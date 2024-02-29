@@ -1,25 +1,49 @@
-import requests;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class GeminiAPI {
+    private String apiEndpoint;
+    private String apiKey;
+    private String apiSecret;
 
-    public String authenticateUser(String username, String password) {
-        // Make a request to Gemini's authentication endpoint
-        Response response = requests.post('https://gemini.com/authenticate', data={'username': username, 'password': password});
-        if (response.status_code == 200) {
-            return response.json().get('access_token');
-        } else {
+    public GeminiAPI(String apiEndpoint, String apiKey, String apiSecret) {
+        this.apiEndpoint = apiEndpoint;
+        this.apiKey = apiKey;
+        this.apiSecret = apiSecret;
+    }
+
+    public String fetchChatData() {
+        try {
+            // Construct the URL for the Gemini API endpoint
+            URL url = new URL(apiEndpoint);
+
+            // Open connection to the API endpoint
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer " + generateAuthToken());
+
+            // Read the response from the API
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            // Return the chat data received from the API
+            return response.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
 
-    public String fetchChatData(String accessToken) {
-        // Make a request to Gemini's chat data endpoint
-        Headers headers = new Headers.Builder().add("Authorization", "Bearer " + accessToken).build();
-        Response response = requests.get('https://gemini.com/chat_data', headers=headers);
-        if (response.status_code == 200) {
-            return response.json().get('chat_history');
-        } else {
-            return null;
-        }
+    private String generateAuthToken() {
+        // Implement logic to generate API token using API key and secret
+        // This method should return the generated authentication token
+        return null;
     }
 }
