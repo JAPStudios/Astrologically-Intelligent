@@ -1,1 +1,1 @@
-# Astrology-Intelligent
+# Astralogically-Intelligent
