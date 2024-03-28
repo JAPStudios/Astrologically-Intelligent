@@ -5,9 +5,10 @@ import requests
 class ChatDataRetriever:
     def __init__(self):
         self.api_endpoints = {
-            "ChatGPT": "https://chatgpt.example.com/api/chat",
-            "Gemini": "https://gemini.example.com/api/conversations",
             "Replika": "https://replika.example.com/api/sessions"
+            "ChatGPT": "https://chat.openai.com",
+            "Gemini": "https://gemini.google.com",
+            "AIStudio": "https://aistudio.google.com",
         }
 
     def retrieve_chat_data(self, selected_ai, auth_token):
