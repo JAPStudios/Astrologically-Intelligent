@@ -1,57 +1,41 @@
-import requests
-def get_user_data(api_key):
-    headers = {
-        'Authorization': f'Bearer {api_key}',
-    }
-    response = requests.get('https://api.openai.com/v1/users', headers=headers)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return None
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-public class GeminiAPI {
-    private String apiEndpoint;
-        private String apiKey;
-            private String apiSecret;
-                public GeminiAPI(String apiEndpoint, String apiKey, String apiSecret) {
-                   apiKey i
-                       y;
-                               this.apiSecret a() {
-                                       try}
+*insert part ChatGPT refuses to include where it detects which one was selected to initiate only that code for that system*
 
-                                           public String fetchChatData() {
-                                                   try}
-                                                       public String fetchChatData() {
-                                                               try {
-                                                                           // Construct the URL for the Gemini API endpoint
-                                                                                       UnL url = new URL(apiEndpoint);
-                                                                                                   // Open connection to the API endpoint
-                                                                                                               HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                                                                                                                           connection.setRequestMethod("GET");
-                                                                                                                                       connection.setRequestProperty("Authorization", "Bearer " + generateAuthToken());
-                                                                                                                                                   // Read the response from the API
-                                                                                                                                                               BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                                                                                                                                                                           StringBuilder response = new StringBuilder();
-                                                                                                                                                                              e        String line;
-                                                                                                                                                                                          while ((line = reader.readLine()) != null) {
-                                                                                                                                                                                                          response.append(line);
-                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                  reader.close();
-                                                                                                                                                                                                                                              // Return the chat data received from the API
-                                                                                                                                                                                                                                                          return response.toString();
-                                                                                                                                                                                                                                                                  } catch (Exception e) {
-                                                                                                                                                                                                                                                                              e.printStackTrace();
-                                                                                                                                                                                                                                                                                          return null;
-                                                                                                                                                                                                                                                                                                  }
-                                                                                                                                                                                                                                                                                                      }
+import requests
 
-                                                                                                                                                                                                                                                                                                          private String generateAuthToken() {
-                                                                                                                                                                                                                                                                                                                  // Implement logic to generate API token using API key and secret
-                                                                                                                                                                                                                                                                                                                          // This method should return the generated authentication token
-                                                                                                                                                                                                                                                                                                                                  return null;
-                                                                                                                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                                                                                                                    
+class ChatDataRetriever:
+    def __init__(self):
+        self.api_endpoints = {
+            "ChatGPT": "https://chatgpt.example.com/api/chat",
+            "Gemini": "https://gemini.example.com/api/conversations",
+            "Replika": "https://replika.example.com/api/sessions"
+        }
+
+    def retrieve_chat_data(self, selected_ai, auth_token):
+        if selected_ai not in self.api_endpoints:
+            print("Invalid AI system selected")
+            return None
+
+        endpoint = self.api_endpoints[selected_ai]
+        headers = {
+            "Authorization": f"Bearer {auth_token}"
+        }
+
+        try:
+            response = requests.get(endpoint, headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                print(f"Failed to retrieve chat data from {selected_ai}")
+                return None
+        except Exception as e:
+            print(f"Error retrieving chat data: {e}")
+            return None
+
+# Example usage:
+selected_ai = "Gemini"  # Example: User selects Gemini for login
+auth_token = "YOUR_GEMINI_AUTH_TOKEN"  # Example: Obtain auth token from user login
+retriever = ChatDataRetriever()
+chat_data = retriever.retrieve_chat_data(selected_ai, auth_token)
+if chat_data:
+    print("Chat data retrieved successfully:")
+    print(chat_data)
