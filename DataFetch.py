@@ -39,7 +39,7 @@ import requests
 class ChatDataRetriever:
     def __init__(self):
         self.api_endpoints = {
-            "Replika": "https://replika.example.com/api/sessions"
+            "Replika": "https://my.replika.ai"
             "ChatGPT": "https://chat.openai.com",
             "Gemini": "https://gemini.google.com",
             "AIStudio": "https://aistudio.google.com",
