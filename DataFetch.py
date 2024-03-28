@@ -1,42 +1,20 @@
 import tkinter as tk
 from tkinter import messagebox
-class ChatDataRetrieverGUI:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("AI System Selection")
-        
-        # Create buttons for each AI system
-        self.create_button("Replika", self.select_ai_system)
-        self.create_button("ChatGPT", self.select_ai_system)
-        self.create_button("Gemini", self.select_ai_system)
-        self.create_button("AIStudio", self.select_ai_system)
-        
+import requests
     def create_button(self, text, command):
         btn = tk.Button(self.root, text=text, command=lambda: command(text))
         btn.pack(pady=5)
-        
     def select_ai_system(self, ai_system):
         messagebox.showinfo("Selected AI System", f"You selected: {ai_system}")
-        # Here you can perform further actions based on the selected AI system
 if __name__ == "__main__":
     root = tk.Tk()
-    app = ChatDataRetrieverGUI(root)
+    app = AccountDataRetrieverGUI(root)
     root.mainloop()
     def detect_selected_ai(self):
-        # Here you can implement code to detect which AI system the user selected
-        # For example, you can prompt the user to enter their choice or retrieve it from UI inputs
-        selected_ai = input("Enter the AI system you want to retrieve chat data from: ")
+        selected_ai = input("Enter the AI system you want to retrieve account data from: ")
         return selected_ai
-# Example usage:
-retriever = ChatDataRetriever()
-selected_ai = retriever.detect_selected_ai()  # Detect which AI system the user selected
-auth_token = "YOUR_AUTH_TOKEN"  # Example: Obtain auth token from user login
-chat_data = retriever.retrieve_chat_data(selected_ai, auth_token)
-if chat_data:
-    print("Chat data retrieved successfully:")
-    print(chat_data)
 import requests
-class ChatDataRetriever:
+class AccountDataRetriever:
     def __init__(self):
         self.api_endpoints = {
             "Replika": "https://my.replika.ai"
@@ -44,29 +22,22 @@ class ChatDataRetriever:
             "Gemini": "https://gemini.google.com",
             "AIStudio": "https://aistudio.google.com",
         }
-    def retrieve_chat_data(self, selected_ai, auth_token):
-        if selected_ai not in self.api_endpoints:
-            print("Invalid AI system selected")
-            return None
-        endpoint = self.api_endpoints[selected_ai]
-        headers = {
-            "Authorization": f"Bearer {auth_token}"
-        }
+    def retrieve_account_data(self, selected_ai, auth_token):
         try:
             response = requests.get(endpoint, headers=headers)
             if response.status_code == 200:
                 return response.json()
             else:
-                print(f"Failed to retrieve chat data from {selected_ai}")
+                print(f"Failed to retrieve system data from {selected_ai}")
                 return None
         except Exception as e:
-            print(f"Error retrieving chat data: {e}")
+            print(f"Error retrieving system data: {e}")
             return None
 # Example usage:
 selected_ai = "Gemini"  # Example: User selects Gemini for login
 auth_token = "YOUR_GEMINI_AUTH_TOKEN"  # Example: Obtain auth token from user login
-retriever = ChatDataRetriever()
-chat_data = retriever.retrieve_chat_data(selected_ai, auth_token)
+retriever = AccountDataRetriever()
+chat_data = retriever.retrieve_account_data(selected_ai, auth_token)
 if chat_data:
-    print("Chat data retrieved successfully:")
-    print(chat_data)
+    print("System data retrieved successfully:")
+    print(account_data)
