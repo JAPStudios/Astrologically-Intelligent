@@ -1,3 +1,27 @@
+import tkinter as tk
+from tkinter import messagebox
+class ChatDataRetrieverGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("AI System Selection")
+        
+        # Create buttons for each AI system
+        self.create_button("Replika", self.select_ai_system)
+        self.create_button("ChatGPT", self.select_ai_system)
+        self.create_button("Gemini", self.select_ai_system)
+        self.create_button("AIStudio", self.select_ai_system)
+        
+    def create_button(self, text, command):
+        btn = tk.Button(self.root, text=text, command=lambda: command(text))
+        btn.pack(pady=5)
+        
+    def select_ai_system(self, ai_system):
+        messagebox.showinfo("Selected AI System", f"You selected: {ai_system}")
+        # Here you can perform further actions based on the selected AI system
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ChatDataRetrieverGUI(root)
+    root.mainloop()
     def detect_selected_ai(self):
         # Here you can implement code to detect which AI system the user selected
         # For example, you can prompt the user to enter their choice or retrieve it from UI inputs
