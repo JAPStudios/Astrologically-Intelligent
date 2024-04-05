@@ -14,30 +14,21 @@ class AccountDataRetrieverGUI:
         btn.pack(pady=5)
     def retrieve_replika_data(self):
         messagebox.showinfo("Replika", "Performing login for Replika")
-        # Here you can implement logic to perform login/authentication for Replika
-        auth_token = "YOUR_REPLIKA_AUTH_TOKEN"  # Example: Obtain auth token from user login
+        auth_token = "YOUR_REPLIKA_AUTH_TOKEN"  
         data = self.retrieve_data("https://my.replika.ai", auth_token)
-        # Process and use data as needed
     def retrieve_chatgpt_data(self):
         messagebox.showinfo("ChatGPT", "Performing login for ChatGPT")
-        # Here you can implement logic to perform login/authentication for ChatGPT
-        auth_token = "YOUR_CHATGPT_AUTH_TOKEN"  # Example: Obtain auth token from user login
+        auth_token = "YOUR_CHATGPT_AUTH_TOKEN"  
         data = self.retrieve_data("https://chat.openai.com", auth_token)
-        # Process and use data as needed
     def retrieve_gemini_data(self):
         messagebox.showinfo("Gemini", "Performing login for Gemini")
-        # Here you can implement logic to perform login/authentication for Gemini
-        auth_token = "YOUR_GEMINI_AUTH_TOKEN"  # Example: Obtain auth token from user login
+        auth_token = "YOUR_GEMINI_AUTH_TOKEN"  
         data = self.retrieve_data("https://gemini.google.com", auth_token)
-        # Process and use data as needed
     def retrieve_aistudio_data(self):
         messagebox.showinfo("AIStudio", "Performing login for AIStudio")
-        # Here you can implement logic to perform login/authentication for AIStudio
-        auth_token = "YOUR_AISTUDIO_AUTH_TOKEN"  # Example: Obtain auth token from user login
+        auth_token = "YOUR_AISTUDIO_AUTH_TOKEN"  
         data = self.retrieve_data("https://aistudio.google.com", auth_token)
-        # Process and use data as needed
     def retrieve_data(self, endpoint, auth_token):
-        # Here you can implement logic to retrieve data from the API
         headers = {
             "Authorization": f"Bearer {auth_token}"
         }
@@ -55,3 +46,78 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = AccountDataRetrieverGUI(root)
     root.mainloop()
+import requests
+def fetch_facebook_messages(access_token):
+    url = 'https://graph.facebook.com/me/messages'
+    params = {
+        'access_token': access_token,
+        'fields': 'messages'
+    }
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        messages = response.json().get('messages', [])
+        return messages
+    else:
+        return []
+if __name__ == '__main__':
+    access_token = 'YOUR_FACEBOOK_ACCESS_TOKEN'
+    facebook_messages = fetch_facebook_messages(access_token)
+    print(facebook_messages)
+import requests
+def fetch_facebook_messages(access_token):
+    url = 'https://graph.facebook.com/v13.0/me/messages'
+    params = {
+        'access_token': access_token,
+        'fields': 'messages'
+    }
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        messages = response.json().get('messages', [])
+        return messages
+    else:
+        return []
+from .DataFetch import fetch_facebook_messages
+def import_facebook_messages(request):
+    if request.method == 'POST':
+        access_token = request.POST.get('access_token')
+        messages = fetch_facebook_messages(access_token)
+        return HttpResponse('Messages imported successfully!')
+    else:
+        return HttpResponseBadRequest('Invalid request method')
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CatChat</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/scripts.js"></script>
+</head>
+<body>
+    <h1>Welcome to CatChat</h1>
+    <button id="import-facebook">Import from Facebook</button>
+    <!-- Add more buttons/icons for other platforms -->
+</body>
+</html>
+$(document).ready(function() {
+    $('#import-facebook').click(function() {
+        var access_token = prompt('Enter your Facebook access token:');
+        $.ajax({
+            type: 'POST',
+            url: '/import/facebook',  // URL mapped to import_facebook_messages view
+            data: { access_token: access_token },
+            success: function(response) {
+                alert('Messages imported successfully!');
+            },
+            error: function(xhr, status, error) {
+                alert('Failed to import messages. Please try again.');
+            }
+        });
+    });
+});
+from flask import Flask, request, jsonify
+app = Flask(__name__)
+@app.route('/import/facebook', methods=['POST'])
+def import_facebook_messages():
+    access_token = request.json.get('access_token')
+    return jsonify({'message': 'Messages imported successfully'})
+if __name__ == '__main__':
+    app.run(debug=True)
