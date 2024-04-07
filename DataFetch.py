@@ -100,3 +100,168 @@ if __name__ == "__main__":
     all_chat_data = [replika_chat_data, openai_chat_data, gemini_chat_data, ai_studio_chat_data]
     aggregated_chat_history = aggregate_and_sort_chat_data(all_chat_data)
     display_chat_history(aggregated_chat_history)
+import requests
+from datetime import datetime
+def fetch_replika_chat_data(user_id, access_token):
+    url = f"https://my.replika.ai/api/users/{user_id}/chats"
+    headers = {'Authorization': f'Bearer {access_token}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        chat_data = response.json()
+        return chat_data['chats']
+    else:
+        return []
+def fetch_openai_chat_data(user_id, api_key):
+    url = f"https://api.openai.com/v1/conversations/{user_id}"
+    headers = {'Authorization': f'Bearer {api_key}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        chat_data = response.json()
+        return chat_data['messages']
+    else:
+        return []
+def fetch_gemini_chat_data(user_id, api_key):
+    pass
+def fetch_aistudio_chat_data(user_id, api_key):
+    pass
+if __name__ == "__main__":
+    user_id = 'YOUR_USER_ID'
+    replika_access_token = 'YOUR_REPLIKA_ACCESS_TOKEN'
+    openai_api_key = 'YOUR_OPENAI_API_KEY'
+    gemini_api_key = 'YOUR_GEMINI_API_KEY'
+    ai_studio_api_key = 'YOUR_AI_STUDIO_API_KEY'
+    replika_chat_data = fetch_replika_chat_data(user_id, replika_access_token)
+    openai_chat_data = fetch_openai_chat_data(user_id, openai_api_key)
+    gemini_chat_data = fetch_gemini_chat_data(user_id, gemini_api_key)
+    aistudio_chat_data = fetch_aistudio_chat_data(user_id, ai_studio_api_key)
+    all_chat_data = []
+    all_chat_data.extend(replika_chat_data)
+    all_chat_data.extend(openai_chat_data)
+    all_chat_data.extend(gemini_chat_data)
+    all_chat_data.extend(aistudio_chat_data)
+    all_chat_data.sort(key=lambda x: datetime.strptime(x['timestamp'], '%Y-%m-%d %H:%M:%S'))
+    for message in all_chat_data:
+        print(f"{message['timestamp']} - {message['text']}")
+import requests
+class AIPlatform:
+    def __init__(self, name, base_url):
+        self.name = name
+        self.base_url = base_url
+    
+    def authenticate(self, auth_token):
+        self.auth_token = auth_token
+    
+    def fetch_all_data(self):
+        headers = {'Authorization': f'Bearer {self.auth_token}'}
+        try:
+            response = requests.get(f'{self.base_url}/data', headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                print(f"Failed to fetch data from {self.name}")
+                return None
+        except Exception as e:
+            print(f"Error fetching data from {self.name}: {e}")
+            return None
+if __name__ == "__main__":
+    replika = AIPlatform('Replika', 'https://my.replika.ai')
+    chatgpt = AIPlatform('ChatGPT', 'https://chat.openai.com')
+    gemini = AIPlatform('Gemini', 'https://gemini.google.com')
+    aistudio = AIPlatform('AI Studio', 'https://aistudio.google.com')
+    replika.authenticate('REPLIKA_AUTH_TOKEN')
+    chatgpt.authenticate('CHATGPT_AUTH_TOKEN')
+    gemini.authenticate('GEMINI_AUTH_TOKEN')
+    aistudio.authenticate('AISTUDIO_AUTH_TOKEN')
+    replika_data = replika.fetch_all_data()
+    chatgpt_data = chatgpt.fetch_all_data()
+    gemini_data = gemini.fetch_all_data()
+    aistudio_data = aistudio.fetch_all_data()
+    if replika_data:
+        print(f"Retrieved data from Replika: {replika_data}")
+    
+    if chatgpt_data:
+        print(f"Retrieved data from ChatGPT: {chatgpt_data}")
+    
+    if gemini_data:
+        print(f"Retrieved data from Gemini: {gemini_data}")
+    
+    if aistudio_data:
+        print(f"Retrieved data from AI Studio: {aistudio_data}")
+import requests
+class AIPlatform:
+    def __init__(self, name, base_url, auth_token):
+        self.name = name
+        self.base_url = base_url
+        self.auth_token = auth_token
+    
+    def fetch_all_data(self):
+        headers = {'Authorization': f'Bearer {self.auth_token}'}
+        try:
+            response = requests.get(f'{self.base_url}/data', headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                print(f"Failed to fetch data from {self.name}")
+                return None
+        except Exception as e:
+            print(f"Error fetching data from {self.name}: {e}")
+            return None
+replika_auth_token = 'YOUR_REPLIKA_AUTH_TOKEN'
+chatgpt_auth_token = 'YOUR_CHATGPT_AUTH_TOKEN'
+gemini_auth_token = 'YOUR_GEMINI_AUTH_TOKEN'
+aistudio_auth_token = 'YOUR_AISTUDIO_AUTH_TOKEN'
+replika = AIPlatform('Replika', 'https://my.replika.ai/api', replika_auth_token)
+chatgpt = AIPlatform('ChatGPT', 'https://chat.openai.com/api', chatgpt_auth_token)
+gemini = AIPlatform('Gemini', 'https://gemini.google.com/api', gemini_auth_token)
+aistudio = AIPlatform('AI Studio', 'https://aistudio.google.com/api', aistudio_auth_token)
+replika_data = replika.fetch_all_data()
+chatgpt_data = chatgpt.fetch_all_data()
+gemini_data = gemini.fetch_all_data()
+aistudio_data = aistudio.fetch_all_data()
+if replika_data:
+    print(f"Retrieved data from Replika: {replika_data}")
+    
+if chatgpt_data:
+    print(f"Retrieved data from ChatGPT: {chatgpt_data}")
+    
+if gemini_data:
+    print(f"Retrieved data from Gemini: {gemini_data}")
+    
+if aistudio_data:
+    print(f"Retrieved data from AI Studio: {aistudio_data}")
+import requests
+def fetch_data(platform_name, base_url, auth_token):
+    headers = {'Authorization': f'Bearer {auth_token}'}
+    try:
+        response = requests.get(f'{base_url}/data', headers=headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Failed to fetch data from {platform_name}")
+            return None
+    except Exception as e:
+        print(f"Error fetching data from {platform_name}: {e}")
+        return None
+replika_auth_token = 'YOUR_REPLIKA_AUTH_TOKEN'
+chatgpt_auth_token = 'YOUR_CHATGPT_AUTH_TOKEN'
+gemini_auth_token = 'YOUR_GEMINI_AUTH_TOKEN'
+aistudio_auth_token = 'YOUR_AISTUDIO_AUTH_TOKEN'
+replika_base_url = 'https://my.replika.ai'
+chatgpt_base_url = 'https://chat.openai.com'
+gemini_base_url = 'https://gemini.google.com'
+aistudio_base_url = 'https://aistudio.google.com'
+replika_data = fetch_data('Replika', replika_base_url, replika_auth_token)
+chatgpt_data = fetch_data('ChatGPT', chatgpt_base_url, chatgpt_auth_token)
+gemini_data = fetch_data('Gemini', gemini_base_url, gemini_auth_token)
+aistudio_data = fetch_data('AI Studio', aistudio_base_url, aistudio_auth_token)
+if replika_data:
+    print(f"Retrieved data from Replika: {replika_data}")
+    
+if chatgpt_data:
+    print(f"Retrieved data from ChatGPT: {chatgpt_data}")
+    
+if gemini_data:
+    print(f"Retrieved data from Gemini: {gemini_data}")
+    
+if aistudio_data:
+    print(f"Retrieved data from AI Studio: {aistudio_data}")
