@@ -265,3 +265,104 @@ if gemini_data:
     
 if aistudio_data:
     print(f"Retrieved data from AI Studio: {aistudio_data}")
+import requests
+from datetime import datetime
+class AIPlatform:
+    def __init__(self, name, base_url, auth_token):
+        self.name = name
+        self.base_url = base_url
+        self.auth_token = auth_token
+    def fetch_data(self):
+        headers = {'Authorization': f'Bearer {self.auth_token}'}
+        try:
+            response = requests.get(f'{self.base_url}/data', headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                print(f"Failed to fetch data from {self.name}")
+                return None
+        except Exception as e:
+            print(f"Error fetching data from {self.name}: {e}")
+            return None
+replika_auth_token = 'YOUR_REPLIKA_AUTH_TOKEN'
+chatgpt_auth_token = 'YOUR_CHATGPT_AUTH_TOKEN'
+gemini_auth_token = 'YOUR_GEMINI_AUTH_TOKEN'
+aistudio_auth_token = 'YOUR_AISTUDIO_AUTH_TOKEN'
+replika_base_url = 'https://my.replika.ai'
+chatgpt_base_url = 'https://chat.openai.com'
+gemini_base_url = 'https://gemini.google.com'
+aistudio_base_url = 'https://aistudio.google.com'
+replika = AIPlatform('Replika', replika_base_url, replika_auth_token)
+chatgpt = AIPlatform('ChatGPT', chatgpt_base_url, chatgpt_auth_token)
+gemini = AIPlatform('Gemini', gemini_base_url, gemini_auth_token)
+aistudio = AIPlatform('AI Studio', aistudio_base_url, aistudio_auth_token)
+replika_data = replika.fetch_data()
+chatgpt_data = chatgpt.fetch_data()
+gemini_data = gemini.fetch_data()
+aistudio_data = aistudio.fetch_data()
+all_chat_data = []
+if replika_data:
+    all_chat_data.extend(replika_data)
+if chatgpt_data:
+    all_chat_data.extend(chatgpt_data)
+if gemini_data:
+    all_chat_data.extend(gemini_data)
+if aistudio_data:
+    all_chat_data.extend(aistudio_data)
+all_chat_data.sort(key=lambda x: datetime.strptime(x['timestamp'], '%Y-%m-%d %H:%M:%S'))
+for message in all_chat_data:
+    print(f"{message['timestamp']} - {message['text']}")
+import requests
+from datetime import datetime
+class AIPlatform:
+    def __init__(self, name, base_url, auth_token):
+        self.name = name
+        self.base_url = base_url
+        self.auth_token = auth_token
+    def fetch_data(self):
+        headers = {'Authorization': f'Bearer {self.auth_token}'}
+        try:
+            response = requests.get(f'{self.base_url}/data?type=interactions', headers=headers)
+            if response.status_code == 200:
+                return response.json()['interactions']
+            else:
+                print(f"Failed to fetch data from {self.name}")
+                return None
+        except Exception as e:
+            print(f"Error fetching data from {self.name}: {e}")
+            return None
+replika_auth_token = 'YOUR_REPLIKA_AUTH_TOKEN'
+chatgpt_auth_token = 'YOUR_CHATGPT_AUTH_TOKEN'
+gemini_auth_token = 'YOUR_GEMINI_AUTH_TOKEN'
+aistudio_auth_token = 'YOUR_AISTUDIO_AUTH_TOKEN'
+replika_base_url = 'https://my.replika.ai'
+chatgpt_base_url = 'https://chat.openai.com'
+gemini_base_url = 'https://gemini.google.com'
+aistudio_base_url = 'https://aistudio.google.com'
+replika = AIPlatform('Replika', replika_base_url, replika_auth_token)
+chatgpt = AIPlatform('ChatGPT', chatgpt_base_url, chatgpt_auth_token)
+gemini = AIPlatform('Gemini', gemini_base_url, gemini_auth_token)
+aistudio = AIPlatform('AI Studio', aistudio_base_url, aistudio_auth_token)
+all_chat_data = []
+for platform in [replika, chatgpt, gemini, aistudio]:
+    platform_data = platform.fetch_data()
+    if platform_data:
+        all_chat_data.extend(platform_data)
+all_chat_data.sort(key=lambda x: datetime.strptime(x['timestamp'], '%Y-%m-%d %H:%M:%S'))
+for interaction in all_chat_data:
+    print(f"{interaction['timestamp']} - {interaction['type']}: {interaction['content']}")
+import tkinter as tk
+from tkinter import messagebox
+import requests
+class AccountDataRetrieverGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("AI System Selection")
+    def retrieve_replika_data(self):
+        messagebox.showinfo("Replika", "Performing login for Replika")
+    def retrieve_chatgpt_data(self):
+        messagebox.showinfo("ChatGPT", "Performing login for ChatGPT")
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = AccountDataRetrieverGUI(root)
+    root.mainloop()
