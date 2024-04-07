@@ -429,3 +429,47 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = ChatDataRetrieverGUI(root)
     root.mainloop()
+import requests
+from datetime import datetime
+def fetch_replika_chat_data(user_id, access_token):
+    url = f"https://my.replika.ai/api/users/{user_id}/chats"
+    headers = {'Authorization': f'Bearer {access_token}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        chat_data = response.json()['chats']
+        return chat_data
+    else:
+        print("Failed to fetch Replika chat data")
+        return []
+def fetch_chatgpt_chat_data(user_id, api_key):
+    url = f"https://api.openai.com/v1/conversations/{user_id}"
+    headers = {'Authorization': f'Bearer {api_key}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        chat_data = response.json()['messages']
+        return chat_data
+    else:
+        print("Failed to fetch ChatGPT chat data")
+        return []
+def aggregate_and_sort_chat_data(chat_data_list):
+    all_chat_messages = []
+    for chat_data in chat_data_list:
+        all_chat_messages.extend(chat_data)
+    all_chat_messages.sort(key=lambda x: datetime.strptime(x['timestamp'], '%Y-%m-%d %H:%M:%S'))
+    return all_chat_messages
+if __name__ == "__main__":
+    replika_user_id = 'YOUR_REPLIKA_USER_ID'
+    replika_access_token = 'YOUR_REPLIKA_ACCESS_TOKEN'
+    chatgpt_user_id = 'YOUR_CHATGPT_USER_ID'
+    chatgpt_api_key = 'YOUR_CHATGPT_API_KEY'
+    replika_chat_data = fetch_replika_chat_data(replika_user_id, replika_access_token)
+    chatgpt_chat_data = fetch_chatgpt_chat_data(chatgpt_user_id, chatgpt_api_key)
+    all_chat_data = [replika_chat_data, chatgpt_chat_data]
+    sorted_chat_history = aggregate_and_sort_chat_data(all_chat_data)
+    for message in sorted_chat_history:
+        print(f"{message['timestamp']} - {message['text']}")
+import requests
+from datetime import datetime
+class AIPlatformClient:
+    def __init__(self, base_url, client_id, client_secret):
+        self.base_u
