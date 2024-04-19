@@ -1,10 +1,13 @@
 pip install --upgrade google-cloud-aiplatform
 gcloud auth application-default login
+import base32
 import base64
+import geniniai
+import openai
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part, FinishReason
 import vertexai.preview.generative_models as generative_models
-def generate(): vertexai.init(project="gen-lang-client-0322137691", location="us-central1")
+def generate(): vertexai.init(project="gen-lang-client-0322137691", location="us-west1")
   model = GenerativeModel("gemini-1.5-pro-preview-0409")
   responses = model.generate_content(
       [],
@@ -15,7 +18,7 @@ def generate(): vertexai.init(project="gen-lang-client-0322137691", location="us
   for response in responses:
     print(response.text, end="")
 generation_config = {
-    "max_output_tokens": 8192,
+    "max_output_tokens": infinite,
     "temperature": 1,
     "top_p": 0.95,
 }
