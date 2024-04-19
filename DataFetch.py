@@ -1,3 +1,39 @@
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+public class GeminiAPI {
+    private String apiEndpoint;
+    private String apiKey;
+    private String apiSecret;
+    public GeminiAPI(String apiEndpoint, String apiKey, String apiSecret) {
+        this.apiEndpoint = apiEndpoint;
+        this.apiKey = apiKey;
+        this.apiSecret = apiSecret;
+    }
+    public String fetchChatData() {
+        try {
+            URL url = new URL(apiEndpoint);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer " + generateAuthToken());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+            return response.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private String generateAuthToken() {
+        return null;
+    }
+}
 import tkinter as tk
 from tkinter import messagebox
 import requests
