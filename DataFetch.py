@@ -1,3 +1,135 @@
+import requests
+
+def fetch_data_from_replika(access_token):
+    # Example Replika API endpoint
+    url = "https://api.replika.ai/messages"
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+    response = requests.get(url, headers=headers)
+    return response.json()
+
+def fetch_data_from_chatgpt(api_key):
+    # Example ChatGPT API endpoint
+    url = "https://api.openai.com/v1/messages"
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+    response = requests.get(url, headers=headers)
+    return response.json()
+
+# Replace placeholders with actual credentials
+replika_access_token = "YOUR_REPLIKA_ACCESS_TOKEN"
+chatgpt_api_key = "YOUR_CHATGPT_API_KEY"
+
+replika_data = fetch_data_from_replika(replika_access_token)
+chatgpt_data = fetch_data_from_chatgpt(chatgpt_api_key)
+
+# Process and integrate the fetched data as needed
+combined_data = {
+    "replika": replika_data,
+    "chatgpt": chatgpt_data
+}
+
+# Further process or store the combined data
+print(combined_data)
+import requests
+
+def fetch_data_from_platform(api_url, api_key):
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+    response = requests.get(api_url, headers=headers)
+    return response.json()
+
+# Example API endpoints (replace with actual URLs)
+platform_endpoints = {
+    "replika": "https://api.replika.ai/messages",
+    "aidungeon": "https://api.aidungeon.com/conversations",
+    "chatgpt": "https://api.openai.com/v1/messages",
+    "gemini": "https://api.gemini.google.com/conversations",
+    "sudowrite": "https://api.sudowrite.com/messages",
+    "aistudio": "https://api.aistudio.google.com/chats"
+}
+
+# Example API keys (replace with actual keys)
+api_keys = {
+    "replika": "YOUR_REPLIKA_API_KEY",
+    "aidungeon": "YOUR_AIDUNGEON_API_KEY",
+    "chatgpt": "YOUR_CHATGPT_API_KEY",
+    "gemini": "YOUR_GEMINI_API_KEY",
+    "sudowrite": "YOUR_SUDOWRITE_API_KEY",
+    "aistudio": "YOUR_AISTUDIO_API_KEY"
+}
+
+# Function to fetch data from all platforms
+def fetch_data_from_all_platforms():
+    all_data = {}
+    for platform, endpoint in platform_endpoints.items():
+        if platform in api_keys:
+            api_key = api_keys[platform]
+            data = fetch_data_from_platform(endpoint, api_key)
+            all_data[platform] = data
+    return all_data
+
+# Retrieve data from all platforms
+consolidated_data = fetch_data_from_all_platforms()
+
+# Process and sort the data chronologically
+# Your sorting and processing logic here...
+
+# Example output
+print(consolidated_data)
+import requests
+
+# Example API endpoints for retrieving session data (replace with actual URLs)
+platform_endpoints = {
+    "replika": "https://api.replika.ai/sessions",
+    "aidungeon": "https://api.aidungeon.com/sessions",
+    "chatgpt": "https://api.openai.com/v1/sessions",
+    # Add more platforms with their respective endpoints...
+}
+
+# Example API keys or tokens (replace with actual credentials)
+api_credentials = {
+    "replika": "YOUR_REPLIKA_API_KEY",
+    "aidungeon": "YOUR_AIDUNGEON_API_KEY",
+    "chatgpt": "YOUR_CHATGPT_API_KEY",
+    # Add more platform credentials...
+}
+
+# Function to fetch session data from a platform
+def fetch_session_data(platform, api_key):
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+    endpoint = platform_endpoints.get(platform)
+    if endpoint:
+        response = requests.get(endpoint, headers=headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Failed to fetch session data from {platform}: {response.status_code}")
+    else:
+        print(f"No endpoint found for {platform}")
+
+# Function to fetch session data from all platforms
+def fetch_session_data_from_all_platforms():
+    all_session_data = {}
+    for platform, api_key in api_credentials.items():
+        session_data = fetch_session_data(platform, api_key)
+        if session_data:
+            all_session_data[platform] = session_data
+    return all_session_data
+
+# Retrieve session data from all platforms
+consolidated_session_data = fetch_session_data_from_all_platforms()
+
+# Process and organize session data as needed
+# Your sorting and processing logic here...
+
+# Example output
+print(consolidated_session_data)
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.BufferedReader;
@@ -378,134 +510,4 @@ aistudio_base_url = 'https://aistudio.google.com'
 replika = AIPlatform('Replika', replika_base_url, replika_auth_token)
 chatgpt = AIPlatform('ChatGPT', chatgpt_base_url, chatgpt_auth_token)
 gemini = AIPlatform('Gemini', gemini_base_url, gemini_auth_token)
-aistudio = AIPlatform('AI Studio', aistudio_base_url, aistudio_auth_token)
-all_chat_data = []
-for platform in [replika, chatgpt, gemini, aistudio]:
-    platform_data = platform.fetch_data()
-    if platform_data:
-        all_chat_data.extend(platform_data)
-all_chat_data.sort(key=lambda x: datetime.strptime(x['timestamp'], '%Y-%m-%d %H:%M:%S'))
-for interaction in all_chat_data:
-    print(f"{interaction['timestamp']} - {interaction['type']}: {interaction['content']}")
-import tkinter as tk
-from tkinter import messagebox
-import requests
-class AccountDataRetrieverGUI:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("AI System Selection")
-    def retrieve_replika_data(self):
-        messagebox.showinfo("Replika", "Performing login for Replika")
-    def retrieve_chatgpt_data(self):
-        messagebox.showinfo("ChatGPT", "Performing login for ChatGPT")
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = AccountDataRetrieverGUI(root)
-    root.mainloop()
-import requests
-def fetch_replika_chat_data(user_id, access_token):
-    url = f"https://my.replika.ai/api/users/{user_id}/chats"
-    headers = {'Authorization': f'Bearer {access_token}'}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.json()['chats']
-    else:
-        return []
-def fetch_chatgpt_chat_data(user_id, api_key):
-    url = f"https://api.openai.com/v1/conversations/{user_id}"
-    headers = {'Authorization': f'Bearer {api_key}'}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.json()['messages']
-    else:
-        return []
-from datetime import datetime
-def aggregate_and_sort_chat_data(chat_data_list):
-    all_chat_messages = []
-    for chat_data in chat_data_list:
-        all_chat_messages.extend(chat_data)
-    all_chat_messages.sort(key=lambda x: datetime.strptime(x['timestamp'], '%Y-%m-%d %H:%M:%S'))
-    return all_chat_messages
-if __name__ == "__main__":
-    user_id = 'YOUR_USER_ID'
-    replika_access_token = 'YOUR_REPLIKA_ACCESS_TOKEN'
-    openai_api_key = 'YOUR_OPENAI_API_KEY'
-    replika_chat_data = fetch_replika_chat_data(user_id, replika_access_token)
-    chatgpt_chat_data = fetch_chatgpt_chat_data(user_id, openai_api_key)
-    all_chat_data = [replika_chat_data, chatgpt_chat_data]  
-    sorted_chat_history = aggregate_and_sort_chat_data(all_chat_data)
-    for message in sorted_chat_history:
-        print(f"{message['timestamp']} - {message['text']}")
-import tkinter as tk
-from tkinter import messagebox
-import webview
-import requests
-from datetime import datetime
-class ChatDataRetrieverGUI:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("AI Platform Chat Data Retriever")
-    def retrieve_replika_data(self):
-        messagebox.showinfo("Replika", "Performing login for Replika")
-    def retrieve_chatgpt_data(self):
-        messagebox.showinfo("ChatGPT", "Performing login for ChatGPT")
-    def retrieve_gemini_data(self):
-        messagebox.showinfo("Gemini", "Performing login for Gemini")
-    def retrieve_aistudio_data(self):
-        messagebox.showinfo("AI Studio", "Performing login for AI Studio")
-def fetch_chat_data(platform_name, auth_token):
-    pass
-def display_chat_history(chat_messages):
-    html_content = "<html><body>"
-    for message in chat_messages:
-        html_content += f"<p>{message['timestamp']} - {message['text']}</p>"
-    html_content += "</body></html>"
-    webview.create_window("Chat History", html=html_content, width=800, height=600)
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = ChatDataRetrieverGUI(root)
-    root.mainloop()
-import requests
-from datetime import datetime
-def fetch_replika_chat_data(user_id, access_token):
-    url = f"https://my.replika.ai/api/users/{user_id}/chats"
-    headers = {'Authorization': f'Bearer {access_token}'}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        chat_data = response.json()['chats']
-        return chat_data
-    else:
-        print("Failed to fetch Replika chat data")
-        return []
-def fetch_chatgpt_chat_data(user_id, api_key):
-    url = f"https://api.openai.com/v1/conversations/{user_id}"
-    headers = {'Authorization': f'Bearer {api_key}'}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        chat_data = response.json()['messages']
-        return chat_data
-    else:
-        print("Failed to fetch ChatGPT chat data")
-        return []
-def aggregate_and_sort_chat_data(chat_data_list):
-    all_chat_messages = []
-    for chat_data in chat_data_list:
-        all_chat_messages.extend(chat_data)
-    all_chat_messages.sort(key=lambda x: datetime.strptime(x['timestamp'], '%Y-%m-%d %H:%M:%S'))
-    return all_chat_messages
-if __name__ == "__main__":
-    replika_user_id = 'YOUR_REPLIKA_USER_ID'
-    replika_access_token = 'YOUR_REPLIKA_ACCESS_TOKEN'
-    chatgpt_user_id = 'YOUR_CHATGPT_USER_ID'
-    chatgpt_api_key = 'YOUR_CHATGPT_API_KEY'
-    replika_chat_data = fetch_replika_chat_data(replika_user_id, replika_access_token)
-    chatgpt_chat_data = fetch_chatgpt_chat_data(chatgpt_user_id, chatgpt_api_key)
-    all_chat_data = [replika_chat_data, chatgpt_chat_data]
-    sorted_chat_history = aggregate_and_sort_chat_data(all_chat_data)
-    for message in sorted_chat_history:
-        print(f"{message['timestamp']} - {message['text']}")
-import requests
-from datetime import datetime
-class AIPlatformClient:
-    def __init__(self, base_url, client_id, client_secret):
-        self.base_u
+aistudio = AIPlatform('AI Studio', aistudio_base_url, aist
