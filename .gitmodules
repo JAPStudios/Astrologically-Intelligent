@@ -2797,3 +2797,103 @@
 	path = upstream/perplexityai/libpfm
 	url = https://github.com/perplexityai/libpfm.git
 	branch = main
+[submodule "upstream/perplexityai/pgcat"]
+	path = upstream/perplexityai/pgcat
+	url = https://github.com/perplexityai/pgcat.git
+	branch = main
+[submodule "upstream/perplexityai/js-sdk-common"]
+	path = upstream/perplexityai/js-sdk-common
+	url = https://github.com/perplexityai/js-sdk-common.git
+	branch = main
+[submodule "upstream/perplexityai/js-client-sdk"]
+	path = upstream/perplexityai/js-client-sdk
+	url = https://github.com/perplexityai/js-client-sdk.git
+	branch = main
+[submodule "upstream/perplexityai/Factory"]
+	path = upstream/perplexityai/Factory
+	url = https://github.com/perplexityai/Factory.git
+	branch = main
+[submodule "upstream/perplexityai/webRTC"]
+	path = upstream/perplexityai/webRTC
+	url = https://github.com/perplexityai/webRTC.git
+	branch = main
+[submodule "upstream/perplexityai/gazelle_py"]
+	path = upstream/perplexityai/gazelle_py
+	url = https://github.com/perplexityai/gazelle_py.git
+	branch = main
+[submodule "upstream/perplexityai/codescythe"]
+	path = upstream/perplexityai/codescythe
+	url = https://github.com/perplexityai/codescythe.git
+	branch = main
+[submodule "upstream/perplexityai/bumblebee"]
+	path = upstream/perplexityai/bumblebee
+	url = https://github.com/perplexityai/bumblebee.git
+	branch = main
+[submodule "upstream/perplexityai/lightweight-charts"]
+	path = upstream/perplexityai/lightweight-charts
+	url = https://github.com/perplexityai/lightweight-charts.git
+	branch = master
+[submodule "upstream/perplexityai/watchman"]
+	path = upstream/perplexityai/watchman
+	url = https://github.com/perplexityai/watchman.git
+	branch = main
+[submodule "upstream/perplexityai/wandr"]
+	path = upstream/perplexityai/wandr
+	url = https://github.com/perplexityai/wandr.git
+	branch = main
+[submodule "upstream/perplexityai/api-platform-developers"]
+	path = upstream/perplexityai/api-platform-developers
+	url = https://github.com/perplexityai/api-platform-developers.git
+	branch = main
+[submodule "upstream/perplexityai/bazel-watcher"]
+	path = upstream/perplexityai/bazel-watcher
+	url = https://github.com/perplexityai/bazel-watcher.git
+	branch = main
+[submodule "upstream/perplexityai/rules_multirun"]
+	path = upstream/perplexityai/rules_multirun
+	url = https://github.com/perplexityai/rules_multirun.git
+	branch = main
+[submodule "upstream/perplexityai/perplexity-cli"]
+	path = upstream/perplexityai/perplexity-cli
+	url = https://github.com/perplexityai/perplexity-cli.git
+	branch = main
+[submodule "upstream/perplexityai/electron-sdk"]
+	path = upstream/perplexityai/electron-sdk
+	url = https://github.com/perplexityai/electron-sdk.git
+	branch = main
+[submodule "upstream/perplexityai/numbat"]
+	path = upstream/perplexityai/numbat
+	url = https://github.com/perplexityai/numbat.git
+	branch = main
+[submodule "upstream/perplexityai/workers-sdk"]
+	path = upstream/perplexityai/workers-sdk
+	url = https://github.com/perplexityai/workers-sdk.git
+	branch = main
+[submodule "upstream/perplexityai/perplexity-search-sdk"]
+	path = upstream/perplexityai/perplexity-search-sdk
+	url = https://github.com/perplexityai/perplexity-search-sdk.git
+	branch = main
+[submodule "upstream/perplexityai/gazelle_css"]
+	path = upstream/perplexityai/gazelle_css
+	url = https://github.com/perplexityai/gazelle_css.git
+	branch = main
+[submodule "upstream/perplexityai/cachew"]
+	path = upstream/perplexityai/cachew
+	url = https://github.com/perplexityai/cachew.git
+	branch = main
+[submodule "upstream/perplexityai/rules_web_e2e"]
+	path = upstream/perplexityai/rules_web_e2e
+	url = https://github.com/perplexityai/rules_web_e2e.git
+	branch = main
+[submodule "upstream/perplexityai/rusqlite"]
+	path = upstream/perplexityai/rusqlite
+	url = https://github.com/perplexityai/rusqlite.git
+	branch = master
+[submodule "upstream/perplexityai/SPACE"]
+	path = upstream/perplexityai/SPACE
+	url = https://github.com/perplexityai/SPACE.git
+	branch = main
+[submodule "upstream/perplexityai/browsesafe-plus-plus"]
+	path = upstream/perplexityai/browsesafe-plus-plus
+	url = https://github.com/perplexityai/browsesafe-plus-plus.git
+	branch = main
