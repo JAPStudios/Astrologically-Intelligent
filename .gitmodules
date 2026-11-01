@@ -197,3 +197,103 @@
 	path = upstream/anthropics/sycophancy-to-subterfuge-paper
 	url = https://github.com/anthropics/sycophancy-to-subterfuge-paper.git
 	branch = main
+[submodule "upstream/anthropics/anthropic-sdk-go"]
+	path = upstream/anthropics/anthropic-sdk-go
+	url = https://github.com/anthropics/anthropic-sdk-go.git
+	branch = main
+[submodule "upstream/anthropics/claude-quickstarts"]
+	path = upstream/anthropics/claude-quickstarts
+	url = https://github.com/anthropics/claude-quickstarts.git
+	branch = main
+[submodule "upstream/anthropics/rogue-deploy-eval"]
+	path = upstream/anthropics/rogue-deploy-eval
+	url = https://github.com/anthropics/rogue-deploy-eval.git
+	branch = main
+[submodule "upstream/anthropics/anthropic-sdk-java"]
+	path = upstream/anthropics/anthropic-sdk-java
+	url = https://github.com/anthropics/anthropic-sdk-java.git
+	branch = main
+[submodule "upstream/anthropics/orjson"]
+	path = upstream/anthropics/orjson
+	url = https://github.com/anthropics/orjson.git
+	branch = anthropic-3.11.7
+[submodule "upstream/anthropics/claude-code"]
+	path = upstream/anthropics/claude-code
+	url = https://github.com/anthropics/claude-code.git
+	branch = main
+[submodule "upstream/anthropics/devcontainer-features"]
+	path = upstream/anthropics/devcontainer-features
+	url = https://github.com/anthropics/devcontainer-features.git
+	branch = main
+[submodule "upstream/anthropics/anthropic-sdk-ruby"]
+	path = upstream/anthropics/anthropic-sdk-ruby
+	url = https://github.com/anthropics/anthropic-sdk-ruby.git
+	branch = main
+[submodule "upstream/anthropics/attribution-graphs-frontend"]
+	path = upstream/anthropics/attribution-graphs-frontend
+	url = https://github.com/anthropics/attribution-graphs-frontend.git
+	branch = main
+[submodule "upstream/anthropics/redis-py"]
+	path = upstream/anthropics/redis-py
+	url = https://github.com/anthropics/redis-py.git
+	branch = master
+[submodule "upstream/anthropics/github-mcp-server"]
+	path = upstream/anthropics/github-mcp-server
+	url = https://github.com/anthropics/github-mcp-server.git
+	branch = main
+[submodule "upstream/anthropics/claude-code-base-action"]
+	path = upstream/anthropics/claude-code-base-action
+	url = https://github.com/anthropics/claude-code-base-action.git
+	branch = main
+[submodule "upstream/anthropics/claude-code-action"]
+	path = upstream/anthropics/claude-code-action
+	url = https://github.com/anthropics/claude-code-action.git
+	branch = main
+[submodule "upstream/anthropics/claude-code-monitoring-guide"]
+	path = upstream/anthropics/claude-code-monitoring-guide
+	url = https://github.com/anthropics/claude-code-monitoring-guide.git
+	branch = main
+[submodule "upstream/anthropics/claude-code-security-review"]
+	path = upstream/anthropics/claude-code-security-review
+	url = https://github.com/anthropics/claude-code-security-review.git
+	branch = main
+[submodule "upstream/anthropics/anthropic-sdk-php"]
+	path = upstream/anthropics/anthropic-sdk-php
+	url = https://github.com/anthropics/anthropic-sdk-php.git
+	branch = main
+[submodule "upstream/anthropics/anthropic-sdk-csharp"]
+	path = upstream/anthropics/anthropic-sdk-csharp
+	url = https://github.com/anthropics/anthropic-sdk-csharp.git
+	branch = main
+[submodule "upstream/anthropics/beam"]
+	path = upstream/anthropics/beam
+	url = https://github.com/anthropics/beam.git
+	branch = anthropic-2.71.0
+[submodule "upstream/anthropics/apitools"]
+	path = upstream/anthropics/apitools
+	url = https://github.com/anthropics/apitools.git
+	branch = anthropic-0.5.32
+[submodule "upstream/anthropics/claude-agent-sdk-demos"]
+	path = upstream/anthropics/claude-agent-sdk-demos
+	url = https://github.com/anthropics/claude-agent-sdk-demos.git
+	branch = main
+[submodule "upstream/anthropics/claude-agent-sdk-typescript"]
+	path = upstream/anthropics/claude-agent-sdk-typescript
+	url = https://github.com/anthropics/claude-agent-sdk-typescript.git
+	branch = main
+[submodule "upstream/anthropics/rclone"]
+	path = upstream/anthropics/rclone
+	url = https://github.com/anthropics/rclone.git
+	branch = master
+[submodule "upstream/anthropics/torchtyping"]
+	path = upstream/anthropics/torchtyping
+	url = https://github.com/anthropics/torchtyping.git
+	branch = anthropic-0.1.5
+[submodule "upstream/anthropics/life-sciences"]
+	path = upstream/anthropics/life-sciences
+	url = https://github.com/anthropics/life-sciences.git
+	branch = main
+[submodule "upstream/anthropics/sandbox-runtime"]
+	path = upstream/anthropics/sandbox-runtime
+	url = https://github.com/anthropics/sandbox-runtime.git
+	branch = main
