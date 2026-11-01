@@ -182,13 +182,18 @@ class ToolRegistry:
         from pathlib import Path
         if not isinstance(name, str) or len(name) > 256 or not re.fullmatch(r"[A-Za-z0-9_-]+(?:/[A-Za-z0-9_-]+)*",name):
             raise ValueError("Invalid skill name")
+        skills_root=Path("skills").resolve()
+        upstream_root=Path("upstream").resolve()
         if name.startswith("upstream/"):
-            root=Path("upstream").resolve()
-            relative=name[len("upstream/"):]
+            nested_skill=(skills_root/name/"SKILL.md").resolve()
+            if nested_skill.is_relative_to(skills_root) and nested_skill.is_file():
+                root, path = skills_root, nested_skill
+            else:
+                root=upstream_root
+                path=(root/name[len("upstream/"):]/"SKILL.md").resolve()
         else:
-            root=Path("skills").resolve()
-            relative=name
-        path=(root/relative/"SKILL.md").resolve()
+            root=skills_root
+            path=(root/name/"SKILL.md").resolve()
         if not path.is_relative_to(root) or not path.is_file(): raise ValueError("Skill not found")
         if path.stat().st_size > 131072: raise ValueError("Skill exceeds 128 KiB limit")
         return {"name":name,"content":path.read_text(encoding="utf-8")}
