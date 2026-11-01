@@ -19,8 +19,8 @@ Provider selection is controlled by `ASTRO_AI_PROVIDER`:
 | Provider value | Transport | Configuration |
 | --- | --- | --- |
 | `openai-compatible` (default), `openai` | OpenAI Chat Completions | `ASTRO_AI_API_KEY`, `ASTRO_AI_BASE_URL`, `ASTRO_AI_MODEL` |
-| `xai` / `grok` | OpenAI-compatible Chat Completions transport | Configure the xAI API endpoint and key |
-| `perplexity` | OpenAI-compatible transport only | Requires a Perplexity endpoint/model supporting the Chat Completions tool schema |
+| `xai` / `grok` | OpenAI-compatible Chat Completions transport | `XAI_API_KEY`, default endpoint `https://api.x.ai/v1`, default model `grok-4.20-non-reasoning` |
+| `perplexity` | Perplexity Chat Completions endpoint | `PERPLEXITY_API_KEY`, default endpoint `https://api.perplexity.ai`, default model `sonar` |
 | `local` | OpenAI-compatible local endpoint | Set `ASTRO_AI_BASE_URL`; key may be empty for localhost |
 | `anthropic` / `claude` | Native Anthropic Messages API | `ANTHROPIC_API_KEY` (or `ASTRO_AI_API_KEY`), optional `ANTHROPIC_BASE_URL`, `ASTRO_AI_MODEL` |
 
@@ -79,6 +79,8 @@ The service binds to `127.0.0.1:8765` by default. It exposes `GET /health` and `
 - Runs: `runs.start`, `runs.finish`
 - Plugins: `plugins.discover`, `plugins.status`
 - n8n: `n8n.workflows.list`, `n8n.workflows.get`, `n8n.workflows.activate`, `n8n.workflows.deactivate`
+- Paperclip: `paperclip.agents.list`, `paperclip.issues.list`, `paperclip.issues.create`, `paperclip.goals.create`, `paperclip.approvals.list`
+- Perplexity: `perplexity.search`
 
 ## Plugins
 

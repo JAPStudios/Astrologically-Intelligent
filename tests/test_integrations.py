@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from astrologically_intelligent.integrations import N8nClient, PaperclipClient
+from astrologically_intelligent.integrations import N8nClient, PaperclipClient, PerplexityClient
 
 
 class N8nClientTests(unittest.TestCase):
@@ -59,6 +59,24 @@ class PaperclipClientTests(unittest.TestCase):
             self.client.list_agents("../private")
         with self.assertRaises(ValueError):
             PaperclipClient("http://example.com", "secret")
+
+
+
+class PerplexityClientTests(unittest.TestCase):
+    def test_search_uses_documented_search_endpoint(self):
+        client = PerplexityClient("test-key")
+        with patch.object(client.http, "request", return_value={"results": []}) as request:
+            client.search("AI agent frameworks", max_results=7)
+        request.assert_called_once_with("POST", "/search",
+                                       {"query":"AI agent frameworks","max_results":7})
+
+    def test_search_validates_query_and_result_limit(self):
+        client = PerplexityClient("test-key")
+        with self.assertRaises(ValueError):
+            client.search(" ")
+        with self.assertRaises(ValueError):
+            client.search("test", max_results=21)
+
 
 
 if __name__ == "__main__":

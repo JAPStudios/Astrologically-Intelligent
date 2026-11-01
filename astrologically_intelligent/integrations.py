@@ -187,9 +187,37 @@ class PaperclipClient:
                                  {"title": title.strip(), "description": description})
 
 
+
+class PerplexityClient:
+    """Perplexity Search API client using the documented /search endpoint."""
+
+    def __init__(self, api_key: str, base_url: str = "https://api.perplexity.ai", timeout: float = 30.0):
+        if not api_key.strip():
+            raise IntegrationError("Perplexity API key is required")
+        self.http = JsonApiClient(base_url, api_key, "Perplexity", timeout)
+
+    @classmethod
+    def from_env(cls) -> "PerplexityClient":
+        key = os.getenv("PERPLEXITY_API_KEY", "").strip()
+        if not key:
+            raise IntegrationError("PERPLEXITY_API_KEY is not configured")
+        return cls(key, os.getenv("PERPLEXITY_BASE_URL", "https://api.perplexity.ai"))
+
+    def search(self, query: str, max_results: int = 5) -> Any:
+        if not query.strip():
+            raise ValueError("Search query is required")
+        if not 1 <= int(max_results) <= 20:
+            raise ValueError("max_results must be between 1 and 20")
+        return self.http.request("POST", "/search", {"query": query.strip(), "max_results": int(max_results)})
+
+
 def n8n_client_from_env() -> N8nClient:
     return N8nClient.from_env()
 
 
 def paperclip_client_from_env() -> PaperclipClient:
     return PaperclipClient.from_env()
+
+
+def perplexity_client_from_env() -> PerplexityClient:
+    return PerplexityClient.from_env()

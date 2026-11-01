@@ -7,7 +7,7 @@ from typing import Any, Callable
 from .storage import Store
 from .orchestration import Orchestrator
 from .plugins import PluginManager
-from .integrations import n8n_client_from_env, paperclip_client_from_env
+from .integrations import n8n_client_from_env, paperclip_client_from_env, perplexity_client_from_env
 
 
 class ToolRegistry:
@@ -152,6 +152,10 @@ class ToolRegistry:
         reg("paperclip.approvals.list","List approval requests in a Paperclip company.",
             {"company_id":{"type":"string"},"status":{"type":"string"}},["company_id"],
             lambda company_id,status=None:paperclip_client_from_env().list_approvals(company_id,status))
+
+        reg("perplexity.search","Search the web using the Perplexity Search API.",
+            {"query":{"type":"string"},"max_results":{"type":"integer","minimum":1,"maximum":20}},
+            ["query"],lambda query,max_results=5:perplexity_client_from_env().search(query,max_results))
 
     def _list_skills(self) -> list[dict[str, str]]:
         from pathlib import Path
