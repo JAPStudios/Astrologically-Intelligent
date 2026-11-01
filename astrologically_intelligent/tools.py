@@ -163,24 +163,32 @@ class ToolRegistry:
 
     def _list_skills(self) -> list[dict[str, str]]:
         from pathlib import Path
-        root = Path("skills")
-        if not root.is_dir(): return []
+        roots = [(Path("skills"), ""), (Path("upstream"), "upstream/")]
         results=[]
-        for path in sorted(root.rglob("SKILL.md")):
-            if ".git" in path.parts:
+        for root, prefix in roots:
+            if not root.is_dir():
                 continue
-            content=path.read_text(encoding="utf-8")
-            summary=next((line.lstrip("# ").strip() for line in content.splitlines() if line.strip()),"")
-            results.append({"name":path.parent.relative_to(root).as_posix(),"summary":summary[:200]})
-        return results
+            for path in sorted(root.rglob("SKILL.md")):
+                if ".git" in path.parts:
+                    continue
+                body=path.read_text(encoding="utf-8")
+                summary=next((line.lstrip("# ").strip() for line in body.splitlines() if line.strip()),"")
+                name=prefix + path.parent.relative_to(root).as_posix()
+                results.append({"name":name,"summary":summary[:200]})
+        return sorted(results, key=lambda item: item["name"])
 
     def _read_skill(self, name: str) -> dict[str, str]:
         import re
         from pathlib import Path
         if not isinstance(name, str) or len(name) > 256 or not re.fullmatch(r"[A-Za-z0-9_-]+(?:/[A-Za-z0-9_-]+)*",name):
             raise ValueError("Invalid skill name")
-        root=Path("skills").resolve()
-        path=(root/name/"SKILL.md").resolve()
+        if name.startswith("upstream/"):
+            root=Path("upstream").resolve()
+            relative=name[len("upstream/"):]
+        else:
+            root=Path("skills").resolve()
+            relative=name
+        path=(root/relative/"SKILL.md").resolve()
         if not path.is_relative_to(root) or not path.is_file(): raise ValueError("Skill not found")
         if path.stat().st_size > 131072: raise ValueError("Skill exceeds 128 KiB limit")
         return {"name":name,"content":path.read_text(encoding="utf-8")}
