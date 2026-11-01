@@ -2097,3 +2097,103 @@
 	path = upstream/openai/openai-sora-sample-app
 	url = https://github.com/openai/openai-sora-sample-app.git
 	branch = main
+[submodule "upstream/openai/gpt-oss-safeguard"]
+	path = upstream/openai/gpt-oss-safeguard
+	url = https://github.com/openai/gpt-oss-safeguard.git
+	branch = main
+[submodule "upstream/openai/circuit_sparsity"]
+	path = upstream/openai/circuit_sparsity
+	url = https://github.com/openai/circuit_sparsity.git
+	branch = main
+[submodule "upstream/openai/openai-mcpkit"]
+	path = upstream/openai/openai-mcpkit
+	url = https://github.com/openai/openai-mcpkit.git
+	branch = main
+[submodule "upstream/openai/openai-knowledge-retrieval"]
+	path = upstream/openai/openai-knowledge-retrieval
+	url = https://github.com/openai/openai-knowledge-retrieval.git
+	branch = main
+[submodule "upstream/openai/apps-sdk-ui"]
+	path = upstream/openai/apps-sdk-ui
+	url = https://github.com/openai/apps-sdk-ui.git
+	branch = main
+[submodule "upstream/openai/tunnel-client"]
+	path = upstream/openai/tunnel-client
+	url = https://github.com/openai/tunnel-client.git
+	branch = master
+[submodule "upstream/openai/GABRIEL"]
+	path = upstream/openai/GABRIEL
+	url = https://github.com/openai/GABRIEL.git
+	branch = main
+[submodule "upstream/openai/parameter-golf"]
+	path = upstream/openai/parameter-golf
+	url = https://github.com/openai/parameter-golf.git
+	branch = main
+[submodule "upstream/openai/hallucinations-paper-experiments"]
+	path = upstream/openai/hallucinations-paper-experiments
+	url = https://github.com/openai/hallucinations-paper-experiments.git
+	branch = main
+[submodule "upstream/openai/symphony"]
+	path = upstream/openai/symphony
+	url = https://github.com/openai/symphony.git
+	branch = main
+[submodule "upstream/openai/plugins"]
+	path = upstream/openai/plugins
+	url = https://github.com/openai/plugins.git
+	branch = main
+[submodule "upstream/openai/realtime-voice-component"]
+	path = upstream/openai/realtime-voice-component
+	url = https://github.com/openai/realtime-voice-component.git
+	branch = main
+[submodule "upstream/openai/orion-multistep-analysis"]
+	path = upstream/openai/orion-multistep-analysis
+	url = https://github.com/openai/orion-multistep-analysis.git
+	branch = main
+[submodule "upstream/openai/teen-safety-policy-pack"]
+	path = upstream/openai/teen-safety-policy-pack
+	url = https://github.com/openai/teen-safety-policy-pack.git
+	branch = main
+[submodule "upstream/openai/model_spec_evals"]
+	path = upstream/openai/model_spec_evals
+	url = https://github.com/openai/model_spec_evals.git
+	branch = main
+[submodule "upstream/openai/model_spec_dataset"]
+	path = upstream/openai/model_spec_dataset
+	url = https://github.com/openai/model_spec_dataset.git
+	branch = main
+[submodule "upstream/openai/codex-plugin-cc"]
+	path = upstream/openai/codex-plugin-cc
+	url = https://github.com/openai/codex-plugin-cc.git
+	branch = main
+[submodule "upstream/openai/openai-imagegen-demo"]
+	path = upstream/openai/openai-imagegen-demo
+	url = https://github.com/openai/openai-imagegen-demo.git
+	branch = main
+[submodule "upstream/openai/euphony"]
+	path = upstream/openai/euphony
+	url = https://github.com/openai/euphony.git
+	branch = main
+[submodule "upstream/openai/homebrew-tools"]
+	path = upstream/openai/homebrew-tools
+	url = https://github.com/openai/homebrew-tools.git
+	branch = main
+[submodule "upstream/openai/privacy-filter"]
+	path = upstream/openai/privacy-filter
+	url = https://github.com/openai/privacy-filter.git
+	branch = main
+[submodule "upstream/openai/monitorability-evals"]
+	path = upstream/openai/monitorability-evals
+	url = https://github.com/openai/monitorability-evals.git
+	branch = main
+[submodule "upstream/openai/openai-realtime-meeting-assistant"]
+	path = upstream/openai/openai-realtime-meeting-assistant
+	url = https://github.com/openai/openai-realtime-meeting-assistant.git
+	branch = main
+[submodule "upstream/openai/openai-cli"]
+	path = upstream/openai/openai-cli
+	url = https://github.com/openai/openai-cli.git
+	branch = main
+[submodule "upstream/openai/openai-developers-for-claude"]
+	path = upstream/openai/openai-developers-for-claude
+	url = https://github.com/openai/openai-developers-for-claude.git
+	branch = main
