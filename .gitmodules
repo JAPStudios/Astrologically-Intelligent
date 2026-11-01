@@ -897,3 +897,103 @@
 	path = upstream/NousResearch/smc-inference-server
 	url = https://github.com/NousResearch/smc-inference-server.git
 	branch = main
+[submodule "upstream/NousResearch/litellm"]
+	path = upstream/NousResearch/litellm
+	url = https://github.com/NousResearch/litellm.git
+	branch = main
+[submodule "upstream/NousResearch/lighteval"]
+	path = upstream/NousResearch/lighteval
+	url = https://github.com/NousResearch/lighteval.git
+	branch = nous
+[submodule "upstream/NousResearch/scaling-transformer"]
+	path = upstream/NousResearch/scaling-transformer
+	url = https://github.com/NousResearch/scaling-transformer.git
+	branch = main
+[submodule "upstream/NousResearch/huskyholdem-bench"]
+	path = upstream/NousResearch/huskyholdem-bench
+	url = https://github.com/NousResearch/huskyholdem-bench.git
+	branch = main
+[submodule "upstream/NousResearch/creative-writing-bench"]
+	path = upstream/NousResearch/creative-writing-bench
+	url = https://github.com/NousResearch/creative-writing-bench.git
+	branch = main
+[submodule "upstream/NousResearch/eqbench3"]
+	path = upstream/NousResearch/eqbench3
+	url = https://github.com/NousResearch/eqbench3.git
+	branch = main
+[submodule "upstream/NousResearch/longform-writing-bench"]
+	path = upstream/NousResearch/longform-writing-bench
+	url = https://github.com/NousResearch/longform-writing-bench.git
+	branch = main
+[submodule "upstream/NousResearch/iroh-fake-store"]
+	path = upstream/NousResearch/iroh-fake-store
+	url = https://github.com/NousResearch/iroh-fake-store.git
+	branch = main
+[submodule "upstream/NousResearch/tinker-atropos"]
+	path = upstream/NousResearch/tinker-atropos
+	url = https://github.com/NousResearch/tinker-atropos.git
+	branch = main
+[submodule "upstream/NousResearch/Liger-Kernel"]
+	path = upstream/NousResearch/Liger-Kernel
+	url = https://github.com/NousResearch/Liger-Kernel.git
+	branch = main
+[submodule "upstream/NousResearch/DeepEP"]
+	path = upstream/NousResearch/DeepEP
+	url = https://github.com/NousResearch/DeepEP.git
+	branch = main
+[submodule "upstream/NousResearch/vllm"]
+	path = upstream/NousResearch/vllm
+	url = https://github.com/NousResearch/vllm.git
+	branch = main
+[submodule "upstream/NousResearch/cline"]
+	path = upstream/NousResearch/cline
+	url = https://github.com/NousResearch/cline.git
+	branch = main
+[submodule "upstream/NousResearch/harbor"]
+	path = upstream/NousResearch/harbor
+	url = https://github.com/NousResearch/harbor.git
+	branch = main
+[submodule "upstream/NousResearch/openai-evals"]
+	path = upstream/NousResearch/openai-evals
+	url = https://github.com/NousResearch/openai-evals.git
+	branch = nous
+[submodule "upstream/NousResearch/llm-abliteration"]
+	path = upstream/NousResearch/llm-abliteration
+	url = https://github.com/NousResearch/llm-abliteration.git
+	branch = main
+[submodule "upstream/NousResearch/nomos"]
+	path = upstream/NousResearch/nomos
+	url = https://github.com/NousResearch/nomos.git
+	branch = main
+[submodule "upstream/NousResearch/lm-evaluation-harness-pretraining"]
+	path = upstream/NousResearch/lm-evaluation-harness-pretraining
+	url = https://github.com/NousResearch/lm-evaluation-harness-pretraining.git
+	branch = main
+[submodule "upstream/NousResearch/nccl-tests"]
+	path = upstream/NousResearch/nccl-tests
+	url = https://github.com/NousResearch/nccl-tests.git
+	branch = master
+[submodule "upstream/NousResearch/LeastLoadedEP"]
+	path = upstream/NousResearch/LeastLoadedEP
+	url = https://github.com/NousResearch/LeastLoadedEP.git
+	branch = main
+[submodule "upstream/NousResearch/neural-steering"]
+	path = upstream/NousResearch/neural-steering
+	url = https://github.com/NousResearch/neural-steering.git
+	branch = main
+[submodule "upstream/NousResearch/pico"]
+	path = upstream/NousResearch/pico
+	url = https://github.com/NousResearch/pico.git
+	branch = main
+[submodule "upstream/NousResearch/pokemon-agent"]
+	path = upstream/NousResearch/pokemon-agent
+	url = https://github.com/NousResearch/pokemon-agent.git
+	branch = main
+[submodule "upstream/NousResearch/torchtitan_tests"]
+	path = upstream/NousResearch/torchtitan_tests
+	url = https://github.com/NousResearch/torchtitan_tests.git
+	branch = master
+[submodule "upstream/NousResearch/hermes-agent-self-evolution"]
+	path = upstream/NousResearch/hermes-agent-self-evolution
+	url = https://github.com/NousResearch/hermes-agent-self-evolution.git
+	branch = main
