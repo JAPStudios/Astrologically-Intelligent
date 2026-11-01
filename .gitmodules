@@ -1697,3 +1697,103 @@
 	path = upstream/openai/grade-school-math
 	url = https://github.com/openai/grade-school-math.git
 	branch = master
+[submodule "upstream/openai/openai-quickstart-python"]
+	path = upstream/openai/openai-quickstart-python
+	url = https://github.com/openai/openai-quickstart-python.git
+	branch = master
+[submodule "upstream/openai/glide-text2im"]
+	path = upstream/openai/glide-text2im
+	url = https://github.com/openai/glide-text2im.git
+	branch = main
+[submodule "upstream/openai/openai-openapi"]
+	path = upstream/openai/openai-openapi
+	url = https://github.com/openai/openai-openapi.git
+	branch = main
+[submodule "upstream/openai/openai-node"]
+	path = upstream/openai/openai-node
+	url = https://github.com/openai/openai-node.git
+	branch = main
+[submodule "upstream/openai/openai-quickstart-node"]
+	path = upstream/openai/openai-quickstart-node
+	url = https://github.com/openai/openai-quickstart-node.git
+	branch = master
+[submodule "upstream/openai/following-instructions-human-feedback"]
+	path = upstream/openai/following-instructions-human-feedback
+	url = https://github.com/openai/following-instructions-human-feedback.git
+	branch = main
+[submodule "upstream/openai/tart"]
+	path = upstream/openai/tart
+	url = https://github.com/openai/tart.git
+	branch = main
+[submodule "upstream/openai/openai-cookbook"]
+	path = upstream/openai/openai-cookbook
+	url = https://github.com/openai/openai-cookbook.git
+	branch = main
+[submodule "upstream/openai/dalle-2-preview"]
+	path = upstream/openai/dalle-2-preview
+	url = https://github.com/openai/dalle-2-preview.git
+	branch = main
+[submodule "upstream/openai/softnet"]
+	path = upstream/openai/softnet
+	url = https://github.com/openai/softnet.git
+	branch = main
+[submodule "upstream/openai/Video-Pre-Training"]
+	path = upstream/openai/Video-Pre-Training
+	url = https://github.com/openai/Video-Pre-Training.git
+	branch = main
+[submodule "upstream/openai/moderation-api-release"]
+	path = upstream/openai/moderation-api-release
+	url = https://github.com/openai/moderation-api-release.git
+	branch = main
+[submodule "upstream/openai/human-eval-infilling"]
+	path = upstream/openai/human-eval-infilling
+	url = https://github.com/openai/human-eval-infilling.git
+	branch = master
+[submodule "upstream/openai/whisper"]
+	path = upstream/openai/whisper
+	url = https://github.com/openai/whisper.git
+	branch = main
+[submodule "upstream/openai/dallify-discord-bot"]
+	path = upstream/openai/dallify-discord-bot
+	url = https://github.com/openai/dallify-discord-bot.git
+	branch = main
+[submodule "upstream/openai/tiktoken"]
+	path = upstream/openai/tiktoken
+	url = https://github.com/openai/tiktoken.git
+	branch = main
+[submodule "upstream/openai/point-e"]
+	path = upstream/openai/point-e
+	url = https://github.com/openai/point-e.git
+	branch = main
+[submodule "upstream/openai/gpt-discord-bot"]
+	path = upstream/openai/gpt-discord-bot
+	url = https://github.com/openai/gpt-discord-bot.git
+	branch = main
+[submodule "upstream/openai/orchard"]
+	path = upstream/openai/orchard
+	url = https://github.com/openai/orchard.git
+	branch = main
+[submodule "upstream/openai/evals"]
+	path = upstream/openai/evals
+	url = https://github.com/openai/evals.git
+	branch = main
+[submodule "upstream/openai/consistency_models"]
+	path = upstream/openai/consistency_models
+	url = https://github.com/openai/consistency_models.git
+	branch = main
+[submodule "upstream/openai/chatgpt-retrieval-plugin"]
+	path = upstream/openai/chatgpt-retrieval-plugin
+	url = https://github.com/openai/chatgpt-retrieval-plugin.git
+	branch = main
+[submodule "upstream/openai/plugins-quickstart"]
+	path = upstream/openai/plugins-quickstart
+	url = https://github.com/openai/plugins-quickstart.git
+	branch = main
+[submodule "upstream/openai/prm800k"]
+	path = upstream/openai/prm800k
+	url = https://github.com/openai/prm800k.git
+	branch = main
+[submodule "upstream/openai/shap-e"]
+	path = upstream/openai/shap-e
+	url = https://github.com/openai/shap-e.git
+	branch = main
