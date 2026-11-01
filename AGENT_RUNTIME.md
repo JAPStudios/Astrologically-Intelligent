@@ -44,6 +44,25 @@ Available tools:
 
 The connector uses the n8n API-key header. HTTPS is required except for localhost. It does not claim to vendor the n8n application or its node catalogue.
 
+## Paperclip agent-organization integration
+
+Configure an authenticated Paperclip agent API token and instance URL:
+
+```sh
+export PAPERCLIP_BASE_URL="https://paperclip.example.com"
+export PAPERCLIP_API_KEY="..."
+```
+
+The connector follows Paperclip's documented company-scoped API routes and uses bearer-token authentication. Available tools:
+
+- `paperclip.agents.list`: list agents in a company.
+- `paperclip.issues.list`: list company issues with optional status, assignee, and project filters.
+- `paperclip.issues.create`: create a company issue.
+- `paperclip.goals.create`: create a company goal.
+- `paperclip.approvals.list`: list company approval requests.
+
+The token's own Paperclip permissions and company membership remain authoritative. This connector does not install or vendor the Paperclip server, UI, database, or adapter packages.
+
 ## HTTP service
 
 The service binds to `127.0.0.1:8765` by default. It exposes `GET /health` and `POST /v1/chat`. Non-loopback binding requires `ASTRO_AI_API_TOKEN` with at least 24 characters; clients authenticate with a bearer token. Request bodies are limited to 1 MB.
