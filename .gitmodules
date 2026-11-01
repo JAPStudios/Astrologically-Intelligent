@@ -497,3 +497,103 @@
 	path = upstream/anthropics/xls
 	url = https://github.com/anthropics/xls.git
 	branch = main
+[submodule "upstream/anthropics/axt-verify"]
+	path = upstream/anthropics/axt-verify
+	url = https://github.com/anthropics/axt-verify.git
+	branch = main
+[submodule "upstream/anthropics/commerce-agents"]
+	path = upstream/anthropics/commerce-agents
+	url = https://github.com/anthropics/commerce-agents.git
+	branch = main
+[submodule "upstream/anthropics/fermats-last-theorem"]
+	path = upstream/anthropics/fermats-last-theorem
+	url = https://github.com/anthropics/fermats-last-theorem.git
+	branch = main
+[submodule "upstream/anthropics/mythos-5-incident-transcript"]
+	path = upstream/anthropics/mythos-5-incident-transcript
+	url = https://github.com/anthropics/mythos-5-incident-transcript.git
+	branch = main
+[submodule "upstream/anthropics/raft-rs"]
+	path = upstream/anthropics/raft-rs
+	url = https://github.com/anthropics/raft-rs.git
+	branch = master
+[submodule "upstream/anthropics/claude-for-financial-advisors"]
+	path = upstream/anthropics/claude-for-financial-advisors
+	url = https://github.com/anthropics/claude-for-financial-advisors.git
+	branch = main
+[submodule "upstream/anthropics/uplifting-biomolecular-modeling"]
+	path = upstream/anthropics/uplifting-biomolecular-modeling
+	url = https://github.com/anthropics/uplifting-biomolecular-modeling.git
+	branch = main
+[submodule "upstream/anthropics/serde-saphyr"]
+	path = upstream/anthropics/serde-saphyr
+	url = https://github.com/anthropics/serde-saphyr.git
+	branch = master
+[submodule "upstream/anthropics/claude-code-playground"]
+	path = upstream/anthropics/claude-code-playground
+	url = https://github.com/anthropics/claude-code-playground.git
+	branch = main
+[submodule "upstream/anthropics/snix"]
+	path = upstream/anthropics/snix
+	url = https://github.com/anthropics/snix.git
+	branch = canon
+[submodule "upstream/anthropics/oss-scanner"]
+	path = upstream/anthropics/oss-scanner
+	url = https://github.com/anthropics/oss-scanner.git
+	branch = main
+[submodule "upstream/anthropics/single-agent-loop-kit"]
+	path = upstream/anthropics/single-agent-loop-kit
+	url = https://github.com/anthropics/single-agent-loop-kit.git
+	branch = release
+[submodule "upstream/n8n-io/n8n-nodes-starter"]
+	path = upstream/n8n-io/n8n-nodes-starter
+	url = https://github.com/n8n-io/n8n-nodes-starter.git
+	branch = master
+[submodule "upstream/n8n-io/n8n-docs"]
+	path = upstream/n8n-io/n8n-docs
+	url = https://github.com/n8n-io/n8n-docs.git
+	branch = main
+[submodule "upstream/n8n-io/bash-dash"]
+	path = upstream/n8n-io/bash-dash
+	url = https://github.com/n8n-io/bash-dash.git
+	branch = main
+[submodule "upstream/n8n-io/test-workflows"]
+	path = upstream/n8n-io/test-workflows
+	url = https://github.com/n8n-io/test-workflows.git
+	branch = main
+[submodule "upstream/n8n-io/n8n-cloud-status"]
+	path = upstream/n8n-io/n8n-cloud-status
+	url = https://github.com/n8n-io/n8n-cloud-status.git
+	branch = master
+[submodule "upstream/n8n-io/nodelinter"]
+	path = upstream/n8n-io/nodelinter
+	url = https://github.com/n8n-io/nodelinter.git
+	branch = master
+[submodule "upstream/n8n-io/n8n-design-system"]
+	path = upstream/n8n-io/n8n-design-system
+	url = https://github.com/n8n-io/n8n-design-system.git
+	branch = main
+[submodule "upstream/n8n-io/element-theme-n8n"]
+	path = upstream/n8n-io/element-theme-n8n
+	url = https://github.com/n8n-io/element-theme-n8n.git
+	branch = master
+[submodule "upstream/n8n-io/n8n-storybook"]
+	path = upstream/n8n-io/n8n-storybook
+	url = https://github.com/n8n-io/n8n-storybook.git
+	branch = main
+[submodule "upstream/n8n-io/discourse-n8n-wf"]
+	path = upstream/n8n-io/discourse-n8n-wf
+	url = https://github.com/n8n-io/discourse-n8n-wf.git
+	branch = main
+[submodule "upstream/n8n-io/tmpl"]
+	path = upstream/n8n-io/tmpl
+	url = https://github.com/n8n-io/tmpl.git
+	branch = master
+[submodule "upstream/n8n-io/n8n-benchmarking"]
+	path = upstream/n8n-io/n8n-benchmarking
+	url = https://github.com/n8n-io/n8n-benchmarking.git
+	branch = master
+[submodule "upstream/n8n-io/js-client-oauth2-extended"]
+	path = upstream/n8n-io/js-client-oauth2-extended
+	url = https://github.com/n8n-io/js-client-oauth2-extended.git
+	branch = master
