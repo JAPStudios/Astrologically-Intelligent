@@ -49,3 +49,51 @@
 [submodule "upstream/odysseus-dev/odysseus"]
 	path = upstream/odysseus-dev/odysseus
 	url = https://github.com/odysseus-dev/odysseus.git
+
+[submodule "upstream/anthropics/anthropic-sdk-python"]
+	path = upstream/anthropics/anthropic-sdk-python
+	url = https://github.com/anthropics/anthropic-sdk-python.git
+
+[submodule "upstream/openai/openai-python"]
+	path = upstream/openai/openai-python
+	url = https://github.com/openai/openai-python.git
+
+[submodule "upstream/openai/openai-agents-js"]
+	path = upstream/openai/openai-agents-js
+	url = https://github.com/openai/openai-agents-js.git
+
+[submodule "upstream/n8n-io/self-hosted-ai-starter-kit"]
+	path = upstream/n8n-io/self-hosted-ai-starter-kit
+	url = https://github.com/n8n-io/self-hosted-ai-starter-kit.git
+
+[submodule "upstream/NousResearch/hermes-official-plugins"]
+	path = upstream/NousResearch/hermes-official-plugins
+	url = https://github.com/NousResearch/hermes-official-plugins.git
+
+[submodule "upstream/openclaw/clawhub"]
+	path = upstream/openclaw/clawhub
+	url = https://github.com/openclaw/clawhub.git
+
+[submodule "upstream/openclaw/acpx"]
+	path = upstream/openclaw/acpx
+	url = https://github.com/openclaw/acpx.git
+
+[submodule "upstream/paperclipai/companies"]
+	path = upstream/paperclipai/companies
+	url = https://github.com/paperclipai/companies.git
+
+[submodule "upstream/paperclipai/hermes-paperclip-adapter"]
+	path = upstream/paperclipai/hermes-paperclip-adapter
+	url = https://github.com/paperclipai/hermes-paperclip-adapter.git
+
+[submodule "upstream/perplexityai/perplexity-node"]
+	path = upstream/perplexityai/perplexity-node
+	url = https://github.com/perplexityai/perplexity-node.git
+
+[submodule "upstream/xai-org/xai-sdk-ts"]
+	path = upstream/xai-org/xai-sdk-ts
+	url = https://github.com/xai-org/xai-sdk-ts.git
+
+[submodule "upstream/odysseus-dev/odysseus-current"]
+	path = upstream/odysseus-dev/odysseus-current
+	url = https://github.com/odysseus-dev/odysseus-current.git
