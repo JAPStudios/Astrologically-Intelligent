@@ -2397,3 +2397,103 @@
 	path = upstream/openclaw/community
 	url = https://github.com/openclaw/community.git
 	branch = main
+[submodule "upstream/openclaw/caclawphony"]
+	path = upstream/openclaw/caclawphony
+	url = https://github.com/openclaw/caclawphony.git
+	branch = main
+[submodule "upstream/openclaw/discrawl"]
+	path = upstream/openclaw/discrawl
+	url = https://github.com/openclaw/discrawl.git
+	branch = main
+[submodule "upstream/openclaw/slacrawl"]
+	path = upstream/openclaw/slacrawl
+	url = https://github.com/openclaw/slacrawl.git
+	branch = main
+[submodule "upstream/openclaw/crabline"]
+	path = upstream/openclaw/crabline
+	url = https://github.com/openclaw/crabline.git
+	branch = main
+[submodule "upstream/openclaw/releases"]
+	path = upstream/openclaw/releases
+	url = https://github.com/openclaw/releases.git
+	branch = main
+[submodule "upstream/openclaw/ocm"]
+	path = upstream/openclaw/ocm
+	url = https://github.com/openclaw/ocm.git
+	branch = main
+[submodule "upstream/openclaw/docs"]
+	path = upstream/openclaw/docs
+	url = https://github.com/openclaw/docs.git
+	branch = main
+[submodule "upstream/openclaw/esp-openclaw-node"]
+	path = upstream/openclaw/esp-openclaw-node
+	url = https://github.com/openclaw/esp-openclaw-node.git
+	branch = main
+[submodule "upstream/openclaw/notcrawl"]
+	path = upstream/openclaw/notcrawl
+	url = https://github.com/openclaw/notcrawl.git
+	branch = main
+[submodule "upstream/openclaw/clawsweeper"]
+	path = upstream/openclaw/clawsweeper
+	url = https://github.com/openclaw/clawsweeper.git
+	branch = main
+[submodule "upstream/openclaw/clownfish"]
+	path = upstream/openclaw/clownfish
+	url = https://github.com/openclaw/clownfish.git
+	branch = main
+[submodule "upstream/openclaw/crabpot"]
+	path = upstream/openclaw/crabpot
+	url = https://github.com/openclaw/crabpot.git
+	branch = main
+[submodule "upstream/openclaw/wacrawl"]
+	path = upstream/openclaw/wacrawl
+	url = https://github.com/openclaw/wacrawl.git
+	branch = main
+[submodule "upstream/openclaw/plugin-inspector"]
+	path = upstream/openclaw/plugin-inspector
+	url = https://github.com/openclaw/plugin-inspector.git
+	branch = main
+[submodule "upstream/openclaw/kitchen-sink"]
+	path = upstream/openclaw/kitchen-sink
+	url = https://github.com/openclaw/kitchen-sink.git
+	branch = main
+[submodule "upstream/openclaw/gitcrawl"]
+	path = upstream/openclaw/gitcrawl
+	url = https://github.com/openclaw/gitcrawl.git
+	branch = main
+[submodule "upstream/openclaw/Kova"]
+	path = upstream/openclaw/Kova
+	url = https://github.com/openclaw/Kova.git
+	branch = main
+[submodule "upstream/openclaw/cookbook"]
+	path = upstream/openclaw/cookbook
+	url = https://github.com/openclaw/cookbook.git
+	branch = main
+[submodule "upstream/openclaw/clawsweeper.bot"]
+	path = upstream/openclaw/clawsweeper.bot
+	url = https://github.com/openclaw/clawsweeper.bot.git
+	branch = main
+[submodule "upstream/openclaw/crabbox"]
+	path = upstream/openclaw/crabbox
+	url = https://github.com/openclaw/crabbox.git
+	branch = main
+[submodule "upstream/openclaw/clawsweeper-state-archive-20260731"]
+	path = upstream/openclaw/clawsweeper-state-archive-20260731
+	url = https://github.com/openclaw/clawsweeper-state-archive-20260731.git
+	branch = main
+[submodule "upstream/openclaw/openclaw-rtt"]
+	path = upstream/openclaw/openclaw-rtt
+	url = https://github.com/openclaw/openclaw-rtt.git
+	branch = main
+[submodule "upstream/openclaw/crawlkit"]
+	path = upstream/openclaw/crawlkit
+	url = https://github.com/openclaw/crawlkit.git
+	branch = main
+[submodule "upstream/openclaw/crawlbar"]
+	path = upstream/openclaw/crawlbar
+	url = https://github.com/openclaw/crawlbar.git
+	branch = main
+[submodule "upstream/openclaw/clawgrit-reports"]
+	path = upstream/openclaw/clawgrit-reports
+	url = https://github.com/openclaw/clawgrit-reports.git
+	branch = main
