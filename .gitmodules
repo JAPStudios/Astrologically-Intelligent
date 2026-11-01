@@ -397,3 +397,103 @@
 	path = upstream/anthropics/claude-for-legal
 	url = https://github.com/anthropics/claude-for-legal.git
 	branch = main
+[submodule "upstream/anthropics/headvis"]
+	path = upstream/anthropics/headvis
+	url = https://github.com/anthropics/headvis.git
+	branch = main
+[submodule "upstream/anthropics/cwc-long-running-agents"]
+	path = upstream/anthropics/cwc-long-running-agents
+	url = https://github.com/anthropics/cwc-long-running-agents.git
+	branch = main
+[submodule "upstream/anthropics/cwc-workshops"]
+	path = upstream/anthropics/cwc-workshops
+	url = https://github.com/anthropics/cwc-workshops.git
+	branch = main
+[submodule "upstream/anthropics/swift-markdown"]
+	path = upstream/anthropics/swift-markdown
+	url = https://github.com/anthropics/swift-markdown.git
+	branch = main
+[submodule "upstream/anthropics/html-effectiveness"]
+	path = upstream/anthropics/html-effectiveness
+	url = https://github.com/anthropics/html-effectiveness.git
+	branch = main
+[submodule "upstream/anthropics/scone-bench"]
+	path = upstream/anthropics/scone-bench
+	url = https://github.com/anthropics/scone-bench.git
+	branch = main
+[submodule "upstream/anthropics/cargo-nix-plugin"]
+	path = upstream/anthropics/cargo-nix-plugin
+	url = https://github.com/anthropics/cargo-nix-plugin.git
+	branch = main
+[submodule "upstream/anthropics/ClaudeForFoundationModels"]
+	path = upstream/anthropics/ClaudeForFoundationModels
+	url = https://github.com/anthropics/ClaudeForFoundationModels.git
+	branch = main
+[submodule "upstream/anthropics/defending-code-reference-harness"]
+	path = upstream/anthropics/defending-code-reference-harness
+	url = https://github.com/anthropics/defending-code-reference-harness.git
+	branch = main
+[submodule "upstream/anthropics/riegeli-rs"]
+	path = upstream/anthropics/riegeli-rs
+	url = https://github.com/anthropics/riegeli-rs.git
+	branch = anthropic-next
+[submodule "upstream/anthropics/leptos-chartistry"]
+	path = upstream/anthropics/leptos-chartistry
+	url = https://github.com/anthropics/leptos-chartistry.git
+	branch = master
+[submodule "upstream/anthropics/launch-your-agent"]
+	path = upstream/anthropics/launch-your-agent
+	url = https://github.com/anthropics/launch-your-agent.git
+	branch = main
+[submodule "upstream/anthropics/claude-tag-plugins"]
+	path = upstream/anthropics/claude-tag-plugins
+	url = https://github.com/anthropics/claude-tag-plugins.git
+	branch = main
+[submodule "upstream/anthropics/jacobian-lens"]
+	path = upstream/anthropics/jacobian-lens
+	url = https://github.com/anthropics/jacobian-lens.git
+	branch = main
+[submodule "upstream/anthropics/code-migration-kit-with-claude-code"]
+	path = upstream/anthropics/code-migration-kit-with-claude-code
+	url = https://github.com/anthropics/code-migration-kit-with-claude-code.git
+	branch = main
+[submodule "upstream/anthropics/k12-teacher-skills"]
+	path = upstream/anthropics/k12-teacher-skills
+	url = https://github.com/anthropics/k12-teacher-skills.git
+	branch = main
+[submodule "upstream/anthropics/rayon"]
+	path = upstream/anthropics/rayon
+	url = https://github.com/anthropics/rayon.git
+	branch = main
+[submodule "upstream/anthropics/cryptography-research-demo"]
+	path = upstream/anthropics/cryptography-research-demo
+	url = https://github.com/anthropics/cryptography-research-demo.git
+	branch = main
+[submodule "upstream/anthropics/oncall-kit"]
+	path = upstream/anthropics/oncall-kit
+	url = https://github.com/anthropics/oncall-kit.git
+	branch = main
+[submodule "upstream/anthropics/formal-math"]
+	path = upstream/anthropics/formal-math
+	url = https://github.com/anthropics/formal-math.git
+	branch = main
+[submodule "upstream/anthropics/OpenROAD-flow-scripts"]
+	path = upstream/anthropics/OpenROAD-flow-scripts
+	url = https://github.com/anthropics/OpenROAD-flow-scripts.git
+	branch = master
+[submodule "upstream/anthropics/amulet2"]
+	path = upstream/anthropics/amulet2
+	url = https://github.com/anthropics/amulet2.git
+	branch = main
+[submodule "upstream/anthropics/mockturtle"]
+	path = upstream/anthropics/mockturtle
+	url = https://github.com/anthropics/mockturtle.git
+	branch = master
+[submodule "upstream/anthropics/claude-tag-wif-gateway-sample"]
+	path = upstream/anthropics/claude-tag-wif-gateway-sample
+	url = https://github.com/anthropics/claude-tag-wif-gateway-sample.git
+	branch = main
+[submodule "upstream/anthropics/xls"]
+	path = upstream/anthropics/xls
+	url = https://github.com/anthropics/xls.git
+	branch = main
