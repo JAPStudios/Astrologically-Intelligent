@@ -7,6 +7,7 @@ from typing import Any, Callable
 from .storage import Store
 from .orchestration import Orchestrator
 from .plugins import PluginManager
+from .integrations import n8n_client_from_env
 
 
 class ToolRegistry:
@@ -115,6 +116,19 @@ class ToolRegistry:
             lambda:self.plugins.discover() if hasattr(self,"plugins") else [])
         reg("plugins.status","Show installed plugin load results.",{},[],
             lambda:self.plugins.status() if hasattr(self,"plugins") else {"loaded":[],"errors":[]})
+
+        reg("n8n.workflows.list","List workflows from a configured n8n instance.", 
+            {"limit":{"type":"integer","minimum":1,"maximum":250},"cursor":{"type":"string"}},
+            [],lambda limit=100,cursor=None:n8n_client_from_env().list_workflows(limit,cursor))
+        reg("n8n.workflows.get","Retrieve a workflow definition from n8n by ID.",
+            {"workflow_id":{"type":"string"}},["workflow_id"],
+            lambda workflow_id:n8n_client_from_env().get_workflow(workflow_id))
+        reg("n8n.workflows.activate","Activate a workflow in the configured n8n instance.",
+            {"workflow_id":{"type":"string"}},["workflow_id"],
+            lambda workflow_id:n8n_client_from_env().set_workflow_active(workflow_id,True))
+        reg("n8n.workflows.deactivate","Deactivate a workflow in the configured n8n instance.",
+            {"workflow_id":{"type":"string"}},["workflow_id"],
+            lambda workflow_id:n8n_client_from_env().set_workflow_active(workflow_id,False))
 
     def _list_skills(self) -> list[dict[str, str]]:
         from pathlib import Path
