@@ -205,7 +205,7 @@ class OpenClawClient:
         return cls(os.getenv("OPENCLAW_GATEWAY_URL", "http://127.0.0.1:18789"), token)
 
     def list_sessions(self, session_key: str = "main") -> Any:
-        if not re.fullmatch(r"[A-Za-z0-9_:@./-]{1,256}", session_key):
+        if not re.fullmatch(r"[A-Za-z0-9_:@.-]{1,256}", session_key) or ".." in session_key:
             raise ValueError("Invalid OpenClaw session key")
         # Keep this integration read-only. The Gateway token is an operator credential;
         # no arbitrary tool name or mutating tool arguments are accepted here.
