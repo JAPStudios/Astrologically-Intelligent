@@ -697,3 +697,103 @@
 	path = upstream/n8n-io/traefik-cloudflarewarp-plugin
 	url = https://github.com/n8n-io/traefik-cloudflarewarp-plugin.git
 	branch = main
+[submodule "upstream/n8n-io/terraform-azurerm-aks"]
+	path = upstream/n8n-io/terraform-azurerm-aks
+	url = https://github.com/n8n-io/terraform-azurerm-aks.git
+	branch = main
+[submodule "upstream/n8n-io/terraform-aws-n8n"]
+	path = upstream/n8n-io/terraform-aws-n8n
+	url = https://github.com/n8n-io/terraform-aws-n8n.git
+	branch = main
+[submodule "upstream/n8n-io/n8n-sandbox-service"]
+	path = upstream/n8n-io/n8n-sandbox-service
+	url = https://github.com/n8n-io/n8n-sandbox-service.git
+	branch = main
+[submodule "upstream/n8n-io/terraform-azurerm-n8n"]
+	path = upstream/n8n-io/terraform-azurerm-n8n
+	url = https://github.com/n8n-io/terraform-azurerm-n8n.git
+	branch = main
+[submodule "upstream/n8n-io/n8n-observability"]
+	path = upstream/n8n-io/n8n-observability
+	url = https://github.com/n8n-io/n8n-observability.git
+	branch = main
+[submodule "upstream/n8n-io/video-resources"]
+	path = upstream/n8n-io/video-resources
+	url = https://github.com/n8n-io/video-resources.git
+	branch = main
+[submodule "upstream/n8n-io/terraform-google-n8n"]
+	path = upstream/n8n-io/terraform-google-n8n
+	url = https://github.com/n8n-io/terraform-google-n8n.git
+	branch = main
+[submodule "upstream/n8n-io/n8n-airgap-monitoring"]
+	path = upstream/n8n-io/n8n-airgap-monitoring
+	url = https://github.com/n8n-io/n8n-airgap-monitoring.git
+	branch = main
+[submodule "upstream/n8n-io/github-actions"]
+	path = upstream/n8n-io/github-actions
+	url = https://github.com/n8n-io/github-actions.git
+	branch = main
+[submodule "upstream/n8n-io/automation-mining-skill"]
+	path = upstream/n8n-io/automation-mining-skill
+	url = https://github.com/n8n-io/automation-mining-skill.git
+	branch = main
+[submodule "upstream/n8n-io/n8n-kiro-power"]
+	path = upstream/n8n-io/n8n-kiro-power
+	url = https://github.com/n8n-io/n8n-kiro-power.git
+	branch = main
+[submodule "upstream/n8n-io/n8n-cursor-plugin"]
+	path = upstream/n8n-io/n8n-cursor-plugin
+	url = https://github.com/n8n-io/n8n-cursor-plugin.git
+	branch = main
+[submodule "upstream/NousResearch/llama.cpp"]
+	path = upstream/NousResearch/llama.cpp
+	url = https://github.com/NousResearch/llama.cpp.git
+	branch = master
+[submodule "upstream/NousResearch/llm-chain"]
+	path = upstream/NousResearch/llm-chain
+	url = https://github.com/NousResearch/llm-chain.git
+	branch = main
+[submodule "upstream/NousResearch/local_generative_agents"]
+	path = upstream/NousResearch/local_generative_agents
+	url = https://github.com/NousResearch/local_generative_agents.git
+	branch = main
+[submodule "upstream/NousResearch/Obsidian"]
+	path = upstream/NousResearch/Obsidian
+	url = https://github.com/NousResearch/Obsidian.git
+	branch = main
+[submodule "upstream/NousResearch/StripedHyenaTrainer"]
+	path = upstream/NousResearch/StripedHyenaTrainer
+	url = https://github.com/NousResearch/StripedHyenaTrainer.git
+	branch = main
+[submodule "upstream/NousResearch/jedi"]
+	path = upstream/NousResearch/jedi
+	url = https://github.com/NousResearch/jedi.git
+	branch = master
+[submodule "upstream/NousResearch/finetuning-subnet"]
+	path = upstream/NousResearch/finetuning-subnet
+	url = https://github.com/NousResearch/finetuning-subnet.git
+	branch = master
+[submodule "upstream/NousResearch/ollama"]
+	path = upstream/NousResearch/ollama
+	url = https://github.com/NousResearch/ollama.git
+	branch = main
+[submodule "upstream/NousResearch/funcchain"]
+	path = upstream/NousResearch/funcchain
+	url = https://github.com/NousResearch/funcchain.git
+	branch = main
+[submodule "upstream/NousResearch/axolotl-func-calling"]
+	path = upstream/NousResearch/axolotl-func-calling
+	url = https://github.com/NousResearch/axolotl-func-calling.git
+	branch = main
+[submodule "upstream/NousResearch/Hermes-Function-Calling"]
+	path = upstream/NousResearch/Hermes-Function-Calling
+	url = https://github.com/NousResearch/Hermes-Function-Calling.git
+	branch = main
+[submodule "upstream/NousResearch/nous-llama.cpp"]
+	path = upstream/NousResearch/nous-llama.cpp
+	url = https://github.com/NousResearch/nous-llama.cpp.git
+	branch = master
+[submodule "upstream/NousResearch/nanotron"]
+	path = upstream/NousResearch/nanotron
+	url = https://github.com/NousResearch/nanotron.git
+	branch = main
