@@ -1,10 +1,10 @@
 # Agent runtime and provider configuration
 
-Astrologically Intelligent provides a persistent conversation runtime with model tool calling, SQLite memory and work items, Markdown skills, an extensible Python plugin entry-point group, and a SQLite-backed agent control plane.
+Astrologically Intelligent provides persistent conversations, model tool calling, SQLite memory and work items, Markdown skills, an extensible Python plugin entry-point group, and a SQLite-backed multi-agent control plane.
 
 ## Setup
 
-Python 3.10+; the core runtime uses the standard library. No provider SDK is required for the HTTP transports.
+Python 3.10+; the core runtime uses the standard library.
 
 ```sh
 export ASTRO_AI_PROVIDER=openai-compatible
@@ -18,14 +18,31 @@ Provider selection is controlled by `ASTRO_AI_PROVIDER`:
 
 | Provider value | Transport | Configuration |
 | --- | --- | --- |
-| `openai-compatible` (default) | OpenAI Chat Completions | `ASTRO_AI_API_KEY`, `ASTRO_AI_BASE_URL`, `ASTRO_AI_MODEL` |
-| `openai` | OpenAI Chat Completions | Same as above |
-| `xai` / `grok` | OpenAI-compatible Chat Completions | Set base URL and xAI key/model |
-| `perplexity` | OpenAI-compatible Chat Completions transport | Configure an endpoint/model that supports the Chat Completions tool schema |
-| `local` | OpenAI-compatible local endpoint | Set `ASTRO_AI_BASE_URL`; API key may be empty for localhost |
+| `openai-compatible` (default), `openai` | OpenAI Chat Completions | `ASTRO_AI_API_KEY`, `ASTRO_AI_BASE_URL`, `ASTRO_AI_MODEL` |
+| `xai` / `grok` | OpenAI-compatible Chat Completions transport | Configure the xAI API endpoint and key |
+| `perplexity` | OpenAI-compatible transport only | Requires a Perplexity endpoint/model supporting the Chat Completions tool schema |
+| `local` | OpenAI-compatible local endpoint | Set `ASTRO_AI_BASE_URL`; key may be empty for localhost |
 | `anthropic` / `claude` | Native Anthropic Messages API | `ANTHROPIC_API_KEY` (or `ASTRO_AI_API_KEY`), optional `ANTHROPIC_BASE_URL`, `ASTRO_AI_MODEL` |
 
-Anthropic transport maps system messages, assistant tool-use blocks, tool schemas, and tool results to and from the runtime's function-tool interface. xAI and other compatible providers use the existing Chat Completions transport. This does not claim native integration of every vendor SDK or every vendor-specific endpoint.
+Anthropic transport maps system messages, assistant tool-use blocks, tool schemas, and tool results to the runtime's function-tool interface. xAI and Perplexity are not represented as native vendor SDK integrations here.
+
+## n8n workflow integration
+
+Astrologically Intelligent can call an existing n8n instance through its public REST API. Configure:
+
+```sh
+export N8N_BASE_URL="https://n8n.example.com"
+export N8N_API_KEY="..."
+```
+
+Available tools:
+
+- `n8n.workflows.list`: list workflows, with bounded pagination.
+- `n8n.workflows.get`: retrieve one workflow by ID.
+- `n8n.workflows.activate`: activate a workflow.
+- `n8n.workflows.deactivate`: deactivate a workflow.
+
+The connector uses the n8n API-key header. HTTPS is required except for localhost. It does not claim to vendor the n8n application or its node catalogue.
 
 ## HTTP service
 
@@ -42,6 +59,7 @@ The service binds to `127.0.0.1:8765` by default. It exposes `GET /health` and `
 - Budgets: `budgets.set`, `budgets.record_cost`, `budgets.list`
 - Runs: `runs.start`, `runs.finish`
 - Plugins: `plugins.discover`, `plugins.status`
+- n8n: `n8n.workflows.list`, `n8n.workflows.get`, `n8n.workflows.activate`, `n8n.workflows.deactivate`
 
 ## Plugins
 
@@ -53,4 +71,4 @@ Installed Python distributions may register entry points under `astrologically_i
 python -m unittest discover -s tests -v
 ```
 
-The current source integrations are incremental. The presence of a provider adapter or an upstream reference does not mean every upstream project has been imported or ported.
+The organization-wide upstream import remains in progress. No source tree is counted as imported merely because an API connector or compatibility layer exists.

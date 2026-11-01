@@ -1,10 +1,10 @@
 # Astrologically Intelligent
 
-A native Android application and Python agent platform with model-provider routing, persistent conversations and memory, extensible tools and skills, multi-agent orchestration, goals, approvals, budgets, and execution records.
+Astrologically Intelligent is an extensible AI application and agent platform with persistent conversations and memory, model-provider routing, tools, skills, multi-agent orchestration, and native Android access.
 
 ## Python agent platform
 
-See [AGENT_RUNTIME.md](AGENT_RUNTIME.md) for setup, provider configuration, API usage, orchestration tools, plugin entry points, and security controls.
+See [AGENT_RUNTIME.md](AGENT_RUNTIME.md) for setup, provider configuration, API usage, orchestration tools, plugin entry points, external integrations, and security controls.
 
 Run with Python 3.10+:
 
@@ -33,6 +33,18 @@ gradle assembleDebug
 python -m unittest discover -s tests -v
 ```
 
-## Upstream integration
+## Upstream organizations
 
-The target project is being expanded with source and working capabilities from the NousResearch, Omacom, OpenClaw, and PaperclipAI GitHub organizations. This is an ongoing repository-wide integration; an imported repository, source snapshot, compatibility layer, or feature is only counted as integrated after its code, dependencies, runtime behavior, and tests are actually incorporated.
+The requested upstream scope comprises public repositories from these GitHub organizations:
+
+- [Anthropic](https://github.com/orgs/anthropics/repositories)
+- [n8n](https://github.com/orgs/n8n-io/repositories)
+- [NousResearch](https://github.com/orgs/NousResearch/repositories)
+- [Odysseus](https://github.com/orgs/odysseus-dev/repositories)
+- [OpenAI](https://github.com/orgs/openai/repositories)
+- [OpenClaw](https://github.com/orgs/openclaw/repositories)
+- [PaperclipAI](https://github.com/orgs/paperclipai/repositories)
+- [Perplexity](https://github.com/orgs/perplexityai/repositories)
+- [xAI](https://github.com/orgs/xai-org/repositories)
+
+This is a repository-wide integration effort. Provider compatibility, an API connector, a source reference, or a catalogue is not equivalent to importing an upstream repository's source and functionality. Track each upstream project against its actual imported code, required dependencies, executable behavior, and tests.
