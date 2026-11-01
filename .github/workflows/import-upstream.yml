@@ -33,7 +33,7 @@ jobs:
           while true; do
             batch=$((batch + 1))
             echo "Starting upstream import batch ${batch}"
-            output="$(python scripts/import_upstream_orgs.py --limit 10)"
+            output="$(python scripts/import_upstream_orgs.py --limit 25)"
             echo "$output"
             added="$(printf '%s\n' "$output" | sed -n 's/^IMPORT_ADDED=\([0-9][0-9]*\).*/\1/p' | tail -n 1)"
             if [[ -z "$added" ]]; then
