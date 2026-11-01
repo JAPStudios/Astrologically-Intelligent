@@ -1,10 +1,12 @@
-# Astrologically Intelligent — agent runtime
+# Astrologically Intelligent — integrated agent platform
 
-This repository now contains a native Python agent runtime designed around the existing astrology application. It adopts compatible architectural ideas from NousResearch Hermes (provider abstraction, tool registry, durable sessions and memory), OpenClaw (a local service/API entry point and extensible tool surface), and Paperclip (durable work items and explicit task states). Omarchy's Linux desktop configuration is not a suitable runtime dependency for this Android/Python application; its reusable UI ideas remain a separate native Android integration task.
+Astrologically Intelligent is the destination repository for the software and capabilities being integrated from the NousResearch, Omacom, OpenClaw, and PaperclipAI GitHub organizations. No product-purpose or platform category is excluded by the repository name.
 
-## Run
+## Existing runtime
 
-Python 3.10+; no third-party Python packages are required.
+The Python service provides multi-turn model conversations, OpenAI-compatible provider transport, tool calling, SQLite conversation history and memory, task records, Markdown skills, and a JSON HTTP API. The Android application is in `app/`.
+
+Run the service with Python 3.10+:
 
 ```sh
 export ASTRO_AI_API_KEY="..."
@@ -13,25 +15,34 @@ export ASTRO_AI_BASE_URL="https://api.openai.com/v1"
 python -m astrologically_intelligent
 ```
 
-The HTTP service binds to `127.0.0.1:8765` by default:
-- `GET /health`
-- `POST /v1/chat` with JSON `{"message":"...","session_id":"optional-stable-id"}`
+The service binds to loopback on port 8765 by default. It exposes `GET /health` and `POST /v1/chat`. Non-loopback binding requires `ASTRO_AI_API_TOKEN` with at least 24 characters; clients authenticate with a bearer token. Request bodies are limited to 1 MB.
 
-For Gemini's OpenAI-compatible endpoint, configure `ASTRO_AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai`, `ASTRO_AI_MODEL`, and an API key. Ollama can be used with `ASTRO_AI_BASE_URL=http://127.0.0.1:11434/v1`; local endpoints may omit the API key. Other compatible providers can be configured by base URL and model.
+## Implemented integration work
 
-For a non-loopback bind, set `ASTRO_AI_API_TOKEN` to a random value of at least 24 characters. Clients must send `Authorization: Bearer <token>`. The server refuses an externally reachable bind without this token.
+- **Agent organization and execution records:** SQLite-backed agent registration, adapter/model metadata, role and state, run lifecycle, and due-heartbeat discovery.
+- **Goals:** hierarchical goal records with optional parent goal and owning agent.
+- **Governance:** explicit approval requests with one-way pending-to-decision transitions.
+- **Budgets:** per-agent or organization-level period budgets; cost recording is rejected when it would exceed the configured limit.
+- **Plugin lifecycle:** discovery and loading of installed Python entry points in the `astrologically_intelligent.plugins` group. A plugin exposes `setup(registry)`. Plugins are executable trusted code and must be installed deliberately.
+- **Existing capabilities:** provider abstraction, bounded tool-calling loop, persistent conversations and memory, work items, and Markdown skill discovery.
 
-## Included functionality
+## Plugin entry-point example
 
-- OpenAI-compatible provider transport with configurable model, endpoint, API key, timeout, and HTTP error reporting.
-- Multi-turn tool-calling loop with a bounded number of rounds.
-- SQLite persistence for conversations, namespaced memories, and work items.
-- Built-in tools for explicit memory save/recall, work-item create/list/update, and read-only local Markdown skill discovery/loading. The included astrology skill enforces birth-data requirements and prevents fabricated ephemeris/chart outputs.
-- Local JSON HTTP API with request-size limits, constant-time bearer-token comparison, no-store responses, and loopback-only default.
-- Unit tests and a dedicated GitHub Actions workflow.
+In a Python package's `pyproject.toml`:
 
-## Scope and integration status
+```toml
+[project.entry-points."astrologically_intelligent.plugins"]
+example = "example_plugin:plugin"
+```
 
-This is an implemented Python runtime, not a wholesale copy of Hermes, OpenClaw, Paperclip, or Omarchy. The upstream projects are large, independent applications with different execution environments. Their source trees are not interchangeable with this Android/Python codebase. This integration ports compatible subsystem designs and leaves platform-specific components out rather than importing inert scripts or presenting configuration as functioning software.
+The referenced object must expose `setup(registry)`; it can register tools through `registry.register(name, description, parameters, handler)`.
 
-Not yet implemented: Android UI wiring, background scheduling, messaging-channel adapters, browser automation, MCP transport, model-provider-specific OAuth flows, multi-agent isolation, budget enforcement, and astronomical ephemeris/chart computation. No astrology chart result is fabricated by this runtime.
+## Integration status
+
+This commit adds functioning orchestration primitives and plugin loading. It does not claim that every repository in the four organizations has been imported or that every upstream application has been fully ported. The source organizations contain many independent repositories and complete applications; repository-by-repository source ingestion, dependency integration, platform builds, and test execution remain necessary. No list of planned work is represented as completed functionality.
+
+Run tests:
+
+```sh
+python -m unittest discover -s tests -v
+```
