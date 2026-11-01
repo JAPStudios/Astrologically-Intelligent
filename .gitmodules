@@ -2297,3 +2297,103 @@
 	path = upstream/openclaw/AXorcist
 	url = https://github.com/openclaw/AXorcist.git
 	branch = main
+[submodule "upstream/openclaw/Peekaboo"]
+	path = upstream/openclaw/Peekaboo
+	url = https://github.com/openclaw/Peekaboo.git
+	branch = main
+[submodule "upstream/openclaw/Tachikoma"]
+	path = upstream/openclaw/Tachikoma
+	url = https://github.com/openclaw/Tachikoma.git
+	branch = main
+[submodule "upstream/openclaw/mcporter"]
+	path = upstream/openclaw/mcporter
+	url = https://github.com/openclaw/mcporter.git
+	branch = main
+[submodule "upstream/openclaw/Swabble"]
+	path = upstream/openclaw/Swabble
+	url = https://github.com/openclaw/Swabble.git
+	branch = main
+[submodule "upstream/openclaw/imsg"]
+	path = upstream/openclaw/imsg
+	url = https://github.com/openclaw/imsg.git
+	branch = main
+[submodule "upstream/openclaw/gogcli"]
+	path = upstream/openclaw/gogcli
+	url = https://github.com/openclaw/gogcli.git
+	branch = main
+[submodule "upstream/openclaw/wacli"]
+	path = upstream/openclaw/wacli
+	url = https://github.com/openclaw/wacli.git
+	branch = main
+[submodule "upstream/openclaw/songsee"]
+	path = upstream/openclaw/songsee
+	url = https://github.com/openclaw/songsee.git
+	branch = main
+[submodule "upstream/openclaw/nix-openclaw"]
+	path = upstream/openclaw/nix-openclaw
+	url = https://github.com/openclaw/nix-openclaw.git
+	branch = main
+[submodule "upstream/openclaw/goplaces"]
+	path = upstream/openclaw/goplaces
+	url = https://github.com/openclaw/goplaces.git
+	branch = main
+[submodule "upstream/openclaw/spogo"]
+	path = upstream/openclaw/spogo
+	url = https://github.com/openclaw/spogo.git
+	branch = main
+[submodule "upstream/openclaw/remindctl"]
+	path = upstream/openclaw/remindctl
+	url = https://github.com/openclaw/remindctl.git
+	branch = main
+[submodule "upstream/openclaw/clawgo"]
+	path = upstream/openclaw/clawgo
+	url = https://github.com/openclaw/clawgo.git
+	branch = main
+[submodule "upstream/openclaw/nix-openclaw-tools"]
+	path = upstream/openclaw/nix-openclaw-tools
+	url = https://github.com/openclaw/nix-openclaw-tools.git
+	branch = main
+[submodule "upstream/openclaw/homebrew-tap"]
+	path = upstream/openclaw/homebrew-tap
+	url = https://github.com/openclaw/homebrew-tap.git
+	branch = main
+[submodule "upstream/openclaw/casa"]
+	path = upstream/openclaw/casa
+	url = https://github.com/openclaw/casa.git
+	branch = main
+[submodule "upstream/openclaw/clawdinators"]
+	path = upstream/openclaw/clawdinators
+	url = https://github.com/openclaw/clawdinators.git
+	branch = main
+[submodule "upstream/openclaw/openclaw-ansible"]
+	path = upstream/openclaw/openclaw-ansible
+	url = https://github.com/openclaw/openclaw-ansible.git
+	branch = main
+[submodule "upstream/openclaw/lobster"]
+	path = upstream/openclaw/lobster
+	url = https://github.com/openclaw/lobster.git
+	branch = main
+[submodule "upstream/openclaw/hermit"]
+	path = upstream/openclaw/hermit
+	url = https://github.com/openclaw/hermit.git
+	branch = main
+[submodule "upstream/openclaw/flawd-bot"]
+	path = upstream/openclaw/flawd-bot
+	url = https://github.com/openclaw/flawd-bot.git
+	branch = main
+[submodule "upstream/openclaw/.github"]
+	path = upstream/openclaw/.github
+	url = https://github.com/openclaw/.github.git
+	branch = main
+[submodule "upstream/openclaw/openclaw-windows-node"]
+	path = upstream/openclaw/openclaw-windows-node
+	url = https://github.com/openclaw/openclaw-windows-node.git
+	branch = main
+[submodule "upstream/openclaw/voice-community"]
+	path = upstream/openclaw/voice-community
+	url = https://github.com/openclaw/voice-community.git
+	branch = regional-ops-sop
+[submodule "upstream/openclaw/community"]
+	path = upstream/openclaw/community
+	url = https://github.com/openclaw/community.git
+	branch = main
