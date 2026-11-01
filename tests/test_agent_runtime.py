@@ -48,6 +48,16 @@ class RuntimeTests(unittest.TestCase):
         provider = OpenAICompatibleProvider(ProviderConfig("http://localhost:1234/v1", "", "test-model"))
         self.assertEqual(provider.config.model, "test-model")
 
+    def test_skill_tools_list_and_read_astrology_guide(self):
+        names = json.loads(self.runtime.tools.execute("skills.list", "{}"))
+        self.assertIn("astrology", [item["name"] for item in names])
+        guide = json.loads(self.runtime.tools.execute("skills.read", {"name": "astrology"}))
+        self.assertIn("Calculation integrity", guide["content"])
+
+    def test_skill_tool_rejects_path_traversal(self):
+        result = json.loads(self.runtime.tools.execute("skills.read", {"name": "../README"}))
+        self.assertIn("error", result)
+
     def test_empty_message_rejected(self):
         with self.assertRaises(ValueError):
             self.runtime.chat("  ")

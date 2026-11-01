@@ -26,7 +26,7 @@ For a non-loopback bind, set `ASTRO_AI_API_TOKEN` to a random value of at least 
 - OpenAI-compatible provider transport with configurable model, endpoint, API key, timeout, and HTTP error reporting.
 - Multi-turn tool-calling loop with a bounded number of rounds.
 - SQLite persistence for conversations, namespaced memories, and work items.
-- Built-in tools for explicit memory save/recall and work-item create/list/update.
+- Built-in tools for explicit memory save/recall, work-item create/list/update, and read-only local Markdown skill discovery/loading. The included astrology skill enforces birth-data requirements and prevents fabricated ephemeris/chart outputs.
 - Local JSON HTTP API with request-size limits, constant-time bearer-token comparison, no-store responses, and loopback-only default.
 - Unit tests and a dedicated GitHub Actions workflow.
 
