@@ -1197,3 +1197,103 @@
 	path = upstream/NousResearch/hermes-labs-plugins
 	url = https://github.com/NousResearch/hermes-labs-plugins.git
 	branch = main
+[submodule "upstream/openai/kubernetes-ec2-autoscaler"]
+	path = upstream/openai/kubernetes-ec2-autoscaler
+	url = https://github.com/openai/kubernetes-ec2-autoscaler.git
+	branch = master
+[submodule "upstream/openai/mujoco-py"]
+	path = upstream/openai/mujoco-py
+	url = https://github.com/openai/mujoco-py.git
+	branch = master
+[submodule "upstream/openai/atari-py"]
+	path = upstream/openai/atari-py
+	url = https://github.com/openai/atari-py.git
+	branch = master
+[submodule "upstream/openai/pachi-py"]
+	path = upstream/openai/pachi-py
+	url = https://github.com/openai/pachi-py.git
+	branch = master
+[submodule "upstream/openai/gym"]
+	path = upstream/openai/gym
+	url = https://github.com/openai/gym.git
+	branch = master
+[submodule "upstream/openai/doom-py"]
+	path = upstream/openai/doom-py
+	url = https://github.com/openai/doom-py.git
+	branch = master
+[submodule "upstream/openai/InfoGAN"]
+	path = upstream/openai/InfoGAN
+	url = https://github.com/openai/InfoGAN.git
+	branch = master
+[submodule "upstream/openai/gym-http-api"]
+	path = upstream/openai/gym-http-api
+	url = https://github.com/openai/gym-http-api.git
+	branch = master
+[submodule "upstream/openai/requests-for-research"]
+	path = upstream/openai/requests-for-research
+	url = https://github.com/openai/requests-for-research.git
+	branch = master
+[submodule "upstream/openai/vime"]
+	path = upstream/openai/vime
+	url = https://github.com/openai/vime.git
+	branch = master
+[submodule "upstream/openai/improved-gan"]
+	path = upstream/openai/improved-gan
+	url = https://github.com/openai/improved-gan.git
+	branch = master
+[submodule "upstream/openai/rosbridge"]
+	path = upstream/openai/rosbridge
+	url = https://github.com/openai/rosbridge.git
+	branch = master
+[submodule "upstream/openai/imitation"]
+	path = upstream/openai/imitation
+	url = https://github.com/openai/imitation.git
+	branch = master
+[submodule "upstream/openai/iaf"]
+	path = upstream/openai/iaf
+	url = https://github.com/openai/iaf.git
+	branch = master
+[submodule "upstream/openai/robot_controllers"]
+	path = upstream/openai/robot_controllers
+	url = https://github.com/openai/robot_controllers.git
+	branch = indigo-devel
+[submodule "upstream/openai/fetch_robots"]
+	path = upstream/openai/fetch_robots
+	url = https://github.com/openai/fetch_robots.git
+	branch = indigo-devel
+[submodule "upstream/openai/neural-gpu"]
+	path = upstream/openai/neural-gpu
+	url = https://github.com/openai/neural-gpu.git
+	branch = master
+[submodule "upstream/openai/pixel-cnn"]
+	path = upstream/openai/pixel-cnn
+	url = https://github.com/openai/pixel-cnn.git
+	branch = master
+[submodule "upstream/openai/gym-soccer"]
+	path = upstream/openai/gym-soccer
+	url = https://github.com/openai/gym-soccer.git
+	branch = master
+[submodule "upstream/openai/gym-wikinav"]
+	path = upstream/openai/gym-wikinav
+	url = https://github.com/openai/gym-wikinav.git
+	branch = master
+[submodule "upstream/openai/gym-recording"]
+	path = upstream/openai/gym-recording
+	url = https://github.com/openai/gym-recording.git
+	branch = master
+[submodule "upstream/openai/pyconfigatron"]
+	path = upstream/openai/pyconfigatron
+	url = https://github.com/openai/pyconfigatron.git
+	branch = master
+[submodule "upstream/openai/openai-gemm"]
+	path = upstream/openai/openai-gemm
+	url = https://github.com/openai/openai-gemm.git
+	branch = master
+[submodule "upstream/openai/zbarlight"]
+	path = upstream/openai/zbarlight
+	url = https://github.com/openai/zbarlight.git
+	branch = master
+[submodule "upstream/openai/go-vncdriver"]
+	path = upstream/openai/go-vncdriver
+	url = https://github.com/openai/go-vncdriver.git
+	branch = master
