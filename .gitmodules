@@ -1397,3 +1397,103 @@
 	path = upstream/openai/blocksparse
 	url = https://github.com/openai/blocksparse.git
 	branch = master
+[submodule "upstream/openai/chef-logdna_agent"]
+	path = upstream/openai/chef-logdna_agent
+	url = https://github.com/openai/chef-logdna_agent.git
+	branch = master
+[submodule "upstream/openai/maddpg"]
+	path = upstream/openai/maddpg
+	url = https://github.com/openai/maddpg.git
+	branch = master
+[submodule "upstream/openai/deeptype"]
+	path = upstream/openai/deeptype
+	url = https://github.com/openai/deeptype.git
+	branch = master
+[submodule "upstream/openai/retro"]
+	path = upstream/openai/retro
+	url = https://github.com/openai/retro.git
+	branch = master
+[submodule "upstream/openai/ceph-chef"]
+	path = upstream/openai/ceph-chef
+	url = https://github.com/openai/ceph-chef.git
+	branch = master
+[submodule "upstream/openai/EPG"]
+	path = upstream/openai/EPG
+	url = https://github.com/openai/EPG.git
+	branch = master
+[submodule "upstream/openai/retro-movies"]
+	path = upstream/openai/retro-movies
+	url = https://github.com/openai/retro-movies.git
+	branch = master
+[submodule "upstream/openai/retro-baselines"]
+	path = upstream/openai/retro-baselines
+	url = https://github.com/openai/retro-baselines.git
+	branch = master
+[submodule "upstream/openai/sonic-on-ray"]
+	path = upstream/openai/sonic-on-ray
+	url = https://github.com/openai/sonic-on-ray.git
+	branch = master
+[submodule "upstream/openai/junit-annotate-buildkite-plugin"]
+	path = upstream/openai/junit-annotate-buildkite-plugin
+	url = https://github.com/openai/junit-annotate-buildkite-plugin.git
+	branch = master
+[submodule "upstream/openai/finetune-transformer-lm"]
+	path = upstream/openai/finetune-transformer-lm
+	url = https://github.com/openai/finetune-transformer-lm.git
+	branch = master
+[submodule "upstream/openai/glow"]
+	path = upstream/openai/glow
+	url = https://github.com/openai/glow.git
+	branch = master
+[submodule "upstream/openai/atari-reset"]
+	path = upstream/openai/atari-reset
+	url = https://github.com/openai/atari-reset.git
+	branch = master
+[submodule "upstream/openai/box2d-py"]
+	path = upstream/openai/box2d-py
+	url = https://github.com/openai/box2d-py.git
+	branch = master
+[submodule "upstream/openai/large-scale-curiosity"]
+	path = upstream/openai/large-scale-curiosity
+	url = https://github.com/openai/large-scale-curiosity.git
+	branch = master
+[submodule "upstream/openai/random-network-distillation"]
+	path = upstream/openai/random-network-distillation
+	url = https://github.com/openai/random-network-distillation.git
+	branch = master
+[submodule "upstream/openai/spinningup"]
+	path = upstream/openai/spinningup
+	url = https://github.com/openai/spinningup.git
+	branch = master
+[submodule "upstream/openai/coinrun"]
+	path = upstream/openai/coinrun
+	url = https://github.com/openai/coinrun.git
+	branch = master
+[submodule "upstream/openai/post--example"]
+	path = upstream/openai/post--example
+	url = https://github.com/openai/post--example.git
+	branch = master
+[submodule "upstream/openai/spinningup-workshop"]
+	path = upstream/openai/spinningup-workshop
+	url = https://github.com/openai/spinningup-workshop.git
+	branch = master
+[submodule "upstream/openai/lucid"]
+	path = upstream/openai/lucid
+	url = https://github.com/openai/lucid.git
+	branch = master
+[submodule "upstream/openai/gpt-2"]
+	path = upstream/openai/gpt-2
+	url = https://github.com/openai/gpt-2.git
+	branch = master
+[submodule "upstream/openai/neural-mmo"]
+	path = upstream/openai/neural-mmo
+	url = https://github.com/openai/neural-mmo.git
+	branch = v1.0
+[submodule "upstream/openai/ebm_code_release"]
+	path = upstream/openai/ebm_code_release
+	url = https://github.com/openai/ebm_code_release.git
+	branch = master
+[submodule "upstream/openai/sparse_attention"]
+	path = upstream/openai/sparse_attention
+	url = https://github.com/openai/sparse_attention.git
+	branch = master
