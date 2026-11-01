@@ -35,6 +35,29 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(task["status"],"open")
         updated=self.store.update_task(task["id"],"in_progress","agent-1")
         self.assertEqual(updated["assignee"],"agent-1")
+    def test_vendor_provider_defaults(self):
+        with patch.dict("os.environ", {
+            "ASTRO_AI_PROVIDER":"xai", "XAI_API_KEY":"xai-test",
+        }, clear=True):
+            xai=provider_from_env()
+        self.assertEqual(xai.config.base_url,"https://api.x.ai/v1")
+        self.assertEqual(xai.config.api_key,"xai-test")
+        with patch.dict("os.environ", {
+            "ASTRO_AI_PROVIDER":"perplexity", "PERPLEXITY_API_KEY":"pplx-test",
+        }, clear=True):
+            perplexity=provider_from_env()
+        self.assertEqual(perplexity.config.base_url,"https://api.perplexity.ai")
+        self.assertEqual(perplexity.config.model,"sonar")
+
+    def test_external_platform_tools_are_registered(self):
+        names={item["function"]["name"] for item in self.runtime.tools.definitions()}
+        expected={
+            "n8n.workflows.list","n8n.workflows.get","n8n.workflows.activate","n8n.workflows.deactivate",
+            "paperclip.agents.list","paperclip.issues.list","paperclip.issues.create",
+            "paperclip.goals.create","paperclip.approvals.list","perplexity.search","openclaw.sessions.list",
+        }
+        self.assertTrue(expected <= names)
+
     def test_provider_request_shape(self):
         provider=OpenAICompatibleProvider(ProviderConfig("http://localhost:1234/v1","","test-model"))
         self.assertEqual(provider.config.model,"test-model")
