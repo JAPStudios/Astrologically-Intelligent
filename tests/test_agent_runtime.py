@@ -96,6 +96,13 @@ class RuntimeTests(unittest.TestCase):
             "skills.read", {"name":"upstream/anthropics-skills/skills/skill-creator"}))
         self.assertIn("# Skill Creator", imported["content"])
 
+    def test_upstream_skill_with_dot_directory_can_be_read(self):
+        names = {item["name"] for item in json.loads(self.runtime.tools.execute("skills.list", "{}"))}
+        name = "upstream/openai-skills/skills/.curated/chatgpt-apps"
+        self.assertIn(name, names)
+        result = json.loads(self.runtime.tools.execute("skills.read", {"name":name}))
+        self.assertIn("#", result["content"])
+
     def test_skill_tool_rejects_path_traversal(self):
         result=json.loads(self.runtime.tools.execute("skills.read",{"name":"../README"}))
         self.assertIn("error",result)

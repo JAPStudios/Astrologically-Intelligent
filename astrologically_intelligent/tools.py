@@ -180,7 +180,8 @@ class ToolRegistry:
     def _read_skill(self, name: str) -> dict[str, str]:
         import re
         from pathlib import Path
-        if not isinstance(name, str) or len(name) > 256 or not re.fullmatch(r"[A-Za-z0-9_-]+(?:/[A-Za-z0-9_-]+)*",name):
+        if (not isinstance(name, str) or len(name) > 512 or name.startswith("/") or "\\" in name
+                or any(part in {"", ".", ".."} for part in name.split("/"))):
             raise ValueError("Invalid skill name")
         skills_root=Path("skills").resolve()
         upstream_root=Path("upstream").resolve()
