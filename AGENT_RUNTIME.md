@@ -104,4 +104,4 @@ Installed Python distributions may register entry points under `astrologically_i
 python -m unittest discover -s tests -v
 ```
 
-The organization-wide upstream import remains in progress. No source tree is counted as imported merely because an API connector or compatibility layer exists.
+The full public-repository import is complete: 740 non-empty repositories from all nine requested organizations are pinned as Git submodules. The three empty repositories skipped were `anthropics/homebrew-claude`, `NousResearch/forge-feedback`, and `perplexityai/pplx-rs`. Run `git submodule update --init --recursive` to retrieve the source trees. The import is source inclusion; it does not claim that every upstream application has been merged into the runtime or that all upstream projects share one execution model.

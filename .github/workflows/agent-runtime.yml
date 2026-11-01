@@ -9,7 +9,13 @@ on:
       - "scripts/**"
       - "tests/**"
       - ".gitmodules"
+      - "README.md"
+      - "AGENT_RUNTIME.md"
+      - "UPSTREAM_IMPORT.md"
       - "tests/test_agent_runtime.py"
+      - "README.md"
+      - "AGENT_RUNTIME.md"
+      - "UPSTREAM_IMPORT.md"
       - ".github/workflows/agent-runtime.yml"
   pull_request:
     paths:

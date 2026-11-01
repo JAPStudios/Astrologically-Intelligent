@@ -35,20 +35,15 @@ python -m unittest discover -s tests -v
 
 ## Upstream source imports
 
-Pinned source repositories are included as Git submodules under `upstream/` and `skills/upstream/`. The current pinned imports include source from all nine requested organizations. Initialize them in a checkout with:
+The complete public-repository inventory from all nine requested organizations has been imported as **740 pinned Git submodules**. The original inventory contained 743 public repositories; three empty repositories had no commit or source tree and were skipped. The import is recorded in `.gitmodules` and the Git tree.
+
+Initialize and retrieve every imported source tree with:
 
 ```sh
 git submodule update --init --recursive
 ```
 
-To import every public repository in all nine organizations, use the resumable importer:
-
-```sh
-python scripts/import_upstream_orgs.py --dry-run
-GITHUB_TOKEN="..." python scripts/import_upstream_orgs.py
-```
-
-The importer includes archived repositories and forks, skips already-imported submodule URLs, and stages source as Git submodules under `upstream/<organization>/<repository>`. Review the resulting `.gitmodules` and gitlinks before committing. A full organization-wide import has not yet been run.
+The resumable importer in `scripts/import_upstream_orgs.py` can add later upstream repositories or refresh the inventory. It includes archived repositories and forks and skips URLs already represented as submodules. It pins each default-branch commit; it does not flatten or rewrite upstream source files.
 
 ## Upstream organizations
 
