@@ -2,7 +2,7 @@
 
 ## Result
 
-<badge>Complete</badge>
+**Status: Complete**
 
 - Public repositories discovered across the nine requested GitHub organizations: **743**
 - Non-empty repositories pinned in the destination: **740**
