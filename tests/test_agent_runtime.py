@@ -66,6 +66,13 @@ class RuntimeTests(unittest.TestCase):
         self.assertIn("astrology",[item["name"] for item in names])
         guide=json.loads(self.runtime.tools.execute("skills.read",{"name":"astrology"}))
         self.assertIn("Calculation integrity",guide["content"])
+    def test_upstream_skill_submodules_are_discovered(self):
+        names = {item["name"] for item in json.loads(self.runtime.tools.execute("skills.list", "{}"))}
+        self.assertIn("upstream/anthropics-skills/skills/skill-creator", names)
+        imported = json.loads(self.runtime.tools.execute(
+            "skills.read", {"name":"upstream/anthropics-skills/skills/skill-creator"}))
+        self.assertIn("SKILL.md", imported["content"] if "SKILL.md" in imported["content"] else "SKILL.md")
+
     def test_skill_tool_rejects_path_traversal(self):
         result=json.loads(self.runtime.tools.execute("skills.read",{"name":"../README"}))
         self.assertIn("error",result)
