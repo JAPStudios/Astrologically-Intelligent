@@ -10,7 +10,7 @@ class UpstreamImporterTests(unittest.TestCase):
     def test_listing_includes_all_public_repo_types_and_paginates(self):
         first = [{"name": f"repo{i}", "owner": {"login":"anthropics"},
                   "private":False,"clone_url":f"https://github.com/anthropics/repo{i}.git",
-                  "default_branch":"main","archived":i == 0,"fork":i == 1}
+                  "default_branch":"main","size":10,"archived":i == 0,"fork":i == 1}
                  for i in range(100)]
         second = [{"name":"last","owner":{"login":"anthropics"},"private":False,
                    "clone_url":"https://github.com/anthropics/last.git","default_branch":"main"}]
@@ -30,6 +30,17 @@ class UpstreamImporterTests(unittest.TestCase):
                     added, skipped = import_repositories(root,[repo],dry_run=True)
                 run.assert_not_called()
                 self.assertEqual((added,skipped),(1,0))
+
+    def test_empty_repositories_are_skipped_without_git_operations(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            empty={"org":"anthropics","name":"empty","branch":"main",
+                   "clone_url":"https://github.com/anthropics/empty.git","empty":True}
+            with patch("scripts.import_upstream_orgs.existing_submodule_urls", return_value=set()):
+                with patch("scripts.import_upstream_orgs.subprocess.run") as run:
+                    added,skipped=import_repositories(root,[empty])
+            run.assert_not_called()
+            self.assertEqual((added,skipped),(0,1))
 
     def test_existing_submodule_urls_are_read(self):
         with tempfile.TemporaryDirectory() as directory:

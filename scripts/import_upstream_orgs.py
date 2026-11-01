@@ -70,7 +70,7 @@ def list_repositories(orgs: tuple[str, ...], token: str | None = None) -> list[d
                 repositories.append({
                     "org": org, "name": name, "branch": branch,
                     "clone_url": clone_url, "archived": bool(item.get("archived")),
-                    "fork": bool(item.get("fork")),
+                    "fork": bool(item.get("fork")), "empty": not branch or int(item.get("size") or 0) == 0,
                 })
             if len(batch) < 100:
                 break
@@ -99,6 +99,10 @@ def import_repositories(root: Path, repositories: list[dict], dry_run: bool = Fa
         url = repository["clone_url"].removesuffix(".git")
         path = root / "upstream" / repository["org"] / repository["name"]
         if url in known:
+            skipped += 1
+            continue
+        if repository.get("empty"):
+            print(f"[skip empty] {repository['org']}/{repository['name']}")
             skipped += 1
             continue
         if limit is not None and added >= limit:
