@@ -14,8 +14,48 @@ class IntegrationError(RuntimeError):
     pass
 
 
+class JsonApiClient:
+    """Small bounded JSON client for explicitly configured trusted service URLs."""
+
+    def __init__(self, base_url: str, token: str, service: str, timeout: float = 30.0):
+        self.base_url = base_url.rstrip("/")
+        self.token = token
+        self.service = service
+        self.timeout = timeout
+        parsed = urllib.parse.urlparse(self.base_url)
+        if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+            raise ValueError(f"{service} base URL must be an absolute HTTP(S) URL")
+        if parsed.scheme != "https" and parsed.hostname not in {"localhost", "127.0.0.1", "::1"}:
+            raise ValueError(f"{service} credentials require HTTPS except for localhost")
+
+    def request(self, method: str, path: str, payload: dict[str, Any] | None = None,
+                query: dict[str, Any] | None = None) -> Any:
+        if not path.startswith("/api/") or ".." in path.split("/"):
+            raise ValueError("Invalid API path")
+        url = self.base_url + path
+        if query:
+            url += "?" + urllib.parse.urlencode(query, doseq=True)
+        headers = {"Authorization": f"Bearer {self.token}", "Accept": "application/json"}
+        data = None
+        if payload is not None:
+            data = json.dumps(payload).encode("utf-8")
+            headers["Content-Type"] = "application/json"
+        req = urllib.request.Request(url, data=data, headers=headers, method=method)
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as response:
+                body = response.read(2_000_001)
+                if len(body) > 2_000_000:
+                    raise IntegrationError(f"{self.service} response exceeded 2 MB")
+                return json.loads(body.decode("utf-8")) if body else {}
+        except urllib.error.HTTPError as exc:
+            detail = exc.read(2000).decode("utf-8", errors="replace")
+            raise IntegrationError(f"{self.service} API returned HTTP {exc.code}: {detail}") from exc
+        except urllib.error.URLError as exc:
+            raise IntegrationError(f"Could not connect to {self.service}: {exc.reason}") from exc
+
+
 class N8nClient:
-    """Client for the n8n public REST API (API-key authentication)."""
+    """Client for the n8n public REST API (X-N8N-API-KEY authentication)."""
 
     def __init__(self, base_url: str, api_key: str, timeout: float = 30.0):
         self.base_url = base_url.rstrip("/")
@@ -40,10 +80,7 @@ class N8nClient:
         url = self.base_url + path
         if query:
             url += "?" + urllib.parse.urlencode(query, doseq=True)
-        request = urllib.request.Request(
-            url, headers={"X-N8N-API-KEY": self.api_key, "Accept": "application/json"},
-            method=method,
-        )
+        request = urllib.request.Request(url, headers={"X-N8N-API-KEY": self.api_key, "Accept": "application/json"}, method=method)
         try:
             with urllib.request.urlopen(request, timeout=self.timeout) as response:
                 body = response.read(2_000_001)
@@ -78,5 +115,81 @@ class N8nClient:
         return self._request("POST", f"/api/v1/workflows/{self._workflow_id(workflow_id)}/{action}")
 
 
+class PaperclipClient:
+    """Paperclip company-scoped agent, issue, goal, and approval API client."""
+
+    def __init__(self, base_url: str, api_key: str, timeout: float = 30.0):
+        self.http = JsonApiClient(base_url, api_key, "Paperclip", timeout)
+
+    @classmethod
+    def from_env(cls) -> "PaperclipClient":
+        key = os.getenv("PAPERCLIP_API_KEY", "").strip()
+        if not key:
+            raise IntegrationError("PAPERCLIP_API_KEY is not configured")
+        base = os.getenv("PAPERCLIP_BASE_URL", "http://localhost:3100")
+        return cls(base, key)
+
+    @staticmethod
+    def _id(value: str, label: str) -> str:
+        if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", str(value)):
+            raise ValueError(f"Invalid Paperclip {label}")
+        return str(value)
+
+    def list_agents(self, company_id: str) -> Any:
+        company = self._id(company_id, "company ID")
+        return self.http.request("GET", f"/api/companies/{company}/agents")
+
+    def list_issues(self, company_id: str, status: str | None = None,
+                    assignee_agent_id: str | None = None, project_id: str | None = None) -> Any:
+        company = self._id(company_id, "company ID")
+        query: dict[str, Any] = {}
+        if status:
+            if not re.fullmatch(r"[a-z_,]{1,100}", status):
+                raise ValueError("Invalid issue status filter")
+            query["status"] = status
+        if assignee_agent_id:
+            query["assigneeAgentId"] = self._id(assignee_agent_id, "agent ID")
+        if project_id:
+            query["projectId"] = self._id(project_id, "project ID")
+        return self.http.request("GET", f"/api/companies/{company}/issues", query=query)
+
+    def create_issue(self, company_id: str, title: str, description: str = "",
+                     status: str = "todo", priority: str = "medium",
+                     assignee_agent_id: str | None = None, project_id: str | None = None,
+                     goal_id: str | None = None) -> Any:
+        company = self._id(company_id, "company ID")
+        if not title.strip():
+            raise ValueError("Issue title is required")
+        if status not in {"backlog", "todo", "in_progress", "blocked", "in_review"}:
+            raise ValueError("Invalid Paperclip issue status")
+        if priority not in {"critical", "high", "medium", "low"}:
+            raise ValueError("Invalid Paperclip issue priority")
+        payload: dict[str, Any] = {"title": title.strip(), "description": description,
+                                   "status": status, "priority": priority}
+        if assignee_agent_id:
+            payload["assigneeAgentId"] = self._id(assignee_agent_id, "agent ID")
+        if project_id:
+            payload["projectId"] = self._id(project_id, "project ID")
+        if goal_id:
+            payload["goalId"] = self._id(goal_id, "goal ID")
+        return self.http.request("POST", f"/api/companies/{company}/issues", payload)
+
+    def list_approvals(self, company_id: str, status: str | None = None) -> Any:
+        company = self._id(company_id, "company ID")
+        query = {"status": status} if status else None
+        return self.http.request("GET", f"/api/companies/{company}/approvals", query=query)
+
+    def create_goal(self, company_id: str, title: str, description: str = "") -> Any:
+        company = self._id(company_id, "company ID")
+        if not title.strip():
+            raise ValueError("Goal title is required")
+        return self.http.request("POST", f"/api/companies/{company}/goals",
+                                 {"title": title.strip(), "description": description})
+
+
 def n8n_client_from_env() -> N8nClient:
     return N8nClient.from_env()
+
+
+def paperclip_client_from_env() -> PaperclipClient:
+    return PaperclipClient.from_env()
