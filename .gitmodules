@@ -297,3 +297,103 @@
 	path = upstream/anthropics/sandbox-runtime
 	url = https://github.com/anthropics/sandbox-runtime.git
 	branch = main
+[submodule "upstream/anthropics/political-neutrality-eval"]
+	path = upstream/anthropics/political-neutrality-eval
+	url = https://github.com/anthropics/political-neutrality-eval.git
+	branch = main
+[submodule "upstream/anthropics/claude-plugins-official"]
+	path = upstream/anthropics/claude-plugins-official
+	url = https://github.com/anthropics/claude-plugins-official.git
+	branch = main
+[submodule "upstream/anthropics/riv2025-long-horizon-coding-agent-demo"]
+	path = upstream/anthropics/riv2025-long-horizon-coding-agent-demo
+	url = https://github.com/anthropics/riv2025-long-horizon-coding-agent-demo.git
+	branch = main
+[submodule "upstream/anthropics/model-cards"]
+	path = upstream/anthropics/model-cards
+	url = https://github.com/anthropics/model-cards.git
+	branch = main
+[submodule "upstream/anthropics/claude-ai-mcp"]
+	path = upstream/anthropics/claude-ai-mcp
+	url = https://github.com/anthropics/claude-ai-mcp.git
+	branch = main
+[submodule "upstream/anthropics/httpcore"]
+	path = upstream/anthropics/httpcore
+	url = https://github.com/anthropics/httpcore.git
+	branch = anthropic-1.0.9
+[submodule "upstream/anthropics/healthcare"]
+	path = upstream/anthropics/healthcare
+	url = https://github.com/anthropics/healthcare.git
+	branch = main
+[submodule "upstream/anthropics/tailscale-hint-extension"]
+	path = upstream/anthropics/tailscale-hint-extension
+	url = https://github.com/anthropics/tailscale-hint-extension.git
+	branch = main
+[submodule "upstream/anthropics/original_performance_takehome"]
+	path = upstream/anthropics/original_performance_takehome
+	url = https://github.com/anthropics/original_performance_takehome.git
+	branch = main
+[submodule "upstream/anthropics/claude-constitution"]
+	path = upstream/anthropics/claude-constitution
+	url = https://github.com/anthropics/claude-constitution.git
+	branch = main
+[submodule "upstream/anthropics/anthropic-cli"]
+	path = upstream/anthropics/anthropic-cli
+	url = https://github.com/anthropics/anthropic-cli.git
+	branch = main
+[submodule "upstream/anthropics/homebrew-tap"]
+	path = upstream/anthropics/homebrew-tap
+	url = https://github.com/anthropics/homebrew-tap.git
+	branch = main
+[submodule "upstream/anthropics/knowledge-work-plugins"]
+	path = upstream/anthropics/knowledge-work-plugins
+	url = https://github.com/anthropics/knowledge-work-plugins.git
+	branch = main
+[submodule "upstream/anthropics/nix-eval-jobs"]
+	path = upstream/anthropics/nix-eval-jobs
+	url = https://github.com/anthropics/nix-eval-jobs.git
+	branch = main
+[submodule "upstream/anthropics/claudes-c-compiler"]
+	path = upstream/anthropics/claudes-c-compiler
+	url = https://github.com/anthropics/claudes-c-compiler.git
+	branch = main
+[submodule "upstream/anthropics/argo-cd"]
+	path = upstream/anthropics/argo-cd
+	url = https://github.com/anthropics/argo-cd.git
+	branch = master
+[submodule "upstream/anthropics/maestro"]
+	path = upstream/anthropics/maestro
+	url = https://github.com/anthropics/maestro.git
+	branch = main
+[submodule "upstream/anthropics/financial-services"]
+	path = upstream/anthropics/financial-services
+	url = https://github.com/anthropics/financial-services.git
+	branch = main
+[submodule "upstream/anthropics/agent-sdk-workshop"]
+	path = upstream/anthropics/agent-sdk-workshop
+	url = https://github.com/anthropics/agent-sdk-workshop.git
+	branch = main
+[submodule "upstream/anthropics/buffa"]
+	path = upstream/anthropics/buffa
+	url = https://github.com/anthropics/buffa.git
+	branch = main
+[submodule "upstream/anthropics/tokio"]
+	path = upstream/anthropics/tokio
+	url = https://github.com/anthropics/tokio.git
+	branch = anthropic-1.52.3
+[submodule "upstream/anthropics/terragrunt"]
+	path = upstream/anthropics/terragrunt
+	url = https://github.com/anthropics/terragrunt.git
+	branch = main
+[submodule "upstream/anthropics/claude-plugins-community"]
+	path = upstream/anthropics/claude-plugins-community
+	url = https://github.com/anthropics/claude-plugins-community.git
+	branch = main
+[submodule "upstream/anthropics/claude-desktop-buddy"]
+	path = upstream/anthropics/claude-desktop-buddy
+	url = https://github.com/anthropics/claude-desktop-buddy.git
+	branch = main
+[submodule "upstream/anthropics/claude-for-legal"]
+	path = upstream/anthropics/claude-for-legal
+	url = https://github.com/anthropics/claude-for-legal.git
+	branch = main
