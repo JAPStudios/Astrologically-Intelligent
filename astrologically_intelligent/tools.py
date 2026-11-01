@@ -7,7 +7,7 @@ from typing import Any, Callable
 from .storage import Store
 from .orchestration import Orchestrator
 from .plugins import PluginManager
-from .integrations import n8n_client_from_env
+from .integrations import n8n_client_from_env, paperclip_client_from_env
 
 
 class ToolRegistry:
@@ -129,6 +129,29 @@ class ToolRegistry:
         reg("n8n.workflows.deactivate","Deactivate a workflow in the configured n8n instance.",
             {"workflow_id":{"type":"string"}},["workflow_id"],
             lambda workflow_id:n8n_client_from_env().set_workflow_active(workflow_id,False))
+
+        reg("paperclip.agents.list","List agents in a Paperclip company using the configured agent API token.",
+            {"company_id":{"type":"string"}},["company_id"],
+            lambda company_id:paperclip_client_from_env().list_agents(company_id))
+        reg("paperclip.issues.list","List issues in a Paperclip company, optionally filtered by status, agent, or project.",
+            {"company_id":{"type":"string"},"status":{"type":"string"},"assignee_agent_id":{"type":"string"},"project_id":{"type":"string"}},
+            ["company_id"],lambda company_id,status=None,assignee_agent_id=None,project_id=None:
+                paperclip_client_from_env().list_issues(company_id,status,assignee_agent_id,project_id))
+        reg("paperclip.issues.create","Create a Paperclip issue in a company.",
+            {"company_id":{"type":"string"},"title":{"type":"string"},"description":{"type":"string"},
+             "status":{"type":"string"},"priority":{"type":"string"},"assignee_agent_id":{"type":"string"},
+             "project_id":{"type":"string"},"goal_id":{"type":"string"}},
+            ["company_id","title"],lambda company_id,title,description="",status="todo",priority="medium",
+                assignee_agent_id=None,project_id=None,goal_id=None:
+                paperclip_client_from_env().create_issue(company_id,title,description,status,priority,
+                                                         assignee_agent_id,project_id,goal_id))
+        reg("paperclip.goals.create","Create a goal in a Paperclip company.",
+            {"company_id":{"type":"string"},"title":{"type":"string"},"description":{"type":"string"}},
+            ["company_id","title"],lambda company_id,title,description="":
+                paperclip_client_from_env().create_goal(company_id,title,description))
+        reg("paperclip.approvals.list","List approval requests in a Paperclip company.",
+            {"company_id":{"type":"string"},"status":{"type":"string"}},["company_id"],
+            lambda company_id,status=None:paperclip_client_from_env().list_approvals(company_id,status))
 
     def _list_skills(self) -> list[dict[str, str]]:
         from pathlib import Path
