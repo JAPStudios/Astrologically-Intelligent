@@ -5,7 +5,7 @@ import os
 import uuid
 from dataclasses import dataclass
 
-from .providers import OpenAICompatibleProvider
+from .providers import provider_from_env
 from .storage import Store
 from .tools import ToolRegistry
 
@@ -24,7 +24,7 @@ class RuntimeConfig:
 
 class AgentRuntime:
     def __init__(self, provider=None, store: Store | None = None, config: RuntimeConfig | None = None):
-        self.provider = provider or OpenAICompatibleProvider.from_env()
+        self.provider = provider or provider_from_env()
         self.store = store or Store(os.getenv("ASTRO_AI_DB", "astrologically_intelligent.sqlite3"))
         self.config = config or RuntimeConfig()
         self.tools = ToolRegistry(self.store)
