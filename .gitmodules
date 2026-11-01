@@ -1097,3 +1097,103 @@
 	path = upstream/NousResearch/hermes-toolperf-evals
 	url = https://github.com/NousResearch/hermes-toolperf-evals.git
 	branch = main
+[submodule "upstream/NousResearch/image-size"]
+	path = upstream/NousResearch/image-size
+	url = https://github.com/NousResearch/image-size.git
+	branch = main
+[submodule "upstream/NousResearch/Hermes-Bot-Mode"]
+	path = upstream/NousResearch/Hermes-Bot-Mode
+	url = https://github.com/NousResearch/Hermes-Bot-Mode.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-sprites"]
+	path = upstream/NousResearch/hermes-plugin-sprites
+	url = https://github.com/NousResearch/hermes-plugin-sprites.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-backsearch"]
+	path = upstream/NousResearch/hermes-plugin-backsearch
+	url = https://github.com/NousResearch/hermes-plugin-backsearch.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-desktop-accent-picker"]
+	path = upstream/NousResearch/hermes-desktop-accent-picker
+	url = https://github.com/NousResearch/hermes-desktop-accent-picker.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-collective-wisdom"]
+	path = upstream/NousResearch/hermes-collective-wisdom
+	url = https://github.com/NousResearch/hermes-collective-wisdom.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-touchdesigner"]
+	path = upstream/NousResearch/hermes-plugin-touchdesigner
+	url = https://github.com/NousResearch/hermes-plugin-touchdesigner.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-snyk"]
+	path = upstream/NousResearch/hermes-plugin-snyk
+	url = https://github.com/NousResearch/hermes-plugin-snyk.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-memory-wiki"]
+	path = upstream/NousResearch/hermes-memory-wiki
+	url = https://github.com/NousResearch/hermes-memory-wiki.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-byterover"]
+	path = upstream/NousResearch/hermes-plugin-byterover
+	url = https://github.com/NousResearch/hermes-plugin-byterover.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-holographic"]
+	path = upstream/NousResearch/hermes-plugin-holographic
+	url = https://github.com/NousResearch/hermes-plugin-holographic.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-honcho"]
+	path = upstream/NousResearch/hermes-plugin-honcho
+	url = https://github.com/NousResearch/hermes-plugin-honcho.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-mem0"]
+	path = upstream/NousResearch/hermes-plugin-mem0
+	url = https://github.com/NousResearch/hermes-plugin-mem0.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-openviking"]
+	path = upstream/NousResearch/hermes-plugin-openviking
+	url = https://github.com/NousResearch/hermes-plugin-openviking.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-retaindb"]
+	path = upstream/NousResearch/hermes-plugin-retaindb
+	url = https://github.com/NousResearch/hermes-plugin-retaindb.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-supermemory"]
+	path = upstream/NousResearch/hermes-plugin-supermemory
+	url = https://github.com/NousResearch/hermes-plugin-supermemory.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-claude-subscription-directsdk"]
+	path = upstream/NousResearch/hermes-plugin-claude-subscription-directsdk
+	url = https://github.com/NousResearch/hermes-plugin-claude-subscription-directsdk.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-nvidia"]
+	path = upstream/NousResearch/hermes-nvidia
+	url = https://github.com/NousResearch/hermes-nvidia.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-blender"]
+	path = upstream/NousResearch/hermes-plugin-blender
+	url = https://github.com/NousResearch/hermes-plugin-blender.git
+	branch = main
+[submodule "upstream/NousResearch/misaki"]
+	path = upstream/NousResearch/misaki
+	url = https://github.com/NousResearch/misaki.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-homeassistant"]
+	path = upstream/NousResearch/hermes-homeassistant
+	url = https://github.com/NousResearch/hermes-homeassistant.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-tirith"]
+	path = upstream/NousResearch/hermes-plugin-tirith
+	url = https://github.com/NousResearch/hermes-plugin-tirith.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-spotify"]
+	path = upstream/NousResearch/hermes-spotify
+	url = https://github.com/NousResearch/hermes-spotify.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-plugin-solstice"]
+	path = upstream/NousResearch/hermes-plugin-solstice
+	url = https://github.com/NousResearch/hermes-plugin-solstice.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-labs-plugins"]
+	path = upstream/NousResearch/hermes-labs-plugins
+	url = https://github.com/NousResearch/hermes-labs-plugins.git
+	branch = main
