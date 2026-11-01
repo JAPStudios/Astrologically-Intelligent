@@ -59,6 +59,37 @@ class ToolRegistry:
              "assignee": {"type": ["string", "null"]}}, "required": ["task_id", "status"]},
             lambda task_id, status, assignee=None: self._update_task(task_id, status, assignee))
 
+        self.register("skills.list", "List locally installed Markdown skill guides.",
+            {**obj, "properties": {}}, lambda: self._list_skills())
+        self.register("skills.read", "Read a skill guide by its exact name.",
+            {**obj, "properties": {"name": {"type": "string"}}, "required": ["name"]},
+            lambda name: self._read_skill(name))
+
+    def _list_skills(self) -> list[dict[str, str]]:
+        from pathlib import Path
+        root = Path("skills")
+        if not root.is_dir():
+            return []
+        results = []
+        for path in sorted(root.glob("*/SKILL.md")):
+            text = path.read_text(encoding="utf-8")
+            summary = next((line.lstrip("# ").strip() for line in text.splitlines() if line.strip()), "")
+            results.append({"name": path.parent.name, "summary": summary[:200]})
+        return results
+
+    def _read_skill(self, name: str) -> dict[str, str]:
+        import re
+        from pathlib import Path
+        if not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", name):
+            raise ValueError("Invalid skill name")
+        root = Path("skills").resolve()
+        path = (root / name / "SKILL.md").resolve()
+        if path.parent.parent != root or not path.is_file():
+            raise ValueError("Skill not found")
+        if path.stat().st_size > 32768:
+            raise ValueError("Skill exceeds 32 KiB limit")
+        return {"name": name, "content": path.read_text(encoding="utf-8")}
+
     def _remember(self, namespace: str, key: str, value: Any) -> dict[str, bool]:
         self.store.remember(namespace, key, value)
         return {"saved": True}
