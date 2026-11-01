@@ -2497,3 +2497,103 @@
 	path = upstream/openclaw/clawgrit-reports
 	url = https://github.com/openclaw/clawgrit-reports.git
 	branch = main
+[submodule "upstream/openclaw/fs-safe"]
+	path = upstream/openclaw/fs-safe
+	url = https://github.com/openclaw/fs-safe.git
+	branch = main
+[submodule "upstream/openclaw/ask-molty"]
+	path = upstream/openclaw/ask-molty
+	url = https://github.com/openclaw/ask-molty.git
+	branch = main
+[submodule "upstream/openclaw/graincrawl"]
+	path = upstream/openclaw/graincrawl
+	url = https://github.com/openclaw/graincrawl.git
+	branch = main
+[submodule "upstream/openclaw/clickclack"]
+	path = upstream/openclaw/clickclack
+	url = https://github.com/openclaw/clickclack.git
+	branch = main
+[submodule "upstream/openclaw/clawdex"]
+	path = upstream/openclaw/clawdex
+	url = https://github.com/openclaw/clawdex.git
+	branch = main
+[submodule "upstream/openclaw/proxyline"]
+	path = upstream/openclaw/proxyline
+	url = https://github.com/openclaw/proxyline.git
+	branch = main
+[submodule "upstream/openclaw/telecrawl"]
+	path = upstream/openclaw/telecrawl
+	url = https://github.com/openclaw/telecrawl.git
+	branch = main
+[submodule "upstream/openclaw/openclaw-facetime"]
+	path = upstream/openclaw/openclaw-facetime
+	url = https://github.com/openclaw/openclaw-facetime.git
+	branch = main
+[submodule "upstream/openclaw/clawpatch"]
+	path = upstream/openclaw/clawpatch
+	url = https://github.com/openclaw/clawpatch.git
+	branch = main
+[submodule "upstream/openclaw/crabfleet"]
+	path = upstream/openclaw/crabfleet
+	url = https://github.com/openclaw/crabfleet.git
+	branch = main
+[submodule "upstream/openclaw/rfcs"]
+	path = upstream/openclaw/rfcs
+	url = https://github.com/openclaw/rfcs.git
+	branch = main
+[submodule "upstream/openclaw/rastermill"]
+	path = upstream/openclaw/rastermill
+	url = https://github.com/openclaw/rastermill.git
+	branch = main
+[submodule "upstream/openclaw/libopus-wasm"]
+	path = upstream/openclaw/libopus-wasm
+	url = https://github.com/openclaw/libopus-wasm.git
+	branch = main
+[submodule "upstream/openclaw/octopool"]
+	path = upstream/openclaw/octopool
+	url = https://github.com/openclaw/octopool.git
+	branch = main
+[submodule "upstream/openclaw/clawpdf"]
+	path = upstream/openclaw/clawpdf
+	url = https://github.com/openclaw/clawpdf.git
+	branch = main
+[submodule "upstream/openclaw/photoscrawl"]
+	path = upstream/openclaw/photoscrawl
+	url = https://github.com/openclaw/photoscrawl.git
+	branch = main
+[submodule "upstream/openclaw/clawrouter"]
+	path = upstream/openclaw/clawrouter
+	url = https://github.com/openclaw/clawrouter.git
+	branch = main
+[submodule "upstream/openclaw/imsgcrawl"]
+	path = upstream/openclaw/imsgcrawl
+	url = https://github.com/openclaw/imsgcrawl.git
+	branch = main
+[submodule "upstream/openclaw/ffmpeg-wasm"]
+	path = upstream/openclaw/ffmpeg-wasm
+	url = https://github.com/openclaw/ffmpeg-wasm.git
+	branch = main
+[submodule "upstream/openclaw/krillswitch"]
+	path = upstream/openclaw/krillswitch
+	url = https://github.com/openclaw/krillswitch.git
+	branch = main
+[submodule "upstream/openclaw/libterminal"]
+	path = upstream/openclaw/libterminal
+	url = https://github.com/openclaw/libterminal.git
+	branch = main
+[submodule "upstream/openclaw/clawscan"]
+	path = upstream/openclaw/clawscan
+	url = https://github.com/openclaw/clawscan.git
+	branch = main
+[submodule "upstream/openclaw/uirouter"]
+	path = upstream/openclaw/uirouter
+	url = https://github.com/openclaw/uirouter.git
+	branch = main
+[submodule "upstream/openclaw/babelfish"]
+	path = upstream/openclaw/babelfish
+	url = https://github.com/openclaw/babelfish.git
+	branch = main
+[submodule "upstream/openclaw/crabhelm"]
+	path = upstream/openclaw/crabhelm
+	url = https://github.com/openclaw/crabhelm.git
+	branch = main
