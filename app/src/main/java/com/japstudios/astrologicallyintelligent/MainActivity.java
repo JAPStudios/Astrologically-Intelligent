@@ -57,7 +57,6 @@ public final class MainActivity extends Activity {
         token.setSingleLine(true);
         token.setHint("Server access token (optional for local loopback)");
         token.setInputType(129);
-        token.setText(preferences.getString("token", ""));
         root.addView(token);
 
         ScrollView scroll = new ScrollView(this);
@@ -88,8 +87,7 @@ public final class MainActivity extends Activity {
         String accessToken = token.getText().toString().trim();
         if (message.isEmpty() || url.isEmpty()) return;
 
-        preferences.edit().putString("endpoint", url)
-                .putString("token", accessToken).apply();
+        preferences.edit().putString("endpoint", url).apply();
         prompt.setText("");
         transcript.append("\nYou: " + message + "\n");
         send.setEnabled(false);
