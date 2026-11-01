@@ -797,3 +797,103 @@
 	path = upstream/NousResearch/nanotron
 	url = https://github.com/NousResearch/nanotron.git
 	branch = main
+[submodule "upstream/NousResearch/infini-attention"]
+	path = upstream/NousResearch/infini-attention
+	url = https://github.com/NousResearch/infini-attention.git
+	branch = master
+[submodule "upstream/NousResearch/Open-Reasoning-Tasks"]
+	path = upstream/NousResearch/Open-Reasoning-Tasks
+	url = https://github.com/NousResearch/Open-Reasoning-Tasks.git
+	branch = main
+[submodule "upstream/NousResearch/DisTrO"]
+	path = upstream/NousResearch/DisTrO
+	url = https://github.com/NousResearch/DisTrO.git
+	branch = main
+[submodule "upstream/NousResearch/curve25519-dalek"]
+	path = upstream/NousResearch/curve25519-dalek
+	url = https://github.com/NousResearch/curve25519-dalek.git
+	branch = main
+[submodule "upstream/NousResearch/tch-rs"]
+	path = upstream/NousResearch/tch-rs
+	url = https://github.com/NousResearch/tch-rs.git
+	branch = main
+[submodule "upstream/NousResearch/solana-flake"]
+	path = upstream/NousResearch/solana-flake
+	url = https://github.com/NousResearch/solana-flake.git
+	branch = main
+[submodule "upstream/NousResearch/hf-hub"]
+	path = upstream/NousResearch/hf-hub
+	url = https://github.com/NousResearch/hf-hub.git
+	branch = main
+[submodule "upstream/NousResearch/wandb-rs"]
+	path = upstream/NousResearch/wandb-rs
+	url = https://github.com/NousResearch/wandb-rs.git
+	branch = main
+[submodule "upstream/NousResearch/nousflash-agents"]
+	path = upstream/NousResearch/nousflash-agents
+	url = https://github.com/NousResearch/nousflash-agents.git
+	branch = main
+[submodule "upstream/NousResearch/forge-api-demo"]
+	path = upstream/NousResearch/forge-api-demo
+	url = https://github.com/NousResearch/forge-api-demo.git
+	branch = main
+[submodule "upstream/NousResearch/lm-eval-harness"]
+	path = upstream/NousResearch/lm-eval-harness
+	url = https://github.com/NousResearch/lm-eval-harness.git
+	branch = nous
+[submodule "upstream/NousResearch/torchtitan"]
+	path = upstream/NousResearch/torchtitan
+	url = https://github.com/NousResearch/torchtitan.git
+	branch = dev-updated-again
+[submodule "upstream/NousResearch/datatrove"]
+	path = upstream/NousResearch/datatrove
+	url = https://github.com/NousResearch/datatrove.git
+	branch = main
+[submodule "upstream/NousResearch/iroh-blobs"]
+	path = upstream/NousResearch/iroh-blobs
+	url = https://github.com/NousResearch/iroh-blobs.git
+	branch = main
+[submodule "upstream/NousResearch/kaida"]
+	path = upstream/NousResearch/kaida
+	url = https://github.com/NousResearch/kaida.git
+	branch = main
+[submodule "upstream/NousResearch/iroh"]
+	path = upstream/NousResearch/iroh
+	url = https://github.com/NousResearch/iroh.git
+	branch = main
+[submodule "upstream/NousResearch/kaida-gencritique"]
+	path = upstream/NousResearch/kaida-gencritique
+	url = https://github.com/NousResearch/kaida-gencritique.git
+	branch = main
+[submodule "upstream/NousResearch/storywriter"]
+	path = upstream/NousResearch/storywriter
+	url = https://github.com/NousResearch/storywriter.git
+	branch = main
+[submodule "upstream/NousResearch/storywriter-frontend"]
+	path = upstream/NousResearch/storywriter-frontend
+	url = https://github.com/NousResearch/storywriter-frontend.git
+	branch = main
+[submodule "upstream/NousResearch/iroh-gossip"]
+	path = upstream/NousResearch/iroh-gossip
+	url = https://github.com/NousResearch/iroh-gossip.git
+	branch = main
+[submodule "upstream/NousResearch/logfire-rust"]
+	path = upstream/NousResearch/logfire-rust
+	url = https://github.com/NousResearch/logfire-rust.git
+	branch = main
+[submodule "upstream/NousResearch/yellowstone-grpc"]
+	path = upstream/NousResearch/yellowstone-grpc
+	url = https://github.com/NousResearch/yellowstone-grpc.git
+	branch = master
+[submodule "upstream/NousResearch/atropos"]
+	path = upstream/NousResearch/atropos
+	url = https://github.com/NousResearch/atropos.git
+	branch = main
+[submodule "upstream/NousResearch/TextArena"]
+	path = upstream/NousResearch/TextArena
+	url = https://github.com/NousResearch/TextArena.git
+	branch = main
+[submodule "upstream/NousResearch/smc-inference-server"]
+	path = upstream/NousResearch/smc-inference-server
+	url = https://github.com/NousResearch/smc-inference-server.git
+	branch = main
