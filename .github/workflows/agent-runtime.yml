@@ -6,6 +6,8 @@ on:
       - "astrologically_intelligent/**"
       - "skills/**"
       - "upstream/**"
+      - "scripts/**"
+      - "tests/**"
       - ".gitmodules"
       - "tests/test_agent_runtime.py"
       - ".github/workflows/agent-runtime.yml"

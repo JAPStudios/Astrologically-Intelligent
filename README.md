@@ -33,6 +33,23 @@ gradle assembleDebug
 python -m unittest discover -s tests -v
 ```
 
+## Upstream source imports
+
+Pinned source repositories are included as Git submodules under `upstream/` and `skills/upstream/`. The current pinned imports include source from all nine requested organizations. Initialize them in a checkout with:
+
+```sh
+git submodule update --init --recursive
+```
+
+To import every public repository in all nine organizations, use the resumable importer:
+
+```sh
+python scripts/import_upstream_orgs.py --dry-run
+GITHUB_TOKEN="..." python scripts/import_upstream_orgs.py
+```
+
+The importer includes archived repositories and forks, skips already-imported submodule URLs, and stages source as Git submodules under `upstream/<organization>/<repository>`. Review the resulting `.gitmodules` and gitlinks before committing. A full organization-wide import has not yet been run.
+
 ## Upstream organizations
 
 The requested upstream scope comprises public repositories from these GitHub organizations:
