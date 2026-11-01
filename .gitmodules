@@ -1797,3 +1797,103 @@
 	path = upstream/openai/shap-e
 	url = https://github.com/openai/shap-e.git
 	branch = main
+[submodule "upstream/openai/automated-interpretability"]
+	path = upstream/openai/automated-interpretability
+	url = https://github.com/openai/automated-interpretability.git
+	branch = main
+[submodule "upstream/openai/consistency_models_cifar10"]
+	path = upstream/openai/consistency_models_cifar10
+	url = https://github.com/openai/consistency_models_cifar10.git
+	branch = main
+[submodule "upstream/openai/democratic-inputs"]
+	path = upstream/openai/democratic-inputs
+	url = https://github.com/openai/democratic-inputs.git
+	branch = main
+[submodule "upstream/openai/compose-richtext"]
+	path = upstream/openai/compose-richtext
+	url = https://github.com/openai/compose-richtext.git
+	branch = main
+[submodule "upstream/openai/vetu"]
+	path = upstream/openai/vetu
+	url = https://github.com/openai/vetu.git
+	branch = main
+[submodule "upstream/openai/web-crawl-q-and-a-example"]
+	path = upstream/openai/web-crawl-q-and-a-example
+	url = https://github.com/openai/web-crawl-q-and-a-example.git
+	branch = main
+[submodule "upstream/openai/dalle3-eval-samples"]
+	path = upstream/openai/dalle3-eval-samples
+	url = https://github.com/openai/dalle3-eval-samples.git
+	branch = main
+[submodule "upstream/openai/openai-deno-build"]
+	path = upstream/openai/openai-deno-build
+	url = https://github.com/openai/openai-deno-build.git
+	branch = main
+[submodule "upstream/openai/bugbounty-gpt"]
+	path = upstream/openai/bugbounty-gpt
+	url = https://github.com/openai/bugbounty-gpt.git
+	branch = main
+[submodule "upstream/openai/consistencydecoder"]
+	path = upstream/openai/consistencydecoder
+	url = https://github.com/openai/consistencydecoder.git
+	branch = main
+[submodule "upstream/openai/interactive-textbook-demo"]
+	path = upstream/openai/interactive-textbook-demo
+	url = https://github.com/openai/interactive-textbook-demo.git
+	branch = main
+[submodule "upstream/openai/chef-cookbook-hostname"]
+	path = upstream/openai/chef-cookbook-hostname
+	url = https://github.com/openai/chef-cookbook-hostname.git
+	branch = develop
+[submodule "upstream/openai/azure-cli"]
+	path = upstream/openai/azure-cli
+	url = https://github.com/openai/azure-cli.git
+	branch = dev
+[submodule "upstream/openai/weak-to-strong"]
+	path = upstream/openai/weak-to-strong
+	url = https://github.com/openai/weak-to-strong.git
+	branch = main
+[submodule "upstream/openai/openai-security-bots"]
+	path = upstream/openai/openai-security-bots
+	url = https://github.com/openai/openai-security-bots.git
+	branch = main
+[submodule "upstream/openai/swarm"]
+	path = upstream/openai/swarm
+	url = https://github.com/openai/swarm.git
+	branch = main
+[submodule "upstream/openai/transformer-debugger"]
+	path = upstream/openai/transformer-debugger
+	url = https://github.com/openai/transformer-debugger.git
+	branch = main
+[submodule "upstream/openai/main-branch-check-action"]
+	path = upstream/openai/main-branch-check-action
+	url = https://github.com/openai/main-branch-check-action.git
+	branch = main
+[submodule "upstream/openai/simple-evals"]
+	path = upstream/openai/simple-evals
+	url = https://github.com/openai/simple-evals.git
+	branch = main
+[submodule "upstream/openai/openai-dotnet"]
+	path = upstream/openai/openai-dotnet
+	url = https://github.com/openai/openai-dotnet.git
+	branch = main
+[submodule "upstream/openai/openai-assistants-quickstart"]
+	path = upstream/openai/openai-assistants-quickstart
+	url = https://github.com/openai/openai-assistants-quickstart.git
+	branch = main
+[submodule "upstream/openai/sparse_autoencoder"]
+	path = upstream/openai/sparse_autoencoder
+	url = https://github.com/openai/sparse_autoencoder.git
+	branch = main
+[submodule "upstream/openai/GPTs-are-GPTs"]
+	path = upstream/openai/GPTs-are-GPTs
+	url = https://github.com/openai/GPTs-are-GPTs.git
+	branch = main
+[submodule "upstream/openai/safety-rbr-code-and-data"]
+	path = upstream/openai/safety-rbr-code-and-data
+	url = https://github.com/openai/safety-rbr-code-and-data.git
+	branch = main
+[submodule "upstream/openai/openai-go"]
+	path = upstream/openai/openai-go
+	url = https://github.com/openai/openai-go.git
+	branch = main
