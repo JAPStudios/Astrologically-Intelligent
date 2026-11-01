@@ -997,3 +997,103 @@
 	path = upstream/NousResearch/hermes-agent-self-evolution
 	url = https://github.com/NousResearch/hermes-agent-self-evolution.git
 	branch = main
+[submodule "upstream/NousResearch/hermes-paperclip-adapter"]
+	path = upstream/NousResearch/hermes-paperclip-adapter
+	url = https://github.com/NousResearch/hermes-paperclip-adapter.git
+	branch = main
+[submodule "upstream/NousResearch/autonovel"]
+	path = upstream/NousResearch/autonovel
+	url = https://github.com/NousResearch/autonovel.git
+	branch = master
+[submodule "upstream/NousResearch/yhack"]
+	path = upstream/NousResearch/yhack
+	url = https://github.com/NousResearch/yhack.git
+	branch = main
+[submodule "upstream/NousResearch/autoreason"]
+	path = upstream/NousResearch/autoreason
+	url = https://github.com/NousResearch/autoreason.git
+	branch = main
+[submodule "upstream/NousResearch/Gym"]
+	path = upstream/NousResearch/Gym
+	url = https://github.com/NousResearch/Gym.git
+	branch = main
+[submodule "upstream/NousResearch/RL"]
+	path = upstream/NousResearch/RL
+	url = https://github.com/NousResearch/RL.git
+	branch = main
+[submodule "upstream/NousResearch/ink"]
+	path = upstream/NousResearch/ink
+	url = https://github.com/NousResearch/ink.git
+	branch = master
+[submodule "upstream/NousResearch/OpenShell"]
+	path = upstream/NousResearch/OpenShell
+	url = https://github.com/NousResearch/OpenShell.git
+	branch = main
+[submodule "upstream/NousResearch/OpenShell-Community"]
+	path = upstream/NousResearch/OpenShell-Community
+	url = https://github.com/NousResearch/OpenShell-Community.git
+	branch = main
+[submodule "upstream/NousResearch/wterm"]
+	path = upstream/NousResearch/wterm
+	url = https://github.com/NousResearch/wterm.git
+	branch = main
+[submodule "upstream/NousResearch/tinker-nemogym"]
+	path = upstream/NousResearch/tinker-nemogym
+	url = https://github.com/NousResearch/tinker-nemogym.git
+	branch = main
+[submodule "upstream/NousResearch/NemoClaw"]
+	path = upstream/NousResearch/NemoClaw
+	url = https://github.com/NousResearch/NemoClaw.git
+	branch = main
+[submodule "upstream/NousResearch/Nemotron"]
+	path = upstream/NousResearch/Nemotron
+	url = https://github.com/NousResearch/Nemotron.git
+	branch = main
+[submodule "upstream/NousResearch/kanban-video-pipeline"]
+	path = upstream/NousResearch/kanban-video-pipeline
+	url = https://github.com/NousResearch/kanban-video-pipeline.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-example-plugins"]
+	path = upstream/NousResearch/hermes-example-plugins
+	url = https://github.com/NousResearch/hermes-example-plugins.git
+	branch = main
+[submodule "upstream/NousResearch/agent-governance-toolkit"]
+	path = upstream/NousResearch/agent-governance-toolkit
+	url = https://github.com/NousResearch/agent-governance-toolkit.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-compression-eval"]
+	path = upstream/NousResearch/hermes-compression-eval
+	url = https://github.com/NousResearch/hermes-compression-eval.git
+	branch = main
+[submodule "upstream/NousResearch/Megatron-Bridge"]
+	path = upstream/NousResearch/Megatron-Bridge
+	url = https://github.com/NousResearch/Megatron-Bridge.git
+	branch = main
+[submodule "upstream/NousResearch/Megatron-LM"]
+	path = upstream/NousResearch/Megatron-LM
+	url = https://github.com/NousResearch/Megatron-LM.git
+	branch = main
+[submodule "upstream/NousResearch/Automodel"]
+	path = upstream/NousResearch/Automodel
+	url = https://github.com/NousResearch/Automodel.git
+	branch = main
+[submodule "upstream/NousResearch/speculators"]
+	path = upstream/NousResearch/speculators
+	url = https://github.com/NousResearch/speculators.git
+	branch = main
+[submodule "upstream/NousResearch/harbor-fork"]
+	path = upstream/NousResearch/harbor-fork
+	url = https://github.com/NousResearch/harbor-fork.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-telegram-business"]
+	path = upstream/NousResearch/hermes-telegram-business
+	url = https://github.com/NousResearch/hermes-telegram-business.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-e2e-evidence"]
+	path = upstream/NousResearch/hermes-e2e-evidence
+	url = https://github.com/NousResearch/hermes-e2e-evidence.git
+	branch = main
+[submodule "upstream/NousResearch/hermes-toolperf-evals"]
+	path = upstream/NousResearch/hermes-toolperf-evals
+	url = https://github.com/NousResearch/hermes-toolperf-evals.git
+	branch = main
