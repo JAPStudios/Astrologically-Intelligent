@@ -1997,3 +1997,103 @@
 	path = upstream/openai/tart-guest-agent
 	url = https://github.com/openai/tart-guest-agent.git
 	branch = main
+[submodule "upstream/openai/openai-voice-agent-sdk-sample"]
+	path = upstream/openai/openai-voice-agent-sdk-sample
+	url = https://github.com/openai/openai-voice-agent-sdk-sample.git
+	branch = main
+[submodule "upstream/openai/openai-guardrails-python"]
+	path = upstream/openai/openai-guardrails-python
+	url = https://github.com/openai/openai-guardrails-python.git
+	branch = main
+[submodule "upstream/openai/codex"]
+	path = upstream/openai/codex
+	url = https://github.com/openai/codex.git
+	branch = main
+[submodule "upstream/openai/openai-fm"]
+	path = upstream/openai/openai-fm
+	url = https://github.com/openai/openai-fm.git
+	branch = main
+[submodule "upstream/openai/codex-universal"]
+	path = upstream/openai/codex-universal
+	url = https://github.com/openai/codex-universal.git
+	branch = main
+[submodule "upstream/openai/sample-deep-research-mcp"]
+	path = upstream/openai/sample-deep-research-mcp
+	url = https://github.com/openai/sample-deep-research-mcp.git
+	branch = main
+[submodule "upstream/openai/openai-testing-agent-demo"]
+	path = upstream/openai/openai-testing-agent-demo
+	url = https://github.com/openai/openai-testing-agent-demo.git
+	branch = main
+[submodule "upstream/openai/openai-cs-agents-demo"]
+	path = upstream/openai/openai-cs-agents-demo
+	url = https://github.com/openai/openai-cs-agents-demo.git
+	branch = main
+[submodule "upstream/openai/emergent-misalignment-persona-features"]
+	path = upstream/openai/emergent-misalignment-persona-features
+	url = https://github.com/openai/emergent-misalignment-persona-features.git
+	branch = main
+[submodule "upstream/openai/gpt-oss"]
+	path = upstream/openai/gpt-oss
+	url = https://github.com/openai/gpt-oss.git
+	branch = main
+[submodule "upstream/openai/penda_code"]
+	path = upstream/openai/penda_code
+	url = https://github.com/openai/penda_code.git
+	branch = main
+[submodule "upstream/openai/openai-reflect"]
+	path = upstream/openai/openai-reflect
+	url = https://github.com/openai/openai-reflect.git
+	branch = main
+[submodule "upstream/openai/harmony"]
+	path = upstream/openai/harmony
+	url = https://github.com/openai/harmony.git
+	branch = main
+[submodule "upstream/openai/gpt-5-coding-examples"]
+	path = upstream/openai/gpt-5-coding-examples
+	url = https://github.com/openai/gpt-5-coding-examples.git
+	branch = main
+[submodule "upstream/openai/snap-o"]
+	path = upstream/openai/snap-o
+	url = https://github.com/openai/snap-o.git
+	branch = main
+[submodule "upstream/openai/completions-responses-migration-pack"]
+	path = upstream/openai/completions-responses-migration-pack
+	url = https://github.com/openai/completions-responses-migration-pack.git
+	branch = main
+[submodule "upstream/openai/openai-icpc-2025"]
+	path = upstream/openai/openai-icpc-2025
+	url = https://github.com/openai/openai-icpc-2025.git
+	branch = main
+[submodule "upstream/openai/openai-guardrails-js"]
+	path = upstream/openai/openai-guardrails-js
+	url = https://github.com/openai/openai-guardrails-js.git
+	branch = main
+[submodule "upstream/openai/codex-action"]
+	path = upstream/openai/codex-action
+	url = https://github.com/openai/codex-action.git
+	branch = main
+[submodule "upstream/openai/chatkit-js"]
+	path = upstream/openai/chatkit-js
+	url = https://github.com/openai/chatkit-js.git
+	branch = main
+[submodule "upstream/openai/chatkit-python"]
+	path = upstream/openai/chatkit-python
+	url = https://github.com/openai/chatkit-python.git
+	branch = main
+[submodule "upstream/openai/openai-chatkit-starter-app"]
+	path = upstream/openai/openai-chatkit-starter-app
+	url = https://github.com/openai/openai-chatkit-starter-app.git
+	branch = main
+[submodule "upstream/openai/openai-chatkit-advanced-samples"]
+	path = upstream/openai/openai-chatkit-advanced-samples
+	url = https://github.com/openai/openai-chatkit-advanced-samples.git
+	branch = main
+[submodule "upstream/openai/openai-apps-sdk-examples"]
+	path = upstream/openai/openai-apps-sdk-examples
+	url = https://github.com/openai/openai-apps-sdk-examples.git
+	branch = main
+[submodule "upstream/openai/openai-sora-sample-app"]
+	path = upstream/openai/openai-sora-sample-app
+	url = https://github.com/openai/openai-sora-sample-app.git
+	branch = main
