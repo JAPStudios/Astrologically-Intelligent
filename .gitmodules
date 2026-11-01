@@ -2897,3 +2897,63 @@
 	path = upstream/perplexityai/browsesafe-plus-plus
 	url = https://github.com/perplexityai/browsesafe-plus-plus.git
 	branch = main
+[submodule "upstream/perplexityai/gazelle_rs"]
+	path = upstream/perplexityai/gazelle_rs
+	url = https://github.com/perplexityai/gazelle_rs.git
+	branch = main
+[submodule "upstream/perplexityai/rocksdb"]
+	path = upstream/perplexityai/rocksdb
+	url = https://github.com/perplexityai/rocksdb.git
+	branch = main
+[submodule "upstream/perplexityai/e2fsprogs"]
+	path = upstream/perplexityai/e2fsprogs
+	url = https://github.com/perplexityai/e2fsprogs.git
+	branch = main
+[submodule "upstream/perplexityai/mlx-vlm"]
+	path = upstream/perplexityai/mlx-vlm
+	url = https://github.com/perplexityai/mlx-vlm.git
+	branch = main
+[submodule "upstream/perplexityai/bb-storage"]
+	path = upstream/perplexityai/bb-storage
+	url = https://github.com/perplexityai/bb-storage.git
+	branch = main
+[submodule "upstream/xai-org/grok-1"]
+	path = upstream/xai-org/grok-1
+	url = https://github.com/xai-org/grok-1.git
+	branch = main
+[submodule "upstream/xai-org/xai-cookbook"]
+	path = upstream/xai-org/xai-cookbook
+	url = https://github.com/xai-org/xai-cookbook.git
+	branch = main
+[submodule "upstream/xai-org/grok-prompts"]
+	path = upstream/xai-org/grok-prompts
+	url = https://github.com/xai-org/grok-prompts.git
+	branch = main
+[submodule "upstream/xai-org/xai-proto"]
+	path = upstream/xai-org/xai-proto
+	url = https://github.com/xai-org/xai-proto.git
+	branch = main
+[submodule "upstream/xai-org/x-algorithm"]
+	path = upstream/xai-org/x-algorithm
+	url = https://github.com/xai-org/x-algorithm.git
+	branch = main
+[submodule "upstream/xai-org/plugin-marketplace"]
+	path = upstream/xai-org/plugin-marketplace
+	url = https://github.com/xai-org/plugin-marketplace.git
+	branch = main
+[submodule "upstream/xai-org/grok-build-plugin-cc"]
+	path = upstream/xai-org/grok-build-plugin-cc
+	url = https://github.com/xai-org/grok-build-plugin-cc.git
+	branch = main
+[submodule "upstream/xai-org/grok-build"]
+	path = upstream/xai-org/grok-build
+	url = https://github.com/xai-org/grok-build.git
+	branch = main
+[submodule "upstream/xai-org/community-writer"]
+	path = upstream/xai-org/community-writer
+	url = https://github.com/xai-org/community-writer.git
+	branch = main
+[submodule "upstream/xai-org/customer-education-workshops"]
+	path = upstream/xai-org/customer-education-workshops
+	url = https://github.com/xai-org/customer-education-workshops.git
+	branch = main
