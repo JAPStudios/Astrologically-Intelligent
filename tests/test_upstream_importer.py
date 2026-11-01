@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.import_upstream_orgs import existing_submodule_urls, import_repositories, list_repositories
+from scripts.import_upstream_orgs import existing_submodule_urls, import_repositories, list_repositories, fetch_commit_sha
 
 
 class UpstreamImporterTests(unittest.TestCase):
@@ -26,8 +26,9 @@ class UpstreamImporterTests(unittest.TestCase):
             with patch("scripts.import_upstream_orgs.existing_submodule_urls", return_value=set()):
                 repo = {"org":"openai","name":"skills","branch":"main",
                         "clone_url":"https://github.com/openai/skills.git"}
-                with patch("scripts.import_upstream_orgs.subprocess.run") as run:
-                    added, skipped = import_repositories(root,[repo],dry_run=True)
+                with patch("scripts.import_upstream_orgs.fetch_commit_sha", return_value="a"*40):
+                    with patch("scripts.import_upstream_orgs.subprocess.run") as run:
+                        added, skipped = import_repositories(root,[repo],dry_run=True)
                 run.assert_not_called()
                 self.assertEqual((added,skipped),(1,0))
 
@@ -41,6 +42,24 @@ class UpstreamImporterTests(unittest.TestCase):
                     added,skipped=import_repositories(root,[empty])
             run.assert_not_called()
             self.assertEqual((added,skipped),(0,1))
+
+    def test_gitlink_import_records_url_branch_and_commit_without_cloning(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            repo={"org":"openai","name":"skills","branch":"main",
+                  "clone_url":"https://github.com/openai/skills.git","empty":False}
+            calls=[]
+            def fake_run(command, **kwargs):
+                calls.append(command)
+                return type("Result",(),{"returncode":0,"stdout":"","stderr":""})()
+            with patch("scripts.import_upstream_orgs.existing_submodule_urls", return_value=set()):
+                with patch("scripts.import_upstream_orgs.fetch_commit_sha", return_value="b"*40):
+                    with patch("scripts.import_upstream_orgs.subprocess.run", side_effect=fake_run):
+                        added,skipped=import_repositories(root,[repo])
+            self.assertEqual((added,skipped),(1,0))
+            self.assertTrue(any("160000,"+"b"*40+",upstream/openai/skills" in " ".join(c) for c in calls))
+            self.assertTrue(any("submodule.upstream/openai/skills.url" in c for c in calls))
+            self.assertTrue(any("submodule.upstream/openai/skills.branch" in c for c in calls))
 
     def test_existing_submodule_urls_are_read(self):
         with tempfile.TemporaryDirectory() as directory:

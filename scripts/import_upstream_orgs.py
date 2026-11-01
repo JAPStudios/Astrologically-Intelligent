@@ -5,9 +5,10 @@ Run from the root of a clean Astrologically Intelligent checkout:
     python scripts/import_upstream_orgs.py --dry-run
     GITHUB_TOKEN=... python scripts/import_upstream_orgs.py
 
-The import is resumable: existing submodule URLs are skipped. Archived and forked
-public repositories are included. Private repositories are not accessible through
-the public organization listing API.
+The importer records each default-branch commit as a Gitlink and writes its URL
+and branch to .gitmodules without cloning it in the importer job. A recursive
+submodule checkout retrieves the source trees. Existing URLs are skipped; archived
+repositories and forks are included. Private repositories are not included.
 """
 from __future__ import annotations
 
@@ -78,6 +79,33 @@ def list_repositories(orgs: tuple[str, ...], token: str | None = None) -> list[d
     return repositories
 
 
+def fetch_commit_sha(repository: dict, token: str | None = None) -> str | None:
+    branch = repository.get("branch")
+    if not branch:
+        return None
+    org, name = repository["org"], repository["name"]
+    encoded_branch = urllib.parse.quote(branch, safe="/")
+    request = urllib.request.Request(
+        f"{API_ROOT}/repos/{org}/{name}/commits/{encoded_branch}",
+        headers={
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            **({"Authorization": f"Bearer {token}"} if token else {}),
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=45) as response:
+            result = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        if exc.code in (404, 409):
+            return None
+        raise RuntimeError(f"Could not resolve {org}/{name}@{branch}: HTTP {exc.code}") from exc
+    except urllib.error.URLError as exc:
+        raise RuntimeError(f"Could not resolve {org}/{name}@{branch}: {exc}") from exc
+    sha = result.get("sha") if isinstance(result, dict) else None
+    return sha if isinstance(sha, str) and re.fullmatch("[0-9a-f]{40}", sha) else None
+
+
 def existing_submodule_urls(root: Path) -> set[str]:
     gitmodules = root / ".gitmodules"
     if not gitmodules.is_file():
@@ -92,12 +120,13 @@ def existing_submodule_urls(root: Path) -> set[str]:
 
 
 def import_repositories(root: Path, repositories: list[dict], dry_run: bool = False,
-                        limit: int | None = None) -> tuple[int, int]:
+                        limit: int | None = None, token: str | None = None) -> tuple[int, int]:
     known = existing_submodule_urls(root)
     added = skipped = 0
+    gitmodules = root / ".gitmodules"
     for repository in repositories:
         url = repository["clone_url"].removesuffix(".git")
-        path = root / "upstream" / repository["org"] / repository["name"]
+        relative_path = (Path("upstream") / repository["org"] / repository["name"]).as_posix()
         if url in known:
             skipped += 1
             continue
@@ -107,14 +136,23 @@ def import_repositories(root: Path, repositories: list[dict], dry_run: bool = Fa
             continue
         if limit is not None and added >= limit:
             break
-        relative_path = path.relative_to(root).as_posix()
-        command = ["git", "submodule", "add", "--depth", "1"]
-        if repository.get("branch"):
-            command += ["--branch", repository["branch"]]
-        command += [repository["clone_url"], relative_path]
-        print(f"{'[dry-run] ' if dry_run else ''}{relative_path} <- {url}")
+        sha = fetch_commit_sha(repository, token)
+        if not sha:
+            print(f"[skip empty/no commit] {repository['org']}/{repository['name']}")
+            skipped += 1
+            continue
+        print(f"{'[dry-run] ' if dry_run else ''}{relative_path} <- {url} @ {sha}")
         if not dry_run:
-            subprocess.run(command, cwd=root, check=True)
+            section = f"submodule.{relative_path}"
+            subprocess.run(["git", "config", "--file", str(gitmodules), f"{section}.path", relative_path],
+                           cwd=root, check=True)
+            subprocess.run(["git", "config", "--file", str(gitmodules), f"{section}.url", repository["clone_url"]],
+                           cwd=root, check=True)
+            if repository.get("branch"):
+                subprocess.run(["git", "config", "--file", str(gitmodules), f"{section}.branch", repository["branch"]],
+                               cwd=root, check=True)
+            subprocess.run(["git", "update-index", "--add", "--cacheinfo",
+                            f"160000,{sha},{relative_path}"], cwd=root, check=True)
         known.add(url)
         added += 1
     return added, skipped
@@ -135,7 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     orgs = tuple(args.org or ORGANIZATIONS)
     try:
         repositories = list_repositories(orgs, os.getenv("GITHUB_TOKEN"))
-        added, skipped = import_repositories(root, repositories, args.dry_run, args.limit)
+        added, skipped = import_repositories(root, repositories, args.dry_run, args.limit, os.getenv("GITHUB_TOKEN"))
     except Exception as exc:
         print(f"Import stopped: {exc}", file=sys.stderr)
         return 1
@@ -145,7 +183,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.dry_run:
         print("Run without --dry-run to clone and stage the source repositories.")
     else:
-        print("Review .gitmodules and the staged gitlinks, then commit the import.")
+        print("Review .gitmodules and the staged gitlinks, then commit the import. Recursive submodule checkout retrieves the full source trees.")
     return 0
 
 
