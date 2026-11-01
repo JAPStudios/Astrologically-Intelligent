@@ -1597,3 +1597,103 @@
 	path = upstream/openai/phasic-policy-gradient
 	url = https://github.com/openai/phasic-policy-gradient.git
 	branch = master
+[submodule "upstream/openai/lustre"]
+	path = upstream/openai/lustre
+	url = https://github.com/openai/lustre.git
+	branch = master
+[submodule "upstream/openai/summarize-from-feedback"]
+	path = upstream/openai/summarize-from-feedback
+	url = https://github.com/openai/summarize-from-feedback.git
+	branch = master
+[submodule "upstream/openai/scheduler-plugins"]
+	path = upstream/openai/scheduler-plugins
+	url = https://github.com/openai/scheduler-plugins.git
+	branch = master
+[submodule "upstream/openai/psaw"]
+	path = upstream/openai/psaw
+	url = https://github.com/openai/psaw.git
+	branch = master
+[submodule "upstream/openai/robogym"]
+	path = upstream/openai/robogym
+	url = https://github.com/openai/robogym.git
+	branch = master
+[submodule "upstream/openai/pytorch"]
+	path = upstream/openai/pytorch
+	url = https://github.com/openai/pytorch.git
+	branch = master
+[submodule "upstream/openai/vdvae"]
+	path = upstream/openai/vdvae
+	url = https://github.com/openai/vdvae.git
+	branch = main
+[submodule "upstream/openai/understanding-rl-vision"]
+	path = upstream/openai/understanding-rl-vision
+	url = https://github.com/openai/understanding-rl-vision.git
+	branch = master
+[submodule "upstream/openai/tabulate"]
+	path = upstream/openai/tabulate
+	url = https://github.com/openai/tabulate.git
+	branch = master
+[submodule "upstream/openai/GPT-3-Encoder"]
+	path = upstream/openai/GPT-3-Encoder
+	url = https://github.com/openai/GPT-3-Encoder.git
+	branch = master
+[submodule "upstream/openai/CLIP"]
+	path = upstream/openai/CLIP
+	url = https://github.com/openai/CLIP.git
+	branch = main
+[submodule "upstream/openai/CLIP-featurevis"]
+	path = upstream/openai/CLIP-featurevis
+	url = https://github.com/openai/CLIP-featurevis.git
+	branch = master
+[submodule "upstream/openai/improved-diffusion"]
+	path = upstream/openai/improved-diffusion
+	url = https://github.com/openai/improved-diffusion.git
+	branch = main
+[submodule "upstream/openai/DALL-E"]
+	path = upstream/openai/DALL-E
+	url = https://github.com/openai/DALL-E.git
+	branch = master
+[submodule "upstream/openai/grok"]
+	path = upstream/openai/grok
+	url = https://github.com/openai/grok.git
+	branch = main
+[submodule "upstream/openai/guided-diffusion"]
+	path = upstream/openai/guided-diffusion
+	url = https://github.com/openai/guided-diffusion.git
+	branch = main
+[submodule "upstream/openai/miniF2F"]
+	path = upstream/openai/miniF2F
+	url = https://github.com/openai/miniF2F.git
+	branch = main
+[submodule "upstream/openai/gen"]
+	path = upstream/openai/gen
+	url = https://github.com/openai/gen.git
+	branch = master
+[submodule "upstream/openai/etcd"]
+	path = upstream/openai/etcd
+	url = https://github.com/openai/etcd.git
+	branch = 6.3.0-openai
+[submodule "upstream/openai/lean-gym"]
+	path = upstream/openai/lean-gym
+	url = https://github.com/openai/lean-gym.git
+	branch = main
+[submodule "upstream/openai/LHOPT"]
+	path = upstream/openai/LHOPT
+	url = https://github.com/openai/LHOPT.git
+	branch = main
+[submodule "upstream/openai/code-align-evals-data"]
+	path = upstream/openai/code-align-evals-data
+	url = https://github.com/openai/code-align-evals-data.git
+	branch = main
+[submodule "upstream/openai/human-eval"]
+	path = upstream/openai/human-eval
+	url = https://github.com/openai/human-eval.git
+	branch = master
+[submodule "upstream/openai/ppo-ewma"]
+	path = upstream/openai/ppo-ewma
+	url = https://github.com/openai/ppo-ewma.git
+	branch = master
+[submodule "upstream/openai/grade-school-math"]
+	path = upstream/openai/grade-school-math
+	url = https://github.com/openai/grade-school-math.git
+	branch = master
