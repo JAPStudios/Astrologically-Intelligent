@@ -97,3 +97,103 @@
 [submodule "upstream/odysseus-dev/odysseus-current"]
 	path = upstream/odysseus-dev/odysseus-current
 	url = https://github.com/odysseus-dev/odysseus-current.git
+[submodule "upstream/anthropics/PySvelte"]
+	path = upstream/anthropics/PySvelte
+	url = https://github.com/anthropics/PySvelte.git
+	branch = master
+[submodule "upstream/anthropics/hh-rlhf"]
+	path = upstream/anthropics/hh-rlhf
+	url = https://github.com/anthropics/hh-rlhf.git
+	branch = master
+[submodule "upstream/anthropics/toy-models-of-superposition"]
+	path = upstream/anthropics/toy-models-of-superposition
+	url = https://github.com/anthropics/toy-models-of-superposition.git
+	branch = main
+[submodule "upstream/anthropics/ConstitutionalHarmlessnessPaper"]
+	path = upstream/anthropics/ConstitutionalHarmlessnessPaper
+	url = https://github.com/anthropics/ConstitutionalHarmlessnessPaper.git
+	branch = main
+[submodule "upstream/anthropics/evals"]
+	path = upstream/anthropics/evals
+	url = https://github.com/anthropics/evals.git
+	branch = main
+[submodule "upstream/anthropics/sse-starlette"]
+	path = upstream/anthropics/sse-starlette
+	url = https://github.com/anthropics/sse-starlette.git
+	branch = master
+[submodule "upstream/anthropics/anthropic-sdk-typescript"]
+	path = upstream/anthropics/anthropic-sdk-typescript
+	url = https://github.com/anthropics/anthropic-sdk-typescript.git
+	branch = main
+[submodule "upstream/anthropics/s5cmd"]
+	path = upstream/anthropics/s5cmd
+	url = https://github.com/anthropics/s5cmd.git
+	branch = master
+[submodule "upstream/anthropics/triton"]
+	path = upstream/anthropics/triton
+	url = https://github.com/anthropics/triton.git
+	branch = main
+[submodule "upstream/anthropics/hypercorn"]
+	path = upstream/anthropics/hypercorn
+	url = https://github.com/anthropics/hypercorn.git
+	branch = main
+[submodule "upstream/anthropics/anthropic-tokenizer-typescript"]
+	path = upstream/anthropics/anthropic-tokenizer-typescript
+	url = https://github.com/anthropics/anthropic-tokenizer-typescript.git
+	branch = main
+[submodule "upstream/anthropics/DecompositionFaithfulnessPaper"]
+	path = upstream/anthropics/DecompositionFaithfulnessPaper
+	url = https://github.com/anthropics/DecompositionFaithfulnessPaper.git
+	branch = main
+[submodule "upstream/anthropics/claude-cookbooks"]
+	path = upstream/anthropics/claude-cookbooks
+	url = https://github.com/anthropics/claude-cookbooks.git
+	branch = main
+[submodule "upstream/anthropics/anthropic-retrieval-demo"]
+	path = upstream/anthropics/anthropic-retrieval-demo
+	url = https://github.com/anthropics/anthropic-retrieval-demo.git
+	branch = main
+[submodule "upstream/anthropics/anthropic-bedrock-python"]
+	path = upstream/anthropics/anthropic-bedrock-python
+	url = https://github.com/anthropics/anthropic-bedrock-python.git
+	branch = main
+[submodule "upstream/anthropics/anthropic-bedrock-typescript"]
+	path = upstream/anthropics/anthropic-bedrock-typescript
+	url = https://github.com/anthropics/anthropic-bedrock-typescript.git
+	branch = main
+[submodule "upstream/anthropics/cfaulthandler"]
+	path = upstream/anthropics/cfaulthandler
+	url = https://github.com/anthropics/cfaulthandler.git
+	branch = main
+[submodule "upstream/anthropics/python-tblib"]
+	path = upstream/anthropics/python-tblib
+	url = https://github.com/anthropics/python-tblib.git
+	branch = master
+[submodule "upstream/anthropics/anthropic-tools"]
+	path = upstream/anthropics/anthropic-tools
+	url = https://github.com/anthropics/anthropic-tools.git
+	branch = main
+[submodule "upstream/anthropics/blobfile"]
+	path = upstream/anthropics/blobfile
+	url = https://github.com/anthropics/blobfile.git
+	branch = master
+[submodule "upstream/anthropics/sleeper-agents-paper"]
+	path = upstream/anthropics/sleeper-agents-paper
+	url = https://github.com/anthropics/sleeper-agents-paper.git
+	branch = main
+[submodule "upstream/anthropics/prompt-eng-interactive-tutorial"]
+	path = upstream/anthropics/prompt-eng-interactive-tutorial
+	url = https://github.com/anthropics/prompt-eng-interactive-tutorial.git
+	branch = master
+[submodule "upstream/anthropics/swift-markdown-ui"]
+	path = upstream/anthropics/swift-markdown-ui
+	url = https://github.com/anthropics/swift-markdown-ui.git
+	branch = main
+[submodule "upstream/anthropics/courses"]
+	path = upstream/anthropics/courses
+	url = https://github.com/anthropics/courses.git
+	branch = master
+[submodule "upstream/anthropics/sycophancy-to-subterfuge-paper"]
+	path = upstream/anthropics/sycophancy-to-subterfuge-paper
+	url = https://github.com/anthropics/sycophancy-to-subterfuge-paper.git
+	branch = main
