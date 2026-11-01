@@ -1,0 +1,54 @@
+name: Import Upstream Repositories
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/import_upstream_orgs.py"
+      - ".github/workflows/import-upstream.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: upstream-import-main
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Import all public repositories in resumable batches
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          batch=0
+          while true; do
+            batch=$((batch + 1))
+            echo "Starting upstream import batch ${batch}"
+            output="$(python scripts/import_upstream_orgs.py --limit 10)"
+            echo "$output"
+            added="$(printf '%s\n' "$output" | sed -n 's/^IMPORT_ADDED=\([0-9][0-9]*\).*/\1/p' | tail -n 1)"
+            if [[ -z "$added" ]]; then
+              echo "Importer did not report its batch result." >&2
+              exit 1
+            fi
+            if [[ "$added" -eq 0 ]]; then
+              echo "All discoverable public repositories are already represented as submodules."
+              break
+            fi
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .gitmodules upstream
+            git commit -m "Import upstream repository batch ${batch}"
+            git push origin HEAD:main
+            git submodule deinit -f --all || true
+            rm -rf .git/modules
+          done

@@ -22,9 +22,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Initialize skill-source submodules
+        run: git submodule update --init --depth 1 -- skills/upstream/anthropics-skills skills/upstream/openai-skills skills/upstream/n8n-skills skills/upstream/hermes-agent skills/upstream/openclaw-agent-skills
       - name: Run agent runtime tests
         run: python -m unittest discover -s tests -v

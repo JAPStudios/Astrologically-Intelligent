@@ -137,6 +137,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     print(f"Repository listing: {len(repositories)} public repositories.")
     print(f"Submodules {'planned' if args.dry_run else 'added'}: {added}; already present: {skipped}.")
+    print(f"IMPORT_ADDED={added} IMPORT_SKIPPED={skipped}")
     if args.dry_run:
         print("Run without --dry-run to clone and stage the source repositories.")
     else:
