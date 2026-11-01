@@ -1897,3 +1897,103 @@
 	path = upstream/openai/openai-go
 	url = https://github.com/openai/openai-go.git
 	branch = main
+[submodule "upstream/openai/build-hours"]
+	path = upstream/openai/build-hours
+	url = https://github.com/openai/build-hours.git
+	branch = main
+[submodule "upstream/openai/fedramp-et"]
+	path = upstream/openai/fedramp-et
+	url = https://github.com/openai/fedramp-et.git
+	branch = main
+[submodule "upstream/openai/openai-realtime-console"]
+	path = upstream/openai/openai-realtime-console
+	url = https://github.com/openai/openai-realtime-console.git
+	branch = main
+[submodule "upstream/openai/openai-realtime-api-beta"]
+	path = upstream/openai/openai-realtime-api-beta
+	url = https://github.com/openai/openai-realtime-api-beta.git
+	branch = main
+[submodule "upstream/openai/mle-bench"]
+	path = upstream/openai/mle-bench
+	url = https://github.com/openai/mle-bench.git
+	branch = main
+[submodule "upstream/openai/openai-java"]
+	path = upstream/openai/openai-java
+	url = https://github.com/openai/openai-java.git
+	branch = main
+[submodule "upstream/openai/chz"]
+	path = upstream/openai/chz
+	url = https://github.com/openai/chz.git
+	branch = main
+[submodule "upstream/openai/openai-realtime-embedded"]
+	path = upstream/openai/openai-realtime-embedded
+	url = https://github.com/openai/openai-realtime-embedded.git
+	branch = main
+[submodule "upstream/openai/learning-lab"]
+	path = upstream/openai/learning-lab
+	url = https://github.com/openai/learning-lab.git
+	branch = main
+[submodule "upstream/openai/openai-structured-outputs-samples"]
+	path = upstream/openai/openai-structured-outputs-samples
+	url = https://github.com/openai/openai-structured-outputs-samples.git
+	branch = main
+[submodule "upstream/openai/openai-realtime-twilio-demo"]
+	path = upstream/openai/openai-realtime-twilio-demo
+	url = https://github.com/openai/openai-realtime-twilio-demo.git
+	branch = main
+[submodule "upstream/openai/openai-realtime-solar-system"]
+	path = upstream/openai/openai-realtime-solar-system
+	url = https://github.com/openai/openai-realtime-solar-system.git
+	branch = main
+[submodule "upstream/openai/openai-realtime-agents"]
+	path = upstream/openai/openai-realtime-agents
+	url = https://github.com/openai/openai-realtime-agents.git
+	branch = main
+[submodule "upstream/openai/openai-builder-lab"]
+	path = upstream/openai/openai-builder-lab
+	url = https://github.com/openai/openai-builder-lab.git
+	branch = main
+[submodule "upstream/openai/openai-builder-lab-solution"]
+	path = upstream/openai/openai-builder-lab-solution
+	url = https://github.com/openai/openai-builder-lab-solution.git
+	branch = main
+[submodule "upstream/openai/model_spec"]
+	path = upstream/openai/model_spec
+	url = https://github.com/openai/model_spec.git
+	branch = main
+[submodule "upstream/openai/SWELancer-Benchmark"]
+	path = upstream/openai/SWELancer-Benchmark
+	url = https://github.com/openai/SWELancer-Benchmark.git
+	branch = main
+[submodule "upstream/openai/TestUGxlYXNlIGlnbm9yZQo"]
+	path = upstream/openai/TestUGxlYXNlIGlnbm9yZQo
+	url = https://github.com/openai/TestUGxlYXNlIGlnbm9yZQo.git
+	branch = main
+[submodule "upstream/openai/openai-ruby"]
+	path = upstream/openai/openai-ruby
+	url = https://github.com/openai/openai-ruby.git
+	branch = main
+[submodule "upstream/openai/openai-responses-starter-app"]
+	path = upstream/openai/openai-responses-starter-app
+	url = https://github.com/openai/openai-responses-starter-app.git
+	branch = main
+[submodule "upstream/openai/openai-cua-sample-app"]
+	path = upstream/openai/openai-cua-sample-app
+	url = https://github.com/openai/openai-cua-sample-app.git
+	branch = main
+[submodule "upstream/openai/emoclassifiers"]
+	path = upstream/openai/emoclassifiers
+	url = https://github.com/openai/emoclassifiers.git
+	branch = main
+[submodule "upstream/openai/openai-support-agent-demo"]
+	path = upstream/openai/openai-support-agent-demo
+	url = https://github.com/openai/openai-support-agent-demo.git
+	branch = main
+[submodule "upstream/openai/frontier-evals"]
+	path = upstream/openai/frontier-evals
+	url = https://github.com/openai/frontier-evals.git
+	branch = main
+[submodule "upstream/openai/tart-guest-agent"]
+	path = upstream/openai/tart-guest-agent
+	url = https://github.com/openai/tart-guest-agent.git
+	branch = main
