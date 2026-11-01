@@ -47,8 +47,14 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add .gitmodules
+            base="$(git rev-parse HEAD)"
             git commit -m "Import upstream repository batch ${batch}"
             git fetch origin main
-            git rebase origin/main
+            remote="$(git rev-parse origin/main)"
+            if [[ "$remote" != "$base" ]]; then
+              echo "main advanced during this batch; retrying against the latest main."
+              git reset --hard origin/main
+              continue
+            fi
             git push origin HEAD:main
           done
