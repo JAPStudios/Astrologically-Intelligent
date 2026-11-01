@@ -2597,3 +2597,103 @@
 	path = upstream/openclaw/crabhelm
 	url = https://github.com/openclaw/crabhelm.git
 	branch = main
+[submodule "upstream/openclaw/turnwire"]
+	path = upstream/openclaw/turnwire
+	url = https://github.com/openclaw/turnwire.git
+	branch = main
+[submodule "upstream/openclaw/carapace"]
+	path = upstream/openclaw/carapace
+	url = https://github.com/openclaw/carapace.git
+	branch = main
+[submodule "upstream/openclaw/reef"]
+	path = upstream/openclaw/reef
+	url = https://github.com/openclaw/reef.git
+	branch = main
+[submodule "upstream/openclaw/release-workflows"]
+	path = upstream/openclaw/release-workflows
+	url = https://github.com/openclaw/release-workflows.git
+	branch = main
+[submodule "upstream/openclaw/catalog"]
+	path = upstream/openclaw/catalog
+	url = https://github.com/openclaw/catalog.git
+	branch = main
+[submodule "upstream/openclaw/clawsweeper-state"]
+	path = upstream/openclaw/clawsweeper-state
+	url = https://github.com/openclaw/clawsweeper-state.git
+	branch = main
+[submodule "upstream/openclaw/telemetry"]
+	path = upstream/openclaw/telemetry
+	url = https://github.com/openclaw/telemetry.git
+	branch = main
+[submodule "upstream/openclaw/openclaw-windows-packaging"]
+	path = upstream/openclaw/openclaw-windows-packaging
+	url = https://github.com/openclaw/openclaw-windows-packaging.git
+	branch = main
+[submodule "upstream/openclaw/openclaw-enterprise"]
+	path = upstream/openclaw/openclaw-enterprise
+	url = https://github.com/openclaw/openclaw-enterprise.git
+	branch = main
+[submodule "upstream/openclaw/endor-clawsweeper-e2e"]
+	path = upstream/openclaw/endor-clawsweeper-e2e
+	url = https://github.com/openclaw/endor-clawsweeper-e2e.git
+	branch = main
+[submodule "upstream/openclaw/bun"]
+	path = upstream/openclaw/bun
+	url = https://github.com/openclaw/bun.git
+	branch = main
+[submodule "upstream/openclaw/tidepool"]
+	path = upstream/openclaw/tidepool
+	url = https://github.com/openclaw/tidepool.git
+	branch = main
+[submodule "upstream/openclaw/openclaw-atif"]
+	path = upstream/openclaw/openclaw-atif
+	url = https://github.com/openclaw/openclaw-atif.git
+	branch = main
+[submodule "upstream/openclaw/knowledge"]
+	path = upstream/openclaw/knowledge
+	url = https://github.com/openclaw/knowledge.git
+	branch = main
+[submodule "upstream/openclaw/collab"]
+	path = upstream/openclaw/collab
+	url = https://github.com/openclaw/collab.git
+	branch = main
+[submodule "upstream/openclaw/WebKit"]
+	path = upstream/openclaw/WebKit
+	url = https://github.com/openclaw/WebKit.git
+	branch = openclaw/main
+[submodule "upstream/openclaw/proc-safe"]
+	path = upstream/openclaw/proc-safe
+	url = https://github.com/openclaw/proc-safe.git
+	branch = main
+[submodule "upstream/openclaw/birdclaw"]
+	path = upstream/openclaw/birdclaw
+	url = https://github.com/openclaw/birdclaw.git
+	branch = main
+[submodule "upstream/paperclipai/.github"]
+	path = upstream/paperclipai/.github
+	url = https://github.com/paperclipai/.github.git
+	branch = master
+[submodule "upstream/paperclipai/docs"]
+	path = upstream/paperclipai/docs
+	url = https://github.com/paperclipai/docs.git
+	branch = main
+[submodule "upstream/paperclipai/clipmart"]
+	path = upstream/paperclipai/clipmart
+	url = https://github.com/paperclipai/clipmart.git
+	branch = master
+[submodule "upstream/paperclipai/pr-reviewer"]
+	path = upstream/paperclipai/pr-reviewer
+	url = https://github.com/paperclipai/pr-reviewer.git
+	branch = master
+[submodule "upstream/paperclipai/companies-tool"]
+	path = upstream/paperclipai/companies-tool
+	url = https://github.com/paperclipai/companies-tool.git
+	branch = master
+[submodule "upstream/paperclipai/paperclip-docs"]
+	path = upstream/paperclipai/paperclip-docs
+	url = https://github.com/paperclipai/paperclip-docs.git
+	branch = main
+[submodule "upstream/paperclipai/northstar"]
+	path = upstream/paperclipai/northstar
+	url = https://github.com/paperclipai/northstar.git
+	branch = main
