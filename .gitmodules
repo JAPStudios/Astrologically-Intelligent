@@ -2197,3 +2197,103 @@
 	path = upstream/openai/openai-developers-for-claude
 	url = https://github.com/openai/openai-developers-for-claude.git
 	branch = main
+[submodule "upstream/openai/imagegencam"]
+	path = upstream/openai/imagegencam
+	url = https://github.com/openai/imagegencam.git
+	branch = main
+[submodule "upstream/openai/openai-developers-for-cursor"]
+	path = upstream/openai/openai-developers-for-cursor
+	url = https://github.com/openai/openai-developers-for-cursor.git
+	branch = main
+[submodule "upstream/openai/fence"]
+	path = upstream/openai/fence
+	url = https://github.com/openai/fence.git
+	branch = main
+[submodule "upstream/openai/role-specific-plugins"]
+	path = upstream/openai/role-specific-plugins
+	url = https://github.com/openai/role-specific-plugins.git
+	branch = main
+[submodule "upstream/openai/sites"]
+	path = upstream/openai/sites
+	url = https://github.com/openai/sites.git
+	branch = main
+[submodule "upstream/openai/ads-measurement-pixel-gtm-template"]
+	path = upstream/openai/ads-measurement-pixel-gtm-template
+	url = https://github.com/openai/ads-measurement-pixel-gtm-template.git
+	branch = main
+[submodule "upstream/openai/planttalk"]
+	path = upstream/openai/planttalk
+	url = https://github.com/openai/planttalk.git
+	branch = main
+[submodule "upstream/openai/cdc-lean"]
+	path = upstream/openai/cdc-lean
+	url = https://github.com/openai/cdc-lean.git
+	branch = main
+[submodule "upstream/openai/terraform-provider-openai"]
+	path = upstream/openai/terraform-provider-openai
+	url = https://github.com/openai/terraform-provider-openai.git
+	branch = main
+[submodule "upstream/openai/birdingpal"]
+	path = upstream/openai/birdingpal
+	url = https://github.com/openai/birdingpal.git
+	branch = main
+[submodule "upstream/openai/git"]
+	path = upstream/openai/git
+	url = https://github.com/openai/git.git
+	branch = codex
+[submodule "upstream/openai/codex-security"]
+	path = upstream/openai/codex-security
+	url = https://github.com/openai/codex-security.git
+	branch = main
+[submodule "upstream/openai/redcard"]
+	path = upstream/openai/redcard
+	url = https://github.com/openai/redcard.git
+	branch = main
+[submodule "upstream/openai/ten-proofs"]
+	path = upstream/openai/ten-proofs
+	url = https://github.com/openai/ten-proofs.git
+	branch = main
+[submodule "upstream/openai/community-plugins"]
+	path = upstream/openai/community-plugins
+	url = https://github.com/openai/community-plugins.git
+	branch = main
+[submodule "upstream/openai/LongGapsBetweenPrimes"]
+	path = upstream/openai/LongGapsBetweenPrimes
+	url = https://github.com/openai/LongGapsBetweenPrimes.git
+	branch = master
+[submodule "upstream/openai/PrimeGaps186"]
+	path = upstream/openai/PrimeGaps186
+	url = https://github.com/openai/PrimeGaps186.git
+	branch = main
+[submodule "upstream/openai/NavierStokesAndEuler"]
+	path = upstream/openai/NavierStokesAndEuler
+	url = https://github.com/openai/NavierStokesAndEuler.git
+	branch = main
+[submodule "upstream/openai/openai-live-console"]
+	path = upstream/openai/openai-live-console
+	url = https://github.com/openai/openai-live-console.git
+	branch = main
+[submodule "upstream/openai/mcp-extensions"]
+	path = upstream/openai/mcp-extensions
+	url = https://github.com/openai/mcp-extensions.git
+	branch = main
+[submodule "upstream/openai/sign-in-with-chatgpt-devkit"]
+	path = upstream/openai/sign-in-with-chatgpt-devkit
+	url = https://github.com/openai/sign-in-with-chatgpt-devkit.git
+	branch = main
+[submodule "upstream/openai/math"]
+	path = upstream/openai/math
+	url = https://github.com/openai/math.git
+	branch = main
+[submodule "upstream/openai/MultiLangBench"]
+	path = upstream/openai/MultiLangBench
+	url = https://github.com/openai/MultiLangBench.git
+	branch = main
+[submodule "upstream/openai/php2shell-checker"]
+	path = upstream/openai/php2shell-checker
+	url = https://github.com/openai/php2shell-checker.git
+	branch = main
+[submodule "upstream/openclaw/AXorcist"]
+	path = upstream/openclaw/AXorcist
+	url = https://github.com/openclaw/AXorcist.git
+	branch = main
