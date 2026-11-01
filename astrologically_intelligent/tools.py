@@ -166,20 +166,23 @@ class ToolRegistry:
         root = Path("skills")
         if not root.is_dir(): return []
         results=[]
-        for path in sorted(root.glob("*/SKILL.md")):
+        for path in sorted(root.rglob("SKILL.md")):
+            if ".git" in path.parts:
+                continue
             content=path.read_text(encoding="utf-8")
             summary=next((line.lstrip("# ").strip() for line in content.splitlines() if line.strip()),"")
-            results.append({"name":path.parent.name,"summary":summary[:200]})
+            results.append({"name":path.parent.relative_to(root).as_posix(),"summary":summary[:200]})
         return results
 
     def _read_skill(self, name: str) -> dict[str, str]:
         import re
         from pathlib import Path
-        if not re.fullmatch(r"[A-Za-z0-9_-]{1,64}",name): raise ValueError("Invalid skill name")
+        if not isinstance(name, str) or len(name) > 256 or not re.fullmatch(r"[A-Za-z0-9_-]+(?:/[A-Za-z0-9_-]+)*",name):
+            raise ValueError("Invalid skill name")
         root=Path("skills").resolve()
         path=(root/name/"SKILL.md").resolve()
-        if path.parent.parent != root or not path.is_file(): raise ValueError("Skill not found")
-        if path.stat().st_size > 32768: raise ValueError("Skill exceeds 32 KiB limit")
+        if not path.is_relative_to(root) or not path.is_file(): raise ValueError("Skill not found")
+        if path.stat().st_size > 131072: raise ValueError("Skill exceeds 128 KiB limit")
         return {"name":name,"content":path.read_text(encoding="utf-8")}
 
     def _remember(self, namespace: str, key: str, value: Any) -> dict[str, bool]:

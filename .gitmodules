@@ -1,0 +1,51 @@
+[submodule "skills/upstream/anthropics-skills"]
+	path = skills/upstream/anthropics-skills
+	url = https://github.com/anthropics/skills.git
+
+[submodule "skills/upstream/openai-skills"]
+	path = skills/upstream/openai-skills
+	url = https://github.com/openai/skills.git
+
+[submodule "skills/upstream/n8n-skills"]
+	path = skills/upstream/n8n-skills
+	url = https://github.com/n8n-io/skills.git
+
+[submodule "skills/upstream/hermes-agent"]
+	path = skills/upstream/hermes-agent
+	url = https://github.com/NousResearch/hermes-agent.git
+
+[submodule "skills/upstream/openclaw-agent-skills"]
+	path = skills/upstream/openclaw-agent-skills
+	url = https://github.com/openclaw/agent-skills.git
+
+[submodule "upstream/anthropics/claude-agent-sdk-python"]
+	path = upstream/anthropics/claude-agent-sdk-python
+	url = https://github.com/anthropics/claude-agent-sdk-python.git
+
+[submodule "upstream/n8n-io/n8n"]
+	path = upstream/n8n-io/n8n
+	url = https://github.com/n8n-io/n8n.git
+
+[submodule "upstream/openai/openai-agents-python"]
+	path = upstream/openai/openai-agents-python
+	url = https://github.com/openai/openai-agents-python.git
+
+[submodule "upstream/openclaw/openclaw"]
+	path = upstream/openclaw/openclaw
+	url = https://github.com/openclaw/openclaw.git
+
+[submodule "upstream/paperclipai/paperclip"]
+	path = upstream/paperclipai/paperclip
+	url = https://github.com/paperclipai/paperclip.git
+
+[submodule "upstream/perplexityai/perplexity-py"]
+	path = upstream/perplexityai/perplexity-py
+	url = https://github.com/perplexityai/perplexity-py.git
+
+[submodule "upstream/xai-org/xai-sdk-python"]
+	path = upstream/xai-org/xai-sdk-python
+	url = https://github.com/xai-org/xai-sdk-python.git
+
+[submodule "upstream/odysseus-dev/odysseus"]
+	path = upstream/odysseus-dev/odysseus
+	url = https://github.com/odysseus-dev/odysseus.git
