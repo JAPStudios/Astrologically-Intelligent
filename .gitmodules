@@ -2697,3 +2697,103 @@
 	path = upstream/paperclipai/northstar
 	url = https://github.com/paperclipai/northstar.git
 	branch = main
+[submodule "upstream/paperclipai/agent-plugins"]
+	path = upstream/paperclipai/agent-plugins
+	url = https://github.com/paperclipai/agent-plugins.git
+	branch = master
+[submodule "upstream/perplexityai/api-discussion"]
+	path = upstream/perplexityai/api-discussion
+	url = https://github.com/perplexityai/api-discussion.git
+	branch = main
+[submodule "upstream/perplexityai/libfabric-efa-demo"]
+	path = upstream/perplexityai/libfabric-efa-demo
+	url = https://github.com/perplexityai/libfabric-efa-demo.git
+	branch = main
+[submodule "upstream/perplexityai/api-cookbook"]
+	path = upstream/perplexityai/api-cookbook
+	url = https://github.com/perplexityai/api-cookbook.git
+	branch = main
+[submodule "upstream/perplexityai/modelcontextprotocol"]
+	path = upstream/perplexityai/modelcontextprotocol
+	url = https://github.com/perplexityai/modelcontextprotocol.git
+	branch = main
+[submodule "upstream/perplexityai/pplx-kernels"]
+	path = upstream/perplexityai/pplx-kernels
+	url = https://github.com/perplexityai/pplx-kernels.git
+	branch = master
+[submodule "upstream/perplexityai/eppo-ios-sdk"]
+	path = upstream/perplexityai/eppo-ios-sdk
+	url = https://github.com/perplexityai/eppo-ios-sdk.git
+	branch = main
+[submodule "upstream/perplexityai/Highlightr"]
+	path = upstream/perplexityai/Highlightr
+	url = https://github.com/perplexityai/Highlightr.git
+	branch = master
+[submodule "upstream/perplexityai/socket.io-client-swift"]
+	path = upstream/perplexityai/socket.io-client-swift
+	url = https://github.com/perplexityai/socket.io-client-swift.git
+	branch = master
+[submodule "upstream/perplexityai/rules_diff"]
+	path = upstream/perplexityai/rules_diff
+	url = https://github.com/perplexityai/rules_diff.git
+	branch = main
+[submodule "upstream/perplexityai/ape"]
+	path = upstream/perplexityai/ape
+	url = https://github.com/perplexityai/ape.git
+	branch = main
+[submodule "upstream/perplexityai/download_utils"]
+	path = upstream/perplexityai/download_utils
+	url = https://github.com/perplexityai/download_utils.git
+	branch = main
+[submodule "upstream/perplexityai/toolchain_utils"]
+	path = upstream/perplexityai/toolchain_utils
+	url = https://github.com/perplexityai/toolchain_utils.git
+	branch = main
+[submodule "upstream/perplexityai/swift-markdown"]
+	path = upstream/perplexityai/swift-markdown
+	url = https://github.com/perplexityai/swift-markdown.git
+	branch = main
+[submodule "upstream/perplexityai/lefthook"]
+	path = upstream/perplexityai/lefthook
+	url = https://github.com/perplexityai/lefthook.git
+	branch = 0-7-stable
+[submodule "upstream/perplexityai/search_evals"]
+	path = upstream/perplexityai/search_evals
+	url = https://github.com/perplexityai/search_evals.git
+	branch = main
+[submodule "upstream/perplexityai/next-auth"]
+	path = upstream/perplexityai/next-auth
+	url = https://github.com/perplexityai/next-auth.git
+	branch = v4
+[submodule "upstream/perplexityai/react-agent-handler-link"]
+	path = upstream/perplexityai/react-agent-handler-link
+	url = https://github.com/perplexityai/react-agent-handler-link.git
+	branch = main
+[submodule "upstream/perplexityai/dd-trace-js"]
+	path = upstream/perplexityai/dd-trace-js
+	url = https://github.com/perplexityai/dd-trace-js.git
+	branch = master
+[submodule "upstream/perplexityai/pplx-garden"]
+	path = upstream/perplexityai/pplx-garden
+	url = https://github.com/perplexityai/pplx-garden.git
+	branch = main
+[submodule "upstream/perplexityai/ai-sdk"]
+	path = upstream/perplexityai/ai-sdk
+	url = https://github.com/perplexityai/ai-sdk.git
+	branch = main
+[submodule "upstream/perplexityai/rules_playwright"]
+	path = upstream/perplexityai/rules_playwright
+	url = https://github.com/perplexityai/rules_playwright.git
+	branch = main
+[submodule "upstream/perplexityai/bazel-central-registry"]
+	path = upstream/perplexityai/bazel-central-registry
+	url = https://github.com/perplexityai/bazel-central-registry.git
+	branch = main
+[submodule "upstream/perplexityai/gawk"]
+	path = upstream/perplexityai/gawk
+	url = https://github.com/perplexityai/gawk.git
+	branch = main
+[submodule "upstream/perplexityai/libpfm"]
+	path = upstream/perplexityai/libpfm
+	url = https://github.com/perplexityai/libpfm.git
+	branch = main
