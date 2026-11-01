@@ -7,7 +7,7 @@ from typing import Any, Callable
 from .storage import Store
 from .orchestration import Orchestrator
 from .plugins import PluginManager
-from .integrations import n8n_client_from_env, paperclip_client_from_env, perplexity_client_from_env
+from .integrations import n8n_client_from_env, paperclip_client_from_env, perplexity_client_from_env, openclaw_client_from_env
 
 
 class ToolRegistry:
@@ -156,6 +156,10 @@ class ToolRegistry:
         reg("perplexity.search","Search the web using the Perplexity Search API.",
             {"query":{"type":"string"},"max_results":{"type":"integer","minimum":1,"maximum":20}},
             ["query"],lambda query,max_results=5:perplexity_client_from_env().search(query,max_results))
+
+        reg("openclaw.sessions.list","List sessions from a configured OpenClaw Gateway. This connector is read-only.",
+            {"session_key":{"type":"string"}},[],lambda session_key="main":
+                openclaw_client_from_env().list_sessions(session_key))
 
     def _list_skills(self) -> list[dict[str, str]]:
         from pathlib import Path

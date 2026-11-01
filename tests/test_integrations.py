@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from astrologically_intelligent.integrations import N8nClient, PaperclipClient, PerplexityClient
+from astrologically_intelligent.integrations import N8nClient, PaperclipClient, PerplexityClient, OpenClawClient
 
 
 class N8nClientTests(unittest.TestCase):
@@ -76,6 +76,22 @@ class PerplexityClientTests(unittest.TestCase):
             client.search(" ")
         with self.assertRaises(ValueError):
             client.search("test", max_results=21)
+
+
+
+
+class OpenClawClientTests(unittest.TestCase):
+    def test_sessions_list_uses_read_only_tool_invoke(self):
+        client = OpenClawClient("http://127.0.0.1:18789", "operator-token")
+        with patch.object(client.http, "request", return_value={"ok": True}) as request:
+            client.list_sessions("main")
+        request.assert_called_once_with("POST", "/tools/invoke",
+                                        {"tool":"sessions_list","args":{},"sessionKey":"main"})
+
+    def test_sessions_list_rejects_invalid_session_key(self):
+        client = OpenClawClient("http://127.0.0.1:18789", "operator-token")
+        with self.assertRaises(ValueError):
+            client.list_sessions("../../secrets")
 
 
 

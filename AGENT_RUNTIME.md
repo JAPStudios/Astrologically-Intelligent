@@ -63,6 +63,17 @@ The connector follows Paperclip's documented company-scoped API routes and uses 
 
 The token's own Paperclip permissions and company membership remain authoritative. This connector does not install or vendor the Paperclip server, UI, database, or adapter packages.
 
+## OpenClaw Gateway integration
+
+Configure the private Gateway URL and bearer token:
+
+```sh
+export OPENCLAW_GATEWAY_URL="http://127.0.0.1:18789"
+export OPENCLAW_GATEWAY_TOKEN="..."
+```
+
+The integration currently exposes only `openclaw.sessions.list`, through the documented `POST /tools/invoke` endpoint and the `sessions_list` read-only tool. It deliberately does not expose arbitrary tool invocation: OpenClaw documents the bearer token as full operator access, and the endpoint can execute powerful host actions depending on policy. Keep the Gateway on loopback or a private network.
+
 ## HTTP service
 
 The service binds to `127.0.0.1:8765` by default. It exposes `GET /health` and `POST /v1/chat`. Non-loopback binding requires `ASTRO_AI_API_TOKEN` with at least 24 characters; clients authenticate with a bearer token. Request bodies are limited to 1 MB.
@@ -81,6 +92,7 @@ The service binds to `127.0.0.1:8765` by default. It exposes `GET /health` and `
 - n8n: `n8n.workflows.list`, `n8n.workflows.get`, `n8n.workflows.activate`, `n8n.workflows.deactivate`
 - Paperclip: `paperclip.agents.list`, `paperclip.issues.list`, `paperclip.issues.create`, `paperclip.goals.create`, `paperclip.approvals.list`
 - Perplexity: `perplexity.search`
+- OpenClaw: `openclaw.sessions.list` (read-only)
 
 ## Plugins
 

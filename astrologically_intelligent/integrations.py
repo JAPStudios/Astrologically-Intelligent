@@ -30,7 +30,7 @@ class JsonApiClient:
 
     def request(self, method: str, path: str, payload: dict[str, Any] | None = None,
                 query: dict[str, Any] | None = None) -> Any:
-        if not path.startswith("/api/") or ".." in path.split("/"):
+        if not (path.startswith("/api/") or (self.service == "OpenClaw" and path == "/tools/invoke")) or ".." in path.split("/"):
             raise ValueError("Invalid API path")
         url = self.base_url + path
         if query:
@@ -188,6 +188,32 @@ class PaperclipClient:
 
 
 
+
+class OpenClawClient:
+    """Narrow read-only client for OpenClaw Gateway's authenticated HTTP tool API."""
+
+    def __init__(self, base_url: str, token: str, timeout: float = 30.0):
+        if not token.strip():
+            raise IntegrationError("OpenClaw Gateway token is required")
+        self.http = JsonApiClient(base_url, token, "OpenClaw", timeout)
+
+    @classmethod
+    def from_env(cls) -> "OpenClawClient":
+        token = os.getenv("OPENCLAW_GATEWAY_TOKEN", "").strip()
+        if not token:
+            raise IntegrationError("OPENCLAW_GATEWAY_TOKEN is not configured")
+        return cls(os.getenv("OPENCLAW_GATEWAY_URL", "http://127.0.0.1:18789"), token)
+
+    def list_sessions(self, session_key: str = "main") -> Any:
+        if not re.fullmatch(r"[A-Za-z0-9_:@./-]{1,256}", session_key):
+            raise ValueError("Invalid OpenClaw session key")
+        # Keep this integration read-only. The Gateway token is an operator credential;
+        # no arbitrary tool name or mutating tool arguments are accepted here.
+        return self.http.request("POST", "/tools/invoke", {
+            "tool": "sessions_list", "args": {}, "sessionKey": session_key,
+        })
+
+
 class PerplexityClient:
     """Perplexity Search API client using the documented /search endpoint."""
 
@@ -221,3 +247,7 @@ def paperclip_client_from_env() -> PaperclipClient:
 
 def perplexity_client_from_env() -> PerplexityClient:
     return PerplexityClient.from_env()
+
+
+def openclaw_client_from_env() -> OpenClawClient:
+    return OpenClawClient.from_env()
