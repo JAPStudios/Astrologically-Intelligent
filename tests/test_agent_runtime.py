@@ -71,7 +71,7 @@ class RuntimeTests(unittest.TestCase):
         self.assertIn("upstream/anthropics-skills/skills/skill-creator", names)
         imported = json.loads(self.runtime.tools.execute(
             "skills.read", {"name":"upstream/anthropics-skills/skills/skill-creator"}))
-        self.assertIn("SKILL.md", imported["content"] if "SKILL.md" in imported["content"] else "SKILL.md")
+        self.assertIn("# Skill Creator", imported["content"])
 
     def test_skill_tool_rejects_path_traversal(self):
         result=json.loads(self.runtime.tools.execute("skills.read",{"name":"../README"}))
