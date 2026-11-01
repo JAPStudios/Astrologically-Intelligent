@@ -1297,3 +1297,103 @@
 	path = upstream/openai/go-vncdriver
 	url = https://github.com/openai/go-vncdriver.git
 	branch = master
+[submodule "upstream/openai/universe-starter-agent"]
+	path = upstream/openai/universe-starter-agent
+	url = https://github.com/openai/universe-starter-agent.git
+	branch = master
+[submodule "upstream/openai/mitmproxy"]
+	path = upstream/openai/mitmproxy
+	url = https://github.com/openai/mitmproxy.git
+	branch = master
+[submodule "upstream/openai/websockify"]
+	path = upstream/openai/websockify
+	url = https://github.com/openai/websockify.git
+	branch = master
+[submodule "upstream/openai/signup-forms"]
+	path = upstream/openai/signup-forms
+	url = https://github.com/openai/signup-forms.git
+	branch = master
+[submodule "upstream/openai/staged-recipes"]
+	path = upstream/openai/staged-recipes
+	url = https://github.com/openai/staged-recipes.git
+	branch = master
+[submodule "upstream/openai/go-vncdriver-feedstock"]
+	path = upstream/openai/go-vncdriver-feedstock
+	url = https://github.com/openai/go-vncdriver-feedstock.git
+	branch = master
+[submodule "upstream/openai/weightnorm"]
+	path = upstream/openai/weightnorm
+	url = https://github.com/openai/weightnorm.git
+	branch = master
+[submodule "upstream/openai/universe"]
+	path = upstream/openai/universe
+	url = https://github.com/openai/universe.git
+	branch = master
+[submodule "upstream/openai/aws-fluent-plugin-kinesis"]
+	path = upstream/openai/aws-fluent-plugin-kinesis
+	url = https://github.com/openai/aws-fluent-plugin-kinesis.git
+	branch = master
+[submodule "upstream/openai/retask"]
+	path = upstream/openai/retask
+	url = https://github.com/openai/retask.git
+	branch = master
+[submodule "upstream/openai/evolution-strategies-starter"]
+	path = upstream/openai/evolution-strategies-starter
+	url = https://github.com/openai/evolution-strategies-starter.git
+	branch = master
+[submodule "upstream/openai/go-alias"]
+	path = upstream/openai/go-alias
+	url = https://github.com/openai/go-alias.git
+	branch = master
+[submodule "upstream/openai/generating-reviews-discovering-sentiment"]
+	path = upstream/openai/generating-reviews-discovering-sentiment
+	url = https://github.com/openai/generating-reviews-discovering-sentiment.git
+	branch = master
+[submodule "upstream/openai/roboschool"]
+	path = upstream/openai/roboschool
+	url = https://github.com/openai/roboschool.git
+	branch = master
+[submodule "upstream/openai/baselines-results"]
+	path = upstream/openai/baselines-results
+	url = https://github.com/openai/baselines-results.git
+	branch = master
+[submodule "upstream/openai/baselines"]
+	path = upstream/openai/baselines
+	url = https://github.com/openai/baselines.git
+	branch = master
+[submodule "upstream/openai/ot-gan"]
+	path = upstream/openai/ot-gan
+	url = https://github.com/openai/ot-gan.git
+	branch = master
+[submodule "upstream/openai/atari-demo"]
+	path = upstream/openai/atari-demo
+	url = https://github.com/openai/atari-demo.git
+	branch = master
+[submodule "upstream/openai/multiagent-particle-envs"]
+	path = upstream/openai/multiagent-particle-envs
+	url = https://github.com/openai/multiagent-particle-envs.git
+	branch = master
+[submodule "upstream/openai/robosumo"]
+	path = upstream/openai/robosumo
+	url = https://github.com/openai/robosumo.git
+	branch = master
+[submodule "upstream/openai/multiagent-competition"]
+	path = upstream/openai/multiagent-competition
+	url = https://github.com/openai/multiagent-competition.git
+	branch = master
+[submodule "upstream/openai/mlsh"]
+	path = upstream/openai/mlsh
+	url = https://github.com/openai/mlsh.git
+	branch = master
+[submodule "upstream/openai/retro-contest"]
+	path = upstream/openai/retro-contest
+	url = https://github.com/openai/retro-contest.git
+	branch = master
+[submodule "upstream/openai/supervised-reptile"]
+	path = upstream/openai/supervised-reptile
+	url = https://github.com/openai/supervised-reptile.git
+	branch = master
+[submodule "upstream/openai/blocksparse"]
+	path = upstream/openai/blocksparse
+	url = https://github.com/openai/blocksparse.git
+	branch = master
