@@ -1497,3 +1497,103 @@
 	path = upstream/openai/sparse_attention
 	url = https://github.com/openai/sparse_attention.git
 	branch = master
+[submodule "upstream/openai/oauth2_proxy"]
+	path = upstream/openai/oauth2_proxy
+	url = https://github.com/openai/oauth2_proxy.git
+	branch = master
+[submodule "upstream/openai/gpt-2-output-dataset"]
+	path = upstream/openai/gpt-2-output-dataset
+	url = https://github.com/openai/gpt-2-output-dataset.git
+	branch = master
+[submodule "upstream/openai/ml-agents"]
+	path = upstream/openai/ml-agents
+	url = https://github.com/openai/ml-agents.git
+	branch = master
+[submodule "upstream/openai/orrb"]
+	path = upstream/openai/orrb
+	url = https://github.com/openai/orrb.git
+	branch = master
+[submodule "upstream/openai/multi-agent-emergence-environments"]
+	path = upstream/openai/multi-agent-emergence-environments
+	url = https://github.com/openai/multi-agent-emergence-environments.git
+	branch = master
+[submodule "upstream/openai/mujoco-worldgen"]
+	path = upstream/openai/mujoco-worldgen
+	url = https://github.com/openai/mujoco-worldgen.git
+	branch = master
+[submodule "upstream/openai/lm-human-preferences"]
+	path = upstream/openai/lm-human-preferences
+	url = https://github.com/openai/lm-human-preferences.git
+	branch = master
+[submodule "upstream/openai/monorepo-diff-buildkite-plugin"]
+	path = upstream/openai/monorepo-diff-buildkite-plugin
+	url = https://github.com/openai/monorepo-diff-buildkite-plugin.git
+	branch = master
+[submodule "upstream/openai/safety-starter-agents"]
+	path = upstream/openai/safety-starter-agents
+	url = https://github.com/openai/safety-starter-agents.git
+	branch = master
+[submodule "upstream/openai/safety-gym"]
+	path = upstream/openai/safety-gym
+	url = https://github.com/openai/safety-gym.git
+	branch = master
+[submodule "upstream/openai/procgen"]
+	path = upstream/openai/procgen
+	url = https://github.com/openai/procgen.git
+	branch = master
+[submodule "upstream/openai/train-procgen"]
+	path = upstream/openai/train-procgen
+	url = https://github.com/openai/train-procgen.git
+	branch = master
+[submodule "upstream/openai/prometheus"]
+	path = upstream/openai/prometheus
+	url = https://github.com/openai/prometheus.git
+	branch = release-2.16
+[submodule "upstream/openai/ai-and-efficiency"]
+	path = upstream/openai/ai-and-efficiency
+	url = https://github.com/openai/ai-and-efficiency.git
+	branch = master
+[submodule "upstream/openai/fluent-plugin-kubernetes_metadata_filter"]
+	path = upstream/openai/fluent-plugin-kubernetes_metadata_filter
+	url = https://github.com/openai/fluent-plugin-kubernetes_metadata_filter.git
+	branch = master
+[submodule "upstream/openai/jukebox"]
+	path = upstream/openai/jukebox
+	url = https://github.com/openai/jukebox.git
+	branch = master
+[submodule "upstream/openai/image-gpt"]
+	path = upstream/openai/image-gpt
+	url = https://github.com/openai/image-gpt.git
+	branch = master
+[submodule "upstream/openai/consul-helm"]
+	path = upstream/openai/consul-helm
+	url = https://github.com/openai/consul-helm.git
+	branch = master
+[submodule "upstream/openai/gpt-3"]
+	path = upstream/openai/gpt-3
+	url = https://github.com/openai/gpt-3.git
+	branch = master
+[submodule "upstream/openai/gym3"]
+	path = upstream/openai/gym3
+	url = https://github.com/openai/gym3.git
+	branch = master
+[submodule "upstream/openai/kubernetes"]
+	path = upstream/openai/kubernetes
+	url = https://github.com/openai/kubernetes.git
+	branch = master
+[submodule "upstream/openai/go-retryablehttp"]
+	path = upstream/openai/go-retryablehttp
+	url = https://github.com/openai/go-retryablehttp.git
+	branch = master
+[submodule "upstream/openai/distribution_augmentation"]
+	path = upstream/openai/distribution_augmentation
+	url = https://github.com/openai/distribution_augmentation.git
+	branch = master
+[submodule "upstream/openai/assign-one-project-github-action"]
+	path = upstream/openai/assign-one-project-github-action
+	url = https://github.com/openai/assign-one-project-github-action.git
+	branch = master
+[submodule "upstream/openai/phasic-policy-gradient"]
+	path = upstream/openai/phasic-policy-gradient
+	url = https://github.com/openai/phasic-policy-gradient.git
+	branch = master
