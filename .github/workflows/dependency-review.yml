@@ -33,7 +33,7 @@ jobs:
     # dependency-review-action requires GitHub dependency-review support.
     # Keep the blocking gate on the canonical repository; forks and maintainer
     # preview mirrors still run the advisory pip-audit job below.
-    if: github.event_name == 'pull_request' && github.repository == 'odysseus-dev/odysseus'
+    if: github.event_name == 'pull_request' && github.repository == 'JAPStudios/Astrologically-Intelligent'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -68,6 +68,7 @@ jobs:
           python-version: '3.12'
 
       - name: Run pip-audit on requirements
+        working-directory: astrologically_intelligent
         run: |
           set -euo pipefail
           sudo apt-get update
