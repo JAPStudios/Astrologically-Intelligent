@@ -56,7 +56,7 @@ jobs:
       - name: Select the immutable upstream image from Compose
         id: image
         run: |
-          docker compose --env-file /dev/null -f docker-compose.yml config --format json |
+          docker compose --env-file /dev/null -f astrologically_intelligent/docker-compose.yml config --format json |
             python3 -c 'import json, re, sys; image = json.load(sys.stdin)["services"]["searxng"]["image"]; re.fullmatch(r"docker\.io/searxng/searxng:[0-9]{4}\.[^@\s]+@sha256:[0-9a-f]{64}", image) or sys.exit("Invalid SearXNG pin"); print("image=" + image)' >> "$GITHUB_OUTPUT"
       - name: Pull the upstream image without registry credentials
         env:
