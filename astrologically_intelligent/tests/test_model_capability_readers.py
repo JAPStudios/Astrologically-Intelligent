@@ -673,8 +673,11 @@ def test_huggingface_reader_maps_explicit_pipeline_tasks():
         "org/text-model", "org/embedder", "org/vision", "org/image",
         "org/asr", "org/tts", "org/unknown",
     ]
-    assert records[0].capability.family == mc.FAMILY_CHAT
+    assert records[0].capability.family == mc.FAMILY_UNKNOWN
+    assert records[0].capability.modalities.input == (mc.MODALITY_TEXT,)
+    assert records[0].capability.modalities.output == (mc.MODALITY_TEXT,)
     assert records[1].capability.family == mc.FAMILY_EMBEDDING
+    assert records[2].capability.family == mc.FAMILY_UNKNOWN
     assert records[2].capability.modalities.input == (mc.MODALITY_IMAGE,)
     assert records[2].capability.capabilities == (mc.CAP_VISION,)
     assert records[3].capability.family == mc.FAMILY_IMAGE
@@ -804,3 +807,17 @@ def test_ollama_reader_accepts_openai_compatible_model_list_as_identity_only():
     assert all(record.vendor == "ollama" for record in records)
     assert all(record.capability.family == mc.FAMILY_UNKNOWN for record in records)
     assert all(record.capability.capabilities == () for record in records)
+
+
+def test_huggingface_reader_distinguishes_conversation_from_text_generation():
+    records = huggingface.records_from_payload(
+        [
+            {"id": "org/completion", "pipeline_tag": "text-generation"},
+            {"id": "org/conversation", "pipeline_tag": "conversational"},
+            {"id": "org/similarity", "pipeline_tag": "sentence-similarity"},
+        ]
+    )
+
+    assert records[0].capability.family == mc.FAMILY_UNKNOWN
+    assert records[1].capability.family == mc.FAMILY_CHAT
+    assert records[2].capability.family == mc.FAMILY_RERANK
