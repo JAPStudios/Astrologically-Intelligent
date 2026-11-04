@@ -90,6 +90,11 @@ public final class MainActivity extends Activity {
                 String history = new AgentAPI(url, accessToken).fetchHistory(sessionId);
                 org.json.JSONArray messages = new org.json.JSONArray(history);
                 runOnUiThread(() -> {
+                    transcript.setText("");
+                    if (messages.length() == 0) {
+                        transcript.setText("Connect to the Python agent runtime to begin.\\n");
+                        return;
+                    }
                     for (int i = 0; i < messages.length(); i++) {
                         org.json.JSONObject item = messages.optJSONObject(i);
                         if (item == null) continue;
