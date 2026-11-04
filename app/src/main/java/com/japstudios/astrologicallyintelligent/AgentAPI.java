@@ -49,6 +49,50 @@ final class AgentAPI {
         return value.trim();
     }
 
+    String fetchHistory(String sessionId) throws Exception {
+        String encodedSession = java.net.URLEncoder.encode(sessionId, "UTF-8");
+        HttpURLConnection connection = (HttpURLConnection)
+                new URL(baseUrl + "/v1/history?session_id=" + encodedSession + "&limit=40").openConnection();
+        connection.setInstanceFollowRedirects(false);
+        connection.setRequestMethod("GET");
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(20000);
+        connection.setRequestProperty("Accept", "application/json");
+        if (!bearerToken.isEmpty()) {
+            connection.setRequestProperty("Authorization", "Bearer " + bearerToken);
+        }
+        int status = connection.getResponseCode();
+        InputStream stream = status >= 200 && status < 300
+                ? connection.getInputStream() : connection.getErrorStream();
+        try {
+            if (stream == null) throw new IllegalStateException("Agent server returned HTTP " + status);
+            byte[] responseBytes;
+            try (InputStream input = stream; ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[8192];
+                int count;
+                while ((count = input.read(buffer)) != -1) {
+                    if (output.size() + count > MAX_RESPONSE_BYTES) {
+                        throw new IllegalStateException("Agent server response exceeded 1 MB");
+                    }
+                    output.write(buffer, 0, count);
+                }
+                responseBytes = output.toByteArray();
+            }
+            String response = new String(responseBytes, StandardCharsets.UTF_8);
+            if (status < 200 || status >= 300) {
+                try {
+                    JSONObject error = new JSONObject(response);
+                    throw new IllegalStateException(error.optString("error", "HTTP " + status));
+                } catch (org.json.JSONException invalidJson) {
+                    throw new IllegalStateException("Agent server returned HTTP " + status);
+                }
+            }
+            return new JSONObject(response).getJSONArray("messages").toString();
+        } finally {
+            connection.disconnect();
+        }
+    }
+
     String sendMessage(String message, String sessionId) throws Exception {
         HttpURLConnection connection = (HttpURLConnection)
                 new URL(baseUrl + "/v1/chat").openConnection();

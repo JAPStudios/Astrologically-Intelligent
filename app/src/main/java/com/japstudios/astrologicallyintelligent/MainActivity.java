@@ -33,6 +33,7 @@ public final class MainActivity extends Activity {
         sessionId = preferences.getString("session_id", UUID.randomUUID().toString());
         preferences.edit().putString("session_id", sessionId).apply();
         buildInterface();
+        loadHistory();
     }
 
     private void buildInterface() {
@@ -79,6 +80,29 @@ public final class MainActivity extends Activity {
         send.setOnClickListener(v -> submit());
         root.addView(send);
         setContentView(root);
+    }
+
+    private void loadHistory() {
+        String url = endpoint.getText().toString().trim();
+        String accessToken = token.getText().toString().trim();
+        executor.execute(() -> {
+            try {
+                String history = new AgentAPI(url, accessToken).fetchHistory(sessionId);
+                org.json.JSONArray messages = new org.json.JSONArray(history);
+                runOnUiThread(() -> {
+                    for (int i = 0; i < messages.length(); i++) {
+                        org.json.JSONObject item = messages.optJSONObject(i);
+                        if (item == null) continue;
+                        String role = item.optString("role", "assistant");
+                        String label = role.equals("user") ? "You" : "Assistant";
+                        transcript.append(label + ": " + item.optString("content", "") + "\\n");
+                    }
+                });
+            } catch (Exception error) {
+                runOnUiThread(() -> transcript.append("History unavailable: "
+                        + error.getMessage() + "\\n"));
+            }
+        });
     }
 
     private void submit() {

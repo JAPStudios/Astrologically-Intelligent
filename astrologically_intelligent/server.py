@@ -5,6 +5,7 @@ import hmac
 import json
 import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import parse_qs, urlsplit
 
 from .runtime import AgentRuntime
 
@@ -21,9 +22,27 @@ def make_handler(runtime: AgentRuntime, token: str):
             self.wfile.write(body)
 
         def do_GET(self):
-            if self.path=="/health":
+            parsed = urlsplit(self.path)
+            if parsed.path == "/health":
                 return self._send(200,{"status":"ok","service":"astrologically-intelligent"})
-            self._send(404,{"error":"not_found"})
+            if parsed.path != "/v1/history":
+                return self._send(404,{"error":"not_found"})
+            if token and not hmac.compare_digest(self.headers.get("Authorization",""),f"Bearer {token}"):
+                return self._send(401,{"error":"unauthorized"})
+            query = parse_qs(parsed.query, keep_blank_values=True)
+            session_id = query.get("session_id", [""])[0]
+            if not session_id or len(session_id) > 128:
+                return self._send(400,{"error":"invalid_session_id"})
+            try:
+                limit = int(query.get("limit", ["40"])[0])
+            except (TypeError, ValueError):
+                return self._send(400,{"error":"invalid_limit"})
+            if not 1 <= limit <= 200:
+                return self._send(400,{"error":"invalid_limit"})
+            return self._send(200, {
+                "session_id": session_id,
+                "messages": runtime.store.history(session_id, limit),
+            })
 
         def do_POST(self):
             if self.path!="/v1/chat": return self._send(404,{"error":"not_found"})
