@@ -23,7 +23,7 @@ The full-featured web application lives in `astrologically_intelligent/`. It is 
 
 ## Android application
 
-The native Android client is in `app/`. It currently connects to the root Python agent API (`/v1/chat`) and defaults to `http://10.0.2.2:8765` for an Android emulator reaching the development host. It does not yet expose every feature in the full web application. Use HTTPS plus a configured bearer token for remote deployments.
+The native Android client is in `app/`. It connects to the root Python agent API (`/v1/chat`) and restores its latest 40 messages from the authenticated `/v1/history` endpoint when a session opens. It defaults to `http://10.0.2.2:8765` for an Android emulator reaching the development host. It does not yet expose every feature in the full web application. Use HTTPS plus a configured bearer token for remote deployments.
 
 Build with Gradle 8.9, JDK 17, and Android SDK platform 35:
 
