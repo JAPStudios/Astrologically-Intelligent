@@ -44,7 +44,7 @@ jobs:
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@2a66e89f53d0771bb131a7fa31f3136336094aa6  # v3.4.0
         with:
-          dockerfile: Dockerfile
+          dockerfile: astrologically_intelligent/Dockerfile
           # DL3008: pinning apt package versions is impractical on a -slim base
           # image. Debian purges old package versions from its repos, so a
           # pinned version breaks future rebuilds. The base image itself is
