@@ -972,7 +972,15 @@ def _google_model_supports_chat(item: Any) -> bool:
     return any(method in chat_methods for method in methods)
 
 
-def _probe_google_models(base_url: str, api_key: str = None, timeout: int = 5, page_size: int = 1000) -> List[str]:
+def _probe_google_models(
+    base_url: str,
+    api_key: str = None,
+    timeout: int = 5,
+    page_size: int = 1000,
+    *,
+    capability_records: list | None = None,
+    endpoint_id: str = "",
+) -> List[str]:
     """Read Google's native paginated Models API.
 
     This intentionally returns only provider-reported model IDs. Capability
@@ -998,6 +1006,14 @@ def _probe_google_models(base_url: str, api_key: str = None, timeout: int = 5, p
         r = httpx.get(url, headers=headers, params=request_params, timeout=timeout, verify=llm_verify())
         r.raise_for_status()
         data = r.json()
+        if capability_records is not None:
+            _capture_model_capabilities(
+                data,
+                base_url=base_url,
+                endpoint_kind="google",
+                endpoint_id=endpoint_id,
+                output=capability_records,
+            )
         for item in data.get("models") or []:
             if not _google_model_supports_chat(item):
                 continue
@@ -1056,7 +1072,13 @@ def _probe_endpoint(
         return []
     if _is_google_api_base(base):
         try:
-            models = _probe_google_models(base, api_key, timeout=timeout)
+            models = _probe_google_models(
+                base,
+                api_key,
+                timeout=timeout,
+                capability_records=capability_records,
+                endpoint_id=endpoint_id,
+            )
             if models:
                 return models
         except httpx.HTTPStatusError as e:
