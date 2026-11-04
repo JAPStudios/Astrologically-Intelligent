@@ -773,6 +773,10 @@ class SkillsManager:
             skills = self.load_all()
         if not skills or not query.strip():
             return []
+        # Keep the owner-scoped audit corpus before eligibility filtering.
+        # Failed audits may train the quality estimator but remain ineligible
+        # for retrieval below.
+        training_skills = list(skills)
         # Consider published AND draft skills for relevance retrieval.
         # The teacher-escalation loop writes new skills as drafts; the
         # whole point is for the student to find them on the next try
@@ -821,14 +825,16 @@ class SkillsManager:
 
         query_tokens = _tokenize(query)
         semantic_scores: Dict[int, float] = {}
+        quality_scores: Dict[int, float] = {}
         semantic_enabled = str(
             os.environ.get("ODYSSEUS_SKILL_SEMANTIC_RETRIEVAL", "1")
         ).strip().lower() not in {"0", "false", "no", "off"}
         if semantic_enabled:
             try:
-                from src.skill_index import semantic_skill_scores
+                from src.skill_index import semantic_skill_scores, learned_skill_quality_scores
 
                 semantic_scores = semantic_skill_scores(query, skills)
+                quality_scores = learned_skill_quality_scores(training_skills, skills)
             except Exception as exc:
                 logger.debug("Semantic skill retrieval unavailable: %s", exc)
         try:
@@ -864,6 +870,10 @@ class SkillsManager:
             score *= 1.0 + _to_float(sk.get("confidence"), 0.5) * 0.1
             if sk.get("uses", 0) > 0:
                 score *= 1.05
+            # A learned quality estimate is a modest ranking prior only. It
+            # cannot bypass audit eligibility, publication state or tool gates.
+            if position in quality_scores:
+                score *= 0.9 + 0.2 * quality_scores[position]
             scored.append((score, sk))
         scored.sort(key=lambda x: x[0], reverse=True)
         return [sk for _, sk in scored[:max_items]]
