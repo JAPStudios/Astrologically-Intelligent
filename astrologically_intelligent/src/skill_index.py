@@ -159,7 +159,8 @@ def learned_skill_quality_scores(training_skills, candidate_skills):
         training_texts = [_semantic_text(skill) for skill, _ in labelled]
         labels = [label for _, label in labelled]
         digest = hashlib.sha256()
-        digest.update(str(getattr(lane, 'fingerprint', lane.name)).encode('utf-8'))
+        digest.update(target_owner.encode("utf-8"))
+        digest.update(str(getattr(lane, "fingerprint", lane.name)).encode("utf-8"))
         for document, label in zip(training_texts, labels):
             digest.update(b'\\0')
             digest.update(document.encode('utf-8', errors='replace'))
