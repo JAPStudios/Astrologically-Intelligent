@@ -44,7 +44,7 @@ _TASKS = {
         mc.FAMILY_EMBEDDING, (mc.MODALITY_TEXT,), (mc.MODALITY_EMBEDDING,), (),
     ),
     "sentence-similarity": (
-        mc.FAMILY_RERANK, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
+        mc.FAMILY_CLASSIFICATION, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
     ),
     "text-classification": (
         mc.FAMILY_CLASSIFICATION, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
