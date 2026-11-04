@@ -81,3 +81,34 @@ def test_checkpoint_restores_training_random_state(tmp_path):
     assert np.array_equal(model.weights2, restored.weights2)
     assert np.array_equal(model.bias2, restored.bias2)
 
+def test_multilayer_network_learns_xor():
+    base = np.array([[0.0, 0.0], [0.0, 1.0], [1.0, 0.0], [1.0, 1.0]])
+    features = np.repeat(base, 64, axis=0)
+    labels = np.repeat(np.array([0, 1, 1, 0]), 64)
+    model = NeuralNetworkClassifier(2, (16, 8), 2, learning_rate=0.02, seed=23)
+    model.fit(features, labels, epochs=350, batch_size=16)
+    assert model.evaluate(features, labels)["accuracy"] > 0.98
+    assert np.allclose(model.predict_proba(features).sum(axis=1), 1.0)
+
+
+def test_multilayer_checkpoint_round_trip_and_resume(tmp_path):
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, (12, 7), 3, learning_rate=0.01, seed=29)
+    model.fit(features, labels, epochs=3, batch_size=20)
+    checkpoint = tmp_path / "deep-network.npz"
+    model.save(checkpoint)
+    restored = NeuralNetworkClassifier.load(checkpoint)
+    assert restored.hidden_sizes == (12, 7)
+    assert np.array_equal(model.predict(features[:12]), restored.predict(features[:12]))
+    model.fit(features, labels, epochs=4, batch_size=20)
+    restored.fit(features, labels, epochs=4, batch_size=20)
+    for name, parameter in model._parameters().items():
+        assert np.array_equal(parameter, restored._parameters()[name])
+
+
+def test_rejects_invalid_hidden_layer_sequence():
+    with pytest.raises(ValueError, match="dimensions"):
+        NeuralNetworkClassifier(2, (), 3)
+    with pytest.raises(ValueError, match="dimensions"):
+        NeuralNetworkClassifier(2, (8, 0, 4), 3)
+
