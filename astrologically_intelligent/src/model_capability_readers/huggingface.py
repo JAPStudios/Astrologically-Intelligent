@@ -44,7 +44,7 @@ _TASKS = {
         mc.FAMILY_EMBEDDING, (mc.MODALITY_TEXT,), (mc.MODALITY_EMBEDDING,), (),
     ),
     "sentence-similarity": (
-        mc.FAMILY_RERANK, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
+        mc.FAMILY_CLASSIFICATION, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
     ),
     "text-classification": (
         mc.FAMILY_CLASSIFICATION, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
@@ -54,9 +54,6 @@ _TASKS = {
     ),
     "zero-shot-classification": (
         mc.FAMILY_CLASSIFICATION, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
-    ),
-    "fill-mask": (
-        mc.FAMILY_CHAT, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
     ),
     "text-to-image": (
         mc.FAMILY_IMAGE, (mc.MODALITY_TEXT,), (mc.MODALITY_IMAGE,), (mc.CAP_IMAGE_GENERATION,),
