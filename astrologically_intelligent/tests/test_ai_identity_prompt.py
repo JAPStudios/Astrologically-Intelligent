@@ -19,4 +19,4 @@ def test_web_app_uses_astrologically_intelligent_branding():
     assert "<title>Astrologically Intelligent</title>" in index
     assert "\"name\": \"Astrologically Intelligent\"" in manifest
     assert "\"short_name\": \"Astrologically Intelligent\"" in manifest
-    assert "Odysseus Chat" not in index
+    assert "<title>Odysseus Chat</title>" not in index

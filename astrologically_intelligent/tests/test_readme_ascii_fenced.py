@@ -20,7 +20,7 @@ def _fenced_segments(text: str):
 
 def test_readme_opens_with_wordmark_title():
     head = "\n".join(README.read_text(encoding="utf-8").splitlines()[:15])
-    assert 'alt="Odysseus"' in head, "README must open with the Odysseus wordmark image"
+    assert 'alt="Astrologically Intelligent"' in head, "README must open with the Astrologically Intelligent wordmark image"
 
 
 def test_reintroduced_ascii_banner_stays_fenced():

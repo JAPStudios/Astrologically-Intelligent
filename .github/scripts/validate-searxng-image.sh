@@ -3,7 +3,8 @@
 set -euo pipefail
 
 searxng_repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
-searxng_project_root="$searxng_repo/astrologically_intelligent"\nsearxng_image=${1:?usage: validate-searxng-image.sh IMAGE}
+searxng_project_root="$searxng_repo/astrologically_intelligent"
+searxng_image=${1:?usage: validate-searxng-image.sh IMAGE}
 [[ "$searxng_image" =~ ^[a-zA-Z0-9_./:@+-]+$ ]] || {
   echo "Invalid image reference" >&2
   exit 2

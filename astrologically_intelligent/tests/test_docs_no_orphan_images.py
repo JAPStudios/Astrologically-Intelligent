@@ -104,7 +104,7 @@ def test_pages_site_owns_its_entrypoint_and_media():
 
     workflow = (REPO / ".github/workflows/deploy-pages.yml").read_text(encoding="utf-8")
     assert "actions/jekyll-build-pages@" in workflow
-    assert "source: website" in workflow
+    assert "source: astrologically_intelligent/website" in workflow
     assert "destination: _site" in workflow
     assert "path: _site" in workflow
     assert "cancel-in-progress: false" in workflow
