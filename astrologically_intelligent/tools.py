@@ -197,7 +197,7 @@ def _run_deep_research(provider, topic: str, max_time: int = 180) -> dict[str, A
 
     async def execute():
         result = await ResearchService().research(
-            topic.strip(), endpoint, model, max_time=max_time
+            topic.strip(), endpoint, model, max_time=max_time, llm_headers=headers
         )
         return {
             "query": result.query,
