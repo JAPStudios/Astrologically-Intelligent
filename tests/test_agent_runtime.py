@@ -264,6 +264,58 @@ class RuntimeTests(unittest.TestCase):
             "agents.execute", {"agent_id":unsupported["id"],"prompt":"Run this."}))
         self.assertIn("error", rejected)
 
+    def test_model_agent_can_call_only_configured_tools_and_records_trace(self):
+        class ToolProvider:
+            def __init__(self): self.calls = 0
+            def chat(self, messages, tools):
+                self.calls += 1
+                if self.calls == 1:
+                    self.asserted_tools = [item["function"]["name"] for item in tools]
+                    return {"role":"assistant","content":None,"tool_calls":[{
+                        "id":"agent-tool-1","type":"function",
+                        "function":{"name":"memory.remember","arguments":json.dumps({
+                            "namespace":"agent","key":"finding","value":"verified"})}
+                    }]}
+                self.asserted_result = json.loads(messages[-1]["content"])
+                return {"role":"assistant","content":"Saved the finding."}
+
+        provider = ToolProvider()
+        self.runtime.tools.provider = provider
+        agent = json.loads(self.runtime.tools.execute("agents.register", {
+            "name":"Tool researcher","adapter":"model","role":"researcher",
+            "config":{"allowed_tools":["memory.remember"],"max_tool_rounds":2}
+        }))
+        result = json.loads(self.runtime.tools.execute("agents.execute", {
+            "agent_id":agent["id"],"prompt":"Save the verified finding."
+        }))
+        self.assertEqual(result["status"], "succeeded")
+        self.assertEqual(result["output"], "Saved the finding.")
+        self.assertEqual(provider.asserted_tools, ["memory.remember"])
+        self.assertEqual(provider.asserted_result, {"saved":True})
+        self.assertEqual(self.store.recall("agent","finding")[0]["value"], "verified")
+        run = self.runtime.tools.orchestration.get_run(result["run_id"])
+        self.assertEqual(run["output"]["tool_trace"][0]["tool"], "memory.remember")
+
+    def test_model_agent_cannot_call_unconfigured_tools(self):
+        class UnapprovedToolProvider:
+            def chat(self, messages, tools):
+                return {"role":"assistant","content":None,"tool_calls":[{
+                    "id":"agent-tool-2","type":"function",
+                    "function":{"name":"memory.remember","arguments":"{}"}
+                }]}
+
+        self.runtime.tools.provider = UnapprovedToolProvider()
+        agent = json.loads(self.runtime.tools.execute("agents.register", {
+            "name":"Restricted agent","adapter":"llm","config":{}
+        }))
+        result = json.loads(self.runtime.tools.execute("agents.execute", {
+            "agent_id":agent["id"],"prompt":"Try to save something."
+        }))
+        self.assertIn("error", result)
+        run = self.runtime.tools.orchestration.get_run(
+            json.loads(self.runtime.tools.execute("runs.start", {"agent_id":agent["id"]}))["id"])
+        self.assertEqual(run["status"], "running")
+
     def test_model_agent_failure_is_recorded(self):
         class FailingProvider:
             def chat(self, messages, tools):

@@ -201,18 +201,55 @@ class ToolRegistry:
         )
         if not isinstance(system_prompt, str) or not system_prompt.strip():
             raise ValueError("Agent system_prompt must be a non-empty string")
+        allowed_tools = config.get("allowed_tools", [])
+        if not isinstance(allowed_tools, list) or any(not isinstance(name, str) for name in allowed_tools):
+            raise ValueError("Agent allowed_tools must be a list of tool names")
+        if any(name not in self._tools or name in {"agents.execute", "runs.start", "runs.finish"} for name in allowed_tools):
+            raise ValueError("Agent allowed_tools contains an unavailable or restricted tool")
+        max_tool_rounds = config.get("max_tool_rounds", 4)
+        if isinstance(max_tool_rounds, bool) or not isinstance(max_tool_rounds, int) or not 0 <= max_tool_rounds <= 12:
+            raise ValueError("Agent max_tool_rounds must be an integer from 0 to 12")
+        tool_map = {name: self._tools[name] for name in allowed_tools}
+        definitions = [item[0] for item in tool_map.values()]
         run = self.orchestration.start_run(agent_id, input_data={"prompt": prompt.strip()})
         try:
-            response = self.provider.chat([
+            messages = [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt.strip()},
-            ], [])
-            output = response.get("content") if isinstance(response, dict) else None
-            if not isinstance(output, str) or not output.strip():
-                raise RuntimeError("Model returned no text output")
-            finished = self.orchestration.finish_run(run["id"], "succeeded", {"text": output.strip()})
+            ]
+            trace = []
+            output = None
+            for round_number in range(max_tool_rounds + 1):
+                response = self.provider.chat(messages, definitions)
+                if not isinstance(response, dict):
+                    raise RuntimeError("Model returned an invalid response")
+                calls = response.get("tool_calls") or []
+                if not calls:
+                    output = response.get("content")
+                    if not isinstance(output, str) or not output.strip():
+                        raise RuntimeError("Model returned no text output")
+                    break
+                if round_number >= max_tool_rounds:
+                    raise RuntimeError("Agent tool-call limit reached")
+                messages.append(response)
+                for call in calls:
+                    function = call.get("function") or {}
+                    name = function.get("name")
+                    if name not in tool_map:
+                        raise RuntimeError("Agent requested a tool outside its allowed set")
+                    result = self.execute(name, function.get("arguments", "{}"))
+                    trace.append({"tool": name, "result": json.loads(result)})
+                    messages.append({
+                        "role": "tool", "tool_call_id": call.get("id", ""),
+                        "name": name, "content": result,
+                    })
+            if output is None:
+                raise RuntimeError("Agent produced no final output")
+            finished = self.orchestration.finish_run(
+                run["id"], "succeeded", {"text": output.strip(), "tool_trace": trace})
             return {"run_id": run["id"], "agent_id": agent_id,
-                    "status": finished["status"], "output": output.strip()}
+                    "status": finished["status"], "output": output.strip(),
+                    "tool_trace": trace}
         except Exception as exc:
             self.orchestration.finish_run(run["id"], "failed", {"error_type": type(exc).__name__})
             raise RuntimeError(f"Agent execution failed ({type(exc).__name__})") from None
