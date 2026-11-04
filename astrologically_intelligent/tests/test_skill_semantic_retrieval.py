@@ -156,3 +156,52 @@ def test_no_ready_embedding_index_keeps_existing_lexical_behavior(tmp_path, monk
     results = manager.get_relevant_skills("version control procedure", skills=skills)
 
     assert [skill["name"] for skill in results] == ["git-helper"]
+
+
+
+def test_learned_quality_uses_only_owner_scoped_version_two_audits(semantic_lane):
+    skill_index.reset_skill_quality_cache()
+    training = []
+    for owner in ("alice", "bob"):
+        for number in range(4):
+            training.append({
+                **_skill(f"{owner}-positive-{number}", "positive audited procedure"),
+                "owner": owner, "audit_version": 2, "audit_verdict": "pass",
+            })
+            training.append({
+                **_skill(f"{owner}-negative-{number}", "negative audited procedure"),
+                "owner": owner, "audit_version": 2, "audit_verdict": "fail",
+            })
+    candidates = [{
+        **_skill("alice-candidate", "positive candidate procedure"),
+        "owner": "alice",
+    }]
+
+    scores = skill_index.learned_skill_quality_scores(training, candidates)
+
+    assert set(scores) == {0}
+    assert 0.0 <= scores[0] <= 1.0
+
+
+def test_learned_quality_requires_both_audit_classes_for_same_owner(semantic_lane):
+    skill_index.reset_skill_quality_cache()
+    training = [
+        {
+            **_skill(f"alice-positive-{number}", "positive audited procedure"),
+            "owner": "alice", "audit_version": 2, "audit_verdict": "pass",
+        }
+        for number in range(5)
+    ]
+    training.extend(
+        {
+            **_skill(f"bob-negative-{number}", "negative audited procedure"),
+            "owner": "bob", "audit_version": 2, "audit_verdict": "fail",
+        }
+        for number in range(5)
+    )
+    candidates = [{
+        **_skill("alice-candidate", "positive candidate procedure"),
+        "owner": "alice",
+    }]
+
+    assert skill_index.learned_skill_quality_scores(training, candidates) == {}
