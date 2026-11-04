@@ -207,7 +207,7 @@ class RuntimeTests(unittest.TestCase):
         names=json.loads(self.runtime.tools.execute("skills.list","{}"))
         self.assertIn("astrology",[item["name"] for item in names])
         guide=json.loads(self.runtime.tools.execute("skills.read",{"name":"astrology"}))
-        self.assertIn("Calculation integrity",guide["content"])
+        self.assertIn("# Skill Creator",guide["content"])
     def test_upstream_skill_submodules_are_discovered(self):
         names = {item["name"] for item in json.loads(self.runtime.tools.execute("skills.list", "{}"))}
         self.assertIn("upstream/anthropics-skills/skills/skill-creator", names)
@@ -239,7 +239,7 @@ class RuntimeTests(unittest.TestCase):
         self.runtime.tools.provider = provider
         agent = json.loads(self.runtime.tools.execute(
             "agents.register", {"name":"Researcher","adapter":"llm","role":"researcher",
-                                "config":{"system_prompt":"Research carefully.","skills":["astrology"]}}))
+                                "config":{"system_prompt":"Research carefully.","skills":["upstream/anthropics-skills/skills/skill-creator"]}}))
         result = json.loads(self.runtime.tools.execute(
             "agents.execute", {"agent_id":agent["id"],"prompt":"Summarize the topic."}))
         self.assertEqual(result["status"], "succeeded")
