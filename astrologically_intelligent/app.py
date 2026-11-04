@@ -128,8 +128,8 @@ logger = logging.getLogger(__name__)
 # and passed to FastAPI so we can use the modern context-manager lifecycle
 # instead of the deprecated @app.on_event("startup"/"shutdown") decorators.
 app = FastAPI(
-    title="AI Chat Application",
-    description="Comprehensive AI chat with memory, research, and multi-modal capabilities",
+    title="Astrologically Intelligent",
+    description="A non-human virtual intelligence platform for research, work, coding, documents, and agent workflows.",
     version="1.0.0",
 )
 

@@ -1,7 +1,7 @@
 {
-  "name": "Odysseus",
-  "short_name": "Odysseus",
-  "description": "Self-hosted AI chat with memory, documents, and tools",
+  "name": "Astrologically Intelligent",
+  "short_name": "Astrologically Intelligent",
+  "description": "A non-human virtual intelligence platform for research, work, coding, documents, and agent workflows.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
