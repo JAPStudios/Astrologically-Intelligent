@@ -97,7 +97,7 @@ The reader deliberately returns unknown family, modalities, capabilities, and co
 
 - OpenAI keeps the official Models API identity-only.
 - Anthropic maps its native Messages API model list to text conversation support. The list does not establish vision, tool use, reasoning or context limits.
-- Hugging Face maps explicit Hub `pipeline_tag` values to conservative task families and modalities. Missing or unrecognized tags remain unknown.
+- Hugging Face maps explicit Hub `pipeline_tag` values to conservative task families and modalities. Only the `conversational` tag establishes chat; `text-generation` remains unknown-family text generation. Similarity maps to reranking. Missing or unrecognized tags remain unknown.
 - vLLM preserves an explicit `max_model_len` value as a context limit while leaving model family and capabilities unknown.
 - OpenRouter maps explicit architecture modalities, supported parameters, limits, voices and default parameters into family/capability/control state.
 - Google maps its native Models resource. The live endpoint probe captures all returned model metadata while preserving the existing chat-only model picker filter. Embedding-only methods map to the embedding family.
