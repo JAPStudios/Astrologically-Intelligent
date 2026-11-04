@@ -32,32 +32,55 @@ class AgentRuntime:
         self.tools = ToolRegistry(self.store, self.provider)
 
     def chat(self, message: str, session_id: str | None = None) -> dict[str, str]:
-        if not isinstance(message,str) or not message.strip():
+        if not isinstance(message, str) or not message.strip():
             raise ValueError("message must be a non-empty string")
-        session_id=session_id or uuid.uuid4().hex
-        history=self.store.history(session_id,self.config.history_limit)
-        self.store.add_message(session_id,"user",message.strip())
-        messages=[{"role":"system","content":self.config.system_prompt},*history,
-                  {"role":"user","content":message.strip()}]
+        if not isinstance(self.config.max_tool_rounds, int) or self.config.max_tool_rounds < 0:
+            raise ValueError("max_tool_rounds must be a non-negative integer")
+        session_id = session_id or uuid.uuid4().hex
+        history = self.store.history(session_id, self.config.history_limit)
+        self.store.add_message(session_id, "user", message.strip())
+        messages = [
+            {"role": "system", "content": self.config.system_prompt},
+            *history,
+            {"role": "user", "content": message.strip()},
+        ]
+
         for round_index in range(self.config.max_tool_rounds + 1):
-            response = self.provider.chat(messages, self.tools.definitions())
+            final_only = round_index >= self.config.max_tool_rounds
+            if final_only:
+                messages.append({
+                    "role": "system",
+                    "content": (
+                        "The tool execution limit for this turn has been reached. "
+                        "Do not request or execute more tools. Give the most useful "
+                        "final response possible using the conversation and tool "
+                        "results already available. State any limitation plainly."
+                    ),
+                })
+            response = self.provider.chat(
+                messages,
+                [] if final_only else self.tools.definitions(),
+            )
             if not isinstance(response, dict):
                 raise RuntimeError("Model provider returned an invalid response")
 
             tool_calls = response.get("tool_calls") or []
             if not isinstance(tool_calls, list):
                 raise RuntimeError("Model provider returned an invalid tool-call list")
-            if not tool_calls:
+            if not tool_calls or final_only:
                 content = response.get("content")
-                if not isinstance(content, str):
+                if not isinstance(content, str) or not content.strip():
+                    content = (
+                        "The tool execution limit was reached before a final answer "
+                        "could be generated. The completed tool results remain in "
+                        "the conversation context."
+                        if final_only
+                        else None
+                    )
+                if content is None:
                     raise RuntimeError("Model returned no text response")
                 self.store.add_message(session_id, "assistant", content)
                 return {"session_id": session_id, "response": content}
-
-            # A final provider call is reserved for the response after the last
-            # permitted tool round. Never execute an extra batch on that call.
-            if round_index >= self.config.max_tool_rounds:
-                raise RuntimeError("Tool-call limit reached; no final assistant response was produced")
 
             messages.append(response)
             for call in tool_calls:
@@ -76,7 +99,7 @@ class AgentRuntime:
                     "name": name,
                     "content": result,
                 })
-        raise RuntimeError("Tool-call limit reached; no final assistant response was produced")
+        raise RuntimeError("Conversation ended without a response")
 
     def close(self):
         self.tools.close()
