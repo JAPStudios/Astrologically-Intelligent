@@ -12,6 +12,60 @@ from .plugins import PluginManager
 from .integrations import n8n_client_from_env, paperclip_client_from_env, perplexity_client_from_env, openclaw_client_from_env
 
 
+def _validate_schema(value: Any, schema: dict[str, Any], path: str = "arguments") -> None:
+    """Validate tool arguments against the JSON Schema subset advertised to models."""
+    if not isinstance(schema, dict):
+        raise ValueError(f"{path} has an invalid tool schema")
+    expected = schema.get("type")
+    allowed = expected if isinstance(expected, list) else [expected] if expected else []
+    matches = {
+        "object": lambda item: isinstance(item, dict),
+        "array": lambda item: isinstance(item, list),
+        "string": lambda item: isinstance(item, str),
+        "boolean": lambda item: isinstance(item, bool),
+        "integer": lambda item: isinstance(item, int) and not isinstance(item, bool),
+        "number": lambda item: isinstance(item, (int, float)) and not isinstance(item, bool),
+        "null": lambda item: item is None,
+    }
+    if allowed and not any(kind in matches and matches[kind](value) for kind in allowed):
+        raise ValueError(f"{path} must be {' or '.join(allowed)}")
+    if "enum" in schema and value not in schema["enum"]:
+        raise ValueError(f"{path} must be one of the permitted values")
+    if isinstance(value, dict):
+        properties = schema.get("properties", {})
+        if not isinstance(properties, dict):
+            raise ValueError(f"{path} has an invalid properties schema")
+        missing = [key for key in schema.get("required", []) if key not in value]
+        if missing:
+            raise ValueError(f"{path} is missing required field(s): {', '.join(missing)}")
+        if schema.get("additionalProperties") is False:
+            unknown = sorted(set(value) - set(properties))
+            if unknown:
+                raise ValueError(f"{path} contains unsupported field(s): {', '.join(unknown)}")
+        for key, item in value.items():
+            if key in properties:
+                _validate_schema(item, properties[key], f"{path}.{key}")
+    elif isinstance(value, list):
+        item_schema = schema.get("items")
+        if isinstance(item_schema, dict):
+            for index, item in enumerate(value):
+                _validate_schema(item, item_schema, f"{path}[{index}]")
+        for keyword, comparator in (("minItems", lambda n, bound: n >= bound),
+                                    ("maxItems", lambda n, bound: n <= bound)):
+            if keyword in schema and not comparator(len(value), schema[keyword]):
+                raise ValueError(f"{path} violates {keyword}")
+    elif isinstance(value, str):
+        for keyword, comparator in (("minLength", lambda n, bound: n >= bound),
+                                    ("maxLength", lambda n, bound: n <= bound)):
+            if keyword in schema and not comparator(len(value), schema[keyword]):
+                raise ValueError(f"{path} violates {keyword}")
+    elif isinstance(value, (int, float)) and not isinstance(value, bool):
+        for keyword, comparator in (("minimum", lambda n, bound: n >= bound),
+                                    ("maximum", lambda n, bound: n <= bound)):
+            if keyword in schema and not comparator(value, schema[keyword]):
+                raise ValueError(f"{path} violates {keyword}")
+
+
 class ToolRegistry:
     def __init__(self, store: Store, provider=None):
         self.store = store
@@ -40,6 +94,8 @@ class ToolRegistry:
             parsed = json.loads(arguments) if isinstance(arguments, str) else arguments
             if not isinstance(parsed, dict):
                 raise ValueError("Tool arguments must be a JSON object")
+            schema = self._tools[name][0]["function"]["parameters"]
+            _validate_schema(parsed, schema)
             result = self._tools[name][1](**parsed)
             return json.dumps(result, ensure_ascii=False, default=str)
         except (TypeError, ValueError) as exc:
