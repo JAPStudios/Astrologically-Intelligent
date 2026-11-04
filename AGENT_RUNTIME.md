@@ -86,7 +86,7 @@ The service binds to `127.0.0.1:8765` by default. It exposes `GET /health`, auth
 - Skills: `skills.list`, `skills.read`
 - Agents: `agents.register`, `agents.list`, `agents.execute` (active model-backed agents), `agents.set_state`, `agents.due`
 
-Model-backed agents may declare `allowed_tools` in their registration config. Only those exact registered tool names are exposed to the model. The default is an empty allowlist. Set `max_tool_rounds` from 0 to 12 (default 4) to bound tool-call cycles. Agent execution records each tool result in its run output; nested agent execution and direct run-management tools are not permitted.
+Model-backed agents may declare `allowed_tools` in their registration config. Only those exact registered tool names are exposed to the model. The default is an empty allowlist. Set `max_tool_rounds` from 0 to 12 (default 4) to bound tool-call cycles. Agent execution records each tool result in its run output; nested agent execution and direct run-management tools are not permitted. Agents may also declare `skills` as a list of installed skill names; their instructions are loaded into the agent system context, with a combined 128 KiB limit.
 - Goals: `goals.create`, `goals.list`
 - Approvals: `approvals.request`, `approvals.list`, `approvals.decide`
 - Budgets: `budgets.set`, `budgets.record_cost`, `budgets.list`
