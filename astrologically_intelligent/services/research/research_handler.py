@@ -239,6 +239,7 @@ class ResearchHandler:
         progress_callback=None,
         _task_entry: dict = None,
         llm_headers: dict = None,
+        provider_client=None,
     ) -> str:
         """
         Run iterative deep research using the LLM-in-the-loop DeepResearcher.
@@ -266,6 +267,7 @@ class ResearchHandler:
                 llm_endpoint=llm_endpoint,
                 llm_model=llm_model,
                 llm_headers=llm_headers,
+                provider_client=provider_client,
                 max_rounds=8,
                 max_time=max_time,
                 max_report_tokens=int(get_setting("research_max_tokens", 8192)),

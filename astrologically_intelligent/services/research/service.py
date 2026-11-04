@@ -54,6 +54,7 @@ class ResearchService:
         max_time: int = 300,
         on_progress: Optional[Callable[[dict], None]] = None,
         llm_headers: dict | None = None,
+        provider_client=None,
     ) -> ResearchResult:
         """
         Perform deep research on a topic.
@@ -78,6 +79,7 @@ class ResearchService:
             max_time=max_time,
             progress_callback=on_progress,
             llm_headers=llm_headers,
+            provider_client=provider_client,
         )
 
         duration = time.time() - start
