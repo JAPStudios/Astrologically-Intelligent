@@ -96,7 +96,9 @@ The reader deliberately returns unknown family, modalities, capabilities, and co
 
 ## Provider-Native Readers
 
-- OpenAI keeps the official Models API identity-only.\n- Hugging Face maps explicit Hub `pipeline_tag` values to conservative task families and modalities. Missing or unrecognized tags remain unknown.\n- vLLM preserves an explicit `max_model_len` value as a context limit while leaving model family and capabilities unknown.\n- Hugging Face maps explicit model-card `pipeline_tag` values to task families and modalities. Missing or unrecognized tags remain unknown; names and free-form tags do not establish capabilities.\n- vLLM preserves an explicit `max_model_len` as a context limit while leaving family and capabilities unknown.
+- OpenAI keeps the official Models API identity-only.
+- Hugging Face maps explicit Hub `pipeline_tag` values to conservative task families and modalities. Missing or unrecognized tags remain unknown.
+- vLLM preserves an explicit `max_model_len` value as a context limit while leaving model family and capabilities unknown.
 - OpenRouter maps explicit architecture modalities, supported parameters,
   limits, voices, and default parameters into family/capability/control state.
 - Google maps the native Models resource. Embedding-only methods map to the
@@ -112,7 +114,7 @@ The reader deliberately returns unknown family, modalities, capabilities, and co
   served model. It records tool/streaming claims, explicit unsupported
   vision/audio assertions, controls, and runtime/training/size limits.
 
-Readers tolerate non-object entries and unknown fields where their helpers permit it. They do not infer authoritative capability from model IDs or display names.
+Readers tolerate non-object entries and unknown fields where their helpers permit them. They do not infer authoritative capability from model IDs or display names.
 
 ## Evidence Semantics
 
@@ -139,7 +141,7 @@ The provider detector has narrow production consumers in `src/ai_interaction.py`
 - Canonical records are not yet used by runtime discovery, endpoint resolution, model context, request shaping, or frontend pickers.
 - Reader output is not persisted, refreshed, merged, or expired.
 - Provider detection still uses common-port hints; consumers must not promote normalization hints into trust decisions.
-- Only seven concrete readers exist; placeholder and other providers use the
+- Nine concrete readers exist; Anthropic, SGLang and other providers use the
   identity-only generic reader.
 - Generic fallback does not accept bare-list or `key`/`slug`-only payloads.
 - There is no capability-specific diagnostic/logging path.
