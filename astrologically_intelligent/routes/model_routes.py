@@ -2120,6 +2120,46 @@ def setup_model_routes(model_discovery):
 
     # ---- Admin: model endpoints CRUD ----
 
+    @router.get("/model-endpoints/{endpoint_id}/capabilities")
+    def get_model_endpoint_capabilities(request: Request, endpoint_id: str) -> Dict[str, Any]:
+        """Return normalized model capabilities from a fresh provider catalogue."""
+        require_admin(request)
+        db = SessionLocal()
+        try:
+            endpoint = db.query(ModelEndpoint).filter(ModelEndpoint.id == endpoint_id).first()
+            if endpoint is None:
+                raise HTTPException(404, "Model endpoint not found")
+            base = _normalize_base(endpoint.base_url)
+            ok, reason = check_outbound_url(
+                base,
+                block_private=os.getenv("MODELENDPOINT_BLOCK_PRIVATE_IPS", "false").lower() == "true",
+            )
+            if not ok:
+                raise HTTPException(400, f"Rejected endpoint URL: {reason}")
+            kind = _effective_endpoint_kind(endpoint, base)
+            records = []
+            model_ids = _probe_endpoint(
+                base,
+                endpoint.api_key,
+                timeout=_explicit_model_list_timeout(
+                    base, kind, getattr(endpoint, "model_refresh_timeout", None)
+                ),
+                capability_records=records,
+                endpoint_id=str(endpoint.id),
+                endpoint_kind=kind,
+            )
+            classified_ids = {record.model_id for record in records}
+            return {
+                "endpoint_id": str(endpoint.id),
+                "endpoint_kind": kind,
+                "models": [record.to_dict() for record in records],
+                "unclassified_model_ids": [
+                    model_id for model_id in model_ids if model_id not in classified_ids
+                ],
+            }
+        finally:
+            db.close()
+
     @router.get("/model-endpoints")
     def list_model_endpoints(request: Request) -> List[Dict[str, Any]]:
         require_admin(request)
