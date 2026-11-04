@@ -26,25 +26,25 @@ vendor = VENDOR_HUGGINGFACE
 
 _TASKS = {
     "text-generation": (
-        mc.FAMILY_CHAT, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
+        mc.FAMILY_UNKNOWN, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
     ),
     "conversational": (
         mc.FAMILY_CHAT, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
     ),
     "image-to-text": (
-        mc.FAMILY_CHAT, (mc.MODALITY_IMAGE,), (mc.MODALITY_TEXT,), (mc.CAP_VISION,),
+        mc.FAMILY_UNKNOWN, (mc.MODALITY_IMAGE,), (mc.MODALITY_TEXT,), (mc.CAP_VISION,),
     ),
     "visual-question-answering": (
-        mc.FAMILY_CHAT, (mc.MODALITY_TEXT, mc.MODALITY_IMAGE), (mc.MODALITY_TEXT,), (mc.CAP_VISION,),
+        mc.FAMILY_UNKNOWN, (mc.MODALITY_TEXT, mc.MODALITY_IMAGE), (mc.MODALITY_TEXT,), (mc.CAP_VISION,),
     ),
     "document-question-answering": (
-        mc.FAMILY_CHAT, (mc.MODALITY_TEXT, mc.MODALITY_IMAGE), (mc.MODALITY_TEXT,), (mc.CAP_VISION, mc.CAP_FILES),
+        mc.FAMILY_UNKNOWN, (mc.MODALITY_TEXT, mc.MODALITY_IMAGE), (mc.MODALITY_TEXT,), (mc.CAP_VISION, mc.CAP_FILES),
     ),
     "feature-extraction": (
         mc.FAMILY_EMBEDDING, (mc.MODALITY_TEXT,), (mc.MODALITY_EMBEDDING,), (),
     ),
     "sentence-similarity": (
-        mc.FAMILY_CLASSIFICATION, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
+        mc.FAMILY_RERANK, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
     ),
     "text-classification": (
         mc.FAMILY_CLASSIFICATION, (mc.MODALITY_TEXT,), (mc.MODALITY_TEXT,), (),
