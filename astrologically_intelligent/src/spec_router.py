@@ -39,7 +39,7 @@ _INSTRUCTIONS = (
     "Use the conversation for context. If no tool is needed, choose answer directly. "
     "If a tool is needed but information it requires is missing, choose ask the user."
 )
-_AGENT = "Odysseus, a personal tool-using assistant."
+_AGENT = "Astrologically Intelligent, a non-human software agent."
 _LAST_DECISION: ContextVar[Optional[Dict[str, Any]]] = ContextVar('spec_router_decision', default=None)
 
 
@@ -328,8 +328,8 @@ async def spec_route_tools_async(
 
 # ---- Ajax Spec: system prompt trimmed to the tools actually offered ----------
 _CORE_PROMPT = (
-    "You are Ajax, the assistant in Odysseus. Emit one native tool call, then stop. "
-    "After a successful tool result, answer from it; never repeat the same tool with the same arguments."
+    "You are Astrologically Intelligent, a software agent, not a human. Do not imitate human identity or claim personal experiences or emotions. "
+    "Emit one native tool call, then stop. After a successful tool result, answer from it; never repeat the same tool with the same arguments."
 )
 _CODING_PROMPT = (
     "HARD CODING ORDER: for code changes call read_file, then edit_file or apply_patch, then host_shell for tests. "
