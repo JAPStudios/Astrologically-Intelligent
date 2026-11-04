@@ -553,6 +553,42 @@ class ToolRegistry:
             self.orchestration.finish_run(run["id"], "failed", {"error_type": type(exc).__name__})
             raise RuntimeError(f"Agent execution failed ({type(exc).__name__})") from None
 
+    @staticmethod
+    def _skill_summary(body: str) -> str:
+        """Return the human-readable description from a Markdown skill guide."""
+        lines = body.splitlines()
+        content_lines = lines
+        if lines and lines[0].strip() == "---":
+            closing = next(
+                (index for index in range(1, len(lines)) if lines[index].strip() == "---"),
+                None,
+            )
+            if closing is not None:
+                frontmatter = lines[1:closing]
+                for index, line in enumerate(frontmatter):
+                    key, separator, value = line.partition(":")
+                    if separator and key.strip().lower() == "description":
+                        value = value.strip().strip("\\"'").strip()
+                        if value in {">", "|", ">-", "|-"}:
+                            value = " ".join(
+                                item.strip() for item in frontmatter[index + 1:]
+                                if item.startswith((" ", "\\t")) and item.strip()
+                            )
+                        if value:
+                            return " ".join(value.split())[:200]
+                content_lines = lines[closing + 1:]
+
+        for line in content_lines:
+            candidate = line.strip()
+            if candidate.startswith("#"):
+                candidate = candidate.lstrip("#").strip()
+                if candidate:
+                    return candidate[:200]
+        return next(
+            (line.strip()[:200] for line in content_lines if line.strip()),
+            "",
+        )
+
     def _list_skills(self) -> list[dict[str, str]]:
         from pathlib import Path
 
@@ -569,12 +605,9 @@ class ToolRegistry:
                     body = path.read_text(encoding="utf-8")
                 except (OSError, UnicodeError):
                     continue
-                summary = next(
-                    (line.lstrip("# ").strip() for line in body.splitlines() if line.strip()),
-                    "",
-                )
+                summary = self._skill_summary(body)
                 name = prefix + path.parent.relative_to(root).as_posix()
-                results.append({"name": name, "summary": summary[:200]})
+                results.append({"name": name, "summary": summary})
         return sorted(results, key=lambda item: item["name"])
 
     def _read_skill(self, name: str) -> dict[str, str]:
