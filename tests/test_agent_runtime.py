@@ -286,7 +286,7 @@ class RuntimeTests(unittest.TestCase):
             "agent_id":agent["id"],"prompt":"Complete the task."
         }))
         self.assertEqual(result["status"], "succeeded")
-        self.assertEqual(provider.models_seen, [])
+        self.assertEqual(provider.models_seen, ["specialist-model"])
         self.assertEqual(provider.config.model, "default-model")
 
     def test_model_agent_can_call_only_configured_tools_and_records_trace(self):
