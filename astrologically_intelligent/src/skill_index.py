@@ -138,6 +138,9 @@ def learned_skill_quality_scores(training_skills, candidate_skills):
                 continue
             if audit_version != 2:
                 continue
+            baseline = str(skill.get("baseline_verdict") or "").strip().lower()
+            if baseline not in {"better", "same", "worse"}:
+                continue
             verdict = str(skill.get("audit_verdict") or "").strip().lower()
             if verdict == "pass":
                 positive_skills.append(skill)
