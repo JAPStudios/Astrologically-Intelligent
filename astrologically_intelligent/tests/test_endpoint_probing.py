@@ -48,6 +48,7 @@ with preserve_import_state("core.database", "src.database", "core.session_manage
     import src.endpoint_resolver as endpoint_resolver
     from routes.model_routes import (
         _probe_endpoint,
+        _probe_google_models,
         _ping_endpoint,
         _probe_single_model,
         _resolve_probe_key,
@@ -138,6 +139,48 @@ class TestProbeEndpointParsing:
         )
         assert records[0].capability.family == "chat"
         assert records[0].capability.capabilities == ()
+
+    def test_google_probe_collects_full_native_capability_catalogue(self, monkeypatch):
+        _patch_resolve(monkeypatch)
+        payload = {
+            "models": [
+                {
+                    "name": "models/gemini-example",
+                    "displayName": "Gemini Example",
+                    "supportedGenerationMethods": ["generateContent"],
+                    "inputTokenLimit": 100000,
+                    "outputTokenLimit": 8192,
+                },
+                {
+                    "name": "models/embed-example",
+                    "displayName": "Embedding Example",
+                    "supportedGenerationMethods": ["embedContent"],
+                },
+            ]
+        }
+        monkeypatch.setattr(
+            model_routes.httpx,
+            "get",
+            lambda url, headers=None, params=None, timeout=None, verify=None, **kwargs: _resp(
+                200, json=payload, url=url
+            ),
+        )
+        records = []
+        models = _probe_google_models(
+            "https://generativelanguage.googleapis.com/v1beta",
+            "test-key",
+            capability_records=records,
+            endpoint_id="google-main",
+        )
+
+        assert models == ["gemini-example"]
+        assert [record.model_id for record in records] == [
+            "gemini-example",
+            "embed-example",
+        ]
+        assert records[0].vendor == "google"
+        assert records[0].capability.family == "chat"
+        assert records[1].capability.family == "embedding"
 
     def test_parses_openai_data_format(self, monkeypatch):
         _patch_resolve(monkeypatch)
