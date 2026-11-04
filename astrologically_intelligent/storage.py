@@ -53,10 +53,36 @@ class Store:
         limit = max(1, min(int(limit), 200))
         with self._lock:
             rows = self._db.execute(
-                "SELECT role, content FROM messages WHERE session_id=? ORDER BY created_at DESC LIMIT ?",
+                "SELECT role, content FROM messages WHERE session_id=? ORDER BY created_at DESC, rowid DESC LIMIT ?",
                 (session_id, limit),
             ).fetchall()
         return [{"role": r["role"], "content": r["content"]} for r in reversed(rows)]
+
+    def list_sessions(self, limit: int = 50) -> list[dict[str, Any]]:
+        """Return recent conversations with their latest message preview."""
+        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 100:
+            raise ValueError("limit must be an integer from 1 to 100")
+        with self._lock:
+            rows = self._db.execute("""
+                SELECT m.session_id, COUNT(*) AS message_count, MAX(m.created_at) AS updated_at,
+                       (SELECT latest.role FROM messages AS latest
+                        WHERE latest.session_id=m.session_id
+                        ORDER BY latest.created_at DESC, latest.rowid DESC LIMIT 1) AS last_role,
+                       (SELECT latest.content FROM messages AS latest
+                        WHERE latest.session_id=m.session_id
+                        ORDER BY latest.created_at DESC, latest.rowid DESC LIMIT 1) AS preview
+                FROM messages AS m
+                GROUP BY m.session_id
+                ORDER BY updated_at DESC, m.session_id
+                LIMIT ?
+            """, (limit,)).fetchall()
+        return [{
+            "session_id": row["session_id"],
+            "message_count": row["message_count"],
+            "updated_at": row["updated_at"],
+            "last_role": row["last_role"],
+            "preview": (row["preview"] or "")[:240],
+        } for row in rows]
 
     def remember(self, namespace: str, key: str, value: Any) -> None:
         now = time.time()

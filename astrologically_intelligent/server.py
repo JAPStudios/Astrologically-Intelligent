@@ -21,15 +21,28 @@ def make_handler(runtime: AgentRuntime, token: str):
             self.end_headers()
             self.wfile.write(body)
 
+        def _authorized(self):
+            return not token or hmac.compare_digest(
+                self.headers.get("Authorization",""), f"Bearer {token}"
+            )
+
         def do_GET(self):
             parsed = urlsplit(self.path)
             if parsed.path == "/health":
                 return self._send(200,{"status":"ok","service":"astrologically-intelligent"})
-            if parsed.path != "/v1/history":
+            if parsed.path not in {"/v1/history", "/v1/sessions"}:
                 return self._send(404,{"error":"not_found"})
-            if token and not hmac.compare_digest(self.headers.get("Authorization",""),f"Bearer {token}"):
+            if not self._authorized():
                 return self._send(401,{"error":"unauthorized"})
             query = parse_qs(parsed.query, keep_blank_values=True)
+            if parsed.path == "/v1/sessions":
+                try:
+                    limit = int(query.get("limit", ["50"])[0])
+                except (TypeError, ValueError):
+                    return self._send(400,{"error":"invalid_limit"})
+                if not 1 <= limit <= 100:
+                    return self._send(400,{"error":"invalid_limit"})
+                return self._send(200, {"sessions": runtime.store.list_sessions(limit)})
             session_id = query.get("session_id", [""])[0]
             if not session_id or len(session_id) > 128:
                 return self._send(400,{"error":"invalid_session_id"})
@@ -46,7 +59,7 @@ def make_handler(runtime: AgentRuntime, token: str):
 
         def do_POST(self):
             if self.path!="/v1/chat": return self._send(404,{"error":"not_found"})
-            if token and not hmac.compare_digest(self.headers.get("Authorization",""),f"Bearer {token}"):
+            if not self._authorized():
                 return self._send(401,{"error":"unauthorized"})
             try:
                 length=int(self.headers.get("Content-Length","0"))

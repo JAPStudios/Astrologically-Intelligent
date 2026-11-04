@@ -16,6 +16,7 @@ class HistoryEndpointTests(unittest.TestCase):
         self.runtime = AgentRuntime(provider=object(), store=self.store)
         self.store.add_message("session-1", "user", "First message")
         self.store.add_message("session-1", "assistant", "First reply")
+        self.store.add_message("session-2", "user", "Another conversation")
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), make_handler(self.runtime, "test-token"))
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
@@ -41,6 +42,26 @@ class HistoryEndpointTests(unittest.TestCase):
             {"role": "user", "content": "First message"},
             {"role": "assistant", "content": "First reply"},
         ])
+
+    def test_sessions_returns_recent_conversation_previews(self):
+        with self.request("/v1/sessions") as response:
+            payload = json.loads(response.read())
+        self.assertEqual([item["session_id"] for item in payload["sessions"]],
+                         ["session-2", "session-1"])
+        self.assertEqual(payload["sessions"][0]["preview"], "Another conversation")
+        self.assertEqual(payload["sessions"][1]["message_count"], 2)
+
+    def test_sessions_requires_authentication(self):
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.request("/v1/sessions", token="")
+        self.assertEqual(raised.exception.code, 401)
+
+    def test_sessions_rejects_invalid_limits(self):
+        for path in ("/v1/sessions?limit=0", "/v1/sessions?limit=101",
+                     "/v1/sessions?limit=invalid"):
+            with self.assertRaises(urllib.error.HTTPError) as raised:
+                self.request(path)
+            self.assertEqual(raised.exception.code, 400)
 
     def test_health_remains_public(self):
         with urllib.request.urlopen(self.url + "/health", timeout=3) as response:

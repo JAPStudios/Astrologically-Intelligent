@@ -49,10 +49,8 @@ final class AgentAPI {
         return value.trim();
     }
 
-    String fetchHistory(String sessionId) throws Exception {
-        String encodedSession = java.net.URLEncoder.encode(sessionId, "UTF-8");
-        HttpURLConnection connection = (HttpURLConnection)
-                new URL(baseUrl + "/v1/history?session_id=" + encodedSession + "&limit=40").openConnection();
+    private HttpURLConnection openGet(String path) throws Exception {
+        HttpURLConnection connection = (HttpURLConnection) new URL(baseUrl + path).openConnection();
         connection.setInstanceFollowRedirects(false);
         connection.setRequestMethod("GET");
         connection.setConnectTimeout(10000);
@@ -61,6 +59,10 @@ final class AgentAPI {
         if (!bearerToken.isEmpty()) {
             connection.setRequestProperty("Authorization", "Bearer " + bearerToken);
         }
+        return connection;
+    }
+
+    private String readResponse(HttpURLConnection connection) throws Exception {
         int status = connection.getResponseCode();
         InputStream stream = status >= 200 && status < 300
                 ? connection.getInputStream() : connection.getErrorStream();
@@ -87,10 +89,21 @@ final class AgentAPI {
                     throw new IllegalStateException("Agent server returned HTTP " + status);
                 }
             }
-            return new JSONObject(response).getJSONArray("messages").toString();
+            return response;
         } finally {
             connection.disconnect();
         }
+    }
+
+    String fetchHistory(String sessionId) throws Exception {
+        String encodedSession = java.net.URLEncoder.encode(sessionId, "UTF-8");
+        HttpURLConnection connection = openGet("/v1/history?session_id=" + encodedSession + "&limit=40");
+        return new JSONObject(readResponse(connection)).getJSONArray("messages").toString();
+    }
+
+    String fetchSessions() throws Exception {
+        HttpURLConnection connection = openGet("/v1/sessions?limit=50");
+        return new JSONObject(readResponse(connection)).getJSONArray("sessions").toString();
     }
 
     String sendMessage(String message, String sessionId) throws Exception {
@@ -115,37 +128,8 @@ final class AgentAPI {
         try (OutputStream output = connection.getOutputStream()) {
             output.write(bytes);
         }
-
-        int status = connection.getResponseCode();
-        InputStream stream = status >= 200 && status < 300
-                ? connection.getInputStream() : connection.getErrorStream();
         try {
-            if (stream == null) {
-                throw new IllegalStateException("Agent server returned HTTP " + status + " without a response body");
-            }
-            byte[] responseBytes;
-            try (InputStream input = stream; ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-                byte[] buffer = new byte[8192];
-                int count;
-                while ((count = input.read(buffer)) != -1) {
-                    if (output.size() + count > MAX_RESPONSE_BYTES) {
-                        throw new IllegalStateException("Agent server response exceeded 1 MB");
-                    }
-                    output.write(buffer, 0, count);
-                }
-                responseBytes = output.toByteArray();
-            }
-            String response = new String(responseBytes, StandardCharsets.UTF_8);
-            if (status < 200 || status >= 300) {
-                try {
-                    JSONObject error = new JSONObject(response);
-                    throw new IllegalStateException(error.optString("error", "HTTP " + status));
-                } catch (org.json.JSONException invalidJson) {
-                    throw new IllegalStateException("Agent server returned HTTP " + status);
-                }
-            }
-            JSONObject json = new JSONObject(response);
-            return json.getString("response");
+            return new JSONObject(readResponse(connection)).getString("response");
         } finally {
             connection.disconnect();
         }

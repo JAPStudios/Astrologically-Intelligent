@@ -1,9 +1,9 @@
 package com.japstudios.astrologicallyintelligent;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.graphics.Typeface;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -60,10 +62,19 @@ public final class MainActivity extends Activity {
         token.setInputType(129);
         root.addView(token);
 
+        LinearLayout conversationActions = new LinearLayout(this);
+        conversationActions.setOrientation(LinearLayout.HORIZONTAL);
+        Button conversations = new Button(this);
+        conversations.setText("Conversations");
+        conversations.setOnClickListener(v -> showConversations());
+        conversationActions.addView(conversations, new LinearLayout.LayoutParams(0,
+                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         Button newConversation = new Button(this);
-        newConversation.setText("New conversation");
+        newConversation.setText("New");
         newConversation.setOnClickListener(v -> startNewConversation());
-        root.addView(newConversation);
+        conversationActions.addView(newConversation, new LinearLayout.LayoutParams(0,
+                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        root.addView(conversationActions);
 
         ScrollView scroll = new ScrollView(this);
         transcript = new TextView(this);
@@ -92,6 +103,48 @@ public final class MainActivity extends Activity {
         preferences.edit().putString("session_id", sessionId).apply();
         transcript.setText("New conversation.\n");
         prompt.setText("");
+    }
+
+    private void showConversations() {
+        String url = endpoint.getText().toString().trim();
+        String accessToken = token.getText().toString().trim();
+        executor.execute(() -> {
+            try {
+                org.json.JSONArray sessions = new org.json.JSONArray(
+                        new AgentAPI(url, accessToken).fetchSessions());
+                List<String> labels = new ArrayList<>();
+                List<String> ids = new ArrayList<>();
+                for (int i = 0; i < sessions.length(); i++) {
+                    org.json.JSONObject item = sessions.optJSONObject(i);
+                    if (item == null) continue;
+                    String id = item.optString("session_id", "");
+                    if (id.isEmpty()) continue;
+                    String preview = item.optString("preview", "").replace('\n', ' ');
+                    if (preview.length() > 72) preview = preview.substring(0, 72) + "…";
+                    labels.add((id.equals(sessionId) ? "Current · " : "")
+                            + preview + " (" + item.optInt("message_count") + ")");
+                    ids.add(id);
+                }
+                runOnUiThread(() -> {
+                    if (labels.isEmpty()) {
+                        transcript.append("\nNo saved conversations were found.\n");
+                        return;
+                    }
+                    new AlertDialog.Builder(this)
+                            .setTitle("Conversations")
+                            .setItems(labels.toArray(new String[0]), (dialog, which) -> {
+                                sessionId = ids.get(which);
+                                preferences.edit().putString("session_id", sessionId).apply();
+                                loadHistory();
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .show();
+                });
+            } catch (Exception error) {
+                runOnUiThread(() -> transcript.append("\nConversations unavailable: "
+                        + error.getMessage() + "\n"));
+            }
+        });
     }
 
     private void loadHistory() {
