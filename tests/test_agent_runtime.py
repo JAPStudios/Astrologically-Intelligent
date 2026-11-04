@@ -266,6 +266,29 @@ class RuntimeTests(unittest.TestCase):
             "agents.execute", {"agent_id":unsupported["id"],"prompt":"Run this."}))
         self.assertIn("error", rejected)
 
+    def test_agent_model_override_does_not_mutate_shared_provider(self):
+        from astrologically_intelligent.providers import ProviderConfig
+
+        class ModelAwareProvider:
+            def __init__(self):
+                self.config = ProviderConfig("https://provider.example/v1", "test-key", "default-model")
+                self.models_seen = []
+            def chat(self, messages, tools):
+                self.models_seen.append(self.config.model)
+                return {"role":"assistant","content":"Model selected."}
+
+        provider = ModelAwareProvider()
+        self.runtime.tools.provider = provider
+        agent = json.loads(self.runtime.tools.execute("agents.register", {
+            "name":"Specialist","adapter":"llm","model":"specialist-model"
+        }))
+        result = json.loads(self.runtime.tools.execute("agents.execute", {
+            "agent_id":agent["id"],"prompt":"Complete the task."
+        }))
+        self.assertEqual(result["status"], "succeeded")
+        self.assertEqual(provider.models_seen, [])
+        self.assertEqual(provider.config.model, "default-model")
+
     def test_model_agent_can_call_only_configured_tools_and_records_trace(self):
         class ToolProvider:
             def __init__(self): self.calls = 0

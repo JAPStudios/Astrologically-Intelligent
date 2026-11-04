@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+from copy import copy
+from dataclasses import is_dataclass, replace
 from typing import Any, Callable
 
 from .storage import Store
@@ -229,6 +231,14 @@ class ToolRegistry:
             raise ValueError("Agent max_tool_rounds must be an integer from 0 to 12")
         tool_map = {name: self._tools[name] for name in allowed_tools}
         definitions = [item[0] for item in tool_map.values()]
+        agent_provider = self.provider
+        agent_model = agent.get("model")
+        if isinstance(agent_model, str) and agent_model.strip():
+            provider_config = getattr(self.provider, "config", None)
+            if not is_dataclass(provider_config):
+                raise ValueError("The configured provider does not support per-agent model selection")
+            agent_provider = copy(self.provider)
+            agent_provider.config = replace(provider_config, model=agent_model.strip())
         run = self.orchestration.start_run(agent_id, input_data={"prompt": prompt.strip()})
         try:
             messages = [
@@ -238,7 +248,7 @@ class ToolRegistry:
             trace = []
             output = None
             for round_number in range(max_tool_rounds + 1):
-                response = self.provider.chat(messages, definitions)
+                response = agent_provider.chat(messages, definitions)
                 if not isinstance(response, dict):
                     raise RuntimeError("Model returned an invalid response")
                 calls = response.get("tool_calls") or []
