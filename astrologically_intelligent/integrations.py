@@ -229,19 +229,37 @@ class OpenClawClient:
         return self._invoke_read_tool("sessions_list", session_key, args)
 
     def read_session_history(self, session_key: str, limit: int = 20,
-                             offset: int = 0, include_tools: bool = False) -> Any:
+                             offset: int = 0, include_tools: bool = False,
+                             message_id: str | None = None,
+                             transcript_session_id: str | None = None) -> Any:
         if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 100:
             raise ValueError("limit must be an integer from 1 to 100")
         if isinstance(offset, bool) or not isinstance(offset, int) or offset < 0:
             raise ValueError("offset must be a non-negative integer")
         if not isinstance(include_tools, bool):
             raise ValueError("include_tools must be a boolean")
+        if message_id is not None and (
+            not isinstance(message_id, str) or not re.fullmatch(r"[A-Za-z0-9_:.@-]{1,256}", message_id)
+        ):
+            raise ValueError("Invalid OpenClaw message ID")
+        if transcript_session_id is not None and (
+            not isinstance(transcript_session_id, str)
+            or not re.fullmatch(r"[A-Za-z0-9_:.@-]{1,256}", transcript_session_id)
+        ):
+            raise ValueError("Invalid OpenClaw transcript session ID")
+        if transcript_session_id is not None and message_id is None:
+            raise ValueError("transcript_session_id requires message_id")
         args: dict[str, Any] = {
             "sessionKey": self._session_key(session_key),
             "limit": limit,
-            "offset": offset,
             "includeTools": include_tools,
         }
+        if message_id is not None:
+            args["messageId"] = message_id
+        if transcript_session_id is not None:
+            args["sessionId"] = transcript_session_id
+        else:
+            args["offset"] = offset
         return self._invoke_read_tool("sessions_history", session_key, args)
 
     def search_sessions(self, query: str, session_key: str = "main",
