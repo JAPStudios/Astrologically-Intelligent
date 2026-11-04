@@ -1,6 +1,6 @@
 # Threat Model
 
-Odysseus is a **self-hosted AI workspace with privileged local access**. This document states the trust boundary so contributors can reason about security decisions without reading through the full auth and middleware stack.
+Astrologically Intelligent is a **self-hosted AI workspace with privileged local access**. This document states the trust boundary so contributors can reason about security decisions without reading through the full auth and middleware stack.
 
 ## Trust Boundary
 
@@ -86,7 +86,7 @@ These are open, acknowledged, and contributor help is welcome:
 
 1. **No shell/filesystem sandbox.** The agent `bash` and `read_file`/`write_file` tools run as the app process user with no network egress filtering or filesystem confinement. A successful prompt-injection reaching a shell-enabled admin session can make outbound requests to internal services. See #1058 for the sandbox proposal. The tool approval gate above is the compensating control and is on by default; turning it off leaves this gap unmitigated beyond the untrusted-context wrapper.
 
-2. **SSRF via `/api/v1/chat` `base_url` parameter.** A chat-scoped API token can supply an arbitrary `base_url`; the server forwards the LLM request to that host without validating the scheme or address. PR #1039 fixes this.
+2. **Residual DNS-rebinding risk for token-supplied `/api/v1/chat` endpoints.** Direct `base_url` values supplied with an API token are checked by `validate_public_http_url` before the request. Regression tests reject loopback, private, link-local metadata, IPv6 local, multicast, unspecified, and non-HTTP(S) targets; DNS results are also rejected when any resolved address is non-public. Admin-configured model endpoints intentionally retain access to local/LAN model servers. The validator explicitly does not pin the validated DNS result to the subsequent HTTP connection, so a DNS-rebinding race remains possible. Close that gap with connection-time address enforcement or deployment-level outbound network restrictions; do not remove the intentional local-endpoint path for trusted administrator configuration.
 
 3. **`src/search/` partial consolidation.** `src.search.core` and `src.search.providers` correctly alias `services.search` via `sys.modules` replacement. `analytics`, `cache`, `content`, `query`, and `ranking` are still independent copies that can drift. The SSRF regression tests in `tests/test_webhook_ssrf_resilience.py` test `src.webhook_manager` directly (separate from search), so the safety net there is intact. See #1058.
 
