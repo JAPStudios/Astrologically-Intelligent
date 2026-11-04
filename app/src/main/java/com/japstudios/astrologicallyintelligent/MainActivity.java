@@ -93,7 +93,7 @@ public final class MainActivity extends Activity {
         send.setEnabled(false);
         executor.execute(() -> {
             try {
-                String answer = new GeminiAPI(url, accessToken).sendMessage(message, sessionId);
+                String answer = new AgentAPI(url, accessToken).sendMessage(message, sessionId);
                 runOnUiThread(() -> transcript.append("\nAssistant: " + answer + "\n"));
             } catch (Exception error) {
                 runOnUiThread(() -> transcript.append("\nConnection error: "
