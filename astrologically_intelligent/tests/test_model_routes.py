@@ -2240,6 +2240,7 @@ def test_capabilities_route_returns_fresh_normalized_records(monkeypatch):
     monkeypatch.setattr(model_routes, "SessionLocal", lambda: db)
     monkeypatch.setattr(model_routes, "require_admin", lambda request: None)
     monkeypatch.setattr(model_routes, "check_outbound_url", lambda *a, **k: (True, ""))
+    monkeypatch.setattr(endpoint_resolver, "resolve_url", lambda url: url, raising=False)
 
     def fake_probe(base_url, api_key, **kwargs):
         kwargs["capability_records"].append(
