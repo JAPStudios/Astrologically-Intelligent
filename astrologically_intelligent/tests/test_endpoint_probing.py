@@ -214,7 +214,16 @@ class TestProbeEndpointParsing:
             return _resp(404)
 
         monkeypatch.setattr(model_routes.httpx, "get", fake_get)
-        assert _probe_endpoint("http://localhost:11434/v1") == ["llama3:8b"]
+        records = []
+        assert _probe_endpoint(
+            "http://localhost:11434/v1",
+            capability_records=records,
+            endpoint_id="ollama-test",
+        ) == ["llama3:8b"]
+        assert len(records) == 1
+        assert records[0].vendor == "ollama"
+        assert records[0].model_id == "llama3:8b"
+        assert records[0].capability.family == "unknown"
         assert "http://localhost:11434/v1/models" in seen
         assert "http://localhost:11434/api/tags" in seen
 
