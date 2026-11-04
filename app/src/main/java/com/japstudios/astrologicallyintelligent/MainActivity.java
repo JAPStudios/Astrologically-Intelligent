@@ -60,6 +60,11 @@ public final class MainActivity extends Activity {
         token.setInputType(129);
         root.addView(token);
 
+        Button newConversation = new Button(this);
+        newConversation.setText("New conversation");
+        newConversation.setOnClickListener(v -> startNewConversation());
+        root.addView(newConversation);
+
         ScrollView scroll = new ScrollView(this);
         transcript = new TextView(this);
         transcript.setTextSize(16);
@@ -82,17 +87,26 @@ public final class MainActivity extends Activity {
         setContentView(root);
     }
 
+    private void startNewConversation() {
+        sessionId = UUID.randomUUID().toString();
+        preferences.edit().putString("session_id", sessionId).apply();
+        transcript.setText("New conversation.\n");
+        prompt.setText("");
+    }
+
     private void loadHistory() {
+        String requestedSessionId = sessionId;
         String url = endpoint.getText().toString().trim();
         String accessToken = token.getText().toString().trim();
         executor.execute(() -> {
             try {
-                String history = new AgentAPI(url, accessToken).fetchHistory(sessionId);
+                String history = new AgentAPI(url, accessToken).fetchHistory(requestedSessionId);
                 org.json.JSONArray messages = new org.json.JSONArray(history);
                 runOnUiThread(() -> {
+                    if (!requestedSessionId.equals(sessionId)) return;
                     transcript.setText("");
                     if (messages.length() == 0) {
-                        transcript.setText("Connect to the Python agent runtime to begin.\\n");
+                        transcript.setText("Connect to the Python agent runtime to begin.\n");
                         return;
                     }
                     for (int i = 0; i < messages.length(); i++) {
@@ -104,8 +118,11 @@ public final class MainActivity extends Activity {
                     }
                 });
             } catch (Exception error) {
-                runOnUiThread(() -> transcript.append("History unavailable: "
-                        + error.getMessage() + "\\n"));
+                runOnUiThread(() -> {
+                    if (requestedSessionId.equals(sessionId)) {
+                        transcript.append("History unavailable: " + error.getMessage() + "\n");
+                    }
+                });
             }
         });
     }
@@ -120,13 +137,21 @@ public final class MainActivity extends Activity {
         prompt.setText("");
         transcript.append("\nYou: " + message + "\n");
         send.setEnabled(false);
+        String requestSessionId = sessionId;
         executor.execute(() -> {
             try {
-                String answer = new AgentAPI(url, accessToken).sendMessage(message, sessionId);
-                runOnUiThread(() -> transcript.append("\nAssistant: " + answer + "\n"));
+                String answer = new AgentAPI(url, accessToken).sendMessage(message, requestSessionId);
+                runOnUiThread(() -> {
+                    if (requestSessionId.equals(sessionId)) {
+                        transcript.append("\nAssistant: " + answer + "\n");
+                    }
+                });
             } catch (Exception error) {
-                runOnUiThread(() -> transcript.append("\nConnection error: "
-                        + error.getMessage() + "\n"));
+                runOnUiThread(() -> {
+                    if (requestSessionId.equals(sessionId)) {
+                        transcript.append("\nConnection error: " + error.getMessage() + "\n");
+                    }
+                });
             } finally {
                 runOnUiThread(() -> send.setEnabled(true));
             }
