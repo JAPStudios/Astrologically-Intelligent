@@ -95,7 +95,7 @@ public final class MainActivity extends Activity {
                         if (item == null) continue;
                         String role = item.optString("role", "assistant");
                         String label = role.equals("user") ? "You" : "Assistant";
-                        transcript.append(label + ": " + item.optString("content", "") + "\\n");
+                        transcript.append(label + ": " + item.optString("content", "") + "\n");
                     }
                 });
             } catch (Exception error) {
