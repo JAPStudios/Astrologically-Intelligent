@@ -19,8 +19,6 @@ class ProviderRetryTests(unittest.TestCase):
 
     def test_retries_rate_limit_then_returns_json(self):
         response = io.BytesIO(b'{"choices": []}')
-        response.__enter__ = lambda: response
-        response.__exit__ = lambda *args: None
         with patch("urllib.request.urlopen", side_effect=[
             self._http_error(429, "1"), response
         ]) as request, patch("time.sleep") as sleep:
