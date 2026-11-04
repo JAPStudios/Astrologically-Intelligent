@@ -7,6 +7,7 @@ language model and does not pretend to be a pretrained language model.
 """
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 from typing import Iterable
@@ -17,7 +18,7 @@ import numpy as np
 class NeuralNetworkClassifier:
     """One-hidden-layer feed-forward neural network for multiclass learning."""
 
-    FORMAT_VERSION = 1
+    FORMAT_VERSION = 2
 
     def __init__(
         self,
@@ -35,10 +36,10 @@ class NeuralNetworkClassifier:
             raise ValueError("learning_rate must be a positive finite number")
         self.input_size, self.hidden_size, self.output_size = dimensions
         self.learning_rate = float(learning_rate)
-        rng = np.random.default_rng(seed)
-        self.weights1 = rng.normal(0.0, np.sqrt(2.0 / input_size), (input_size, hidden_size))
+        self._rng = np.random.default_rng(seed)
+        self.weights1 = self._rng.normal(0.0, np.sqrt(2.0 / input_size), (input_size, hidden_size))
         self.bias1 = np.zeros(hidden_size, dtype=np.float64)
-        self.weights2 = rng.normal(0.0, np.sqrt(2.0 / hidden_size), (hidden_size, output_size))
+        self.weights2 = self._rng.normal(0.0, np.sqrt(2.0 / hidden_size), (hidden_size, output_size))
         self.bias2 = np.zeros(output_size, dtype=np.float64)
         self._step = 0
         self._adam = {
@@ -97,10 +98,9 @@ class NeuralNetworkClassifier:
             raise ValueError("epochs must be a positive integer")
         if isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size < 1:
             raise ValueError("batch_size must be a positive integer")
-        rng = np.random.default_rng()
         history: list[dict[str, float]] = []
         for _ in range(epochs):
-            indices = rng.permutation(len(values)) if shuffle else np.arange(len(values))
+            indices = self._rng.permutation(len(values)) if shuffle else np.arange(len(values))
             for start in range(0, len(indices), batch_size):
                 batch_indices = indices[start:start + batch_size]
                 batch_x = values[batch_indices]
@@ -148,6 +148,7 @@ class NeuralNetworkClassifier:
             dimensions=np.array([self.input_size, self.hidden_size, self.output_size]),
             learning_rate=np.array(self.learning_rate),
             step=np.array(self._step),
+            rng_state=np.array(json.dumps(self._rng.bit_generator.state)),
             weights1=self.weights1, bias1=self.bias1,
             weights2=self.weights2, bias2=self.bias2,
             **{f"adam_{name}_m": state[0] for name, state in self._adam.items()},
@@ -160,7 +161,7 @@ class NeuralNetworkClassifier:
         """Load a checkpoint without enabling pickle-based object deserialization."""
         with np.load(path, allow_pickle=False) as archive:
             version = int(archive["format_version"])
-            if version != cls.FORMAT_VERSION:
+            if version not in (1, cls.FORMAT_VERSION):
                 raise ValueError(f"unsupported neural-network checkpoint version: {version}")
             dimensions = archive["dimensions"].astype(int).tolist()
             model = cls(*dimensions, learning_rate=float(archive["learning_rate"]))
@@ -177,6 +178,8 @@ class NeuralNetworkClassifier:
                        for state in model._adam[name]):
                     raise ValueError(f"invalid optimizer state: {name}")
             model._step = int(archive["step"])
+            if version >= 2:
+                model._rng.bit_generator.state = json.loads(str(archive["rng_state"]))
             if model._step < 0:
                 raise ValueError("invalid optimizer step")
             return model
