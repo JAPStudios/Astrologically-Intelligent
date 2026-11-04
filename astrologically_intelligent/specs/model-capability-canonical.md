@@ -11,7 +11,7 @@ This spec covers the implementation introduced on current `dev` in:
   `src/model_capability_readers/base.py`;
 - reader dispatch in `src/model_capability_readers/__init__.py`;
 - concrete readers for generic OpenAI-compatible, OpenAI, OpenRouter, Google,
-  Hugging Face, Ollama, LM Studio, llama.cpp, and vLLM payloads;
+  Anthropic, Hugging Face, Ollama, LM Studio, llama.cpp, and vLLM payloads;
 - regression coverage in `tests/test_model_capabilities.py` and
   `tests/test_model_capability_readers.py`.
 
@@ -80,7 +80,7 @@ Current detection order and behavior are:
 
 These are normalization hints, not authorization. Hostname checks accept an exact domain or its dot-delimited subdomains after lowercasing and removing a trailing dot, so names such as `notopenai.com` do not match `openai.com`; local-port mappings remain intentionally covered by tests. Callers must not treat any result as proof of endpoint trust.
 
-Implemented reader modules are `generic_openai`, `openai`, `openrouter`, `google`, `huggingface`, `llamacpp`, `ollama`, `lmstudio`, and `vllm`. Hugging Face records use explicit Hub `pipeline_tag` values for conservative task normalization. Anthropic and SGLang retain placeholder vendor IDs and currently dispatch through the generic identity-only reader. Other explicitly supplied vendor strings are also preserved while using that generic reader.
+Implemented reader modules are `generic_openai`, `openai`, `openrouter`, `google`, `anthropic`, `huggingface`, `llamacpp`, `ollama`, `lmstudio`, and `vllm`. SGLang remains a placeholder vendor ID and dispatches through the generic identity-only reader. Other explicitly supplied vendor strings are also preserved while using that generic reader.
 
 Stable model identity is scoped in this order:
 
@@ -96,7 +96,7 @@ The reader deliberately returns unknown family, modalities, capabilities, and co
 
 ## Provider-Native Readers
 
-- OpenAI keeps the official Models API identity-only.
+- OpenAI keeps the official Models API identity-only.\n- Anthropic maps its native Messages API model list to text conversation support. The list does not establish vision, tool use, reasoning or context limits.
 - Hugging Face maps explicit Hub `pipeline_tag` values to conservative task families and modalities. Missing or unrecognized tags remain unknown.
 - vLLM preserves an explicit `max_model_len` value as a context limit while leaving model family and capabilities unknown.
 - OpenRouter maps explicit architecture modalities, supported parameters,
