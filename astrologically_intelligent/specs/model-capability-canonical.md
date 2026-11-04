@@ -15,7 +15,7 @@ This spec covers the implementation introduced on current `dev` in:
 - regression coverage in `tests/test_model_capabilities.py` and
   `tests/test_model_capability_readers.py`.
 
-The reader modules normalize JSON returned by existing endpoint probes. The admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. It captures native Anthropic and Google catalogues plus OpenAI-compatible and Ollama model-list responses. Records are not persisted and are not yet consumed by model routing or frontend pickers. OAuth-backed endpoints are not supported by this route.
+The reader modules normalize JSON returned by existing endpoint probes. The admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. It captures native Anthropic and Google catalogues plus OpenAI-compatible and Ollama model-list responses. The admin endpoint settings UI renders the returned families, modalities, limits and capability tokens. Records are not persisted or consumed by model routing or model pickers. OAuth-backed endpoints are not supported by this route.
 
 There is no `src/provider_capability_schemas.py`, capability-specific diagnostics module, or runtime model-quirk registry on current `dev`.
 
@@ -127,7 +127,7 @@ Focused tests pin:
 - the admin capability route, including provider-managed authentication rejection;
 - negative cases that avoid name-based media/capability inference.
 
-The provider detector has narrow production consumers in `src/ai_interaction.py` and `routes/gallery/gallery_routes.py`. The canonical record readers now also serve the admin capability endpoint. Model routing and frontend pickers do not yet consume these records.
+The provider detector has narrow production consumers in `src/ai_interaction.py` and `routes/gallery/gallery_routes.py`. The canonical record readers now serve the admin capability endpoint plus its settings inspector. Model routing and model pickers do not yet consume these records.
 
 ## Current Gaps
 
