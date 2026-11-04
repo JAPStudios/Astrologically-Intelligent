@@ -190,3 +190,4 @@ def reset_skill_index_cache() -> None:
     """Clear process-local vectors after embedding configuration changes/tests."""
     with _cache_lock:
         _corpus_cache.clear()
+        _quality_model_cache.clear()
