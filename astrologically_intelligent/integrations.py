@@ -204,14 +204,54 @@ class OpenClawClient:
             raise IntegrationError("OPENCLAW_GATEWAY_TOKEN is not configured")
         return cls(os.getenv("OPENCLAW_GATEWAY_URL", "http://127.0.0.1:18789"), token)
 
-    def list_sessions(self, session_key: str = "main") -> Any:
-        if not re.fullmatch(r"[A-Za-z0-9_:@.-]{1,256}", session_key) or ".." in session_key:
+    @staticmethod
+    def _session_key(session_key: str) -> str:
+        if not isinstance(session_key, str) or not re.fullmatch(r"[A-Za-z0-9_:@.-]{1,256}", session_key) or ".." in session_key:
             raise ValueError("Invalid OpenClaw session key")
-        # Keep this integration read-only. The Gateway token is an operator credential;
-        # no arbitrary tool name or mutating tool arguments are accepted here.
+        return session_key
+
+    def _invoke_read_tool(self, tool: str, session_key: str, args: dict[str, Any]) -> Any:
+        if tool not in {"sessions_list", "sessions_history", "sessions_search"}:
+            raise ValueError("Unsupported OpenClaw read tool")
         return self.http.request("POST", "/tools/invoke", {
-            "tool": "sessions_list", "args": {}, "sessionKey": session_key,
+            "tool": tool, "args": args, "sessionKey": self._session_key(session_key),
         })
+
+    def list_sessions(self, session_key: str = "main", limit: int = 100,
+                      active_minutes: int | None = None) -> Any:
+        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 200:
+            raise ValueError("limit must be an integer from 1 to 200")
+        args: dict[str, Any] = {"limit": limit}
+        if active_minutes is not None:
+            if isinstance(active_minutes, bool) or not isinstance(active_minutes, int) or active_minutes < 1:
+                raise ValueError("active_minutes must be a positive integer")
+            args["activeMinutes"] = active_minutes
+        return self._invoke_read_tool("sessions_list", session_key, args)
+
+    def read_session_history(self, session_key: str, limit: int = 20,
+                             offset: int = 0, include_tools: bool = False) -> Any:
+        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 100:
+            raise ValueError("limit must be an integer from 1 to 100")
+        if isinstance(offset, bool) or not isinstance(offset, int) or offset < 0:
+            raise ValueError("offset must be a non-negative integer")
+        if not isinstance(include_tools, bool):
+            raise ValueError("include_tools must be a boolean")
+        args: dict[str, Any] = {
+            "sessionKey": self._session_key(session_key),
+            "limit": limit,
+            "offset": offset,
+            "includeTools": include_tools,
+        }
+        return self._invoke_read_tool("sessions_history", session_key, args)
+
+    def search_sessions(self, query: str, session_key: str = "main",
+                        limit: int = 10) -> Any:
+        if not isinstance(query, str) or not query.strip() or len(query) > 4096:
+            raise ValueError("query must contain 1 to 4096 characters")
+        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 25:
+            raise ValueError("limit must be an integer from 1 to 25")
+        args = {"query": query.strip(), "limit": limit}
+        return self._invoke_read_tool("sessions_search", session_key, args)
 
 
 class PerplexityClient:
