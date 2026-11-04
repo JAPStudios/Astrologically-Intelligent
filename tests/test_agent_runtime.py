@@ -93,7 +93,7 @@ class RuntimeTests(unittest.TestCase):
     def test_provider_connection_error_details_are_not_exposed(self):
         error = urllib.error.URLError("secret-endpoint-detail")
         with patch("astrologically_intelligent.providers.urllib.request.urlopen", side_effect=error):
-            with self.assertRaisesRegex(RuntimeError, "Provider connection failed \(URLError\)") as raised:
+            with self.assertRaisesRegex(RuntimeError, r"Provider connection failed \(URLError\)") as raised:
                 _post_json("https://provider.example/v1/chat/completions", {}, {}, 5)
         self.assertNotIn("secret-endpoint-detail", str(raised.exception))
 
