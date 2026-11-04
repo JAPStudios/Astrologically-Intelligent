@@ -2957,3 +2957,7 @@
 	path = upstream/xai-org/customer-education-workshops
 	url = https://github.com/xai-org/customer-education-workshops.git
 	branch = main
+[submodule "upstream/anthropics/FlashProve"]
+	path = upstream/anthropics/FlashProve
+	url = https://github.com/anthropics/FlashProve.git
+	branch = main
