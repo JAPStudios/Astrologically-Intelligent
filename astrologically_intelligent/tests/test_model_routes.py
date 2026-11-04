@@ -2227,3 +2227,59 @@ def test_capture_model_capabilities_uses_native_reader_and_endpoint_identity():
     )
     assert captured[0].capability.family == "chat"
     assert captured[0].capability.capabilities == ()
+
+
+def test_capabilities_route_returns_fresh_normalized_records(monkeypatch):
+    ep = _make_endpoint(
+        id="anthropic-primary",
+        base_url="https://api.anthropic.com/v1",
+        endpoint_kind="api",
+        api_key="test-key",
+    )
+    db = _PinnedFakeDb([ep])
+    monkeypatch.setattr(model_routes, "SessionLocal", lambda: db)
+    monkeypatch.setattr(model_routes, "require_admin", lambda request: None)
+    monkeypatch.setattr(model_routes, "check_outbound_url", lambda *a, **k: (True, ""))
+
+    def fake_probe(base_url, api_key, **kwargs):
+        kwargs["capability_records"].append(
+            SimpleNamespace(
+                model_id="claude-example",
+                to_dict=lambda: {
+                    "vendor": "anthropic",
+                    "model_id": "claude-example",
+                    "capability": {"family": "chat"},
+                },
+            )
+        )
+        return ["claude-example", "legacy-model"]
+
+    monkeypatch.setattr(model_routes, "_probe_endpoint", fake_probe)
+    endpoint = _get_route("/api/model-endpoints/{endpoint_id}/capabilities", "GET")
+
+    result = endpoint(_PinnedFakeRequest(), "anthropic-primary")
+
+    assert result["endpoint_id"] == "anthropic-primary"
+    assert result["models"] == [
+        {
+            "vendor": "anthropic",
+            "model_id": "claude-example",
+            "capability": {"family": "chat"},
+        }
+    ]
+    assert result["unclassified_model_ids"] == ["legacy-model"]
+    assert db.closed is True
+
+
+def test_capabilities_route_rejects_provider_managed_auth(monkeypatch):
+    ep = _make_endpoint(id="oauth-endpoint", provider_auth_id="oauth-1")
+    db = _PinnedFakeDb([ep])
+    monkeypatch.setattr(model_routes, "SessionLocal", lambda: db)
+    monkeypatch.setattr(model_routes, "require_admin", lambda request: None)
+    endpoint = _get_route("/api/model-endpoints/{endpoint_id}/capabilities", "GET")
+
+    with pytest.raises(HTTPException) as exc:
+        endpoint(_PinnedFakeRequest(), "oauth-endpoint")
+
+    assert exc.value.status_code == 409
+    assert db.closed is True
