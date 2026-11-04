@@ -6,8 +6,9 @@ import importlib.util
 import subprocess
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-SCRIPT_PATH = ROOT / ".github" / "scripts" / "focused_test_guidance.py"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+REPOSITORY_ROOT = PROJECT_ROOT.parent
+SCRIPT_PATH = REPOSITORY_ROOT / ".github" / "scripts" / "focused_test_guidance.py"
 
 
 def _load_helper():
