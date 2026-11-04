@@ -112,3 +112,38 @@ def test_rejects_invalid_hidden_layer_sequence():
     with pytest.raises(ValueError, match="dimensions"):
         NeuralNetworkClassifier(2, (8, 0, 4), 3)
 
+def test_multilayer_backprop_matches_finite_difference():
+    model = NeuralNetworkClassifier(2, (3, 2), 2, seed=31)
+    features = np.array([[0.3, -0.7], [-0.2, 0.8]], dtype=float)
+    labels = np.array([0, 1], dtype=int)
+    activations, pre_activations, probabilities = model._forward(features)
+    count = len(labels)
+    delta = probabilities.copy()
+    delta[np.arange(count), labels] -= 1.0
+    delta /= count
+    last = len(model._weights) - 1
+    gradients = {f"weights{last + 1}": activations[-1].T @ delta,
+                 f"bias{last + 1}": np.sum(delta, axis=0)}
+    upstream = delta @ model._weights[last].T
+    for layer in range(last - 1, -1, -1):
+        upstream *= (pre_activations[layer] > 0.0)
+        gradients[f"weights{layer + 1}"] = activations[layer].T @ upstream
+        gradients[f"bias{layer + 1}"] = np.sum(upstream, axis=0)
+        if layer:
+            upstream = upstream @ model._weights[layer].T
+
+    def loss():
+        return model.evaluate(features, labels)["loss"]
+
+    epsilon = 1e-6
+    for name, parameter in model._parameters().items():
+        index = tuple(0 for _ in parameter.shape)
+        original = parameter[index]
+        parameter[index] = original + epsilon
+        upper = loss()
+        parameter[index] = original - epsilon
+        lower = loss()
+        parameter[index] = original
+        numerical = (upper - lower) / (2.0 * epsilon)
+        assert numerical == pytest.approx(gradients[name][index], abs=2e-5)
+
