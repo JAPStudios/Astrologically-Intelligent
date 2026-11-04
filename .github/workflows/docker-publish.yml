@@ -102,7 +102,9 @@ jobs:
       - name: Read APP_VERSION + short sha
         id: ver
         run: |
-          v=$(grep -E '^APP_VERSION' src/constants.py | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+          version_file=src/constants.py
+          [ -f "$version_file" ] || version_file=astrologically_intelligent/src/constants.py
+          v=$(grep -E '^APP_VERSION' "$version_file" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
           [ -n "$v" ] || { echo "APP_VERSION not found"; exit 1; }
           echo "version=$v" >> "$GITHUB_OUTPUT"
           echo "short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
