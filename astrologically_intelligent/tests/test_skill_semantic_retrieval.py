@@ -19,7 +19,11 @@ class _IntentLane:
             self.document_encode_calls += 1
         for text in texts:
             lowered = text.lower()
-            if "orchestrate attendees" in lowered or "coordinate calendars" in lowered:
+            if "positive" in lowered:
+                vectors.append([1.0, 0.0])
+            elif "negative" in lowered:
+                vectors.append([0.0, 1.0])
+            elif "orchestrate attendees" in lowered or "coordinate calendars" in lowered:
                 vectors.append([1.0, 0.0])
             else:
                 vectors.append([0.0, 1.0])
@@ -180,7 +184,7 @@ def test_learned_quality_uses_only_owner_scoped_version_two_audits(semantic_lane
     scores = skill_index.learned_skill_quality_scores(training, candidates)
 
     assert set(scores) == {0}
-    assert 0.0 <= scores[0] <= 1.0
+    assert scores[0] > 0.5
 
 
 def test_learned_quality_requires_both_audit_classes_for_same_owner(semantic_lane):
