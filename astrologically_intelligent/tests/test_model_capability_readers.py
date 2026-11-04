@@ -820,4 +820,4 @@ def test_huggingface_reader_distinguishes_conversation_from_text_generation():
 
     assert records[0].capability.family == mc.FAMILY_UNKNOWN
     assert records[1].capability.family == mc.FAMILY_CHAT
-    assert records[2].capability.family == mc.FAMILY_RERANK
+    assert records[2].capability.family == mc.FAMILY_CLASSIFICATION
