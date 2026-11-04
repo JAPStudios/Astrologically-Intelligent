@@ -568,11 +568,11 @@ class ToolRegistry:
                 for index, line in enumerate(frontmatter):
                     key, separator, value = line.partition(":")
                     if separator and key.strip().lower() == "description":
-                        value = value.strip().strip("\\"'").strip()
+                        value = value.strip().strip('"').strip("'").strip()
                         if value in {">", "|", ">-", "|-"}:
                             value = " ".join(
                                 item.strip() for item in frontmatter[index + 1:]
-                                if item.startswith((" ", "\\t")) and item.strip()
+                                if item.startswith((" ", "\t")) and item.strip()
                             )
                         if value:
                             return " ".join(value.split())[:200]
