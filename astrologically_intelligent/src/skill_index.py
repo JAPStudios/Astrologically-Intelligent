@@ -150,7 +150,7 @@ def learned_skill_quality_scores(training_skills, candidate_skills):
             return {}
         # Balance the observed classes and bound per-request training cost.
         sample_count = min(len(positive_skills), len(negative_skills), 128)
-        sampler = __import__("numpy").random.default_rng(73)
+        sampler = np.random.default_rng(73)
         positive_indices = sampler.choice(len(positive_skills), sample_count, replace=False)
         negative_indices = sampler.choice(len(negative_skills), sample_count, replace=False)
         labelled = ([(positive_skills[int(i)], 1) for i in positive_indices] +
