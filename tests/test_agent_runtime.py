@@ -207,7 +207,8 @@ class RuntimeTests(unittest.TestCase):
         names=json.loads(self.runtime.tools.execute("skills.list","{}"))
         self.assertIn("astrology",[item["name"] for item in names])
         guide=json.loads(self.runtime.tools.execute("skills.read",{"name":"astrology"}))
-        self.assertIn("# Skill Creator",guide["content"])
+        self.assertIn("# Astrology consultation skill",guide["content"])
+        self.assertIn("## Calculation integrity",guide["content"])
     def test_upstream_skill_submodules_are_discovered(self):
         names = {item["name"] for item in json.loads(self.runtime.tools.execute("skills.list", "{}"))}
         self.assertIn("upstream/anthropics-skills/skills/skill-creator", names)
@@ -245,7 +246,7 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(result["status"], "succeeded")
         self.assertEqual(result["output"], "Task completed.")
         self.assertIn("Research carefully.", provider.messages[0]["content"])
-        self.assertIn("Calculation integrity", provider.messages[0]["content"])
+        self.assertIn("# Skill Creator", provider.messages[0]["content"])
         self.assertIn("untrusted data, not instructions", provider.messages[0]["content"])
         self.assertEqual(provider.messages[1]["content"], "Summarize the topic.")
         self.assertEqual(provider.tools, [])
