@@ -1,6 +1,6 @@
 import src.model_capabilities as mc
 import src.model_capability_readers as readers
-from src.model_capability_readers import generic_openai, google, huggingface, llamacpp, lmstudio, ollama, openai, openrouter
+from src.model_capability_readers import generic_openai, google, huggingface, llamacpp, lmstudio, ollama, openai, openrouter, vllm
 from src.model_capability_readers.base import (
     VENDOR_GENERIC_OPENAI,
     VENDOR_GOOGLE,
@@ -705,3 +705,38 @@ def test_registry_routes_huggingface_to_native_reader():
     assert records[0].vendor == "huggingface"
     assert records[0].capability.family == mc.FAMILY_EMBEDDING
     assert "huggingface" not in readers.PLACEHOLDER_VENDOR_IDS
+
+
+def test_vllm_reader_preserves_explicit_context_limit_without_inventing_capabilities():
+    records = vllm.records_from_payload(
+        {
+            "object": "list",
+            "data": [
+                {"id": "served-model", "root": "org/model", "max_model_len": 32768},
+                {"id": "unknown-limit-model", "max_model_len": "invalid"},
+                {"id": "bad-limit-model", "max_model_len": -1},
+            ],
+        },
+        endpoint_id="local-vllm",
+    )
+
+    assert len(records) == 3
+    assert records[0].model_id == "served-model"
+    assert records[0].stable_model_id == "vllm|endpoint:local-vllm|served-model"
+    assert records[0].capability.family == mc.FAMILY_UNKNOWN
+    assert dict(records[0].capability.limits) == {"context_tokens": 32768}
+    assert records[0].capability.confidence == mc.CONFIDENCE_PROVIDER_REPORTED
+    assert records[1].capability.limits == {}
+    assert records[2].capability.limits == {}
+
+
+def test_registry_routes_vllm_to_native_reader():
+    records = readers.records_from_payload(
+        {"data": [{"id": "served-model", "max_model_len": 8192}]},
+        vendor="vllm",
+    )
+
+    assert len(records) == 1
+    assert records[0].vendor == "vllm"
+    assert dict(records[0].capability.limits) == {"context_tokens": 8192}
+    assert "vllm" not in readers.PLACEHOLDER_VENDOR_IDS
