@@ -82,7 +82,8 @@ class NeuralNetworkClassifier:
         return np.argmax(self.predict_proba(features), axis=1)
 
     def evaluate(self, features, labels):
-        values, targets = self._features(features), self._labels(labels, len(features))
+        values = self._features(features)
+        targets = self._labels(labels, len(values))
         probabilities = self._forward(values)[2]
         selected = np.clip(probabilities[np.arange(len(targets)), targets], 1e-12, 1.0)
         return {"loss": float(-np.mean(np.log(selected))),
