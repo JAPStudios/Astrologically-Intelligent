@@ -297,6 +297,8 @@ def detect_vendor(base_url: Any = "", endpoint_kind: Any = "") -> str:
         domain = domain.lower().rstrip(".")
         return host == domain or host.endswith(f".{domain}")
 
+    if host_matches("huggingface.co"):
+        return VENDOR_HUGGINGFACE
     if host_matches("openrouter.ai"):
         return VENDOR_OPENROUTER
     if host_matches("openai.com"):
