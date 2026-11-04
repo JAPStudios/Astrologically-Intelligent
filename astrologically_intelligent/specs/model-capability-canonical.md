@@ -80,7 +80,7 @@ Current detection order and behavior are:
 
 These are normalization hints, not authorization. Hostname checks accept an exact domain or its dot-delimited subdomains after lowercasing and removing a trailing dot, so names such as `notopenai.com` do not match `openai.com`; local-port mappings remain intentionally covered by tests. Callers must not treat any result as proof of endpoint trust.
 
-Implemented reader modules are `generic_openai`, `openai`, `openrouter`, `google`, `huggingface`, `llamacpp`, `ollama`, and `lmstudio`. Hugging Face records use explicit Hub `pipeline_tag` values for conservative task normalization. Anthropic, SGLang, and vLLM retain placeholder vendor IDs and currently dispatch through the generic identity-only reader. Other explicitly supplied vendor strings are also preserved while using that generic reader.
+Implemented reader modules are `generic_openai`, `openai`, `openrouter`, `google`, `huggingface`, `llamacpp`, `ollama`, `lmstudio`, and `vllm`. Hugging Face records use explicit Hub `pipeline_tag` values for conservative task normalization. Anthropic and SGLang retain placeholder vendor IDs and currently dispatch through the generic identity-only reader. Other explicitly supplied vendor strings are also preserved while using that generic reader.
 
 Stable model identity is scoped in this order:
 
@@ -96,7 +96,7 @@ The reader deliberately returns unknown family, modalities, capabilities, and co
 
 ## Provider-Native Readers
 
-- OpenAI keeps the official Models API identity-only.\n- Hugging Face maps explicit model-card `pipeline_tag` values to task families and modalities. Missing or unrecognized tags remain unknown; names and free-form tags do not establish capabilities.
+- OpenAI keeps the official Models API identity-only.\n- Hugging Face maps explicit model-card `pipeline_tag` values to task families and modalities. Missing or unrecognized tags remain unknown; names and free-form tags do not establish capabilities.\n- vLLM preserves an explicit `max_model_len` as a context limit while leaving family and capabilities unknown.
 - OpenRouter maps explicit architecture modalities, supported parameters,
   limits, voices, and default parameters into family/capability/control state.
 - Google maps the native Models resource. Embedding-only methods map to the
