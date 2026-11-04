@@ -124,8 +124,14 @@ def learned_skill_quality_scores(training_skills, candidate_skills):
         lane = _choose_lane(index) if index is not None else None
         if lane is None:
             return {}
+        candidate_owners = {str(skill.get("owner") or "") for skill in candidate_skills}
+        if len(candidate_owners) != 1:
+            return {}
+        target_owner = next(iter(candidate_owners))
         labelled = []
         for skill in training_skills:
+            if str(skill.get("owner") or "") != target_owner:
+                continue
             if int(skill.get('audit_version') or 0) != 2:
                 continue
             verdict = str(skill.get('audit_verdict') or '').strip().lower()
