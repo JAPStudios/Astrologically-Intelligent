@@ -213,9 +213,15 @@ class OpenClawClient:
     def _invoke_read_tool(self, tool: str, session_key: str, args: dict[str, Any]) -> Any:
         if tool not in {"sessions_list", "sessions_history", "sessions_search"}:
             raise ValueError("Unsupported OpenClaw read tool")
-        return self.http.request("POST", "/tools/invoke", {
-            "tool": tool, "args": args, "sessionKey": self._session_key(session_key),
+        response = self.http.request("POST", "/tools/invoke", {
+            "tool": tool, "action": "json", "args": args,
+            "sessionKey": self._session_key(session_key),
         })
+        if not isinstance(response, dict) or response.get("ok") is not True:
+            detail = response.get("error", {}) if isinstance(response, dict) else {}
+            message = detail.get("message", "OpenClaw returned an invalid tool response") if isinstance(detail, dict) else "OpenClaw returned an invalid tool response"
+            raise IntegrationError(str(message)[:1000])
+        return response.get("result", {})
 
     def list_sessions(self, session_key: str = "main", limit: int = 100,
                       active_minutes: int | None = None) -> Any:
