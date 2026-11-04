@@ -95,23 +95,15 @@ The reader deliberately returns unknown family, modalities, capabilities, and co
 
 ## Provider-Native Readers
 
-- OpenAI keeps the official Models API identity-only.\n- Anthropic maps its native Messages API model list to text conversation support. The list does not establish vision, tool use, reasoning or context limits.\n- Anthropic maps its native Messages API model list to text conversation support. The list does not establish vision, tool use, reasoning or context limits.
+- OpenAI keeps the official Models API identity-only.
+- Anthropic maps its native Messages API model list to text conversation support. The list does not establish vision, tool use, reasoning or context limits.
 - Hugging Face maps explicit Hub `pipeline_tag` values to conservative task families and modalities. Missing or unrecognized tags remain unknown.
 - vLLM preserves an explicit `max_model_len` value as a context limit while leaving model family and capabilities unknown.
-- OpenRouter maps explicit architecture modalities, supported parameters,
-  limits, voices, and default parameters into family/capability/control state.
-- Google maps the native Models resource. Embedding-only methods map to the
-  embedding family; content-generation methods do not prove modality or chat
-  family. Explicit thinking, limits, sampling fields, caching, and batch
-  methods are retained without parsing product names.
-- Ollama treats `/api/tags` as identity-only and maps selected-model
-  `/api/show` capability tokens. Context can come from structured fields or a
-  parsed `num_ctx` line in the serialized `parameters` value.
-- LM Studio maps native v1 `models[]` and v0-style `data[]` fields. A plain
-  OpenAI-compatible list without native type/capability fields stays unknown.
-- llama.cpp can merge `/v1/models`, `/props`, and `/slots` evidence for one
-  served model. It records tool/streaming claims, explicit unsupported
-  vision/audio assertions, controls, and runtime/training/size limits.
+- OpenRouter maps explicit architecture modalities, supported parameters, limits, voices and default parameters into family/capability/control state.
+- Google maps its native Models resource. The live endpoint probe captures all returned model metadata while preserving the existing chat-only model picker filter. Embedding-only methods map to the embedding family.
+- Ollama maps native `/api/tags` payloads to identity-only records, accepts OpenAI-compatible `data[]` lists as identity-only records and maps selected-model `/api/show` capability tokens.
+- LM Studio maps native v1 `models[]` and v0-style `data[]` fields. A plain OpenAI-compatible list without native type/capability fields stays unknown.
+- llama.cpp can merge `/v1/models`, `/props` and `/slots` evidence for one served model. It records tool/streaming claims, explicit unsupported vision/audio assertions, controls and runtime/training/size limits.
 
 Readers tolerate non-object entries and unknown fields where their helpers permit them. They do not infer authoritative capability from model IDs or display names.
 
@@ -125,24 +117,24 @@ Those tokens make evidence representable; current `dev` does not implement a glo
 
 Focused tests pin:
 
-- endpoint-kind, host, and common-port vendor detection;
+- endpoint-kind, host and common-port vendor detection;
 - endpoint/base-URL-scoped stable IDs;
 - unknown behavior for generic and official OpenAI lists;
 - canonical normalization and display-surface matching;
-- assertion, deterministic-control, and probe-result shapes;
-- OpenRouter, Google, Hugging Face, Ollama, LM Studio, llama.cpp, and vLLM mappings;
+- assertion, deterministic-control and probe-result shapes;
+- OpenRouter, Google, Anthropic, Hugging Face, Ollama, LM Studio, llama.cpp and vLLM mappings;
+- live Anthropic and Google metadata capture during endpoint probing;
+- the admin capability route, including provider-managed authentication rejection;
 - negative cases that avoid name-based media/capability inference.
 
-The provider detector has narrow production consumers in `src/ai_interaction.py` and `routes/gallery/gallery_routes.py` for selecting OpenRouter media request behavior. `ModelCapabilityRecord` normalization remains disconnected from runtime model discovery and request builders; helper reuse must not be described as full canonical integration.
+The provider detector has narrow production consumers in `src/ai_interaction.py` and `routes/gallery/gallery_routes.py`. The canonical record readers now also serve the admin capability endpoint. Model routing and frontend pickers do not yet consume these records.
 
 ## Current Gaps
 
 - The admin capability endpoint exposes live normalized records. Canonical records are not yet persisted or used by model routing, endpoint resolution, model context, request shaping or frontend pickers.
-- Reader output is refreshed on explicit capability requests but is not persisted, merged, or expired.
+- Reader output is refreshed on explicit capability requests but is not persisted, merged or expired.
 - Provider detection still uses common-port hints; consumers must not promote normalization hints into trust decisions.
-- Nine concrete readers exist; Anthropic, SGLang and other providers use the
-  identity-only generic reader.
+- Ten concrete readers exist; SGLang and other providers use the identity-only generic reader.
 - Generic fallback does not accept bare-list or `key`/`slug`-only payloads.
 - There is no capability-specific diagnostic/logging path.
-- Runtime request builders still contain model-name heuristics outside this
-  canonical layer.
+- Runtime request builders still contain model-name heuristics outside this canonical layer.
