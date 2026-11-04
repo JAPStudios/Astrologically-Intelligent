@@ -1083,6 +1083,7 @@ async function loadEndpoints() {
             </div>
             <div style="display:flex;gap:4px;align-items:center;">
               ${_endpointSelectMode ? '' : `
+                ${!ep.provider_auth_id ? `<button class="admin-btn-sm" data-adm-ep-capabilities="${esc(ep.id)}">Capabilities</button>` : ''}
                 <button class="admin-btn-sm" data-adm-toggle-ep="${ep.id}">${ep.is_enabled ? 'Disable' : 'Enable'}</button>
                 <button class="admin-btn-delete" data-adm-del-ep="${ep.id}" data-adm-ep-online="${ep.online ? '1' : '0'}">Delete</button>
                 ${hasModels ? '<svg class="admin-user-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.3;transition:transform 0.2s,opacity 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>' : ''}`}
@@ -1097,6 +1098,7 @@ async function loadEndpoints() {
           </div>
           <div id="adm-chatgpt-usage-${esc(ep.id)}" class="adm-chatgpt-usage-host${isUsageExpanded ? '' : ' hidden'}" data-adm-chatgpt-usage-host="${esc(ep.provider_auth_id)}" data-chatgpt-endpoint-id="${esc(ep.id)}"${isUsageExpanded ? '' : ' style="display:none;"'}><div class="adm-chatgpt-usage adm-chatgpt-usage-loading"><div class="adm-chatgpt-usage-status">Loading usage...</div></div></div>` : ''}
           ${endpointDetailHtml(ep, category)}
+          ${!ep.provider_auth_id ? `<div class="hidden" data-adm-ep-capabilities-panel="${esc(ep.id)}" style="margin:8px 0;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:11px;"></div>` : ''}
           ${hasModels ? `<div class="mcp-tools-panel hidden" data-adm-ep-models-panel="${ep.id}"></div>` : ''}
         </div>`;
     });
@@ -1193,6 +1195,56 @@ async function loadEndpoints() {
           }
           _setChatgptUsageExpanded(epId, authId, true);
           await _reconnectChatgptAccount(host, authId, epId);
+        }
+      });
+    });
+    queryAll('[data-adm-ep-capabilities]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const epId = btn.dataset.admEpCapabilities;
+        const row = btn.closest('.admin-user-row');
+        const panel = row ? row.querySelector('[data-adm-ep-capabilities-panel]') : null;
+        if (!panel) return;
+        if (!panel.classList.contains('hidden')) {
+          panel.classList.add('hidden');
+          return;
+        }
+        panel.classList.remove('hidden');
+        panel.textContent = 'Loading model capabilities…';
+        btn.disabled = true;
+        try {
+          const res = await fetch(`/api/model-endpoints/${encodeURIComponent(epId)}/capabilities`, {
+            credentials: 'same-origin',
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.detail || `HTTP ${res.status}`);
+          const records = Array.isArray(data.models) ? data.models : [];
+          const recordRows = records.map(record => {
+            const capability = record.capability || {};
+            const modalities = capability.modalities || {};
+            const limits = capability.limits || {};
+            const caps = Array.isArray(capability.capabilities) ? capability.capabilities : [];
+            const inputs = Array.isArray(modalities.input) ? modalities.input.join(', ') : '';
+            const outputs = Array.isArray(modalities.output) ? modalities.output.join(', ') : '';
+            const context = limits.context_tokens ? ` · ${Number(limits.context_tokens).toLocaleString()} context tokens` : '';
+            return `<div style="padding:7px 0;border-top:1px solid var(--border);">
+              <div style="font-weight:600;">${esc(record.display_name || record.model_id || 'Unnamed model')}</div>
+              <div style="opacity:.7;">${esc(record.vendor || 'unknown')} · ${esc(capability.family || 'unknown')}${context}</div>
+              <div style="opacity:.65;">Input: ${esc(inputs || 'unknown')} · Output: ${esc(outputs || 'unknown')}</div>
+              <div style="opacity:.65;">Capabilities: ${esc(caps.length ? caps.join(', ') : 'not established')}</div>
+            </div>`;
+          }).join('');
+          const unclassified = Array.isArray(data.unclassified_model_ids) ? data.unclassified_model_ids : [];
+          panel.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+            <strong>Model capabilities</strong>
+            <span style="opacity:.6;">${records.length} classified records</span>
+          </div>
+          ${recordRows || '<div style="opacity:.65;padding:6px 0;">No native capability records returned.</div>'}
+          ${unclassified.length ? `<div style="border-top:1px solid var(--border);padding-top:7px;margin-top:7px;"><div style="font-weight:600;">Unclassified model IDs</div><div style="opacity:.7;">${unclassified.map(esc).join(', ')}</div></div>` : ''}`;
+        } catch (error) {
+          panel.textContent = error && error.message ? error.message : 'Unable to load model capabilities';
+        } finally {
+          btn.disabled = false;
         }
       });
     });
