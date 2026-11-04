@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 
 from astrologically_intelligent.providers import (
-    AnthropicMessagesProvider, OpenAICompatibleProvider, ProviderConfig, provider_from_env,
+    AnthropicMessagesProvider, GeminiGenerateContentProvider, OpenAICompatibleProvider, ProviderConfig, provider_from_env,
 )
 from astrologically_intelligent.runtime import AgentRuntime, RuntimeConfig
 from astrologically_intelligent.storage import Store
@@ -81,6 +81,62 @@ class RuntimeTests(unittest.TestCase):
     def test_provider_request_shape(self):
         provider=OpenAICompatibleProvider(ProviderConfig("http://localhost:1234/v1","","test-model"))
         self.assertEqual(provider.config.model,"test-model")
+    def test_gemini_provider_defaults_and_tool_schema_translation(self):
+        with patch.dict("os.environ", {"ASTRO_AI_PROVIDER":"gemini", "GEMINI_API_KEY":"gemini-test"}, clear=True):
+            provider = provider_from_env()
+        self.assertIsInstance(provider, GeminiGenerateContentProvider)
+        self.assertEqual(provider.config.base_url, "https://generativelanguage.googleapis.com/v1beta")
+        self.assertEqual(provider.config.model, "gemini-3.8-flash")
+        system, converted = GeminiGenerateContentProvider._contents([
+            {"role":"system", "content":"system rules"},
+            {"role":"user", "content":"hello"},
+        ])
+        self.assertEqual(system, "system rules")
+        self.assertEqual(converted, [{"role":"user", "parts":[{"text":"hello"}]}])
+
+    def test_gemini_function_call_round_trip_preserves_signature_and_ids(self):
+        provider = GeminiGenerateContentProvider(ProviderConfig(
+            "https://generativelanguage.googleapis.com/v1beta", "gemini-test", "gemini-3.8-flash"))
+        tools = [{"type":"function", "function": {
+            "name":"memory.remember", "description":"Save approved memory.",
+            "parameters":{"type":"object", "properties": {
+                "value":{"type":["string", "null"]}}, "additionalProperties":False},
+        }}]
+        alias = provider._tool_alias("memory.remember")
+        model_content = {"role":"model", "parts":[{
+            "functionCall":{"id":"gemini-call-1", "name":alias, "args":{"value":"Ada"}},
+            "thoughtSignature":"opaque-signature"
+        }]}
+        with patch("astrologically_intelligent.providers._post_json", return_value={
+            "candidates":[{"content":model_content, "finishReason":"STOP"}]
+        }) as post:
+            response = provider.chat([{"role":"system", "content":"rules"},
+                                      {"role":"user", "content":"remember Ada"}], tools)
+        self.assertEqual(response["tool_calls"][0]["id"], "gemini-call-1")
+        self.assertEqual(response["tool_calls"][0]["function"]["name"], "memory.remember")
+        sent = post.call_args.args[1]
+        self.assertEqual(sent["systemInstruction"]["parts"][0]["text"], "rules")
+        declaration = sent["tools"][0]["functionDeclarations"][0]
+        self.assertEqual(declaration["name"], alias)
+        self.assertEqual(declaration["parameters"]["properties"]["value"], {"type":"STRING", "nullable":True})
+        next_messages = [{"role":"user", "content":"remember Ada"}, response, {
+            "role":"tool", "tool_call_id":"gemini-call-1", "name":"memory.remember",
+            "content":json.dumps({"saved":True})
+        }]
+        _, converted = provider._contents(next_messages)
+        self.assertEqual(converted[1], model_content)
+        self.assertEqual(converted[2]["parts"][0]["functionResponse"], {
+            "name":alias, "id":"gemini-call-1", "response":{"saved":True}
+        })
+
+    def test_gemini_rejects_undeclared_function_call(self):
+        provider = GeminiGenerateContentProvider(ProviderConfig(
+            "https://generativelanguage.googleapis.com/v1beta", "key", "gemini-3.8-flash"))
+        with patch("astrologically_intelligent.providers._post_json", return_value={
+            "candidates":[{"content":{"parts":[{"functionCall":{"name":"unknown", "args":{}}}]}}]
+        }):
+            with self.assertRaisesRegex(RuntimeError, "undeclared function"):
+                provider.chat([{"role":"user", "content":"run"}], [])
     def test_anthropic_message_translation_preserves_tool_cycle(self):
         messages=[
             {"role":"system","content":"system rules"},

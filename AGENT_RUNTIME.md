@@ -23,8 +23,9 @@ Provider selection is controlled by `ASTRO_AI_PROVIDER`:
 | `perplexity` | Perplexity Chat Completions endpoint | `PERPLEXITY_API_KEY`, default endpoint `https://api.perplexity.ai`, default model `sonar` |
 | `local` | OpenAI-compatible local endpoint | Set `ASTRO_AI_BASE_URL`; key may be empty for localhost |
 | `anthropic` / `claude` | Native Anthropic Messages API | `ANTHROPIC_API_KEY` (or `ASTRO_AI_API_KEY`), optional `ANTHROPIC_BASE_URL`, `ASTRO_AI_MODEL` |
+| `gemini` / `google` | Native Gemini `generateContent` API with function calling | `GEMINI_API_KEY` (or `ASTRO_AI_API_KEY`), optional `GEMINI_BASE_URL`, `ASTRO_AI_MODEL` |
 
-Anthropic transport maps system messages, assistant tool-use blocks, tool schemas, and tool results to the runtime's function-tool interface. xAI and Perplexity are not represented as native vendor SDK integrations here.
+Anthropic transport maps system messages, assistant tool-use blocks, tool schemas, and tool results to the runtime's function-tool interface. Gemini uses its native `generateContent` endpoint and preserves model-returned content, function-call IDs, and thought signatures across tool turns. xAI and Perplexity use the OpenAI-compatible transport.
 
 ## n8n workflow integration
 

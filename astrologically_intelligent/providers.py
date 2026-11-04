@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+from urllib.parse import quote
 import os
 import urllib.error
 import urllib.request
@@ -156,6 +158,179 @@ class AnthropicMessagesProvider:
         return response
 
 
+
+
+def _gemini_schema(schema: dict[str, Any]) -> dict[str, Any]:
+    """Convert the runtime's JSON Schema subset to Gemini's Schema shape."""
+    if not isinstance(schema, dict):
+        return {"type": "STRING"}
+    result: dict[str, Any] = {}
+    schema_type = schema.get("type")
+    nullable = False
+    if isinstance(schema_type, list):
+        nullable = "null" in schema_type
+        schema_type = next((item for item in schema_type if item != "null"), "string")
+    if schema_type:
+        result["type"] = str(schema_type).upper()
+    if nullable or schema.get("nullable") is True:
+        result["nullable"] = True
+    for key in ("description", "format", "enum", "required", "minimum", "maximum",
+                "minItems", "maxItems", "minLength", "maxLength"):
+        if key in schema:
+            result[key] = schema[key]
+    if isinstance(schema.get("properties"), dict):
+        result["properties"] = {
+            name: _gemini_schema(value) for name, value in schema["properties"].items()
+        }
+    if isinstance(schema.get("items"), dict):
+        result["items"] = _gemini_schema(schema["items"])
+    return result
+
+
+class GeminiGenerateContentProvider:
+    """Native Gemini generateContent transport with function calling and signature preservation."""
+
+    def __init__(self, config: ProviderConfig):
+        self.config = config
+
+    @classmethod
+    def from_env(cls) -> "GeminiGenerateContentProvider":
+        key = os.getenv("GEMINI_API_KEY") or os.getenv("ASTRO_AI_API_KEY", "")
+        if not key:
+            raise RuntimeError("Set GEMINI_API_KEY or ASTRO_AI_API_KEY for the Gemini provider")
+        base = os.getenv("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta").rstrip("/")
+        model = os.getenv("ASTRO_AI_MODEL", "gemini-3.8-flash")
+        return cls(ProviderConfig(base, key, model))
+
+    @staticmethod
+    def _tool_alias(name: str) -> str:
+        # Gemini function names are kept portable; runtime tool names may contain dots.
+        return "ai_" + hashlib.sha256(name.encode("utf-8")).hexdigest()[:24]
+
+    @classmethod
+    def _contents(cls, messages: list[dict[str, Any]]) -> tuple[str, list[dict[str, Any]]]:
+        system_parts: list[str] = []
+        contents: list[dict[str, Any]] = []
+        pending_results: list[dict[str, Any]] = []
+
+        def flush_results() -> None:
+            if pending_results:
+                contents.append({"role": "user", "parts": list(pending_results)})
+                pending_results.clear()
+
+        for message in messages:
+            role = message.get("role")
+            if role == "system":
+                if message.get("content"):
+                    system_parts.append(str(message["content"]))
+                continue
+            if role == "tool":
+                original_name = str(message.get("name", ""))
+                alias = cls._tool_alias(original_name)
+                raw = message.get("content", "")
+                try:
+                    response = json.loads(raw) if isinstance(raw, str) else raw
+                except (TypeError, json.JSONDecodeError):
+                    response = {"result": str(raw)}
+                if not isinstance(response, dict):
+                    response = {"result": response}
+                function_response: dict[str, Any] = {"name": alias, "response": response}
+                call_id = message.get("tool_call_id")
+                if call_id:
+                    function_response["id"] = call_id
+                pending_results.append({"functionResponse": function_response})
+                continue
+            flush_results()
+            if role == "assistant" and isinstance(message.get("_gemini_content"), dict):
+                contents.append(message["_gemini_content"])
+            elif role in {"user", "assistant"}:
+                text = str(message.get("content") or "")
+                if text:
+                    contents.append({
+                        "role": "model" if role == "assistant" else "user",
+                        "parts": [{"text": text}],
+                    })
+        flush_results()
+        return "\n\n".join(system_parts), contents
+
+    def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+        system, contents = self._contents(messages)
+        payload: dict[str, Any] = {"contents": contents}
+        if system:
+            payload["systemInstruction"] = {"parts": [{"text": system}]}
+        aliases: dict[str, str] = {}
+        if tools:
+            declarations = []
+            for item in tools:
+                if item.get("type") != "function" or not isinstance(item.get("function"), dict):
+                    continue
+                fn = item["function"]
+                original_name = str(fn.get("name", ""))
+                alias = self._tool_alias(original_name)
+                if alias in aliases and aliases[alias] != original_name:
+                    raise RuntimeError("Gemini tool-name alias collision")
+                aliases[alias] = original_name
+                declaration: dict[str, Any] = {
+                    "name": alias,
+                    "description": str(fn.get("description", "")),
+                }
+                parameters = fn.get("parameters")
+                if isinstance(parameters, dict):
+                    declaration["parameters"] = _gemini_schema(parameters)
+                declarations.append(declaration)
+            if declarations:
+                payload["tools"] = [{"functionDeclarations": declarations}]
+        model = self.config.model.removeprefix("models/")
+        if not model or any(char not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-" for char in model):
+            raise ValueError("Invalid Gemini model name")
+        result = _post_json(
+            f"{self.config.base_url}/models/{quote(model, safe='._-')}:generateContent",
+            payload, {"x-goog-api-key": self.config.api_key}, self.config.timeout,
+        )
+        candidates = result.get("candidates")
+        if not isinstance(candidates, list) or not candidates or not isinstance(candidates[0], dict):
+            raise RuntimeError("Gemini response did not contain candidates[0]")
+        candidate = candidates[0]
+        content = candidate.get("content")
+        if not isinstance(content, dict) or not isinstance(content.get("parts"), list):
+            raise RuntimeError("Gemini response did not contain candidate content parts")
+        text_parts: list[str] = []
+        tool_calls: list[dict[str, Any]] = []
+        response_aliases: dict[str, str] = {}
+        for part in content["parts"]:
+            if not isinstance(part, dict):
+                continue
+            if isinstance(part.get("text"), str) and not part.get("thought"):
+                text_parts.append(part["text"])
+            function_call = part.get("functionCall")
+            if isinstance(function_call, dict):
+                alias = str(function_call.get("name", ""))
+                original_name = aliases.get(alias)
+                if not original_name:
+                    raise RuntimeError("Gemini requested an undeclared function")
+                response_aliases[original_name] = alias
+                call_id = str(function_call.get("id") or "")
+                arguments = function_call.get("args")
+                if not isinstance(arguments, dict):
+                    arguments = {}
+                tool_calls.append({
+                    "id": call_id, "type": "function",
+                    "function": {
+                        "name": original_name,
+                        "arguments": json.dumps(arguments, ensure_ascii=False),
+                    },
+                })
+        response: dict[str, Any] = {"role": "assistant", "content": "\n".join(text_parts) or None}
+        if tool_calls:
+            # Preserve full model content, including Gemini 3 thought signatures.
+            response["tool_calls"] = tool_calls
+            response["_gemini_content"] = content
+        elif not text_parts:
+            reason = candidate.get("finishReason", "unknown")
+            raise RuntimeError(f"Gemini returned no text or function call (finishReason={reason})")
+        return response
+
+
 def _post_json(url: str, payload: dict[str, Any], headers: dict[str, str], timeout: float) -> dict[str, Any]:
     request_headers = {"Content-Type": "application/json", **headers}
     request = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"),
@@ -178,6 +353,8 @@ def provider_from_env():
     name = os.getenv("ASTRO_AI_PROVIDER", "openai-compatible").strip().lower()
     if name in {"anthropic", "claude"}:
         return AnthropicMessagesProvider.from_env()
+    if name in {"gemini", "google", "google-gemini"}:
+        return GeminiGenerateContentProvider.from_env()
     if name in {"openai", "openai-compatible", "local"}:
         return OpenAICompatibleProvider.from_env()
     if name in {"xai", "grok"}:
