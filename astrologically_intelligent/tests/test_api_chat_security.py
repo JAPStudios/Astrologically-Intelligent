@@ -20,6 +20,8 @@ import pytest
     "http://224.0.0.1/v1",
     "http://0.0.0.0/v1",
     "file:///etc/passwd",
+    "https://alice:secret@api.example.com/v1",
+    "https://alice@api.example.com/v1",
 ])
 def test_public_url_validator_blocks_internal_targets(url):
     from src.url_security import is_public_http_url
