@@ -1,182 +1,182 @@
-"""A small, genuinely trainable neural classifier implemented with NumPy.
-
-This module is intended for local learned components inside Astrologically
-Intelligent. It performs dense-layer forward propagation, softmax inference,
-cross-entropy backpropagation and Adam optimization. It does not call a remote
-language model and does not pretend to be a pretrained language model.
-"""
+"""Trainable NumPy multilayer perceptron for task-specific local learning."""
 from __future__ import annotations
-
 import json
 import os
 from pathlib import Path
-from typing import Iterable
-
+from typing import Iterable, Sequence
 import numpy as np
 
 
 class NeuralNetworkClassifier:
-    """One-hidden-layer feed-forward neural network for multiclass learning."""
+    """Configurable multilayer perceptron for multiclass classification."""
 
-    FORMAT_VERSION = 2
+    FORMAT_VERSION = 3
 
-    def __init__(
-        self,
-        input_size: int,
-        hidden_size: int,
-        output_size: int,
-        *,
-        learning_rate: float = 1e-3,
-        seed: int | None = None,
-    ) -> None:
-        dimensions = (input_size, hidden_size, output_size)
-        if any(isinstance(value, bool) or not isinstance(value, int) or value <= 0 for value in dimensions):
+    def __init__(self, input_size: int, hidden_size: int | Sequence[int], output_size: int,
+                 *, learning_rate: float = 1e-3, seed: int | None = None) -> None:
+        if isinstance(hidden_size, bool):
+            raise ValueError("hidden dimensions must be positive integers")
+        hidden_sizes = (hidden_size,) if isinstance(hidden_size, int) else tuple(hidden_size)
+        dimensions = (input_size, *hidden_sizes, output_size)
+        if (not hidden_sizes or any(isinstance(v, bool) or not isinstance(v, int) or v <= 0
+                                    for v in dimensions)):
             raise ValueError("network dimensions must be positive integers")
         if not np.isfinite(learning_rate) or learning_rate <= 0:
             raise ValueError("learning_rate must be a positive finite number")
-        self.input_size, self.hidden_size, self.output_size = dimensions
+        self.input_size = input_size
+        self.hidden_sizes = tuple(hidden_sizes)
+        self.hidden_size = self.hidden_sizes[0]
+        self.output_size = output_size
         self.learning_rate = float(learning_rate)
         self._rng = np.random.default_rng(seed)
-        self.weights1 = self._rng.normal(0.0, np.sqrt(2.0 / input_size), (input_size, hidden_size))
-        self.bias1 = np.zeros(hidden_size, dtype=np.float64)
-        self.weights2 = self._rng.normal(0.0, np.sqrt(2.0 / hidden_size), (hidden_size, output_size))
-        self.bias2 = np.zeros(output_size, dtype=np.float64)
+        self._weights, self._biases = [], []
+        for fan_in, fan_out in zip(dimensions[:-1], dimensions[1:]):
+            self._weights.append(self._rng.normal(0.0, np.sqrt(2.0 / fan_in),
+                                                  (fan_in, fan_out)))
+            self._biases.append(np.zeros(fan_out, dtype=np.float64))
         self._step = 0
-        self._adam = {
-            name: (np.zeros_like(value), np.zeros_like(value))
-            for name, value in self._parameters().items()
-        }
+        self._adam = {name: (np.zeros_like(value), np.zeros_like(value))
+                      for name, value in self._parameters().items()}
 
-    def _parameters(self) -> dict[str, np.ndarray]:
-        return {
-            "weights1": self.weights1, "bias1": self.bias1,
-            "weights2": self.weights2, "bias2": self.bias2,
-        }
+    @property
+    def weights1(self):
+        return self._weights[0]
 
-    def _forward(self, features: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-        hidden_linear = features @ self.weights1 + self.bias1
-        hidden = np.maximum(hidden_linear, 0.0)
-        logits = hidden @ self.weights2 + self.bias2
-        shifted = logits - np.max(logits, axis=1, keepdims=True)
-        exponentials = np.exp(shifted)
+    @property
+    def bias1(self):
+        return self._biases[0]
+
+    @property
+    def weights2(self):
+        if len(self._weights) != 2:
+            raise AttributeError("weights2 is only defined for one hidden layer")
+        return self._weights[1]
+
+    @property
+    def bias2(self):
+        if len(self._biases) != 2:
+            raise AttributeError("bias2 is only defined for one hidden layer")
+        return self._biases[1]
+
+    def _parameters(self):
+        result = {}
+        for i, (weights, bias) in enumerate(zip(self._weights, self._biases), 1):
+            result[f"weights{i}"], result[f"bias{i}"] = weights, bias
+        return result
+
+    def _forward(self, features):
+        activations, pre_activations = [features], []
+        for weights, bias in zip(self._weights[:-1], self._biases[:-1]):
+            linear = activations[-1] @ weights + bias
+            pre_activations.append(linear)
+            activations.append(np.maximum(linear, 0.0))
+        logits = activations[-1] @ self._weights[-1] + self._biases[-1]
+        exponentials = np.exp(logits - np.max(logits, axis=1, keepdims=True))
         probabilities = exponentials / np.sum(exponentials, axis=1, keepdims=True)
-        return hidden_linear, hidden, probabilities
+        return activations, pre_activations, probabilities
 
     def predict_proba(self, features: Iterable[Iterable[float]]) -> np.ndarray:
-        """Return one normalized class-probability row per input example."""
-        values = self._features(features)
-        return self._forward(values)[2]
+        return self._forward(self._features(features))[2]
 
     def predict(self, features: Iterable[Iterable[float]]) -> np.ndarray:
-        """Return the most probable class index for each example."""
         return np.argmax(self.predict_proba(features), axis=1)
 
-    def evaluate(self, features: Iterable[Iterable[float]], labels: Iterable[int]) -> dict[str, float]:
-        """Return mean cross-entropy loss and classification accuracy."""
-        values = self._features(features)
-        targets = self._labels(labels, len(values))
+    def evaluate(self, features, labels):
+        values, targets = self._features(features), self._labels(labels, len(features))
         probabilities = self._forward(values)[2]
         selected = np.clip(probabilities[np.arange(len(targets)), targets], 1e-12, 1.0)
-        return {
-            "loss": float(-np.mean(np.log(selected))),
-            "accuracy": float(np.mean(np.argmax(probabilities, axis=1) == targets)),
-        }
+        return {"loss": float(-np.mean(np.log(selected))),
+                "accuracy": float(np.mean(np.argmax(probabilities, axis=1) == targets))}
 
-    def fit(
-        self,
-        features: Iterable[Iterable[float]],
-        labels: Iterable[int],
-        *,
-        epochs: int = 100,
-        batch_size: int = 32,
-        shuffle: bool = True,
-    ) -> list[dict[str, float]]:
-        """Train using mini-batch backpropagation and Adam; return epoch metrics."""
+    def fit(self, features, labels, *, epochs: int = 100, batch_size: int = 32,
+            shuffle: bool = True) -> list[dict[str, float]]:
         values = self._features(features)
         targets = self._labels(labels, len(values))
         if isinstance(epochs, bool) or not isinstance(epochs, int) or epochs < 1:
             raise ValueError("epochs must be a positive integer")
         if isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size < 1:
             raise ValueError("batch_size must be a positive integer")
-        history: list[dict[str, float]] = []
-        for _ in range(epochs):
+        history = []
+        for epoch in range(epochs):
             indices = self._rng.permutation(len(values)) if shuffle else np.arange(len(values))
             for start in range(0, len(indices), batch_size):
-                batch_indices = indices[start:start + batch_size]
-                batch_x = values[batch_indices]
-                batch_y = targets[batch_indices]
-                hidden_linear, hidden, probabilities = self._forward(batch_x)
-                count = len(batch_indices)
-                probabilities[np.arange(count), batch_y] -= 1.0
-                probabilities /= count
-                grad_w2 = hidden.T @ probabilities
-                grad_b2 = np.sum(probabilities, axis=0)
-                grad_hidden = probabilities @ self.weights2.T
-                grad_hidden[hidden_linear <= 0.0] = 0.0
-                grad_w1 = batch_x.T @ grad_hidden
-                grad_b1 = np.sum(grad_hidden, axis=0)
-                self._adam_update({
-                    "weights1": grad_w1, "bias1": grad_b1,
-                    "weights2": grad_w2, "bias2": grad_b2,
-                })
-            metrics = self.evaluate(values, targets)
-            history.append({"epoch": float(len(history) + 1), **metrics})
+                chosen = indices[start:start + batch_size]
+                x, y = values[chosen], targets[chosen]
+                activations, pre_activations, probabilities = self._forward(x)
+                count, last = len(chosen), len(self._weights) - 1
+                delta = probabilities
+                delta[np.arange(count), y] -= 1.0
+                delta /= count
+                gradients = {f"weights{last + 1}": activations[-1].T @ delta,
+                             f"bias{last + 1}": np.sum(delta, axis=0)}
+                upstream = delta @ self._weights[last].T
+                for layer in range(last - 1, -1, -1):
+                    upstream *= (pre_activations[layer] > 0.0)
+                    gradients[f"weights{layer + 1}"] = activations[layer].T @ upstream
+                    gradients[f"bias{layer + 1}"] = np.sum(upstream, axis=0)
+                    if layer:
+                        upstream = upstream @ self._weights[layer].T
+                self._adam_update(gradients)
+            history.append({"epoch": float(epoch + 1), **self.evaluate(values, targets)})
         return history
 
-    def _adam_update(self, gradients: dict[str, np.ndarray]) -> None:
+    def _adam_update(self, gradients):
         self._step += 1
-        beta1, beta2, epsilon = 0.9, 0.999, 1e-8
+        b1, b2, epsilon = 0.9, 0.999, 1e-8
         parameters = self._parameters()
         for name, gradient in gradients.items():
             first, second = self._adam[name]
-            first *= beta1
-            first += (1.0 - beta1) * gradient
-            second *= beta2
-            second += (1.0 - beta2) * np.square(gradient)
-            corrected_first = first / (1.0 - beta1 ** self._step)
-            corrected_second = second / (1.0 - beta2 ** self._step)
-            parameters[name] -= self.learning_rate * corrected_first / (np.sqrt(corrected_second) + epsilon)
+            first *= b1
+            first += (1.0 - b1) * gradient
+            second *= b2
+            second += (1.0 - b2) * np.square(gradient)
+            mhat = first / (1.0 - b1 ** self._step)
+            vhat = second / (1.0 - b2 ** self._step)
+            parameters[name] -= self.learning_rate * mhat / (np.sqrt(vhat) + epsilon)
 
     def save(self, path: str | os.PathLike[str]) -> None:
-        """Persist architecture, optimizer state and parameters to a NumPy archive."""
         destination = Path(path)
         destination.parent.mkdir(parents=True, exist_ok=True)
         temporary = destination.with_name(destination.name + ".tmp.npz")
-        np.savez_compressed(
-            temporary,
-            format_version=np.array(self.FORMAT_VERSION),
-            dimensions=np.array([self.input_size, self.hidden_size, self.output_size]),
-            learning_rate=np.array(self.learning_rate),
-            step=np.array(self._step),
-            rng_state=np.array(json.dumps(self._rng.bit_generator.state)),
-            weights1=self.weights1, bias1=self.bias1,
-            weights2=self.weights2, bias2=self.bias2,
-            **{f"adam_{name}_m": state[0] for name, state in self._adam.items()},
-            **{f"adam_{name}_v": state[1] for name, state in self._adam.items()},
-        )
+        dimensions = [self.input_size, *self.hidden_sizes, self.output_size]
+        arrays = {"format_version": np.array(self.FORMAT_VERSION),
+                  "dimensions": np.array(dimensions), "learning_rate": np.array(self.learning_rate),
+                  "step": np.array(self._step), "rng_state": np.array(json.dumps(self._rng.bit_generator.state)),
+                  "layer_count": np.array(len(self._weights))}
+        arrays.update({f"weights{i}": v for i, v in enumerate(self._weights, 1)})
+        arrays.update({f"bias{i}": v for i, v in enumerate(self._biases, 1)})
+        arrays.update({f"adam_{n}_m": s[0] for n, s in self._adam.items()})
+        arrays.update({f"adam_{n}_v": s[1] for n, s in self._adam.items()})
+        np.savez_compressed(temporary, **arrays)
         os.replace(temporary, destination)
 
     @classmethod
     def load(cls, path: str | os.PathLike[str]) -> "NeuralNetworkClassifier":
-        """Load a checkpoint without enabling pickle-based object deserialization."""
         with np.load(path, allow_pickle=False) as archive:
             version = int(archive["format_version"])
-            if version not in (1, cls.FORMAT_VERSION):
+            if version not in (1, 2, cls.FORMAT_VERSION):
                 raise ValueError(f"unsupported neural-network checkpoint version: {version}")
-            dimensions = archive["dimensions"].astype(int).tolist()
-            model = cls(*dimensions, learning_rate=float(archive["learning_rate"]))
+            dims = archive["dimensions"].astype(int).tolist()
+            if version < 3:
+                if len(dims) != 3:
+                    raise ValueError("invalid legacy checkpoint dimensions")
+                model = cls(dims[0], dims[1], dims[2],
+                            learning_rate=float(archive["learning_rate"]))
+            else:
+                if len(dims) < 3 or int(archive["layer_count"]) != len(dims) - 1:
+                    raise ValueError("invalid checkpoint architecture")
+                model = cls(dims[0], tuple(dims[1:-1]), dims[-1],
+                            learning_rate=float(archive["learning_rate"]))
             for name, parameter in model._parameters().items():
                 value = archive[name]
                 if value.shape != parameter.shape or not np.isfinite(value).all():
                     raise ValueError(f"invalid checkpoint parameter: {name}")
                 parameter[...] = value
-                model._adam[name] = (
-                    archive[f"adam_{name}_m"].copy(),
-                    archive[f"adam_{name}_v"].copy(),
-                )
-                if any(state.shape != parameter.shape or not np.isfinite(state).all()
-                       for state in model._adam[name]):
+                first, second = archive[f"adam_{name}_m"].copy(), archive[f"adam_{name}_v"].copy()
+                if any(v.shape != parameter.shape or not np.isfinite(v).all()
+                       for v in (first, second)):
                     raise ValueError(f"invalid optimizer state: {name}")
+                model._adam[name] = (first, second)
             model._step = int(archive["step"])
             if version >= 2:
                 model._rng.bit_generator.state = json.loads(str(archive["rng_state"]))
@@ -184,15 +184,15 @@ class NeuralNetworkClassifier:
                 raise ValueError("invalid optimizer step")
             return model
 
-    def _features(self, features: Iterable[Iterable[float]]) -> np.ndarray:
+    def _features(self, features):
         values = np.asarray(features, dtype=np.float64)
-        if values.ndim != 2 or values.shape[1] != self.input_size or values.shape[0] == 0:
+        if values.ndim != 2 or values.shape[1] != self.input_size or not len(values):
             raise ValueError(f"features must be a non-empty 2D array with {self.input_size} columns")
         if not np.isfinite(values).all():
             raise ValueError("features must contain only finite numbers")
         return values
 
-    def _labels(self, labels: Iterable[int], count: int) -> np.ndarray:
+    def _labels(self, labels, count):
         values = np.asarray(labels)
         if values.ndim != 1 or len(values) != count or not np.issubdtype(values.dtype, np.integer):
             raise ValueError("labels must be a one-dimensional integer array matching the examples")
