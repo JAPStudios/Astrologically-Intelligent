@@ -13,7 +13,7 @@ from astrologically_intelligent.server import make_handler
 class HistoryEndpointTests(unittest.TestCase):
     def setUp(self):
         self.store = Store(":memory:")
-        self.runtime = AgentRuntime(store=self.store)
+        self.runtime = AgentRuntime(provider=object(), store=self.store)
         self.store.add_message("session-1", "user", "First message")
         self.store.add_message("session-1", "assistant", "First reply")
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), make_handler(self.runtime, "test-token"))
