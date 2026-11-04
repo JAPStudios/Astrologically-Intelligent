@@ -95,14 +95,27 @@ class AnthropicMessagesProvider:
                 if message.get("content"):
                     blocks.append({"type": "text", "text": str(message["content"])})
                 for call in message["tool_calls"]:
-                    fn = call.get("function", {})
+                    if not isinstance(call, dict):
+                        raise RuntimeError("Anthropic request contains an invalid tool call")
+                    fn = call.get("function")
+                    if not isinstance(fn, dict):
+                        raise RuntimeError("Anthropic request contains a tool call without a function")
+                    raw_arguments = fn.get("arguments", "{}")
                     try:
-                        arguments = json.loads(fn.get("arguments") or "{}")
-                    except (TypeError, json.JSONDecodeError):
-                        arguments = {}
+                        arguments = json.loads(raw_arguments or "{}")
+                    except (TypeError, json.JSONDecodeError) as exc:
+                        raise RuntimeError("Anthropic request contains malformed tool arguments") from exc
+                    if not isinstance(arguments, dict):
+                        raise RuntimeError("Anthropic tool arguments must be a JSON object")
+                    name = fn.get("name")
+                    call_id = call.get("id")
+                    if not isinstance(name, str) or not name:
+                        raise RuntimeError("Anthropic request contains a tool call without a name")
+                    if not isinstance(call_id, str) or not call_id:
+                        raise RuntimeError("Anthropic request contains a tool call without an ID")
                     blocks.append({
-                        "type": "tool_use", "id": call.get("id", ""),
-                        "name": fn.get("name", ""), "input": arguments,
+                        "type": "tool_use", "id": call_id,
+                        "name": name, "input": arguments,
                     })
                 converted.append({"role": "assistant", "content": blocks})
             elif role in {"user", "assistant"}:

@@ -149,5 +149,38 @@ class ProviderAdapterTests(unittest.TestCase):
                 )
 
 
+
+    def test_anthropic_rejects_malformed_tool_arguments_instead_of_erasing_them(self):
+        messages = [{
+            "role": "assistant",
+            "tool_calls": [{
+                "id": "tool-bad",
+                "function": {"name": "skills.read", "arguments": "{invalid"},
+            }],
+        }]
+        with self.assertRaisesRegex(RuntimeError, "malformed tool arguments"):
+            AnthropicMessagesProvider._messages(messages)
+
+    def test_anthropic_rejects_non_object_tool_arguments(self):
+        messages = [{
+            "role": "assistant",
+            "tool_calls": [{
+                "id": "tool-scalar",
+                "function": {"name": "skills.read", "arguments": "[]"},
+            }],
+        }]
+        with self.assertRaisesRegex(RuntimeError, "must be a JSON object"):
+            AnthropicMessagesProvider._messages(messages)
+
+    def test_anthropic_rejects_tool_calls_without_ids(self):
+        messages = [{
+            "role": "assistant",
+            "tool_calls": [{
+                "function": {"name": "skills.read", "arguments": "{}"},
+            }],
+        }]
+        with self.assertRaisesRegex(RuntimeError, "without an ID"):
+            AnthropicMessagesProvider._messages(messages)
+
 if __name__ == "__main__":
     unittest.main()
