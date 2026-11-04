@@ -73,7 +73,7 @@ Endpoint configuration can explicitly map `model_type=llm` to chat and `model_ty
 Current detection order and behavior are:
 
 1. a recognized explicit endpoint kind;
-2. label-bounded hostname checks for OpenRouter, OpenAI, Anthropic, Google APIs, and Ollama Cloud;
+2. label-bounded hostname checks for Hugging Face, OpenRouter, OpenAI, Anthropic, Google APIs, and Ollama Cloud;
 3. common local ports: `11434` for Ollama, `1234` for LM Studio, `8000` for vLLM, and `30000` for SGLang;
 4. generic OpenAI-compatible for any other parsed host, otherwise unknown.
 
