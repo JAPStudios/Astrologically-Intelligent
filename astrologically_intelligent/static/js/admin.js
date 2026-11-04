@@ -1240,7 +1240,7 @@ async function loadEndpoints() {
             <span style="opacity:.6;">${records.length} classified records</span>
           </div>
           ${recordRows || '<div style="opacity:.65;padding:6px 0;">No native capability records returned.</div>'}
-          ${unclassified.length ? `<div style="border-top:1px solid var(--border);padding-top:7px;margin-top:7px;"><div style="font-weight:600;">Unclassified model IDs</div><div style="opacity:.7;">${unclassified.map(esc).join(', ')}</div></div>` : ''}`;
+          ${unclassified.length ? `<div style="border-top:1px solid var(--border);padding-top:7px;margin-top:7px;"><div style="font-weight:600;">Unclassified model IDs</div><div style="opacity:.7;">${unclassified.map(value => esc(value)).join(', ')}</div></div>` : ''}`;
         } catch (error) {
           panel.textContent = error && error.message ? error.message : 'Unable to load model capabilities';
         } finally {
