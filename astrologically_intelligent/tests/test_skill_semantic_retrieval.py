@@ -170,11 +170,11 @@ def test_learned_quality_uses_only_owner_scoped_version_two_audits(semantic_lane
         for number in range(4):
             training.append({
                 **_skill(f"{owner}-positive-{number}", "positive audited procedure"),
-                "owner": owner, "audit_version": 2, "audit_verdict": "pass",
+                "owner": owner, "audit_version": 2, "audit_verdict": "pass", "baseline_verdict": "better",
             })
             training.append({
                 **_skill(f"{owner}-negative-{number}", "negative audited procedure"),
-                "owner": owner, "audit_version": 2, "audit_verdict": "fail",
+                "owner": owner, "audit_version": 2, "audit_verdict": "fail", "baseline_verdict": "worse",
             })
     candidates = [{
         **_skill("alice-candidate", "positive candidate procedure"),
@@ -192,14 +192,14 @@ def test_learned_quality_requires_both_audit_classes_for_same_owner(semantic_lan
     training = [
         {
             **_skill(f"alice-positive-{number}", "positive audited procedure"),
-            "owner": "alice", "audit_version": 2, "audit_verdict": "pass",
+            "owner": "alice", "audit_version": 2, "audit_verdict": "pass", "baseline_verdict": "better",
         }
         for number in range(5)
     ]
     training.extend(
         {
             **_skill(f"bob-negative-{number}", "negative audited procedure"),
-            "owner": "bob", "audit_version": 2, "audit_verdict": "fail",
+            "owner": "bob", "audit_version": 2, "audit_verdict": "fail", "baseline_verdict": "worse",
         }
         for number in range(5)
     )
