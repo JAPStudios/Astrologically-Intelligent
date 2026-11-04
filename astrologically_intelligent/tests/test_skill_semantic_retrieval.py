@@ -88,7 +88,7 @@ def test_semantic_corpus_vectors_are_cached(tmp_path, semantic_lane):
     assert semantic_lane.document_encode_calls == 1
 
 
-def test_semantic_match_cannot_bypass_required_tool_capability(tmp_path, semantic_lane):
+def test_semantic_match_cannot_bypass_required_tool_capability(tmp_path, semantic_lane, monkeypatch):
     manager = SkillsManager(str(tmp_path))
     skills = [
         _skill(
@@ -97,6 +97,9 @@ def test_semantic_match_cannot_bypass_required_tool_capability(tmp_path, semanti
             requires=["manage_calendar"],
         ),
     ]
+    monkeypatch.setattr(
+        skill_index, "learned_skill_quality_scores", lambda training, candidates: {0: 1.0}
+    )
 
     unavailable = manager.get_relevant_skills(
         "orchestrate attendees without double booking anyone",
