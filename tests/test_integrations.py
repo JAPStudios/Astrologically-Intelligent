@@ -31,13 +31,13 @@ class N8nClientTests(unittest.TestCase):
     def test_execution_listing_applies_filters_and_pagination(self):
         with patch.object(self.client, "_request", return_value={"data": []}) as request:
             self.client.list_executions(
-                limit=40, cursor="next", workflow_id="wf-1", status="error",
-                started_after="2026-01-01T00:00:00Z", include_data=True,
+                limit=40, cursor="next", workflow_id="wf-1", project_id="project-1",
+                status="error", started_after="2026-01-01T00:00:00Z", include_data=True,
             )
         request.assert_called_once_with(
             "GET", "/api/v1/executions",
             {"limit": 40, "cursor": "next", "workflowId": "wf-1",
-             "status": "error", "startedAfter": "2026-01-01T00:00:00Z",
+             "projectId": "project-1", "status": "error", "startedAfter": "2026-01-01T00:00:00Z",
              "includeData": "true"},
         )
 
