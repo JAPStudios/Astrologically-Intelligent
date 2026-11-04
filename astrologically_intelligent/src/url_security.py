@@ -75,6 +75,11 @@ def is_public_http_url(url: str) -> bool:
     parsed = urlparse((url or "").strip())
     if parsed.scheme not in ("http", "https") or not parsed.hostname:
         return False
+    # Credentials belong in the endpoint authentication configuration, not
+    # inside a caller-controlled URL where they can leak through logs,
+    # redirects, diagnostics, or persisted session metadata.
+    if parsed.username is not None or parsed.password is not None:
+        return False
     return _host_resolves_publicly(parsed.hostname)
 
 
