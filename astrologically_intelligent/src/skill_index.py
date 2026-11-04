@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 _CACHE_LIMIT = 16
 _cache_lock = threading.Lock()
 _corpus_cache: "OrderedDict[str, List[List[float]]]" = OrderedDict()
+_quality_model_cache: "OrderedDict[str, Any]" = OrderedDict()
 
 
 def _semantic_text(skill: Dict[str, Any]) -> str:
@@ -109,6 +110,75 @@ def semantic_skill_scores(query: str, skills: Sequence[Dict[str, Any]]) -> Dict[
         logger.debug("Semantic skill ranking unavailable; using lexical fallback: %s", exc)
         return {}
 
+
+
+def learned_skill_quality_scores(training_skills, candidate_skills):
+    """Predict skill audit quality from owner-scoped version-2 audit outcomes."""
+    if not training_skills or not candidate_skills:
+        return {}
+    try:
+        import numpy as np
+        from src.tool_index import get_ready_tool_index
+        from src.neural_network import NeuralNetworkClassifier
+        index = get_ready_tool_index()
+        lane = _choose_lane(index) if index is not None else None
+        if lane is None:
+            return {}
+        labelled = []
+        for skill in training_skills:
+            if int(skill.get('audit_version') or 0) != 2:
+                continue
+            verdict = str(skill.get('audit_verdict') or '').strip().lower()
+            if verdict == 'pass':
+                label = 1
+            elif verdict in {'fail', 'needs_work'}:
+                label = 0
+            else:
+                continue
+            labelled.append((skill, label))
+        positives = sum(label for _, label in labelled)
+        negatives = len(labelled) - positives
+        if positives < 4 or negatives < 4:
+            return {}
+        training_texts = [_semantic_text(skill) for skill, _ in labelled]
+        labels = [label for _, label in labelled]
+        digest = hashlib.sha256()
+        digest.update(str(getattr(lane, 'fingerprint', lane.name)).encode('utf-8'))
+        for document, label in zip(training_texts, labels):
+            digest.update(b'\\0')
+            digest.update(document.encode('utf-8', errors='replace'))
+            digest.update(bytes([label]))
+        cache_key = digest.hexdigest()
+        with _cache_lock:
+            model = _quality_model_cache.get(cache_key)
+            if model is not None:
+                _quality_model_cache.move_to_end(cache_key)
+        if model is None:
+            vectors = np.asarray(_document_vectors(lane, training_texts), dtype=np.float64)
+            if vectors.ndim != 2 or not np.isfinite(vectors).all():
+                return {}
+            model = NeuralNetworkClassifier(vectors.shape[1], (32, 16), 2,
+                                            learning_rate=0.003, seed=73)
+            model.fit(vectors, np.asarray(labels, dtype=np.int64),
+                      epochs=80, batch_size=min(16, len(labels)))
+            with _cache_lock:
+                _quality_model_cache[cache_key] = model
+                _quality_model_cache.move_to_end(cache_key)
+                while len(_quality_model_cache) > 8:
+                    _quality_model_cache.popitem(last=False)
+        candidate_texts = [_semantic_text(skill) for skill in candidate_skills]
+        candidate_vectors = np.asarray(_document_vectors(lane, candidate_texts), dtype=np.float64)
+        probabilities = model.predict_proba(candidate_vectors)
+        return {i: float(probabilities[i, 1]) for i in range(len(candidate_skills))}
+    except Exception as exc:
+        logger.debug('Learned skill-quality ranking unavailable: %s', exc)
+        return {}
+
+
+def reset_skill_quality_cache():
+    """Clear cached learned quality models after audit-data changes."""
+    with _cache_lock:
+        _quality_model_cache.clear()
 
 def reset_skill_index_cache() -> None:
     """Clear process-local vectors after embedding configuration changes/tests."""
