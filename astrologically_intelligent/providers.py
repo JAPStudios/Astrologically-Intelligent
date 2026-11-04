@@ -339,10 +339,12 @@ def _post_json(url: str, payload: dict[str, Any], headers: dict[str, str], timeo
         with urllib.request.urlopen(request, timeout=timeout) as response:
             result = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")[:2000]
-        raise RuntimeError(f"Provider returned HTTP {exc.code}: {detail}") from exc
+        # Provider response bodies are untrusted and may echo submitted data.
+        # Keep diagnostics useful without forwarding arbitrary body content.
+        raise RuntimeError(f"Provider returned HTTP {exc.code}") from exc
     except (urllib.error.URLError, TimeoutError) as exc:
-        raise RuntimeError(f"Provider connection failed: {exc}") from exc
+        # URL errors can include configured endpoints or other sensitive details.
+        raise RuntimeError(f"Provider connection failed ({type(exc).__name__})") from exc
     if not isinstance(result, dict):
         raise RuntimeError("Provider returned a non-object JSON response")
     return result

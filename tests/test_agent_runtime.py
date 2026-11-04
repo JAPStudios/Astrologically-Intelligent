@@ -1,9 +1,11 @@
 import json
 import unittest
+import urllib.error
+from io import BytesIO
 from unittest.mock import patch
 
 from astrologically_intelligent.providers import (
-    AnthropicMessagesProvider, GeminiGenerateContentProvider, OpenAICompatibleProvider, ProviderConfig, provider_from_env,
+    AnthropicMessagesProvider, GeminiGenerateContentProvider, OpenAICompatibleProvider, ProviderConfig, _post_json, provider_from_env,
 )
 from astrologically_intelligent.runtime import AgentRuntime, RuntimeConfig
 from astrologically_intelligent.storage import Store
@@ -77,6 +79,23 @@ class RuntimeTests(unittest.TestCase):
             "paperclip.goals.create","paperclip.approvals.list","perplexity.search","openclaw.sessions.list",
         }
         self.assertTrue(expected <= names)
+
+    def test_provider_http_error_body_is_not_exposed(self):
+        error = urllib.error.HTTPError(
+            "https://provider.example/v1/chat/completions", 401, "Unauthorized", {},
+            BytesIO(b'{"error":"secret-provider-response"}'),
+        )
+        with patch("astrologically_intelligent.providers.urllib.request.urlopen", side_effect=error):
+            with self.assertRaisesRegex(RuntimeError, "Provider returned HTTP 401") as raised:
+                _post_json("https://provider.example/v1/chat/completions", {}, {}, 5)
+        self.assertNotIn("secret-provider-response", str(raised.exception))
+
+    def test_provider_connection_error_details_are_not_exposed(self):
+        error = urllib.error.URLError("secret-endpoint-detail")
+        with patch("astrologically_intelligent.providers.urllib.request.urlopen", side_effect=error):
+            with self.assertRaisesRegex(RuntimeError, "Provider connection failed \(URLError\)") as raised:
+                _post_json("https://provider.example/v1/chat/completions", {}, {}, 5)
+        self.assertNotIn("secret-endpoint-detail", str(raised.exception))
 
     def test_provider_request_shape(self):
         provider=OpenAICompatibleProvider(ProviderConfig("http://localhost:1234/v1","","test-model"))
