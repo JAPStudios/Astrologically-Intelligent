@@ -15,7 +15,7 @@ This spec covers the implementation introduced on current `dev` in:
 - regression coverage in `tests/test_model_capabilities.py` and
   `tests/test_model_capability_readers.py`.
 
-The layer normalizes already-fetched JSON-compatible values. It performs no network I/O, does not shape provider requests, does not persist its output, and does not authorize model or tool use. No production caller currently consumes the canonical records outside this package; runtime integration remains later work.
+The reader modules normalize JSON returned by existing endpoint probes. The new admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. Records are not persisted and are not yet consumed by model routing or frontend pickers. OAuth-backed endpoints are not supported by this route.
 
 There is no `src/provider_capability_schemas.py`, capability-specific diagnostics module, or runtime model-quirk registry on current `dev`.
 
@@ -33,8 +33,7 @@ There is no `src/provider_capability_schemas.py`, capability-specific diagnostic
   temperature, top-p, seed, tool choice, or prompt caching. A supported
   request control is not itself a model capability.
 - `CapabilityProbeResult` is an in-memory evidence shape that converts pass,
-  fail, or partial probe state into an assertion. No current runtime probe
-  stores or merges these objects.
+  fail, or partial probe state into an assertion. The capability endpoint currently returns reader records without storing or merging probe assertions.
 - `CapabilityQuery` and `display_surfaces_for()` map a normalized capability
   into candidate surfaces such as chat, vision chat, image generation,
   embeddings, or reranking. They are not wired into current pickers.
@@ -138,8 +137,8 @@ The provider detector has narrow production consumers in `src/ai_interaction.py`
 
 ## Current Gaps
 
-- Canonical records are not yet used by runtime discovery, endpoint resolution, model context, request shaping, or frontend pickers.
-- Reader output is not persisted, refreshed, merged, or expired.
+- The admin capability endpoint exposes live normalized records. Canonical records are not yet persisted or used by model routing, endpoint resolution, model context, request shaping or frontend pickers.
+- Reader output is refreshed on explicit capability requests but is not persisted, merged, or expired.
 - Provider detection still uses common-port hints; consumers must not promote normalization hints into trust decisions.
 - Nine concrete readers exist; Anthropic, SGLang and other providers use the
   identity-only generic reader.
