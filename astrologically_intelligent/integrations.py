@@ -122,7 +122,8 @@ class N8nClient:
 
     def list_executions(
         self, limit: int = 100, cursor: str | None = None,
-        workflow_id: str | None = None, status: str | None = None,
+        workflow_id: str | None = None, project_id: str | None = None,
+        status: str | None = None,
         started_after: str | None = None, started_before: str | None = None,
         include_data: bool = False,
     ) -> Any:
@@ -137,6 +138,8 @@ class N8nClient:
             query["cursor"] = cursor
         if workflow_id is not None:
             query["workflowId"] = self._workflow_id(workflow_id)
+        if project_id is not None:
+            query["projectId"] = self._execution_id(project_id)
         if status is not None:
             allowed = {"canceled", "crashed", "error", "new", "running", "success", "unknown", "waiting"}
             if status not in allowed:

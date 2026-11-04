@@ -42,6 +42,8 @@ Available tools:
 - `n8n.workflows.get`: retrieve one workflow by ID.
 - `n8n.workflows.activate`: activate a workflow.
 - `n8n.workflows.deactivate`: deactivate a workflow.
+- `n8n.executions.list`: retrieve execution history with workflow or project filters, status filters, time bounds, cursor pagination and optional execution data.
+- `n8n.executions.get`: retrieve one execution; detailed execution data is opt-in.
 
 The connector uses the n8n API-key header. HTTPS is required except for localhost. It does not claim to vendor the n8n application or its node catalogue.
 
@@ -73,7 +75,7 @@ export OPENCLAW_GATEWAY_URL="http://127.0.0.1:18789"
 export OPENCLAW_GATEWAY_TOKEN="..."
 ```
 
-The integration currently exposes only `openclaw.sessions.list`, through the documented `POST /tools/invoke` endpoint and the `sessions_list` read-only tool. It deliberately does not expose arbitrary tool invocation: OpenClaw documents the bearer token as full operator access, and the endpoint can execute powerful host actions depending on policy. Keep the Gateway on loopback or a private network.
+The integration exposes `openclaw.sessions.list`, `openclaw.sessions.search` and `openclaw.sessions.history` through the Gateway's authenticated `POST /tools/invoke` endpoint. These operations are read-only. Search results include message context identifiers that can be passed to history retrieval. The client deliberately allowlists these three tools rather than exposing arbitrary invocation: the Gateway token can grant powerful operator access. Keep the Gateway on loopback or a private network.
 
 ## HTTP service
 
