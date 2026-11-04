@@ -28,6 +28,38 @@ class N8nClientTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             N8nClient("http://example.com", "secret")
 
+    def test_execution_listing_applies_filters_and_pagination(self):
+        with patch.object(self.client, "_request", return_value={"data": []}) as request:
+            self.client.list_executions(
+                limit=40, cursor="next", workflow_id="wf-1", status="error",
+                started_after="2026-01-01T00:00:00Z", include_data=True,
+            )
+        request.assert_called_once_with(
+            "GET", "/api/v1/executions",
+            {"limit": 40, "cursor": "next", "workflowId": "wf-1",
+             "status": "error", "startedAfter": "2026-01-01T00:00:00Z",
+             "includeData": "true"},
+        )
+
+    def test_execution_detail_defaults_to_metadata_only(self):
+        with patch.object(self.client, "_request", return_value={"id": "ex-1"}) as request:
+            self.client.get_execution("ex-1")
+            request.assert_called_once_with("GET", "/api/v1/executions/ex-1", None)
+            self.client.get_execution("ex-1", include_data=True)
+            request.assert_called_once_with(
+                "GET", "/api/v1/executions/ex-1", {"includeData": "true"}
+            )
+
+    def test_execution_queries_validate_ids_filters_and_bounds(self):
+        with self.assertRaises(ValueError):
+            self.client.get_execution("../secrets")
+        with self.assertRaises(ValueError):
+            self.client.list_executions(status="mystery")
+        with self.assertRaises(ValueError):
+            self.client.list_executions(limit=251)
+        with self.assertRaises(ValueError):
+            self.client.list_executions(workflow_id="../secrets")
+
 
 class PaperclipClientTests(unittest.TestCase):
     def setUp(self):

@@ -114,6 +114,51 @@ class N8nClient:
         action = "activate" if active else "deactivate"
         return self._request("POST", f"/api/v1/workflows/{self._workflow_id(workflow_id)}/{action}")
 
+    @staticmethod
+    def _execution_id(execution_id: str) -> str:
+        if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", str(execution_id)):
+            raise ValueError("Invalid n8n execution ID")
+        return str(execution_id)
+
+    def list_executions(
+        self, limit: int = 100, cursor: str | None = None,
+        workflow_id: str | None = None, status: str | None = None,
+        started_after: str | None = None, started_before: str | None = None,
+        include_data: bool = False,
+    ) -> Any:
+        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 250:
+            raise ValueError("limit must be an integer from 1 to 250")
+        if not isinstance(include_data, bool):
+            raise ValueError("include_data must be a boolean")
+        query: dict[str, Any] = {"limit": limit}
+        if cursor is not None:
+            if not isinstance(cursor, str) or not cursor or len(cursor) > 1024:
+                raise ValueError("cursor must contain 1 to 1024 characters")
+            query["cursor"] = cursor
+        if workflow_id is not None:
+            query["workflowId"] = self._workflow_id(workflow_id)
+        if status is not None:
+            allowed = {"canceled", "crashed", "error", "new", "running", "success", "unknown", "waiting"}
+            if status not in allowed:
+                raise ValueError("Invalid n8n execution status")
+            query["status"] = status
+        for key, value in (("startedAfter", started_after), ("startedBefore", started_before)):
+            if value is not None:
+                if not isinstance(value, str) or not value.strip() or len(value) > 64:
+                    raise ValueError(f"{key} must be a non-empty ISO 8601 timestamp")
+                query[key] = value.strip()
+        if include_data:
+            query["includeData"] = "true"
+        return self._request("GET", "/api/v1/executions", query)
+
+    def get_execution(self, execution_id: str, include_data: bool = False) -> Any:
+        if not isinstance(include_data, bool):
+            raise ValueError("include_data must be a boolean")
+        query = {"includeData": "true"} if include_data else None
+        return self._request(
+            "GET", f"/api/v1/executions/{self._execution_id(execution_id)}", query
+        )
+
 
 class PaperclipClient:
     """Paperclip company-scoped agent, issue, goal, and approval API client."""

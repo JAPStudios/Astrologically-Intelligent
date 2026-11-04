@@ -368,6 +368,18 @@ class ToolRegistry:
             {"workflow_id":{"type":"string"}},["workflow_id"],
             lambda workflow_id:n8n_client_from_env().set_workflow_active(workflow_id,False))
 
+        reg("n8n.executions.list","List workflow executions with optional workflow, status, time, and pagination filters. Execution data is excluded unless explicitly requested.",
+            {"limit":{"type":"integer","minimum":1,"maximum":250},"cursor":{"type":"string","maxLength":1024},
+             "workflow_id":{"type":"string"},"status":{"type":"string","enum":["canceled","crashed","error","new","running","success","unknown","waiting"]},
+             "started_after":{"type":"string","maxLength":64},"started_before":{"type":"string","maxLength":64},
+             "include_data":{"type":"boolean"}},
+            [],lambda limit=100,cursor=None,workflow_id=None,status=None,started_after=None,started_before=None,include_data=False:
+                n8n_client_from_env().list_executions(limit,cursor,workflow_id,status,started_after,started_before,include_data))
+        reg("n8n.executions.get","Retrieve one n8n execution by ID. Detailed node output is excluded unless explicitly requested.",
+            {"execution_id":{"type":"string"},"include_data":{"type":"boolean"}},
+            ["execution_id"],lambda execution_id,include_data=False:
+                n8n_client_from_env().get_execution(execution_id,include_data))
+
         reg("paperclip.agents.list","List agents in a Paperclip company using the configured agent API token.",
             {"company_id":{"type":"string"}},["company_id"],
             lambda company_id:paperclip_client_from_env().list_agents(company_id))
