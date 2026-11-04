@@ -332,22 +332,52 @@ class GeminiGenerateContentProvider:
 
 
 def _post_json(url: str, payload: dict[str, Any], headers: dict[str, str], timeout: float) -> dict[str, Any]:
+    """POST JSON with bounded retries for transient provider failures.
+
+    Only availability failures are retried. Authentication, validation and other
+    permanent 4xx responses fail immediately. Request bodies remain identical
+    across attempts so tool calls and generation settings are not mutated.
+    """
+    import time
+
     request_headers = {"Content-Type": "application/json", **headers}
-    request = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"),
-                                     headers=request_headers, method="POST")
-    try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            result = json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        # Provider response bodies are untrusted and may echo submitted data.
-        # Keep diagnostics useful without forwarding arbitrary body content.
-        raise RuntimeError(f"Provider returned HTTP {exc.code}") from exc
-    except (urllib.error.URLError, TimeoutError) as exc:
-        # URL errors can include configured endpoints or other sensitive details.
-        raise RuntimeError(f"Provider connection failed ({type(exc).__name__})") from exc
-    if not isinstance(result, dict):
-        raise RuntimeError("Provider returned a non-object JSON response")
-    return result
+    body = json.dumps(payload).encode("utf-8")
+    retryable_statuses = {408, 425, 429, 500, 502, 503, 504, 507, 529}
+    max_attempts = 4
+    last_error = None
+
+    for attempt in range(max_attempts):
+        request = urllib.request.Request(
+            url, data=body, headers=request_headers, method="POST"
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                result = json.loads(response.read().decode("utf-8"))
+            if not isinstance(result, dict):
+                raise RuntimeError("Provider returned a non-object JSON response")
+            return result
+        except urllib.error.HTTPError as exc:
+            # Provider response bodies are untrusted and may echo submitted data.
+            # Keep diagnostics useful without forwarding arbitrary body content.
+            if exc.code not in retryable_statuses or attempt == max_attempts - 1:
+                raise RuntimeError(f"Provider returned HTTP {exc.code}") from exc
+            last_error = exc
+            retry_after = exc.headers.get("Retry-After") if exc.headers else None
+            try:
+                delay = float(retry_after)
+            except (TypeError, ValueError):
+                delay = 0.25 * (2 ** attempt)
+            time.sleep(min(max(delay, 0.0), 8.0))
+        except (urllib.error.URLError, TimeoutError) as exc:
+            # URL errors can include configured endpoints or other sensitive details.
+            if attempt == max_attempts - 1:
+                raise RuntimeError(
+                    f"Provider connection failed ({type(exc).__name__})"
+                ) from exc
+            last_error = exc
+            time.sleep(0.25 * (2 ** attempt))
+
+    raise RuntimeError("Provider request failed after retries") from last_error
 
 
 def provider_from_env():
