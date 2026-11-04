@@ -1,9 +1,8 @@
 # Roadmap / Help Wanted
 
-Odysseus is on a voyage, but not home yet. It works great for me (lol), but this ship is moving fast and feedback/help would be appreciated! (I don't know what I'm doing, help).
+Astrologically Intelligent is an active development project. This roadmap records known reliability, integration, accessibility, performance, and deployment work. Items are not complete until implementation is merged and tests or operational evidence verify them.
 
-If you see weird CSS, strange layout behavior, or a suspiciously murky corner of
-the codebase, you are probably right to stay away.
+Report reproducible defects with the affected page or workflow, expected behavior, actual behavior, and relevant logs. Prioritize fixes that affect security, data integrity, reliability, or core user tasks.
 
 ## High Priority
 
@@ -32,7 +31,7 @@ the codebase, you are probably right to stay away.
   before the user request really starts. We need slimmer prompts, better tool
   selection, smaller default tool sets, and clearer guidance for models with
   4k/8k/16k context windows.
-- Local model speculative decoding support. For Odysseus-tuned local models,
+- Local model speculative decoding support. For project-tuned local models,
   plan to ship or recommend a small same-tokenizer draft model when the serving
   backend supports it. Early vLLM testing showed a generic `Qwen3-0.6B` draft
   beside `Qwen3-8B` can materially reduce wall time, while an unsupported
@@ -82,6 +81,6 @@ the codebase, you are probably right to stay away.
 - Backup/restore guide and helper flow for `data/`.
 - Security hardening around admin-only tools and clear docs for their risk.
 
-## Not The Focus Right Now
+## Current Priority
 
-I prob shouldnt add more themes.
+Visual themes are not the current priority; reliability, integration, security, accessibility, and deployment take precedence.
