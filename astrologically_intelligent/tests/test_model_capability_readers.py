@@ -783,3 +783,24 @@ def test_registry_routes_anthropic_to_native_reader():
     assert records[0].vendor == "anthropic"
     assert records[0].capability.family == mc.FAMILY_CHAT
     assert "anthropic" not in readers.PLACEHOLDER_VENDOR_IDS
+
+
+def test_ollama_reader_accepts_openai_compatible_model_list_as_identity_only():
+    records = ollama.records_from_payload(
+        {
+            "object": "list",
+            "data": [
+                {"id": "llama3.2", "object": "model"},
+                {"id": "qwen3", "name": "Qwen 3"},
+                {"name": "missing-id"},
+                None,
+            ],
+        },
+        endpoint_id="ollama-local",
+    )
+
+    assert [record.model_id for record in records] == ["llama3.2", "qwen3"]
+    assert records[1].display_name == "Qwen 3"
+    assert all(record.vendor == "ollama" for record in records)
+    assert all(record.capability.family == mc.FAMILY_UNKNOWN for record in records)
+    assert all(record.capability.capabilities == () for record in records)
