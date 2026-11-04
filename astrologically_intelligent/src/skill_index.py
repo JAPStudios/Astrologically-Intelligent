@@ -128,24 +128,31 @@ def learned_skill_quality_scores(training_skills, candidate_skills):
         if len(candidate_owners) != 1:
             return {}
         target_owner = next(iter(candidate_owners))
-        labelled = []
+        positive_skills, negative_skills = [], []
         for skill in training_skills:
             if str(skill.get("owner") or "") != target_owner:
                 continue
-            if int(skill.get('audit_version') or 0) != 2:
+            try:
+                audit_version = int(skill.get("audit_version") or 0)
+            except (TypeError, ValueError):
                 continue
-            verdict = str(skill.get('audit_verdict') or '').strip().lower()
-            if verdict == 'pass':
-                label = 1
-            elif verdict in {'fail', 'needs_work'}:
-                label = 0
-            else:
+            if audit_version != 2:
                 continue
-            labelled.append((skill, label))
-        positives = sum(label for _, label in labelled)
-        negatives = len(labelled) - positives
-        if positives < 4 or negatives < 4:
+            verdict = str(skill.get("audit_verdict") or "").strip().lower()
+            if verdict == "pass":
+                positive_skills.append(skill)
+            elif verdict in {"fail", "needs_work"}:
+                negative_skills.append(skill)
+        if len(positive_skills) < 4 or len(negative_skills) < 4:
             return {}
+        # Balance the observed classes and bound per-request training cost.
+        sample_count = min(len(positive_skills), len(negative_skills), 128)
+        sampler = __import__("numpy").random.default_rng(73)
+        positive_indices = sampler.choice(len(positive_skills), sample_count, replace=False)
+        negative_indices = sampler.choice(len(negative_skills), sample_count, replace=False)
+        labelled = ([(positive_skills[int(i)], 1) for i in positive_indices] +
+                    [(negative_skills[int(i)], 0) for i in negative_indices])
+        sampler.shuffle(labelled)
         training_texts = [_semantic_text(skill) for skill, _ in labelled]
         labels = [label for _, label in labelled]
         digest = hashlib.sha256()
