@@ -29,7 +29,7 @@ class AgentRuntime:
         self.provider = provider or provider_from_env()
         self.store = store or Store(os.getenv("ASTRO_AI_DB", "astrologically_intelligent.sqlite3"))
         self.config = config or RuntimeConfig()
-        self.tools = ToolRegistry(self.store)
+        self.tools = ToolRegistry(self.store, self.provider)
 
     def chat(self, message: str, session_id: str | None = None) -> dict[str, str]:
         if not isinstance(message,str) or not message.strip():

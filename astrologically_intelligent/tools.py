@@ -88,6 +88,9 @@ class ToolRegistry:
                 self.orchestration.register_agent(name,adapter,model,role,config,heartbeat_seconds))
         reg("agents.list","List registered agents, optionally by state.",{"state":{"type":"string"}},[],
             lambda state=None:self.orchestration.list_agents(state))
+        reg("agents.execute","Execute a prompt with an active model-backed agent and persist the run result.",
+            {"agent_id":{"type":"string"},"prompt":{"type":"string","minLength":1}},
+            ["agent_id","prompt"],lambda agent_id,prompt:self._execute_agent(agent_id,prompt))
         reg("agents.set_state","Pause, activate, or disable a registered agent.",
             {"agent_id":{"type":"string"},"state":{"type":"string","enum":["active","paused","disabled"]}},
             ["agent_id","state"],lambda agent_id,state:self.orchestration.set_agent_state(agent_id,state) or {"error":"Agent not found"})
@@ -171,6 +174,47 @@ class ToolRegistry:
         reg("openclaw.sessions.list","List sessions from a configured OpenClaw Gateway. This connector is read-only.",
             {"session_key":{"type":"string"}},[],lambda session_key="main":
                 openclaw_client_from_env().list_sessions(session_key))
+
+    def _execute_agent(self, agent_id: str, prompt: str) -> dict[str, Any]:
+        if not isinstance(prompt, str) or not prompt.strip():
+            raise ValueError("Agent prompt must be a non-empty string")
+        agent = self.orchestration.get_agent(agent_id)
+        if not agent:
+            raise ValueError("Agent not found")
+        if agent["state"] != "active":
+            raise ValueError("Agent must be active to execute")
+        if agent["adapter"].strip().lower() not in {"llm", "model", "provider"}:
+            raise ValueError("Agent adapter is not supported for model execution")
+        if self.provider is None:
+            raise RuntimeError("No model provider is configured for agent execution")
+        try:
+            config = json.loads(agent.get("config") or "{}")
+        except (TypeError, json.JSONDecodeError):
+            raise ValueError("Agent configuration is invalid") from None
+        if not isinstance(config, dict):
+            raise ValueError("Agent configuration must be an object")
+        system_prompt = config.get("system_prompt") or (
+            f"You are an execution agent named {agent['name']}. "
+            f"Your assigned role is {agent.get('role') or 'agent'}. "
+            "Complete the supplied task directly. Do not claim actions you did not perform."
+        )
+        if not isinstance(system_prompt, str) or not system_prompt.strip():
+            raise ValueError("Agent system_prompt must be a non-empty string")
+        run = self.orchestration.start_run(agent_id, input_data={"prompt": prompt.strip()})
+        try:
+            response = self.provider.chat([
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt.strip()},
+            ], [])
+            output = response.get("content") if isinstance(response, dict) else None
+            if not isinstance(output, str) or not output.strip():
+                raise RuntimeError("Model returned no text output")
+            finished = self.orchestration.finish_run(run["id"], "succeeded", {"text": output.strip()})
+            return {"run_id": run["id"], "agent_id": agent_id,
+                    "status": finished["status"], "output": output.strip()}
+        except Exception as exc:
+            self.orchestration.finish_run(run["id"], "failed", {"error_type": type(exc).__name__})
+            raise RuntimeError(f"Agent execution failed ({type(exc).__name__})") from None
 
     def _list_skills(self) -> list[dict[str, str]]:
         from pathlib import Path

@@ -227,7 +227,59 @@ class RuntimeTests(unittest.TestCase):
         self.assertIn("error",result)
     def test_agent_and_governance_tools_are_registered(self):
         names={item["function"]["name"] for item in self.runtime.tools.definitions()}
-        self.assertTrue({"agents.register","goals.create","approvals.request","budgets.set","runs.start","plugins.status"} <= names)
+        self.assertTrue({"agents.register","agents.execute","goals.create","approvals.request","budgets.set","runs.start","plugins.status"} <= names)
+    def test_model_agent_executes_prompt_and_persists_result(self):
+        class AgentProvider:
+            def chat(self, messages, tools):
+                self.messages = messages
+                self.tools = tools
+                return {"role": "assistant", "content": "Task completed."}
+
+        provider = AgentProvider()
+        self.runtime.tools.provider = provider
+        agent = json.loads(self.runtime.tools.execute(
+            "agents.register", {"name":"Researcher","adapter":"llm","role":"researcher",
+                                "config":{"system_prompt":"Research carefully."}}))
+        result = json.loads(self.runtime.tools.execute(
+            "agents.execute", {"agent_id":agent["id"],"prompt":"Summarize the topic."}))
+        self.assertEqual(result["status"], "succeeded")
+        self.assertEqual(result["output"], "Task completed.")
+        self.assertEqual(provider.messages[0]["content"], "Research carefully.")
+        self.assertEqual(provider.messages[1]["content"], "Summarize the topic.")
+        self.assertEqual(provider.tools, [])
+        run = self.runtime.tools.orchestration.get_run(result["run_id"])
+        self.assertEqual(run["status"], "succeeded")
+        self.assertEqual(run["output"]["text"], "Task completed.")
+
+    def test_model_agent_execution_rejects_paused_or_unsupported_agents(self):
+        agent = json.loads(self.runtime.tools.execute(
+            "agents.register", {"name":"Paused","adapter":"llm"}))
+        self.runtime.tools.execute("agents.set_state", {"agent_id":agent["id"],"state":"paused"})
+        paused = json.loads(self.runtime.tools.execute(
+            "agents.execute", {"agent_id":agent["id"],"prompt":"Run this."}))
+        self.assertIn("error", paused)
+        unsupported = json.loads(self.runtime.tools.execute(
+            "agents.register", {"name":"Other","adapter":"shell"}))
+        rejected = json.loads(self.runtime.tools.execute(
+            "agents.execute", {"agent_id":unsupported["id"],"prompt":"Run this."}))
+        self.assertIn("error", rejected)
+
+    def test_model_agent_failure_is_recorded(self):
+        class FailingProvider:
+            def chat(self, messages, tools):
+                raise RuntimeError("provider failure")
+
+        self.runtime.tools.provider = FailingProvider()
+        agent = json.loads(self.runtime.tools.execute(
+            "agents.register", {"name":"Failing","adapter":"llm"}))
+        result = json.loads(self.runtime.tools.execute(
+            "agents.execute", {"agent_id":agent["id"],"prompt":"Run this."}))
+        self.assertIn("error", result)
+        run_rows = self.runtime.tools.orchestration.db.execute(
+            "SELECT status, output FROM org_runs WHERE agent_id=?", (agent["id"],)).fetchall()
+        self.assertEqual(run_rows[0]["status"], "failed")
+        self.assertEqual(json.loads(run_rows[0]["output"]), {"error_type":"RuntimeError"})
+
     def test_tool_orchestration_budget_and_approval(self):
         agent=json.loads(self.runtime.tools.execute("agents.register",{"name":"Worker","adapter":"local"}))
         budget=json.loads(self.runtime.tools.execute("budgets.set",{"limit_amount":2,"period":"2026-11","agent_id":agent["id"]}))
