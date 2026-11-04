@@ -193,7 +193,7 @@ def _run_deep_research(provider, topic: str, max_time: int = 180) -> dict[str, A
     import sys
     if str(app_root) not in sys.path:
         sys.path.insert(0, str(app_root))
-    from services.research.service import ResearchService
+    from astrologically_intelligent.services.research.service import ResearchService
 
     async def execute():
         result = await ResearchService().research(

@@ -63,14 +63,12 @@ class ExistingBrowsingToolTests(unittest.TestCase):
     def test_deep_research_uses_active_openai_compatible_model(self):
         from types import SimpleNamespace
         from astrologically_intelligent.tools import _run_deep_research
-        provider = SimpleNamespace(
-            config=SimpleNamespace(base_url="https://model.example/v1", model="model-x", api_key="secret")
-        )
-        provider.__class__.__name__ = "OpenAICompatibleProvider"
+        provider = type("OpenAICompatibleProvider", (), {})()
+        provider.config = SimpleNamespace(base_url="https://model.example/v1", model="model-x", api_key="secret")
         fake_result = SimpleNamespace(query="topic", summary="Report", sources=[], duration_seconds=2.5, tokens_used=0)
         async def fake_research(*args, **kwargs):
             return fake_result
-        with patch("services.research.service.ResearchService.research", new=fake_research):
+        with patch("astrologically_intelligent.services.research.service.ResearchService.research", new=fake_research):
             result = _run_deep_research(provider, "topic", 60)
         self.assertEqual(result["report"], "Report")
         self.assertEqual(result["query"], "topic")
