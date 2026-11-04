@@ -182,6 +182,35 @@ class TestProbeEndpointParsing:
         assert records[0].capability.family == "chat"
         assert records[1].capability.family == "embedding"
 
+    def test_vllm_probe_preserves_context_limit_in_capability_records(self, monkeypatch):
+        _patch_resolve(monkeypatch)
+        monkeypatch.setattr(
+            model_routes.httpx,
+            "get",
+            lambda url, headers=None, timeout=None, verify=None, **kwargs: _resp(
+                200,
+                json={
+                    "object": "list",
+                    "data": [
+                        {"id": "served-model", "max_model_len": 16384},
+                    ],
+                },
+                url=url,
+            ),
+        )
+        records = []
+        models = _probe_endpoint(
+            "http://localhost:8000/v1",
+            capability_records=records,
+            endpoint_id="vllm-local",
+        )
+
+        assert models == ["served-model"]
+        assert len(records) == 1
+        assert records[0].vendor == "vllm"
+        assert records[0].capability.family == "unknown"
+        assert dict(records[0].capability.limits) == {"context_tokens": 16384}
+
     def test_parses_openai_data_format(self, monkeypatch):
         _patch_resolve(monkeypatch)
         monkeypatch.setattr(
