@@ -15,7 +15,7 @@ This spec covers the implementation introduced on current `dev` in:
 - regression coverage in `tests/test_model_capabilities.py` and
   `tests/test_model_capability_readers.py`.
 
-The reader modules normalize JSON returned by existing endpoint probes. The new admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. Records are not persisted and are not yet consumed by model routing or frontend pickers. OAuth-backed endpoints are not supported by this route.
+The reader modules normalize JSON returned by existing endpoint probes. The admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. It captures native Anthropic and Google catalogues plus OpenAI-compatible and Ollama model-list responses. Records are not persisted and are not yet consumed by model routing or frontend pickers. OAuth-backed endpoints are not supported by this route.
 
 There is no `src/provider_capability_schemas.py`, capability-specific diagnostics module, or runtime model-quirk registry on current `dev`.
 
@@ -95,7 +95,7 @@ The reader deliberately returns unknown family, modalities, capabilities, and co
 
 ## Provider-Native Readers
 
-- OpenAI keeps the official Models API identity-only.\n- Anthropic maps its native Messages API model list to text conversation support. The list does not establish vision, tool use, reasoning or context limits.
+- OpenAI keeps the official Models API identity-only.\n- Anthropic maps its native Messages API model list to text conversation support. The list does not establish vision, tool use, reasoning or context limits.\n- Anthropic maps its native Messages API model list to text conversation support. The list does not establish vision, tool use, reasoning or context limits.
 - Hugging Face maps explicit Hub `pipeline_tag` values to conservative task families and modalities. Missing or unrecognized tags remain unknown.
 - vLLM preserves an explicit `max_model_len` value as a context limit while leaving model family and capabilities unknown.
 - OpenRouter maps explicit architecture modalities, supported parameters,
