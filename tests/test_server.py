@@ -42,6 +42,11 @@ class HistoryEndpointTests(unittest.TestCase):
             {"role": "assistant", "content": "First reply"},
         ])
 
+    def test_health_remains_public(self):
+        with urllib.request.urlopen(self.url + "/health", timeout=3) as response:
+            payload = json.loads(response.read())
+        self.assertEqual(payload["status"], "ok")
+
     def test_history_requires_authentication(self):
         with self.assertRaises(urllib.error.HTTPError) as raised:
             self.request("/v1/history?session_id=session-1", token="")
