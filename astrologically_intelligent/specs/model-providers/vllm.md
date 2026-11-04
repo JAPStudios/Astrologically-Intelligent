@@ -12,9 +12,9 @@ reader or model-card detector on current `dev`.
 
 Current `GET /v1/models` returns `object: list`, `data[]` model cards with
 `id`, `object`, `owned_by: vllm`, `root`, `parent`, `max_model_len`, and
-`permission[]`. The generic reader retains only identity/raw data and does not
-inspect `owned_by`, `root`, `parent`, `max_model_len`, or `permission`. The card
-does not prove chat template, tools,
+`permission[]`. The dedicated canonical reader retains the served model ID plus
+an explicit positive `max_model_len` as `context_tokens`. It leaves family,
+modalities and capabilities unknown. The card does not prove chat template, tools,
 reasoning parser, vision assets, embeddings, transcription, or rerank.
 
 LoRA cards can use a different `id`, root path, and parent. Keep each served ID
@@ -32,7 +32,7 @@ transport evidence, not a claim that every vLLM model reasons.
 ## Fallback And Safety
 
 Current reader detection identifies port 8000 as vLLM, or accepts an explicit
-endpoint kind, then dispatches to the generic identity-only reader. It does not
+endpoint kind, then dispatches to the dedicated metadata reader. It does not
 infer vLLM from the model-card payload. Do not consume `/server_info`
 environment/config dumps for normal discovery because they can be large and
 operationally sensitive.
@@ -41,4 +41,4 @@ operationally sensitive.
 
 - A small safe native capability endpoint is not part of the canonical probe.
 - Deployment parser/template flags are not persisted with endpoint capability.
-- No dedicated reader maps vLLM model-card fields today.
+- Runtime discovery still exposes model IDs rather than canonical records; the reader is not yet wired into endpoint discovery.
