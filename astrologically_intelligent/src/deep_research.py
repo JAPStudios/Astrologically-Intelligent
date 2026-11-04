@@ -363,7 +363,9 @@ class DeepResearcher:
         search_provider: Optional[str] = None,
         category: Optional[str] = None,
         session_id: str = "",
+        provider_client=None,
     ):
+        self.provider_client = provider_client
         self.llm_endpoint = llm_endpoint
         self.llm_model = llm_model
         self.simple_research_mode = self._looks_like_small_local_model(llm_model)
@@ -626,7 +628,15 @@ class DeepResearcher:
     # ------------------------------------------------------------------
     async def _llm(self, messages: List[Dict], temperature: float = 0.3,
                    max_tokens: int = 4096, timeout: int = 60) -> str:
-        """Call the LLM asynchronously and strip thinking tags."""
+        """Call the configured native provider or the legacy endpoint transport."""
+        if self.provider_client is not None:
+            response = await asyncio.to_thread(self.provider_client.chat, messages)
+            if not isinstance(response, dict):
+                raise RuntimeError("Model provider returned an invalid research response")
+            content = response.get("content")
+            if not isinstance(content, str) or not content.strip():
+                raise RuntimeError("Model provider returned no text for the research step")
+            return strip_thinking(content)
         from src.llm_core import llm_call_async
         response = await llm_call_async(
             url=self.llm_endpoint,

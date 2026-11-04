@@ -177,17 +177,12 @@ def _run_deep_research(provider, topic: str, max_time: int = 180) -> dict[str, A
     if isinstance(max_time, bool) or not isinstance(max_time, int) or not 30 <= max_time <= 600:
         raise ValueError("max_time must be an integer from 30 to 600 seconds")
     config = getattr(provider, "config", None)
-    provider_name = type(provider).__name__
-    if provider_name != "OpenAICompatibleProvider" or config is None:
-        raise RuntimeError("Deep research currently requires the configured OpenAI-compatible model transport")
-    base_url = str(getattr(config, "base_url", "")).rstrip("/")
+    if provider is None or config is None:
+        raise RuntimeError("No configured model provider is available for deep research")
     model = str(getattr(config, "model", "")).strip()
-    api_key = str(getattr(config, "api_key", ""))
-    parsed = urlsplit(base_url)
-    if parsed.scheme not in {"http", "https"} or not parsed.netloc or not model:
-        raise RuntimeError("The active model endpoint configuration is incomplete")
-    endpoint = base_url if base_url.endswith("/chat/completions") else base_url + "/chat/completions"
-    headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
+    if not model:
+        raise RuntimeError("The active model configuration has no model identifier")
+    endpoint = str(getattr(config, "base_url", "")).rstrip("/") or "provider-native"
 
     app_root = __import__("pathlib").Path(__file__).resolve().parent
     import sys
@@ -197,7 +192,7 @@ def _run_deep_research(provider, topic: str, max_time: int = 180) -> dict[str, A
 
     async def execute():
         result = await ResearchService().research(
-            topic.strip(), endpoint, model, max_time=max_time, llm_headers=headers
+            topic.strip(), endpoint, model, max_time=max_time, provider_client=provider
         )
         report = result.summary if isinstance(result.summary, str) else ""
         if report.startswith("## Complete Research Failure") or report.startswith("## Research Engine Unavailable"):
