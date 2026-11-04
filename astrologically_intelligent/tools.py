@@ -420,12 +420,14 @@ class ToolRegistry:
              "active_minutes":{"type":"integer","minimum":1}},[],lambda session_key="main",limit=100,active_minutes=None:
                 openclaw_client_from_env().list_sessions(session_key,limit,active_minutes))
 
-        reg("openclaw.sessions.history","Read a bounded section of a visible OpenClaw session transcript.",
+        reg("openclaw.sessions.history","Read a bounded section of a visible OpenClaw session transcript. Supply message_id plus transcript_session_id from openclaw.sessions.search to reopen the exact matching context.",
             {"session_key":{"type":"string","minLength":1,"maxLength":256},
              "limit":{"type":"integer","minimum":1,"maximum":100},
              "offset":{"type":"integer","minimum":0},
-             "include_tools":{"type":"boolean"}},["session_key"],lambda session_key,limit=20,offset=0,include_tools=False:
-                openclaw_client_from_env().read_session_history(session_key,limit,offset,include_tools))
+             "include_tools":{"type":"boolean"},
+             "message_id":{"type":"string","maxLength":256},
+             "transcript_session_id":{"type":"string","maxLength":256}},["session_key"],lambda session_key,limit=20,offset=0,include_tools=False,message_id=None,transcript_session_id=None:
+                openclaw_client_from_env().read_session_history(session_key,limit,offset,include_tools,message_id,transcript_session_id))
 
         reg("openclaw.sessions.search","Find matching text in visible OpenClaw session transcripts. Returns bounded excerpts that can be reopened with openclaw.sessions.history.",
             {"query":{"type":"string","minLength":1,"maxLength":4096},
