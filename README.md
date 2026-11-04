@@ -35,7 +35,7 @@ python -m unittest discover -s tests -v
 
 ## Upstream source imports
 
-The complete public-repository inventory from all nine requested organizations has been imported as **740 pinned Git submodules**. The original inventory contained 743 public repositories; three empty repositories had no commit or source tree and were skipped. The import is recorded in `.gitmodules` and the Git tree.
+The complete public-repository inventory from all nine requested organizations has been imported as **741 pinned Git submodules**. The original inventory contained 744 public repositories; three empty repositories had no commit or source tree and were skipped. The import is recorded in `.gitmodules` and the Git tree.
 
 Initialize and retrieve every imported source tree with:
 
