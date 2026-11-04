@@ -312,9 +312,10 @@ class RuntimeTests(unittest.TestCase):
             "agent_id":agent["id"],"prompt":"Try to save something."
         }))
         self.assertIn("error", result)
-        run = self.runtime.tools.orchestration.get_run(
-            json.loads(self.runtime.tools.execute("runs.start", {"agent_id":agent["id"]}))["id"])
-        self.assertEqual(run["status"], "running")
+        run = self.runtime.tools.orchestration.db.execute(
+            "SELECT status FROM org_runs ORDER BY started_at DESC LIMIT 1"
+        ).fetchone()
+        self.assertEqual(run["status"], "failed")
 
     def test_model_agent_failure_is_recorded(self):
         class FailingProvider:
