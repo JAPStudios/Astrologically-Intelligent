@@ -64,6 +64,9 @@ class ToolRegistry:
         reg("memory.recall", "Retrieve saved memory by namespace, optionally by key.",
             {"namespace":{"type":"string"},"key":{"type":"string"}}, ["namespace"],
             lambda namespace,key=None:self.store.recall(namespace,key))
+        reg("memory.forget", "Delete one exact saved memory entry by namespace and key when the user explicitly requests deletion.",
+            {"namespace":{"type":"string"},"key":{"type":"string"}}, ["namespace","key"],
+            lambda namespace,key:{"deleted":self.store.forget(namespace,key)})
         reg("work.create", "Create a trackable work item for the assistant or a human.",
             {"title":{"type":"string"},"description":{"type":"string"},"assignee":{"type":["string","null"]}},
             ["title"], lambda title,description="",assignee=None:self.store.create_task(title,description,assignee))

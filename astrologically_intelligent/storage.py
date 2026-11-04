@@ -82,6 +82,19 @@ class Store:
                 ).fetchall()
         return [{"key": r["key"], "value": json.loads(r["value"]), "updated_at": r["updated_at"]} for r in rows]
 
+    def forget(self, namespace: str, key: str) -> bool:
+        """Delete one exact memory entry without affecting other keys or namespaces."""
+        if not isinstance(namespace, str) or not namespace.strip():
+            raise ValueError("Memory namespace is required")
+        if not isinstance(key, str) or not key.strip():
+            raise ValueError("Memory key is required")
+        with self._lock, self._db:
+            cursor = self._db.execute(
+                "DELETE FROM memories WHERE namespace=? AND key=?",
+                (namespace, key),
+            )
+        return cursor.rowcount == 1
+
     def create_task(self, title: str, description: str = "", assignee: str | None = None) -> dict[str, Any]:
         now, task_id = time.time(), uuid.uuid4().hex
         with self._lock, self._db:

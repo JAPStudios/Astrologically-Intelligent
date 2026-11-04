@@ -52,6 +52,30 @@ class RuntimeTests(unittest.TestCase):
         })
         self.assertNotIn("sensitive connector response", json.dumps(result))
 
+    def test_memory_forget_deletes_only_the_exact_namespace_and_key(self):
+        self.store.remember("profile", "preferred_name", "Ada")
+        self.store.remember("profile", "timezone", "UTC")
+        self.store.remember("preferences", "preferred_name", "Grace")
+
+        result = json.loads(self.runtime.tools.execute(
+            "memory.forget", {"namespace": "profile", "key": "preferred_name"}))
+
+        self.assertEqual(result, {"deleted": True})
+        self.assertEqual(self.store.recall("profile", "preferred_name"), [])
+        self.assertEqual(self.store.recall("profile", "timezone")[0]["value"], "UTC")
+        self.assertEqual(self.store.recall("preferences", "preferred_name")[0]["value"], "Grace")
+
+    def test_memory_forget_requires_both_exact_identifiers(self):
+        for arguments in ({"namespace": "profile"}, {"key": "preferred_name"},
+                          {"namespace": "", "key": "preferred_name"}):
+            result = json.loads(self.runtime.tools.execute("memory.forget", arguments))
+            self.assertIn("error", result)
+        self.store.remember("profile", "preferred_name", "Ada")
+        result = json.loads(self.runtime.tools.execute(
+            "memory.forget", {"namespace": "profile", "key": "missing"}))
+        self.assertEqual(result, {"deleted": False})
+        self.assertEqual(self.store.recall("profile", "preferred_name")[0]["value"], "Ada")
+
     def test_work_item_lifecycle(self):
         task=self.store.create_task("Build an integration")
         self.assertEqual(task["status"],"open")

@@ -81,7 +81,7 @@ The service binds to `127.0.0.1:8765` by default. It exposes `GET /health` and `
 
 ## Runtime tools
 
-- Memory: `memory.remember`, `memory.recall`
+- Memory: `memory.remember`, `memory.recall`, `memory.forget` (exact namespace and key)
 - Work items: `work.create`, `work.list`, `work.update`
 - Skills: `skills.list`, `skills.read`
 - Agents: `agents.register`, `agents.list`, `agents.set_state`, `agents.due`
