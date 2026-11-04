@@ -39,20 +39,43 @@ class AgentRuntime:
         self.store.add_message(session_id,"user",message.strip())
         messages=[{"role":"system","content":self.config.system_prompt},*history,
                   {"role":"user","content":message.strip()}]
-        for _ in range(self.config.max_tool_rounds+1):
-            response=self.provider.chat(messages,self.tools.definitions())
-            tool_calls=response.get("tool_calls") or []
+        for round_index in range(self.config.max_tool_rounds + 1):
+            response = self.provider.chat(messages, self.tools.definitions())
+            if not isinstance(response, dict):
+                raise RuntimeError("Model provider returned an invalid response")
+
+            tool_calls = response.get("tool_calls") or []
+            if not isinstance(tool_calls, list):
+                raise RuntimeError("Model provider returned an invalid tool-call list")
             if not tool_calls:
-                content=response.get("content")
-                if not isinstance(content,str): raise RuntimeError("Model returned no text response")
-                self.store.add_message(session_id,"assistant",content)
-                return {"session_id":session_id,"response":content}
+                content = response.get("content")
+                if not isinstance(content, str):
+                    raise RuntimeError("Model returned no text response")
+                self.store.add_message(session_id, "assistant", content)
+                return {"session_id": session_id, "response": content}
+
+            # A final provider call is reserved for the response after the last
+            # permitted tool round. Never execute an extra batch on that call.
+            if round_index >= self.config.max_tool_rounds:
+                raise RuntimeError("Tool-call limit reached; no final assistant response was produced")
+
             messages.append(response)
             for call in tool_calls:
-                function=call.get("function") or {}
-                result=self.tools.execute(function.get("name",""),function.get("arguments","{}"))
-                messages.append({"role":"tool","tool_call_id":call.get("id",""),
-                                 "name":function.get("name",""),"content":result})
+                if not isinstance(call, dict):
+                    raise RuntimeError("Model provider returned an invalid tool call")
+                function = call.get("function")
+                if not isinstance(function, dict):
+                    raise RuntimeError("Model provider returned a tool call without a function")
+                name = function.get("name")
+                if not isinstance(name, str) or not name:
+                    raise RuntimeError("Model provider returned a tool call without a name")
+                result = self.tools.execute(name, function.get("arguments", "{}"))
+                messages.append({
+                    "role": "tool",
+                    "tool_call_id": call.get("id", ""),
+                    "name": name,
+                    "content": result,
+                })
         raise RuntimeError("Tool-call limit reached; no final assistant response was produced")
 
     def close(self):
