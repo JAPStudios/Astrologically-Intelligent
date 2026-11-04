@@ -195,6 +195,30 @@ def records_from_payload(
     payload = as_mapping(payload)
     if "models" in payload:
         return records_from_tags_payload(payload, endpoint_id=endpoint_id, base_url=base_url)
+    if "data" in payload:
+        records = []
+        for item in as_list(payload.get("data")):
+            if not isinstance(item, Mapping):
+                continue
+            model_id = model_id_from(item, "id", "model", "name")
+            if not model_id:
+                continue
+            records.append(
+                ModelCapabilityRecord(
+                    vendor=VENDOR_OLLAMA,
+                    model_id=model_id,
+                    stable_model_id=stable_model_id_for(
+                        VENDOR_OLLAMA, model_id, endpoint_id=endpoint_id, base_url=base_url
+                    ),
+                    display_name=compact_str(item.get("name") or item.get("display_name")) or model_id,
+                    capability=mc.unknown_capability(
+                        source=mc.SOURCE_PROVIDER_READER,
+                        confidence=mc.CONFIDENCE_UNKNOWN,
+                    ),
+                    raw=item,
+                )
+            )
+        return tuple(records)
     record = record_from_show_payload(
         model_id_from(payload, "model", "name"),
         payload,
