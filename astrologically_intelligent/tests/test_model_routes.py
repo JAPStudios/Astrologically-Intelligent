@@ -45,6 +45,7 @@ with preserve_import_state("core.database", "src.database", "core.session_manage
         _classify_endpoint,
         _effective_endpoint_kind,
         _probe_endpoint,
+        _capture_model_capabilities,
         _ping_endpoint,
         _parse_model_list,
         _normalize_refresh_mode,
@@ -2198,3 +2199,31 @@ def test_manual_refresh_timeout_keeps_cached_models_and_warns(monkeypatch):
     assert db.commits == 0
     assert response.headers["X-Model-Refresh-Status"] == "failed"
     assert "kept cached models" in response.headers["X-Model-Refresh-Warning"]
+
+
+def test_capture_model_capabilities_uses_native_reader_and_endpoint_identity():
+    captured = []
+    records = _capture_model_capabilities(
+        {
+            "data": [
+                {"id": "claude-example", "display_name": "Claude Example"},
+                {"id": "claude-second"},
+            ]
+        },
+        base_url="https://api.anthropic.com/v1",
+        endpoint_kind="api",
+        endpoint_id="anthropic-primary",
+        output=captured,
+    )
+
+    assert records is captured or records == captured
+    assert [record.model_id for record in captured] == [
+        "claude-example",
+        "claude-second",
+    ]
+    assert captured[0].vendor == "anthropic"
+    assert captured[0].stable_model_id == (
+        "anthropic|endpoint:anthropic-primary|claude-example"
+    )
+    assert captured[0].capability.family == "chat"
+    assert captured[0].capability.capabilities == ()
