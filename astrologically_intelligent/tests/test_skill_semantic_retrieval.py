@@ -209,3 +209,27 @@ def test_learned_quality_requires_both_audit_classes_for_same_owner(semantic_lan
     }]
 
     assert skill_index.learned_skill_quality_scores(training, candidates) == {}
+
+def test_learned_quality_model_cache_is_separate_per_owner(semantic_lane):
+    skill_index.reset_skill_quality_cache()
+    training = []
+    for owner in ("alice", "bob"):
+        for number in range(4):
+            training.append({
+                **_skill(f"positive-{number}", "positive audited procedure"),
+                "owner": owner, "audit_version": 2, "audit_verdict": "pass",
+                "baseline_verdict": "better",
+            })
+            training.append({
+                **_skill(f"negative-{number}", "negative audited procedure"),
+                "owner": owner, "audit_version": 2, "audit_verdict": "fail",
+                "baseline_verdict": "worse",
+            })
+    for owner in ("alice", "bob"):
+        candidate = [{
+            **_skill("candidate", "positive candidate procedure"),
+            "owner": owner,
+        }]
+        assert skill_index.learned_skill_quality_scores(training, candidate)
+    assert len(skill_index._quality_model_cache) == 2
+
