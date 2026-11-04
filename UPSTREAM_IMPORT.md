@@ -7,8 +7,8 @@
 - Public repositories discovered across the nine requested GitHub organizations: **744**
 - Non-empty repositories pinned in the destination: **741**
 - Empty repositories skipped because they had no commit/source tree: **3**
-- Gitlinks in the destination tree: **740**
-- Entries in `.gitmodules`: **740**
+- Gitlinks in the destination tree: **741**
+- Entries in `.gitmodules`: **741**
 - Import workflow: `Import Upstream Repositories`
 - Successful import run: [41318801539](https://github.com/JAPStudios/Astrologically-Intelligent/actions/runs/41318801539)
 - Final import batch commit: [b83cb83](https://github.com/JAPStudios/Astrologically-Intelligent/commit/b83cb83e682aa724a5794b2a8dfb723e0a073721)
@@ -18,17 +18,17 @@
 | Organization | Imported submodules |
 | --- | ---: |
 | anthropics | 115 |
-| n8n-io | 53 |
-| NousResearch | 115 |
+| n8n-io | 52 |
+| NousResearch | 114 |
 | odysseus-dev | 2 |
-| openai | 278 |
-| openclaw | 98 |
+| openai | 277 |
+| openclaw | 97 |
 | paperclipai | 11 |
 | perplexityai | 56 |
 | xai-org | 12 |
-| **Total** | **740** |
+| **Total under `upstream/<organization>/`** | **736** |
 
-Five skill-oriented repositories are located under `skills/upstream/` so the runtime's recursive skill loader can discover their `SKILL.md` files. The remaining repositories are under `upstream/<organization>/<repository>`.
+Five skill-oriented repositories are located under `skills/upstream/` so the runtime's recursive skill loader can discover their `SKILL.md` files. They are included in the 741 total Gitlinks but are excluded from the organization-directory table above. The remaining 736 repositories are under `upstream/<organization>/<repository>`.
 
 ## Empty repositories skipped
 
