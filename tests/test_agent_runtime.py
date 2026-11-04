@@ -25,6 +25,12 @@ class RuntimeTests(unittest.TestCase):
         self.runtime=AgentRuntime(provider=FakeProvider(),store=self.store,config=RuntimeConfig(max_tool_rounds=2))
     def tearDown(self):
         self.runtime.close()
+    def test_system_prompt_enforces_non_human_respectful_behavior(self):
+        from astrologically_intelligent.runtime import SYSTEM_PROMPT
+        self.assertIn("You are software, not a human", SYSTEM_PROMPT)
+        self.assertIn("Do not insult, harass, threaten, or demean users", SYSTEM_PROMPT)
+        self.assertIn("Save personal memory only when the user explicitly asks", SYSTEM_PROMPT)
+
     def test_tool_call_and_session_persistence(self):
         result=self.runtime.chat("Remember my preferred name is Ada.","session-a")
         self.assertEqual(result["response"],"Memory saved.")
