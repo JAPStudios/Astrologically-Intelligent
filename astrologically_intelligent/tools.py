@@ -11,8 +11,9 @@ from .integrations import n8n_client_from_env, paperclip_client_from_env, perple
 
 
 class ToolRegistry:
-    def __init__(self, store: Store):
+    def __init__(self, store: Store, provider=None):
         self.store = store
+        self.provider = provider
         self.orchestration = Orchestrator(store.path)
         self._tools: dict[str, tuple[dict[str, Any], Callable[..., Any]]] = {}
         self._register_builtins()
