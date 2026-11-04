@@ -31,7 +31,7 @@ Run the test suite with `python -m pytest`. The CI workflows additionally valida
 
 ## Android client
 
-The native Android client is maintained in the repository root `app/` directory. It connects to the Python runtime; emulator builds use `http://10.0.2.2:7000` to reach the host service.
+The native Android client is maintained in the repository root `app/` directory. It currently connects to the separate root agent API (`/v1/chat`) on port `8765`; emulator builds use `http://10.0.2.2:8765` to reach the host service. It does not yet expose every feature in this full web application, which runs separately on port `7000`.
 
 ## Upstream source provenance
 

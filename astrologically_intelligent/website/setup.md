@@ -8,7 +8,7 @@ This page keeps the detailed install, deployment, troubleshooting, and configura
 
 ## Quick Start
 
-> **Branch note:** `dev` is the default branch and contains the latest development changes, but it may be unstable. For the more stable curated branch, use [`main`](https://github.com/JAPStudios/Astrologically-Intelligent/tree/main).
+> **Branch note:** `main` is the repository's primary branch. Use it for the current application source and deployment instructions.
 
 Defaults work out of the box: clone, run, then configure models/search/email
 inside **Settings**. Only edit `.env` for deployment-level overrides like
