@@ -2156,7 +2156,8 @@ def setup_model_routes(model_discovery):
                     409,
                     "Provider-managed authentication is not available to this capability probe yet",
                 )
-            base = _normalize_base(endpoint.base_url)
+            from src.endpoint_resolver import resolve_url
+            base = resolve_url(_normalize_base(endpoint.base_url))
             ok, reason = check_outbound_url(
                 base,
                 block_private=os.getenv("MODELENDPOINT_BLOCK_PRIVATE_IPS", "false").lower() == "true",
