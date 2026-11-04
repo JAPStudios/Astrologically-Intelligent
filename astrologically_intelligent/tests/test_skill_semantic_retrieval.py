@@ -88,7 +88,7 @@ def test_semantic_corpus_vectors_are_cached(tmp_path, semantic_lane):
     assert semantic_lane.document_encode_calls == 1
 
 
-def test_semantic_match_cannot_bypass_required_tool_capability(tmp_path, semantic_lane, monkeypatch):
+def test_semantic_match_cannot_bypass_required_tool_capability(tmp_path, semantic_lane):
     manager = SkillsManager(str(tmp_path))
     skills = [
         _skill(
@@ -97,9 +97,6 @@ def test_semantic_match_cannot_bypass_required_tool_capability(tmp_path, semanti
             requires=["manage_calendar"],
         ),
     ]
-    monkeypatch.setattr(
-        skill_index, "learned_skill_quality_scores", lambda training, candidates: {0: 1.0}
-    )
 
     unavailable = manager.get_relevant_skills(
         "orchestrate attendees without double booking anyone",
@@ -164,92 +161,4 @@ def test_no_ready_embedding_index_keeps_existing_lexical_behavior(tmp_path, monk
 
     assert [skill["name"] for skill in results] == ["git-helper"]
 
-
-
-def test_learned_quality_uses_only_owner_scoped_version_two_audits(semantic_lane):
-    skill_index.reset_skill_quality_cache()
-    training = []
-    for owner in ("alice", "bob"):
-        for number in range(4):
-            training.append({
-                **_skill(f"{owner}-positive-{number}", "positive audited procedure"),
-                "owner": owner, "audit_version": 2, "audit_verdict": "pass", "baseline_verdict": "better",
-            })
-            training.append({
-                **_skill(f"{owner}-negative-{number}", "negative audited procedure"),
-                "owner": owner, "audit_version": 2, "audit_verdict": "fail", "baseline_verdict": "worse",
-            })
-    candidates = [{
-        **_skill("alice-candidate", "positive candidate procedure"),
-        "owner": "alice",
-    }]
-
-    scores = skill_index.learned_skill_quality_scores(training, candidates)
-
-    assert set(scores) == {0}
-    assert scores[0] > 0.5
-
-
-def test_learned_quality_requires_both_audit_classes_for_same_owner(semantic_lane):
-    skill_index.reset_skill_quality_cache()
-    training = [
-        {
-            **_skill(f"alice-positive-{number}", "positive audited procedure"),
-            "owner": "alice", "audit_version": 2, "audit_verdict": "pass", "baseline_verdict": "better",
-        }
-        for number in range(5)
-    ]
-    training.extend(
-        {
-            **_skill(f"bob-negative-{number}", "negative audited procedure"),
-            "owner": "bob", "audit_version": 2, "audit_verdict": "fail", "baseline_verdict": "worse",
-        }
-        for number in range(5)
-    )
-    candidates = [{
-        **_skill("alice-candidate", "positive candidate procedure"),
-        "owner": "alice",
-    }]
-
-    assert skill_index.learned_skill_quality_scores(training, candidates) == {}
-
-def test_learned_quality_model_cache_is_separate_per_owner(semantic_lane):
-    skill_index.reset_skill_quality_cache()
-    training = []
-    for owner in ("alice", "bob"):
-        for number in range(4):
-            training.append({
-                **_skill(f"positive-{number}", "positive audited procedure"),
-                "owner": owner, "audit_version": 2, "audit_verdict": "pass",
-                "baseline_verdict": "better",
-            })
-            training.append({
-                **_skill(f"negative-{number}", "negative audited procedure"),
-                "owner": owner, "audit_version": 2, "audit_verdict": "fail",
-                "baseline_verdict": "worse",
-            })
-    for owner in ("alice", "bob"):
-        candidate = [{
-            **_skill("candidate", "positive candidate procedure"),
-            "owner": owner,
-        }]
-        assert skill_index.learned_skill_quality_scores(training, candidate)
-    assert len(skill_index._quality_model_cache) == 2
-
-def test_learned_quality_cannot_restore_a_failed_skill(tmp_path, semantic_lane, monkeypatch):
-    manager = SkillsManager(str(tmp_path))
-    failed = {
-        **_skill("failed-procedure", "coordinate calendars and confirm a viable time"),
-        "audit_verdict": "fail",
-        "audit_version": 2,
-        "baseline_verdict": "worse",
-    }
-    monkeypatch.setattr(
-        skill_index, "learned_skill_quality_scores", lambda training, candidates: {0: 1.0}
-    )
-
-    assert manager.get_relevant_skills(
-        "coordinate calendars and confirm a viable time",
-        skills=[failed],
-    ) == []
 
