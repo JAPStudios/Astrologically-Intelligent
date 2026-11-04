@@ -11,7 +11,7 @@ This spec covers the implementation introduced on current `dev` in:
   `src/model_capability_readers/base.py`;
 - reader dispatch in `src/model_capability_readers/__init__.py`;
 - concrete readers for generic OpenAI-compatible, OpenAI, OpenRouter, Google,
-  Hugging Face, Ollama, LM Studio, and llama.cpp payloads;
+  Hugging Face, Ollama, LM Studio, llama.cpp, and vLLM payloads;
 - regression coverage in `tests/test_model_capabilities.py` and
   `tests/test_model_capability_readers.py`.
 
@@ -96,7 +96,7 @@ The reader deliberately returns unknown family, modalities, capabilities, and co
 
 ## Provider-Native Readers
 
-- OpenAI keeps the official Models API identity-only.\n- Hugging Face maps explicit model-card `pipeline_tag` values to task families and modalities. Missing or unrecognized tags remain unknown; names and free-form tags do not establish capabilities.\n- vLLM preserves an explicit `max_model_len` as a context limit while leaving family and capabilities unknown.
+- OpenAI keeps the official Models API identity-only.\n- Hugging Face maps explicit Hub `pipeline_tag` values to conservative task families and modalities. Missing or unrecognized tags remain unknown.\n- vLLM preserves an explicit `max_model_len` value as a context limit while leaving model family and capabilities unknown.\n- Hugging Face maps explicit model-card `pipeline_tag` values to task families and modalities. Missing or unrecognized tags remain unknown; names and free-form tags do not establish capabilities.\n- vLLM preserves an explicit `max_model_len` as a context limit while leaving family and capabilities unknown.
 - OpenRouter maps explicit architecture modalities, supported parameters,
   limits, voices, and default parameters into family/capability/control state.
 - Google maps the native Models resource. Embedding-only methods map to the
@@ -129,7 +129,7 @@ Focused tests pin:
 - unknown behavior for generic and official OpenAI lists;
 - canonical normalization and display-surface matching;
 - assertion, deterministic-control, and probe-result shapes;
-- OpenRouter, Google, Ollama, LM Studio, and llama.cpp mappings;
+- OpenRouter, Google, Hugging Face, Ollama, LM Studio, llama.cpp, and vLLM mappings;
 - negative cases that avoid name-based media/capability inference.
 
 The provider detector has narrow production consumers in `src/ai_interaction.py` and `routes/gallery/gallery_routes.py` for selecting OpenRouter media request behavior. `ModelCapabilityRecord` normalization remains disconnected from runtime model discovery and request builders; helper reuse must not be described as full canonical integration.
