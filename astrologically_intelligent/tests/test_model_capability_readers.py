@@ -1,6 +1,6 @@
 import src.model_capabilities as mc
 import src.model_capability_readers as readers
-from src.model_capability_readers import generic_openai, google, huggingface, llamacpp, lmstudio, ollama, openai, openrouter, vllm
+from src.model_capability_readers import anthropic, generic_openai, google, huggingface, llamacpp, lmstudio, ollama, openai, openrouter, vllm
 from src.model_capability_readers.base import (
     VENDOR_GENERIC_OPENAI,
     VENDOR_GOOGLE,
@@ -740,3 +740,46 @@ def test_registry_routes_vllm_to_native_reader():
     assert records[0].vendor == "vllm"
     assert dict(records[0].capability.limits) == {"context_tokens": 8192}
     assert "vllm" not in readers.PLACEHOLDER_VENDOR_IDS
+
+
+def test_anthropic_reader_maps_native_messages_model_list_conservatively():
+    records = anthropic.records_from_payload(
+        {
+            "data": [
+                {
+                    "id": "claude-example",
+                    "display_name": "Claude Example",
+                    "type": "model",
+                    "created_at": "2026-01-01T00:00:00Z",
+                },
+                {"id": "claude-second"},
+                {"display_name": "missing-id"},
+                None,
+            ],
+            "has_more": False,
+        },
+        endpoint_id="anthropic-prod",
+    )
+
+    assert len(records) == 2
+    assert records[0].vendor == "anthropic"
+    assert records[0].model_id == "claude-example"
+    assert records[0].display_name == "Claude Example"
+    assert records[0].stable_model_id == "anthropic|endpoint:anthropic-prod|claude-example"
+    assert records[0].capability.family == mc.FAMILY_CHAT
+    assert records[0].capability.modalities.input == (mc.MODALITY_TEXT,)
+    assert records[0].capability.modalities.output == (mc.MODALITY_TEXT,)
+    assert records[0].capability.capabilities == ()
+    assert records[1].display_name == "claude-second"
+
+
+def test_registry_routes_anthropic_to_native_reader():
+    records = readers.records_from_payload(
+        {"data": [{"id": "claude-example", "display_name": "Claude Example"}]},
+        base_url="https://api.anthropic.com/v1",
+    )
+
+    assert len(records) == 1
+    assert records[0].vendor == "anthropic"
+    assert records[0].capability.family == mc.FAMILY_CHAT
+    assert "anthropic" not in readers.PLACEHOLDER_VENDOR_IDS
