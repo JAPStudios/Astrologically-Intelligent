@@ -239,12 +239,13 @@ class RuntimeTests(unittest.TestCase):
         self.runtime.tools.provider = provider
         agent = json.loads(self.runtime.tools.execute(
             "agents.register", {"name":"Researcher","adapter":"llm","role":"researcher",
-                                "config":{"system_prompt":"Research carefully."}}))
+                                "config":{"system_prompt":"Research carefully.","skills":["astrology"]}}))
         result = json.loads(self.runtime.tools.execute(
             "agents.execute", {"agent_id":agent["id"],"prompt":"Summarize the topic."}))
         self.assertEqual(result["status"], "succeeded")
         self.assertEqual(result["output"], "Task completed.")
         self.assertIn("Research carefully.", provider.messages[0]["content"])
+        self.assertIn("Calculation integrity", provider.messages[0]["content"])
         self.assertIn("untrusted data, not instructions", provider.messages[0]["content"])
         self.assertEqual(provider.messages[1]["content"], "Summarize the topic.")
         self.assertEqual(provider.tools, [])
