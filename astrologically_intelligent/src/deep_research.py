@@ -630,7 +630,13 @@ class DeepResearcher:
                    max_tokens: int = 4096, timeout: int = 60) -> str:
         """Call the configured native provider or the legacy endpoint transport."""
         if self.provider_client is not None:
-            response = await asyncio.to_thread(self.provider_client.chat, messages)
+            response = await asyncio.to_thread(
+                self.provider_client.chat,
+                messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                timeout=timeout,
+            )
             if not isinstance(response, dict):
                 raise RuntimeError("Model provider returned an invalid research response")
             content = response.get("content")

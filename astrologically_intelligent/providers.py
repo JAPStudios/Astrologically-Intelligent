@@ -34,15 +34,19 @@ class OpenAICompatibleProvider:
             raise RuntimeError("Set ASTRO_AI_API_KEY (or configure a local provider endpoint)")
         return cls(ProviderConfig(base_url, api_key, model))
 
-    def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None, *, temperature: float | None = None, max_tokens: int | None = None, timeout: float | None = None) -> dict[str, Any]:
         payload: dict[str, Any] = {"model": self.config.model, "messages": messages}
+        if temperature is not None:
+            payload["temperature"] = temperature
+        if max_tokens is not None:
+            payload["max_tokens"] = max_tokens
         if tools:
             payload["tools"] = tools
             payload["tool_choice"] = "auto"
         result = _post_json(
             f"{self.config.base_url}/chat/completions", payload,
             {"Authorization": f"Bearer {self.config.api_key}"} if self.config.api_key else {},
-            self.config.timeout,
+            timeout if timeout is not None else self.config.timeout,
         )
         choices = result.get("choices")
         if not isinstance(choices, list) or not choices or not isinstance(choices[0].get("message"), dict):
@@ -133,11 +137,15 @@ class AnthropicMessagesProvider:
                 normalized.append(item)
         return "\n\n".join(system_parts), normalized
 
-    def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None, *, temperature: float | None = None, max_tokens: int | None = None, timeout: float | None = None) -> dict[str, Any]:
         system, converted = self._messages(messages)
         payload: dict[str, Any] = {
-            "model": self.config.model, "max_tokens": 4096, "messages": converted,
+            "model": self.config.model,
+            "max_tokens": max_tokens if max_tokens is not None else 4096,
+            "messages": converted,
         }
+        if temperature is not None:
+            payload["temperature"] = temperature
         if system:
             payload["system"] = system
         if tools:
@@ -150,7 +158,7 @@ class AnthropicMessagesProvider:
         result = _post_json(
             f"{self.config.base_url}/v1/messages", payload,
             {"x-api-key": self.config.api_key, "anthropic-version": self.api_version},
-            self.config.timeout,
+            timeout if timeout is not None else self.config.timeout,
         )
         content = result.get("content")
         if not isinstance(content, list):
@@ -266,9 +274,16 @@ class GeminiGenerateContentProvider:
         flush_results()
         return "\n\n".join(system_parts), contents
 
-    def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None, *, temperature: float | None = None, max_tokens: int | None = None, timeout: float | None = None) -> dict[str, Any]:
         system, contents = self._contents(messages)
         payload: dict[str, Any] = {"contents": contents}
+        generation_config = {}
+        if temperature is not None:
+            generation_config["temperature"] = temperature
+        if max_tokens is not None:
+            generation_config["maxOutputTokens"] = max_tokens
+        if generation_config:
+            payload["generationConfig"] = generation_config
         if system:
             payload["systemInstruction"] = {"parts": [{"text": system}]}
         aliases: dict[str, str] = {}
@@ -298,7 +313,8 @@ class GeminiGenerateContentProvider:
             raise ValueError("Invalid Gemini model name")
         result = _post_json(
             f"{self.config.base_url}/models/{quote(model, safe='._-')}:generateContent",
-            payload, {"x-goog-api-key": self.config.api_key}, self.config.timeout,
+            payload, {"x-goog-api-key": self.config.api_key},
+            timeout if timeout is not None else self.config.timeout,
         )
         candidates = result.get("candidates")
         if not isinstance(candidates, list) or not candidates or not isinstance(candidates[0], dict):
