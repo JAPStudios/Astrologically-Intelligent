@@ -237,7 +237,7 @@ class ToolRegistry:
     def definitions(self) -> list[dict[str, Any]]:
         return [item[0] for item in self._tools.values()]
 
-    def execute(self, name: str, arguments: str | dict[str, Any]) -> str:
+    def execute(self, name: str, arguments: str | dict[str, Any], *, provider=None) -> str:
         if name not in self._tools:
             return json.dumps({"error": f"Tool not found: {name}"})
         try:
@@ -256,7 +256,12 @@ class ToolRegistry:
                 raise ValueError("Tool arguments must be a JSON object")
             schema = self._tools[name][0]["function"]["parameters"]
             _validate_schema(parsed, schema)
-            result = self._tools[name][1](**parsed)
+            if name == "research.deep":
+                result = _run_deep_research(
+                    provider if provider is not None else self.provider, **parsed
+                )
+            else:
+                result = self._tools[name][1](**parsed)
             return json.dumps(result, ensure_ascii=False, default=str)
         except (TypeError, ValueError) as exc:
             return json.dumps({"error": str(exc)})
@@ -500,7 +505,9 @@ class ToolRegistry:
                     name = function.get("name")
                     if name not in tool_map:
                         raise RuntimeError("Agent requested a tool outside its allowed set")
-                    result = self.execute(name, function.get("arguments", "{}"))
+                    result = self.execute(
+                        name, function.get("arguments", "{}"), provider=agent_provider
+                    )
                     trace.append({"tool": name, "result": json.loads(result)})
                     messages.append({
                         "role": "tool", "tool_call_id": call.get("id", ""),
