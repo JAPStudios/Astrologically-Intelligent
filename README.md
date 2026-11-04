@@ -17,9 +17,13 @@ python -m astrologically_intelligent
 
 The local service defaults to `127.0.0.1:8765`. It exposes `GET /health` and `POST /v1/chat`. Non-loopback binding requires a bearer token configured through `ASTRO_AI_API_TOKEN`.
 
+## Full web application
+
+The full-featured web application lives in `astrologically_intelligent/`. It is a separate FastAPI service with its own provider routing, web interface, documents, research, voice, tools, and integrations. Follow `astrologically_intelligent/README.md`; from that directory, start it with `python -m uvicorn app:app --host 127.0.0.1 --port 7000`. The root agent API described above is a separate service on port 8765; the two services are not yet a single process.
+
 ## Android application
 
-The native Android client is in `app/`. It provides a chat interface to the Python runtime. The emulator's default URL `http://10.0.2.2:8765` routes to a Python service running on the development host. Use HTTPS for remote deployments.
+The native Android client is in `app/`. It currently connects to the root Python agent API (`/v1/chat`) and defaults to `http://10.0.2.2:8765` for an Android emulator reaching the development host. It does not yet expose every feature in the full web application. Use HTTPS plus a configured bearer token for remote deployments.
 
 Build with Gradle 8.9, JDK 17, and Android SDK platform 35:
 
