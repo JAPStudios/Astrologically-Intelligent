@@ -20,7 +20,7 @@ services:
     # registry build. For production, pin an immutable tag via ODYSSEUS_IMAGE
     # - e.g. ghcr.io/odysseus-dev/odysseus:1.0.2-7c8070f (X.Y.Z-<sha>) - since
     # :latest and bare :X.Y.Z tags move on every main push.
-    image: ${ODYSSEUS_IMAGE:-ghcr.io/odysseus-dev/odysseus:latest}
+    image: ${ODYSSEUS_IMAGE:-ghcr.io/japstudios/astrologically-intelligent:latest}
     build: .
     ports:
       - "${APP_BIND:-127.0.0.1}:${APP_PORT:-7011}:7000"

@@ -2,7 +2,7 @@
 # Exercise an already-built image through the normal Compose startup path.
 set -euo pipefail
 
-searxng_repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
+searxng_repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd -P)
 searxng_project_root="$searxng_repo/astrologically_intelligent"
 searxng_image=${1:?usage: validate-searxng-image.sh IMAGE}
 [[ "$searxng_image" =~ ^[a-zA-Z0-9_./:@+-]+$ ]] || {
