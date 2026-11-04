@@ -60,5 +60,26 @@ class ExistingBrowsingToolTests(unittest.TestCase):
             _open_existing_browsing("https://example.org", max_chars=50000)
 
 
+    def test_deep_research_uses_active_openai_compatible_model(self):
+        from types import SimpleNamespace
+        from astrologically_intelligent.tools import _run_deep_research
+        provider = SimpleNamespace(
+            config=SimpleNamespace(base_url="https://model.example/v1", model="model-x", api_key="secret")
+        )
+        provider.__class__.__name__ = "OpenAICompatibleProvider"
+        fake_result = SimpleNamespace(query="topic", summary="Report", sources=[], duration_seconds=2.5, tokens_used=0)
+        async def fake_research(*args, **kwargs):
+            return fake_result
+        with patch("services.research.service.ResearchService.research", new=fake_research):
+            result = _run_deep_research(provider, "topic", 60)
+        self.assertEqual(result["report"], "Report")
+        self.assertEqual(result["query"], "topic")
+
+    def test_deep_research_rejects_invalid_time_budget(self):
+        from astrologically_intelligent.tools import _run_deep_research
+        with self.assertRaises(ValueError):
+            _run_deep_research(None, "topic", 10)
+
+
 if __name__ == "__main__":
     unittest.main()
