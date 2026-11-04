@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    working-directory: astrologically_intelligent
+
 # Cancel superseded runs on the same ref to save Actions minutes.
 concurrency:
   group: ci-${{ github.ref }}
@@ -29,6 +33,7 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        working-directory: .
         run: |
           report_file="$RUNNER_TEMP/focused-test-guidance.md"
           publish_report() {

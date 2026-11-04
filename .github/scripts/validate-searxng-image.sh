@@ -3,7 +3,7 @@
 set -euo pipefail
 
 searxng_repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
-searxng_image=${1:?usage: validate-searxng-image.sh IMAGE}
+searxng_project_root="$searxng_repo/astrologically_intelligent"\nsearxng_image=${1:?usage: validate-searxng-image.sh IMAGE}
 [[ "$searxng_image" =~ ^[a-zA-Z0-9_./:@+-]+$ ]] || {
   echo "Invalid image reference" >&2
   exit 2
@@ -18,7 +18,7 @@ export SEARXNG_SECRET=searxng-ci-validation-only
 searxng_volume_created=0
 searxng_started=0
 searxng_compose=(docker compose --env-file /dev/null --project-name "$searxng_project"
-  -f "$searxng_repo/docker-compose.yml"
+  -f "$searxng_project_root/docker-compose.yml"
   -f "$searxng_repo/.github/searxng-validation.compose.yml")
 
 searxng_cleanup() {
@@ -34,11 +34,11 @@ searxng_cleanup() {
 }
 trap searxng_cleanup EXIT
 
-install -m 0644 "$searxng_repo/scripts/check_ca_trust.py" \
-  "$searxng_repo/docker/searxng/validate_image.py" "$searxng_checks/"
-install -m 0644 "$searxng_repo/tests/fixtures/ca-trust/incident.json" "$searxng_checks/incident.json"
-install -m 0644 "$searxng_repo/config/searxng/settings.yml" "$searxng_checks/settings.yml"
-install -m 0644 "$searxng_repo/scripts/migrate_searxng_settings.py" "$searxng_checks/migrate_searxng_settings.py"
+install -m 0644 "$searxng_project_root/scripts/check_ca_trust.py" \
+  "$searxng_project_root/docker/searxng/validate_image.py" "$searxng_checks/"
+install -m 0644 "$searxng_project_root/tests/fixtures/ca-trust/incident.json" "$searxng_checks/incident.json"
+install -m 0644 "$searxng_project_root/config/searxng/settings.yml" "$searxng_checks/settings.yml"
+install -m 0644 "$searxng_project_root/scripts/migrate_searxng_settings.py" "$searxng_checks/migrate_searxng_settings.py"
 if docker volume inspect "$SEARXNG_VALIDATION_VOLUME" >/dev/null 2>&1; then
   echo "Refusing to reuse an existing validation volume" >&2
   exit 1

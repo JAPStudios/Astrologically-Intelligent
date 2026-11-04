@@ -78,7 +78,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ca-certificates
-          python scripts/check_ca_trust.py --system
-          python -m pip install --require-hashes --only-binary=:all: --no-deps -r requirements-bootstrap.txt
+          python astrologically_intelligent/scripts/check_ca_trust.py --system
+          python -m pip install --require-hashes --only-binary=:all: --no-deps -r astrologically_intelligent/requirements-bootstrap.txt
           pip install zizmor==1.25.2
           zizmor --offline --min-severity=low .github/workflows/
