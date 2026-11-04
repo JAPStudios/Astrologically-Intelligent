@@ -3,6 +3,7 @@ import src.model_capability_readers as readers
 from src.model_capability_readers import anthropic, generic_openai, google, huggingface, llamacpp, lmstudio, ollama, openai, openrouter, vllm
 from src.model_capability_readers.base import (
     VENDOR_GENERIC_OPENAI,
+    VENDOR_HUGGINGFACE,
     VENDOR_GOOGLE,
     VENDOR_LLAMACPP,
     VENDOR_LMSTUDIO,
@@ -23,6 +24,8 @@ def test_detect_vendor_uses_endpoint_kind_then_host_and_common_local_ports():
     assert detect_vendor("http://127.0.0.1:8080", endpoint_kind="llama_cpp") == VENDOR_LLAMACPP
     assert detect_vendor("https://openrouter.ai/api/v1") == VENDOR_OPENROUTER
     assert detect_vendor("https://api.openai.com/v1") == VENDOR_OPENAI
+    assert detect_vendor("https://router.huggingface.co/v1") == VENDOR_HUGGINGFACE
+    assert detect_vendor("https://api-inference.huggingface.co") == VENDOR_HUGGINGFACE
     assert detect_vendor("https://generativelanguage.googleapis.com/v1beta/openai") == VENDOR_GOOGLE
     assert detect_vendor("http://127.0.0.1:11434") == VENDOR_OLLAMA
     assert detect_vendor("http://127.0.0.1:1234") == VENDOR_LMSTUDIO
@@ -34,6 +37,7 @@ def test_detect_vendor_requires_a_dns_label_boundary():
     assert detect_vendor("https://api.openai.com./v1") == VENDOR_OPENAI
     assert detect_vendor("https://notopenai.com/v1") == VENDOR_GENERIC_OPENAI
     assert detect_vendor("https://fakeopenrouter.ai/v1") == VENDOR_GENERIC_OPENAI
+    assert detect_vendor("https://fakehuggingface.co/v1") == VENDOR_GENERIC_OPENAI
     assert detect_vendor("https://notgoogleapis.com/v1") == VENDOR_GENERIC_OPENAI
     assert detect_vendor("https://evilanthropic.com/v1") == VENDOR_GENERIC_OPENAI
     assert detect_vendor("https://fakeollama.com/v1") == VENDOR_GENERIC_OPENAI
