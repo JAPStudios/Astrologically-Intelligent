@@ -51,3 +51,33 @@ def test_rejects_non_finite_input():
     model = NeuralNetworkClassifier(2, 4, 2)
     with pytest.raises(ValueError, match="finite"):
         model.predict([[float("nan"), 0.0]])
+
+def test_seed_reproduces_initialization_and_training_shuffle():
+    features, labels = _dataset()
+    first = NeuralNetworkClassifier(2, 10, 3, learning_rate=0.01, seed=41)
+    second = NeuralNetworkClassifier(2, 10, 3, learning_rate=0.01, seed=41)
+
+    first.fit(features, labels, epochs=8, batch_size=19)
+    second.fit(features, labels, epochs=8, batch_size=19)
+
+    assert np.array_equal(first.weights1, second.weights1)
+    assert np.array_equal(first.weights2, second.weights2)
+    assert np.array_equal(first.predict(features), second.predict(features))
+
+
+def test_checkpoint_restores_training_random_state(tmp_path):
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, 10, 3, learning_rate=0.01, seed=17)
+    model.fit(features, labels, epochs=3, batch_size=21)
+    checkpoint = tmp_path / "resume-network.npz"
+    model.save(checkpoint)
+
+    restored = NeuralNetworkClassifier.load(checkpoint)
+    model.fit(features, labels, epochs=5, batch_size=21)
+    restored.fit(features, labels, epochs=5, batch_size=21)
+
+    assert np.array_equal(model.weights1, restored.weights1)
+    assert np.array_equal(model.bias1, restored.bias1)
+    assert np.array_equal(model.weights2, restored.weights2)
+    assert np.array_equal(model.bias2, restored.bias2)
+
