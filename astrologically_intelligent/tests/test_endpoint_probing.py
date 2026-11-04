@@ -106,6 +106,39 @@ class TestModelListHelpers:
 # ── _probe_endpoint: model-list parsing ──
 
 class TestProbeEndpointParsing:
+    def test_anthropic_probe_collects_native_model_capability_records(self, monkeypatch):
+        _patch_resolve(monkeypatch)
+        monkeypatch.setattr(
+            model_routes.httpx,
+            "get",
+            lambda url, headers=None, timeout=None, verify=None, **kwargs: _resp(
+                200,
+                json={
+                    "data": [
+                        {"id": "claude-example", "display_name": "Claude Example"},
+                    ]
+                },
+                url="https://api.anthropic.com/v1/models",
+            ),
+        )
+        records = []
+        models = _probe_endpoint(
+            "https://api.anthropic.com/v1",
+            "test-key",
+            capability_records=records,
+            endpoint_id="anthropic-main",
+            endpoint_kind="api",
+        )
+
+        assert models == ["claude-example"]
+        assert len(records) == 1
+        assert records[0].vendor == "anthropic"
+        assert records[0].stable_model_id == (
+            "anthropic|endpoint:anthropic-main|claude-example"
+        )
+        assert records[0].capability.family == "chat"
+        assert records[0].capability.capabilities == ()
+
     def test_parses_openai_data_format(self, monkeypatch):
         _patch_resolve(monkeypatch)
         monkeypatch.setattr(
