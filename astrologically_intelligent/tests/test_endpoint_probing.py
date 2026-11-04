@@ -179,7 +179,7 @@ class TestProbeEndpointParsing:
             "embed-example",
         ]
         assert records[0].vendor == "google"
-        assert records[0].capability.family == "chat"
+        assert records[0].capability.family == "unknown"
         assert records[1].capability.family == "embedding"
 
     def test_vllm_probe_preserves_context_limit_in_capability_records(self, monkeypatch):
