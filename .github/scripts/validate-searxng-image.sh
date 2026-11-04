@@ -2,8 +2,24 @@
 # Exercise an already-built image through the normal Compose startup path.
 set -euo pipefail
 
-searxng_repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd -P)
-searxng_project_root="$searxng_repo/astrologically_intelligent"
+searxng_script_dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+searxng_repo="$searxng_script_dir"
+searxng_project_root=
+while [[ "$searxng_repo" != "/" ]]; do
+  if [[ -f "$searxng_repo/astrologically_intelligent/scripts/check_ca_trust.py" ]]; then
+    searxng_project_root="$searxng_repo/astrologically_intelligent"
+    break
+  fi
+  if [[ -f "$searxng_repo/scripts/check_ca_trust.py" ]]; then
+    searxng_project_root="$searxng_repo"
+    break
+  fi
+  searxng_repo=$(dirname -- "$searxng_repo")
+done
+if [[ -z "$searxng_project_root" ]]; then
+  echo "Could not locate the Astrologically Intelligent application root" >&2
+  exit 1
+fi
 searxng_image=${1:?usage: validate-searxng-image.sh IMAGE}
 [[ "$searxng_image" =~ ^[a-zA-Z0-9_./:@+-]+$ ]] || {
   echo "Invalid image reference" >&2
