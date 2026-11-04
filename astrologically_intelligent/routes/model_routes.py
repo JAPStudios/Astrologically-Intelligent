@@ -1011,9 +1011,38 @@ def _probe_google_models(base_url: str, api_key: str = None, timeout: int = 5, p
     return models
 
 
-def _probe_endpoint(base_url: str, api_key: str = None, timeout: int = 5) -> List[str]:
-    """Probe a base URL's /models endpoint and return list of model IDs.
-    For Anthropic, queries their /v1/models API, falling back to hardcoded list."""
+def _capture_model_capabilities(
+    payload: Any,
+    *,
+    base_url: str,
+    endpoint_kind: str = "",
+    endpoint_id: str = "",
+    output: list | None = None,
+) -> list:
+    """Normalize provider model metadata already returned by an endpoint probe."""
+    from src.model_capability_readers import records_from_payload
+
+    records = records_from_payload(
+        payload,
+        base_url=base_url,
+        endpoint_kind=endpoint_kind,
+        endpoint_id=endpoint_id,
+    )
+    if output is not None:
+        output.extend(records)
+    return records
+
+
+def _probe_endpoint(
+    base_url: str,
+    api_key: str = None,
+    timeout: int = 5,
+    *,
+    capability_records: list | None = None,
+    endpoint_id: str = "",
+    endpoint_kind: str = "",
+) -> List[str]:
+    """Probe a model endpoint and optionally collect its native capability records."""
     from src.endpoint_resolver import resolve_url
     from src.llm_core import httpx_get_kimi_aware
     base = resolve_url(_normalize_base(base_url))
@@ -1046,6 +1075,10 @@ def _probe_endpoint(base_url: str, api_key: str = None, timeout: int = 5) -> Lis
             r = httpx.get(url, headers=headers, timeout=timeout, verify=llm_verify())
             r.raise_for_status()
             data = r.json()
+            _capture_model_capabilities(
+                data, base_url=base, endpoint_kind=endpoint_kind,
+                endpoint_id=endpoint_id, output=capability_records,
+            )
             models = _openai_model_ids(data)
             if models:
                 return models
@@ -1067,6 +1100,10 @@ def _probe_endpoint(base_url: str, api_key: str = None, timeout: int = 5) -> Lis
         r = httpx_get_kimi_aware(url, headers, timeout=timeout, verify=llm_verify())
         r.raise_for_status()
         data = r.json()
+        _capture_model_capabilities(
+            data, base_url=base, endpoint_kind=endpoint_kind,
+            endpoint_id=endpoint_id, output=capability_records,
+        )
         # OpenAI format: {"data": [{"id": "model-name"}]}
         models = _openai_model_ids(data)
         # Ollama format: {"models": [{"name": "model-name"}]}
@@ -1110,6 +1147,10 @@ def _probe_endpoint(base_url: str, api_key: str = None, timeout: int = 5) -> Lis
             r = httpx.get(root + "/api/tags", timeout=timeout, verify=llm_verify())
             r.raise_for_status()
             data = r.json()
+            _capture_model_capabilities(
+                data, base_url=root, endpoint_kind="ollama",
+                endpoint_id=endpoint_id, output=capability_records,
+            )
             models = _ollama_model_names(data)
             if models:
                 return [m for m in models if _is_chat_model(m)]
