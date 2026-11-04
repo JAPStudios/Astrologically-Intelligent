@@ -84,6 +84,17 @@ class Store:
             "preview": (row["preview"] or "")[:240],
         } for row in rows]
 
+    def delete_session(self, session_id: str) -> bool:
+        """Delete every message belonging to one exact conversation."""
+        if not isinstance(session_id, str) or not session_id or len(session_id) > 128:
+            raise ValueError("session_id must contain 1 to 128 characters")
+        with self._lock, self._db:
+            cursor = self._db.execute(
+                "DELETE FROM messages WHERE session_id=?",
+                (session_id,),
+            )
+        return cursor.rowcount > 0
+
     def remember(self, namespace: str, key: str, value: Any) -> None:
         now = time.time()
         encoded = json.dumps(value, ensure_ascii=False)

@@ -49,10 +49,10 @@ final class AgentAPI {
         return value.trim();
     }
 
-    private HttpURLConnection openGet(String path) throws Exception {
+    private HttpURLConnection openRequest(String method, String path) throws Exception {
         HttpURLConnection connection = (HttpURLConnection) new URL(baseUrl + path).openConnection();
         connection.setInstanceFollowRedirects(false);
-        connection.setRequestMethod("GET");
+        connection.setRequestMethod(method);
         connection.setConnectTimeout(10000);
         connection.setReadTimeout(20000);
         connection.setRequestProperty("Accept", "application/json");
@@ -60,6 +60,10 @@ final class AgentAPI {
             connection.setRequestProperty("Authorization", "Bearer " + bearerToken);
         }
         return connection;
+    }
+
+    private HttpURLConnection openGet(String path) throws Exception {
+        return openRequest("GET", path);
     }
 
     private String readResponse(HttpURLConnection connection) throws Exception {
@@ -104,6 +108,17 @@ final class AgentAPI {
     String fetchSessions() throws Exception {
         HttpURLConnection connection = openGet("/v1/sessions?limit=50");
         return new JSONObject(readResponse(connection)).getJSONArray("sessions").toString();
+    }
+
+    boolean deleteSession(String sessionId) throws Exception {
+        String encodedSession = java.net.URLEncoder.encode(sessionId, "UTF-8");
+        HttpURLConnection connection = openRequest("DELETE", "/v1/sessions/" + encodedSession);
+        try {
+            JSONObject response = new JSONObject(readResponse(connection));
+            return response.optBoolean("deleted", false);
+        } finally {
+            connection.disconnect();
+        }
     }
 
     String sendMessage(String message, String sessionId) throws Exception {

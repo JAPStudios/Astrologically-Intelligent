@@ -132,16 +132,61 @@ public final class MainActivity extends Activity {
                     }
                     new AlertDialog.Builder(this)
                             .setTitle("Conversations")
-                            .setItems(labels.toArray(new String[0]), (dialog, which) -> {
-                                sessionId = ids.get(which);
-                                preferences.edit().putString("session_id", sessionId).apply();
-                                loadHistory();
-                            })
+                            .setItems(labels.toArray(new String[0]), (dialog, which) ->
+                                    showConversationActions(ids.get(which), labels.get(which)))
                             .setNegativeButton("Cancel", null)
                             .show();
                 });
             } catch (Exception error) {
                 runOnUiThread(() -> transcript.append("\nConversations unavailable: "
+                        + error.getMessage() + "\n"));
+            }
+        });
+    }
+
+    private void showConversationActions(String selectedSessionId, String label) {
+        new AlertDialog.Builder(this)
+                .setTitle(label)
+                .setItems(new String[]{"Open", "Delete"}, (dialog, which) -> {
+                    if (which == 0) {
+                        sessionId = selectedSessionId;
+                        preferences.edit().putString("session_id", sessionId).apply();
+                        loadHistory();
+                        return;
+                    }
+                    new AlertDialog.Builder(this)
+                            .setTitle("Delete conversation?")
+                            .setMessage("This permanently deletes this conversation's saved messages.")
+                            .setPositiveButton("Delete", (confirm, selected) ->
+                                    deleteConversation(selectedSessionId))
+                            .setNegativeButton("Cancel", null)
+                            .show();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void deleteConversation(String selectedSessionId) {
+        String url = endpoint.getText().toString().trim();
+        String accessToken = token.getText().toString().trim();
+        executor.execute(() -> {
+            try {
+                boolean deleted = new AgentAPI(url, accessToken).deleteSession(selectedSessionId);
+                runOnUiThread(() -> {
+                    if (!deleted) {
+                        transcript.append("\nConversation was not deleted.\n");
+                        return;
+                    }
+                    if (selectedSessionId.equals(sessionId)) {
+                        sessionId = UUID.randomUUID().toString();
+                        preferences.edit().putString("session_id", sessionId).apply();
+                        transcript.setText("New conversation.\n");
+                    } else {
+                        transcript.append("\nConversation deleted.\n");
+                    }
+                });
+            } catch (Exception error) {
+                runOnUiThread(() -> transcript.append("\nDeletion failed: "
                         + error.getMessage() + "\n"));
             }
         });

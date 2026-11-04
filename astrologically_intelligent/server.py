@@ -57,6 +57,22 @@ def make_handler(runtime: AgentRuntime, token: str):
                 "messages": runtime.store.history(session_id, limit),
             })
 
+        def do_DELETE(self):
+            parsed = urlsplit(self.path)
+            prefix = "/v1/sessions/"
+            if not parsed.path.startswith(prefix):
+                return self._send(404,{"error":"not_found"})
+            if not self._authorized():
+                return self._send(401,{"error":"unauthorized"})
+            session_id = parsed.path[len(prefix):]
+            if not session_id or len(session_id) > 128 or not all(
+                char.isalnum() or char in "_-" for char in session_id
+            ):
+                return self._send(400,{"error":"invalid_session_id"})
+            if not runtime.store.delete_session(session_id):
+                return self._send(404,{"error":"session_not_found"})
+            return self._send(200,{"deleted":True,"session_id":session_id})
+
         def do_POST(self):
             if self.path!="/v1/chat": return self._send(404,{"error":"not_found"})
             if not self._authorized():

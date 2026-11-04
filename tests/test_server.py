@@ -28,8 +28,8 @@ class HistoryEndpointTests(unittest.TestCase):
         self.thread.join(timeout=2)
         self.runtime.close()
 
-    def request(self, path, token="test-token"):
-        request = urllib.request.Request(self.url + path)
+    def request(self, path, token="test-token", method="GET"):
+        request = urllib.request.Request(self.url + path, method=method)
         if token:
             request.add_header("Authorization", f"Bearer {token}")
         return urllib.request.urlopen(request, timeout=3)
@@ -62,6 +62,25 @@ class HistoryEndpointTests(unittest.TestCase):
             with self.assertRaises(urllib.error.HTTPError) as raised:
                 self.request(path)
             self.assertEqual(raised.exception.code, 400)
+
+    def test_delete_removes_only_the_selected_conversation(self):
+        with self.request("/v1/sessions/session-1", method="DELETE") as response:
+            payload = json.loads(response.read())
+        self.assertEqual(payload, {"deleted": True, "session_id": "session-1"})
+        with self.request("/v1/history?session_id=session-1") as response:
+            self.assertEqual(json.loads(response.read())["messages"], [])
+        with self.request("/v1/history?session_id=session-2") as response:
+            self.assertEqual(len(json.loads(response.read())["messages"]), 1)
+
+    def test_delete_requires_authentication(self):
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.request("/v1/sessions/session-1", token="", method="DELETE")
+        self.assertEqual(raised.exception.code, 401)
+
+    def test_delete_reports_unknown_conversation(self):
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.request("/v1/sessions/missing", method="DELETE")
+        self.assertEqual(raised.exception.code, 404)
 
     def test_health_remains_public(self):
         with urllib.request.urlopen(self.url + "/health", timeout=3) as response:
