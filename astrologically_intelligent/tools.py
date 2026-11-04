@@ -41,6 +41,14 @@ class ToolRegistry:
             return json.dumps(result, ensure_ascii=False, default=str)
         except (TypeError, ValueError) as exc:
             return json.dumps({"error": str(exc)})
+        except Exception as exc:
+            # Connector and plugin failures must become tool results, not abort
+            # the entire conversation request. Do not echo exception text: API
+            # clients may include response bodies or sensitive service details.
+            return json.dumps({
+                "error": "Tool execution failed",
+                "type": type(exc).__name__,
+            })
 
     def close(self):
         self.orchestration.close()

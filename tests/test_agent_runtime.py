@@ -30,6 +30,20 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(result["response"],"Memory saved.")
         self.assertEqual(self.store.recall("profile","preferred_name")[0]["value"],"Ada")
         self.assertEqual([m["role"] for m in self.store.history("session-a")],["user","assistant"])
+    def test_tool_handler_exceptions_are_contained_and_redacted(self):
+        def fail():
+            raise RuntimeError("sensitive connector response")
+
+        self.runtime.tools.register("test.failure", "Test a failing handler.", {
+            "type": "object", "properties": {}, "additionalProperties": False,
+        }, fail)
+        result = json.loads(self.runtime.tools.execute("test.failure", {}))
+        self.assertEqual(result, {
+            "error": "Tool execution failed",
+            "type": "RuntimeError",
+        })
+        self.assertNotIn("sensitive connector response", json.dumps(result))
+
     def test_work_item_lifecycle(self):
         task=self.store.create_task("Build an integration")
         self.assertEqual(task["status"],"open")
