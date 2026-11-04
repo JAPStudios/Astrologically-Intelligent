@@ -52,6 +52,28 @@ class ToolArgumentValidationTests(unittest.TestCase):
         self.assertIn("must be integer", wrong_type["error"])
         self.assertIn("minimum", too_large["error"]) if "minimum" in too_large["error"] else self.assertIn("maximum", too_large["error"])
 
+
+    def test_rejects_duplicate_json_keys(self):
+        self.registry.register(
+            "test.duplicate", "Duplicate-key tool",
+            {"type": "object", "properties": {"name": {"type": "string"}},
+             "required": ["name"], "additionalProperties": False},
+            lambda name: {"name": name},
+        )
+        result = json.loads(self.registry.execute(
+            "test.duplicate", '{"name":"first","name":"second"}'))
+        self.assertIn("Duplicate JSON object key", result["error"])
+
+    def test_rejects_nonstandard_json_constants(self):
+        self.registry.register(
+            "test.constant", "Strict JSON tool",
+            {"type": "object", "properties": {"value": {"type": "number"}},
+             "required": ["value"], "additionalProperties": False},
+            lambda value: {"value": value},
+        )
+        result = json.loads(self.registry.execute("test.constant", '{"value":NaN}'))
+        self.assertIn("Invalid JSON constant", result["error"])
+
     def test_accepts_valid_arguments(self):
         self.registry.register(
             "test.valid", "Valid tool",

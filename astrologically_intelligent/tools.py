@@ -12,6 +12,16 @@ from .plugins import PluginManager
 from .integrations import n8n_client_from_env, paperclip_client_from_env, perplexity_client_from_env, openclaw_client_from_env
 
 
+def _unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    """Reject duplicate keys instead of silently accepting the last value."""
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"Duplicate JSON object key: {key}")
+        result[key] = value
+    return result
+
+
 def _validate_schema(value: Any, schema: dict[str, Any], path: str = "arguments") -> None:
     """Validate tool arguments against the JSON Schema subset advertised to models."""
     if not isinstance(schema, dict):
@@ -91,7 +101,17 @@ class ToolRegistry:
         if name not in self._tools:
             return json.dumps({"error": f"Tool not found: {name}"})
         try:
-            parsed = json.loads(arguments) if isinstance(arguments, str) else arguments
+            parsed = (
+                json.loads(
+                    arguments,
+                    parse_constant=lambda value: (_ for _ in ()).throw(
+                        ValueError(f"Invalid JSON constant: {value}")
+                    ),
+                    object_pairs_hook=_unique_json_object,
+                )
+                if isinstance(arguments, str)
+                else arguments
+            )
             if not isinstance(parsed, dict):
                 raise ValueError("Tool arguments must be a JSON object")
             schema = self._tools[name][0]["function"]["parameters"]
