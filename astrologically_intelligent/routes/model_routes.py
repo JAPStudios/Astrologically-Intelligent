@@ -2129,6 +2129,11 @@ def setup_model_routes(model_discovery):
             endpoint = db.query(ModelEndpoint).filter(ModelEndpoint.id == endpoint_id).first()
             if endpoint is None:
                 raise HTTPException(404, "Model endpoint not found")
+            if getattr(endpoint, "provider_auth_id", None):
+                raise HTTPException(
+                    409,
+                    "Provider-managed authentication is not available to this capability probe yet",
+                )
             base = _normalize_base(endpoint.base_url)
             ok, reason = check_outbound_url(
                 base,
