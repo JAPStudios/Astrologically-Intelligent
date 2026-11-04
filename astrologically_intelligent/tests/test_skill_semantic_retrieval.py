@@ -236,3 +236,20 @@ def test_learned_quality_model_cache_is_separate_per_owner(semantic_lane):
         assert skill_index.learned_skill_quality_scores(training, candidate)
     assert len(skill_index._quality_model_cache) == 2
 
+def test_learned_quality_cannot_restore_a_failed_skill(tmp_path, semantic_lane, monkeypatch):
+    manager = SkillsManager(str(tmp_path))
+    failed = {
+        **_skill("failed-procedure", "coordinate calendars and confirm a viable time"),
+        "audit_verdict": "fail",
+        "audit_version": 2,
+        "baseline_verdict": "worse",
+    }
+    monkeypatch.setattr(
+        skill_index, "learned_skill_quality_scores", lambda training, candidates: {0: 1.0}
+    )
+
+    assert manager.get_relevant_skills(
+        "coordinate calendars and confirm a viable time",
+        skills=[failed],
+    ) == []
+
