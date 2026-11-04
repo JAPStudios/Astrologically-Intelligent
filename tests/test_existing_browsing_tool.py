@@ -73,6 +73,37 @@ class ExistingBrowsingToolTests(unittest.TestCase):
         self.assertEqual(result["report"], "Report")
         self.assertEqual(result["query"], "topic")
 
+    def test_deep_research_marks_basic_search_fallback(self):
+        from types import SimpleNamespace
+        from astrologically_intelligent.tools import _run_deep_research
+        provider = type("OpenAICompatibleProvider", (), {})()
+        provider.config = SimpleNamespace(base_url="https://model.example/v1", model="model-x", api_key="secret")
+        fake_result = SimpleNamespace(
+            query="topic", summary="## Research Failed - Basic Search Fallback\\n\\nSearch results",
+            sources=[], duration_seconds=1.0, tokens_used=0,
+        )
+        async def fake_research(*args, **kwargs):
+            return fake_result
+        with patch("astrologically_intelligent.services.research.service.ResearchService.research", new=fake_research):
+            result = _run_deep_research(provider, "topic", 60)
+        self.assertEqual(result["status"], "fallback")
+        self.assertIn("Search results", result["report"])
+
+    def test_deep_research_rejects_complete_engine_failure(self):
+        from types import SimpleNamespace
+        from astrologically_intelligent.tools import _run_deep_research
+        provider = type("OpenAICompatibleProvider", (), {})()
+        provider.config = SimpleNamespace(base_url="https://model.example/v1", model="model-x", api_key="secret")
+        fake_result = SimpleNamespace(
+            query="topic", summary="## Complete Research Failure\\n\\nNo result",
+            sources=[], duration_seconds=1.0, tokens_used=0,
+        )
+        async def fake_research(*args, **kwargs):
+            return fake_result
+        with patch("astrologically_intelligent.services.research.service.ResearchService.research", new=fake_research):
+            with self.assertRaisesRegex(RuntimeError, "could not produce"):
+                _run_deep_research(provider, "topic", 60)
+
     def test_deep_research_rejects_invalid_time_budget(self):
         from astrologically_intelligent.tools import _run_deep_research
         with self.assertRaises(ValueError):

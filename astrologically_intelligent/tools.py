@@ -199,9 +199,13 @@ def _run_deep_research(provider, topic: str, max_time: int = 180) -> dict[str, A
         result = await ResearchService().research(
             topic.strip(), endpoint, model, max_time=max_time, llm_headers=headers
         )
+        report = result.summary if isinstance(result.summary, str) else ""
+        if report.startswith("## Complete Research Failure") or report.startswith("## Research Engine Unavailable"):
+            raise RuntimeError("The research engine could not produce a research result")
         return {
             "query": result.query,
-            "report": result.summary,
+            "status": "fallback" if report.startswith("## Research Failed - Basic Search Fallback") else "completed",
+            "report": report,
             "sources": [
                 {"title": source.title, "url": source.url, "snippet": source.snippet}
                 for source in result.sources
