@@ -524,28 +524,36 @@ class ToolRegistry:
 
     def _list_skills(self) -> list[dict[str, str]]:
         from pathlib import Path
-        roots = [(Path("skills"), ""), (Path("upstream"), "upstream/")]
-        results=[]
+
+        app_root = Path(__file__).resolve().parent
+        roots = [(app_root / "skills", ""), (app_root / "upstream", "upstream/")]
+        results = []
         for root, prefix in roots:
             if not root.is_dir():
                 continue
             for path in sorted(root.rglob("SKILL.md")):
                 if ".git" in path.parts:
                     continue
-                body=path.read_text(encoding="utf-8")
-                summary=next((line.lstrip("# ").strip() for line in body.splitlines() if line.strip()),"")
-                name=prefix + path.parent.relative_to(root).as_posix()
-                results.append({"name":name,"summary":summary[:200]})
+                try:
+                    body = path.read_text(encoding="utf-8")
+                except (OSError, UnicodeError):
+                    continue
+                summary = next(
+                    (line.lstrip("# ").strip() for line in body.splitlines() if line.strip()),
+                    "",
+                )
+                name = prefix + path.parent.relative_to(root).as_posix()
+                results.append({"name": name, "summary": summary[:200]})
         return sorted(results, key=lambda item: item["name"])
 
     def _read_skill(self, name: str) -> dict[str, str]:
-        import re
         from pathlib import Path
         if (not isinstance(name, str) or len(name) > 512 or name.startswith("/") or "\\" in name
                 or any(part in {"", ".", ".."} for part in name.split("/"))):
             raise ValueError("Invalid skill name")
-        skills_root=Path("skills").resolve()
-        upstream_root=Path("upstream").resolve()
+        app_root = Path(__file__).resolve().parent
+        skills_root = (app_root / "skills").resolve()
+        upstream_root = (app_root / "upstream").resolve()
         if name.startswith("upstream/"):
             nested_skill=(skills_root/name/"SKILL.md").resolve()
             if nested_skill.is_relative_to(skills_root) and nested_skill.is_file():

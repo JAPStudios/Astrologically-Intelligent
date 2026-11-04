@@ -369,6 +369,23 @@ class RuntimeTests(unittest.TestCase):
         approval=json.loads(self.runtime.tools.execute("approvals.request",{"action":"deploy","details":{"env":"prod"},"agent_id":agent["id"]}))
         decided=json.loads(self.runtime.tools.execute("approvals.decide",{"approval_id":approval["id"],"decision":"approved","decided_by":"operator"}))
         self.assertEqual(decided["status"],"approved")
+    def test_skill_discovery_uses_application_path_not_process_directory(self):
+        import os
+        from tempfile import TemporaryDirectory
+
+        previous = os.getcwd()
+        try:
+            with TemporaryDirectory() as other_directory:
+                os.chdir(other_directory)
+                listed = self.runtime.tools._list_skills()
+                self.assertTrue(listed)
+                names = {item["name"] for item in listed}
+                self.assertIn("astrology", names)
+                skill = self.runtime.tools._read_skill("astrology")
+                self.assertTrue(skill["content"].strip())
+        finally:
+            os.chdir(previous)
+
     def test_empty_message_rejected(self):
         with self.assertRaises(ValueError): self.runtime.chat("  ")
 
