@@ -1,6 +1,6 @@
 import src.model_capabilities as mc
 import src.model_capability_readers as readers
-from src.model_capability_readers import generic_openai, google, llamacpp, lmstudio, ollama, openai, openrouter
+from src.model_capability_readers import generic_openai, google, huggingface, llamacpp, lmstudio, ollama, openai, openrouter
 from src.model_capability_readers.base import (
     VENDOR_GENERIC_OPENAI,
     VENDOR_GOOGLE,
@@ -653,3 +653,55 @@ def test_llamacpp_props_payload_reports_unsupported_modalities_without_model_lis
         mc.CAP_VISION: mc.ASSERTION_UNSUPPORTED,
         mc.CAP_AUDIO_INPUT: mc.ASSERTION_UNSUPPORTED,
     }
+
+
+def test_huggingface_reader_maps_explicit_pipeline_tasks():
+    records = huggingface.records_from_payload(
+        [
+            {"id": "org/text-model", "pipeline_tag": "text-generation"},
+            {"id": "org/embedder", "pipeline_tag": "feature-extraction"},
+            {"id": "org/vision", "pipeline_tag": "image-to-text"},
+            {"id": "org/image", "pipeline_tag": "text-to-image"},
+            {"id": "org/asr", "pipeline_tag": "automatic-speech-recognition"},
+            {"id": "org/tts", "pipeline_tag": "text-to-speech"},
+            {"id": "org/unknown"},
+        ],
+        base_url="https://huggingface.co/api",
+    )
+
+    assert [record.model_id for record in records] == [
+        "org/text-model", "org/embedder", "org/vision", "org/image",
+        "org/asr", "org/tts", "org/unknown",
+    ]
+    assert records[0].capability.family == mc.FAMILY_CHAT
+    assert records[1].capability.family == mc.FAMILY_EMBEDDING
+    assert records[2].capability.modalities.input == (mc.MODALITY_IMAGE,)
+    assert records[2].capability.capabilities == (mc.CAP_VISION,)
+    assert records[3].capability.family == mc.FAMILY_IMAGE
+    assert records[3].capability.capabilities == (mc.CAP_IMAGE_GENERATION,)
+    assert records[4].capability.capabilities == (mc.CAP_TRANSCRIPTION, mc.CAP_AUDIO_INPUT)
+    assert records[5].capability.capabilities == (mc.CAP_TTS, mc.CAP_AUDIO_OUTPUT)
+    assert records[6].capability.family == mc.FAMILY_UNKNOWN
+    assert all(record.vendor == "huggingface" for record in records)
+    assert all("url:" in record.stable_model_id for record in records)
+
+
+def test_huggingface_reader_accepts_wrapped_payload_and_ignores_invalid_entries():
+    records = huggingface.records_from_payload(
+        {"models": [None, {"id": "org/classifier", "pipeline_tag": "text-classification"}, {"pipeline_tag": "text-generation"}]}
+    )
+
+    assert len(records) == 1
+    assert records[0].capability.family == mc.FAMILY_CLASSIFICATION
+
+
+def test_registry_routes_huggingface_to_native_reader():
+    records = readers.records_from_payload(
+        [{"id": "org/model", "pipeline_tag": "feature-extraction"}],
+        vendor="huggingface",
+    )
+
+    assert len(records) == 1
+    assert records[0].vendor == "huggingface"
+    assert records[0].capability.family == mc.FAMILY_EMBEDDING
+    assert "huggingface" not in readers.PLACEHOLDER_VENDOR_IDS
