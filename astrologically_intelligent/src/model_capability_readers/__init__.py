@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from src.model_capability_readers import generic_openai, google, huggingface, llamacpp, lmstudio, ollama, openai, openrouter
+from src.model_capability_readers import generic_openai, google, huggingface, llamacpp, lmstudio, ollama, openai, openrouter, vllm
 from src.model_capability_readers.base import (
     ModelCapabilityRecord,
     VENDOR_ANTHROPIC,
@@ -28,6 +28,7 @@ from src.model_capability_readers.base import (
 READER_MODULES = {
     VENDOR_GENERIC_OPENAI: generic_openai,
     VENDOR_HUGGINGFACE: huggingface,
+    VENDOR_VLLM: vllm,
     VENDOR_OPENAI: openai,
     VENDOR_OPENROUTER: openrouter,
     VENDOR_GOOGLE: google,
@@ -41,7 +42,6 @@ PLACEHOLDER_VENDOR_IDS = frozenset(
     {
         VENDOR_ANTHROPIC,
         VENDOR_SGLANG,
-        VENDOR_VLLM,
     }
 )
 
