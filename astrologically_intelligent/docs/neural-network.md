@@ -12,6 +12,16 @@ Passing a sequence configures a deeper network, for example
 gradients through reverse-mode backpropagation. `fit()` returns per-epoch
 loss and accuracy. `predict_proba()` returns normalized class probabilities.
 
+Training can monitor a separately prepared validation set through
+`validation_data=(validation_features, validation_labels)`. Each epoch then
+records validation loss plus validation accuracy. Set `patience` to stop when
+validation loss has failed to improve for the specified number of epochs.
+`min_delta` sets the minimum loss reduction that counts as improvement.
+`restore_best_weights=True` restores the best validation checkpoint, including
+Adam moments, optimizer step and random-generator state. Validation examples
+must be held out from the training examples; this class does not split datasets
+or certify that caller-provided datasets are independent.
+
 Version-3 checkpoints preserve the complete layer architecture, all weights
 and biases, Adam moments, optimizer step plus the random-generator state.
 Training with the same seed is reproducible, including mini-batch ordering.
