@@ -147,3 +147,39 @@ def test_multilayer_backprop_matches_finite_difference():
         numerical = (upper - lower) / (2.0 * epsilon)
         assert numerical == pytest.approx(gradients[name][index], abs=2e-5)
 
+def test_validation_monitoring_stops_early_and_restores_best_training_state():
+    features, labels = _dataset()
+    reference = NeuralNetworkClassifier(2, (12, 7), 3, learning_rate=0.01, seed=53)
+    reference.fit(features, labels, epochs=1, batch_size=24)
+
+    model = NeuralNetworkClassifier(2, (12, 7), 3, learning_rate=0.01, seed=53)
+    history = model.fit(
+        features,
+        labels,
+        epochs=20,
+        batch_size=24,
+        validation_data=(features, labels),
+        patience=2,
+        min_delta=1e6,
+        restore_best_weights=True,
+    )
+
+    assert len(history) == 3
+    assert {"validation_loss", "validation_accuracy"} <= history[0].keys()
+    for name, parameter in reference._parameters().items():
+        assert np.array_equal(parameter, model._parameters()[name])
+    assert reference._step == model._step
+
+
+def test_validation_options_require_valid_validation_data():
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, 8, 3, seed=59)
+    with pytest.raises(ValueError, match="requires validation_data"):
+        model.fit(features, labels, epochs=2, patience=1)
+    with pytest.raises(ValueError, match="requires validation_data"):
+        model.fit(features, labels, epochs=2, restore_best_weights=True)
+    with pytest.raises(ValueError, match="validation_data"):
+        model.fit(features, labels, epochs=2, validation_data=(features,))
+    with pytest.raises(ValueError, match="patience"):
+        model.fit(features, labels, epochs=2, validation_data=(features, labels), patience=0)
+
