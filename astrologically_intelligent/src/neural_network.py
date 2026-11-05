@@ -1,5 +1,6 @@
 """Trainable NumPy multilayer perceptron for task-specific local learning."""
 from __future__ import annotations
+import copy
 import json
 import os
 from pathlib import Path
@@ -90,14 +91,38 @@ class NeuralNetworkClassifier:
                 "accuracy": float(np.mean(np.argmax(probabilities, axis=1) == targets))}
 
     def fit(self, features, labels, *, epochs: int = 100, batch_size: int = 32,
-            shuffle: bool = True) -> list[dict[str, float]]:
+            shuffle: bool = True, validation_data=None, patience: int | None = None,
+            min_delta: float = 0.0, restore_best_weights: bool = False) -> list[dict[str, float]]:
         values = self._features(features)
         targets = self._labels(labels, len(values))
         if isinstance(epochs, bool) or not isinstance(epochs, int) or epochs < 1:
             raise ValueError("epochs must be a positive integer")
         if isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size < 1:
             raise ValueError("batch_size must be a positive integer")
+        if patience is not None and (
+            isinstance(patience, bool) or not isinstance(patience, int) or patience < 1
+        ):
+            raise ValueError("patience must be a positive integer")
+        if not np.isfinite(min_delta) or min_delta < 0:
+            raise ValueError("min_delta must be a non-negative finite number")
+        if not isinstance(restore_best_weights, bool):
+            raise ValueError("restore_best_weights must be a boolean")
+        validation = None
+        if validation_data is not None:
+            if not isinstance(validation_data, (tuple, list)) or len(validation_data) != 2:
+                raise ValueError("validation_data must contain features and labels")
+            validation_values = self._features(validation_data[0])
+            validation_targets = self._labels(validation_data[1], len(validation_values))
+            validation = (validation_values, validation_targets)
+        if patience is not None and validation is None:
+            raise ValueError("patience requires validation_data")
+        if restore_best_weights and validation is None:
+            raise ValueError("restore_best_weights requires validation_data")
+
         history = []
+        best_loss = float("inf")
+        best_state = None
+        stale_epochs = 0
         for epoch in range(epochs):
             indices = self._rng.permutation(len(values)) if shuffle else np.arange(len(values))
             for start in range(0, len(indices), batch_size):
@@ -118,7 +143,36 @@ class NeuralNetworkClassifier:
                     if layer:
                         upstream = upstream @ self._weights[layer].T
                 self._adam_update(gradients)
-            history.append({"epoch": float(epoch + 1), **self.evaluate(values, targets)})
+
+            metrics = {"epoch": float(epoch + 1), **self.evaluate(values, targets)}
+            if validation is not None:
+                validation_metrics = self.evaluate(*validation)
+                metrics["validation_loss"] = validation_metrics["loss"]
+                metrics["validation_accuracy"] = validation_metrics["accuracy"]
+                if validation_metrics["loss"] < best_loss - min_delta:
+                    best_loss = validation_metrics["loss"]
+                    stale_epochs = 0
+                    if restore_best_weights:
+                        best_state = (
+                            {name: value.copy() for name, value in self._parameters().items()},
+                            {name: (moments[0].copy(), moments[1].copy())
+                             for name, moments in self._adam.items()},
+                            self._step,
+                            copy.deepcopy(self._rng.bit_generator.state),
+                        )
+                else:
+                    stale_epochs += 1
+            history.append(metrics)
+            if patience is not None and stale_epochs >= patience:
+                break
+
+        if best_state is not None:
+            parameters, optimizer, step, rng_state = best_state
+            for name, value in parameters.items():
+                self._parameters()[name][...] = value
+            self._adam = optimizer
+            self._step = step
+            self._rng.bit_generator.state = rng_state
         return history
 
     def _adam_update(self, gradients):
