@@ -27,55 +27,6 @@ Provider selection is controlled by `ASTRO_AI_PROVIDER`:
 
 Anthropic transport maps system messages, assistant tool-use blocks, tool schemas, and tool results to the runtime's function-tool interface. Gemini uses its native `generateContent` endpoint and preserves model-returned content, function-call IDs, and thought signatures across tool turns. xAI and Perplexity use the OpenAI-compatible transport.
 
-## n8n workflow integration
-
-Astrologically Intelligent can call an existing n8n instance through its public REST API. Configure:
-
-```sh
-export N8N_BASE_URL="https://n8n.example.com"
-export N8N_API_KEY="..."
-```
-
-Available tools:
-
-- `n8n.workflows.list`: list workflows, with bounded pagination.
-- `n8n.workflows.get`: retrieve one workflow by ID.
-- `n8n.workflows.activate`: activate a workflow.
-- `n8n.workflows.deactivate`: deactivate a workflow.
-- `n8n.executions.list`: retrieve execution history with workflow or project filters, status filters, time bounds, cursor pagination and optional execution data.
-- `n8n.executions.get`: retrieve one execution; detailed execution data is opt-in.
-
-The connector uses the n8n API-key header. HTTPS is required except for localhost. It does not claim to vendor the n8n application or its node catalogue.
-
-## Paperclip agent-organization integration
-
-Configure an authenticated Paperclip agent API token and instance URL:
-
-```sh
-export PAPERCLIP_BASE_URL="https://paperclip.example.com"
-export PAPERCLIP_API_KEY="..."
-```
-
-The connector follows Paperclip's documented company-scoped API routes and uses bearer-token authentication. Available tools:
-
-- `paperclip.agents.list`: list agents in a company.
-- `paperclip.issues.list`: list company issues with optional status, assignee, and project filters.
-- `paperclip.issues.create`: create a company issue.
-- `paperclip.goals.create`: create a company goal.
-- `paperclip.approvals.list`: list company approval requests.
-
-The token's own Paperclip permissions and company membership remain authoritative. This connector does not install or vendor the Paperclip server, UI, database, or adapter packages.
-
-## OpenClaw Gateway integration
-
-Configure the private Gateway URL and bearer token:
-
-```sh
-export OPENCLAW_GATEWAY_URL="http://127.0.0.1:18789"
-export OPENCLAW_GATEWAY_TOKEN="..."
-```
-
-The integration exposes `openclaw.sessions.list`, `openclaw.sessions.search` and `openclaw.sessions.history` through the Gateway's authenticated `POST /tools/invoke` endpoint. These operations are read-only. Search results include message context identifiers that can be passed to history retrieval. The client deliberately allowlists these three tools rather than exposing arbitrary invocation: the Gateway token can grant powerful operator access. Keep the Gateway on loopback or a private network.
 
 ## HTTP service
 
@@ -94,10 +45,7 @@ Model-backed agents may declare `allowed_tools` in their registration config. On
 - Budgets: `budgets.set`, `budgets.record_cost`, `budgets.list`
 - Runs: `runs.start`, `runs.finish`
 - Plugins: `plugins.discover`, `plugins.status`
-- n8n: `n8n.workflows.list`, `n8n.workflows.get`, `n8n.workflows.activate`, `n8n.workflows.deactivate`
-- Paperclip: `paperclip.agents.list`, `paperclip.issues.list`, `paperclip.issues.create`, `paperclip.goals.create`, `paperclip.approvals.list`
-- Perplexity: `perplexity.search`
-- OpenClaw: `openclaw.sessions.list` (read-only)
+
 
 ## Plugins
 
