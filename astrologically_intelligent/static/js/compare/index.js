@@ -218,7 +218,9 @@ async function toggleMode() {
       _syncToolbarIndicator(false);
       console.error('Compare startup cleanup error:', cleanupError);
     }
-    if (uiModule) uiModule.showError('Could not start comparison: ' + (err?.message || 'unknown error'));
+    if (uiModule) uiModule.showError(state._blindMode
+      ? 'Could not start comparison. Try again.'
+      : 'Could not start comparison: ' + (err?.message || 'unknown error'));
     return false;
   } finally {
     state._openingSelector = false;
