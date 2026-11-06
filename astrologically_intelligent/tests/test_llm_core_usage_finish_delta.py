@@ -1,6 +1,6 @@
 """Token usage must be captured even when it rides on a non-empty finish delta.
 
-Some OpenAI-compatible gateways and local servers send usage on the FINAL
+Some Chat Completions gateways and local servers send usage on the FINAL
 streamed chunk, whose delta also carries role / finish_reason (e.g.
 {"delta": {"role": "assistant", "content": null}, "finish_reason": "stop"}).
 stream_llm only captured usage when the delta was exactly None / {} /
