@@ -592,8 +592,9 @@ class ToolRegistry:
     def _list_skills(self) -> list[dict[str, str]]:
         from pathlib import Path
 
-        app_root = Path(__file__).resolve().parent
-        roots = [(app_root / "skills", ""), (app_root / "upstream", "upstream/")]
+        repo_root = Path(__file__).resolve().parent.parent
+        skills_root = repo_root / "skills"
+        roots = [(skills_root, ""), (skills_root / "upstream", "upstream/")]
         results = []
         for root, prefix in roots:
             if not root.is_dir():
@@ -615,9 +616,9 @@ class ToolRegistry:
         if (not isinstance(name, str) or len(name) > 512 or name.startswith("/") or "\\" in name
                 or any(part in {"", ".", ".."} for part in name.split("/"))):
             raise ValueError("Invalid skill name")
-        app_root = Path(__file__).resolve().parent
-        skills_root = (app_root / "skills").resolve()
-        upstream_root = (app_root / "upstream").resolve()
+        repo_root = Path(__file__).resolve().parent.parent
+        skills_root = (repo_root / "skills").resolve()
+        upstream_root = (skills_root / "upstream").resolve()
         if name.startswith("upstream/"):
             nested_skill=(skills_root/name/"SKILL.md").resolve()
             if nested_skill.is_relative_to(skills_root) and nested_skill.is_file():
