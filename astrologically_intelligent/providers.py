@@ -26,7 +26,7 @@ class ChatCompletionsProvider:
         self.config = config
 
     @classmethod
-    def from_env(cls) -> "OpenAICompatibleProvider":
+    def from_env(cls) -> "ChatCompletionsProvider":
         base_url = os.getenv("ASTRO_AI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
         api_key = os.getenv("ASTRO_AI_API_KEY", "")
         model = os.getenv("ASTRO_AI_MODEL", "gpt-4.1-mini")
@@ -415,26 +415,26 @@ def _post_json(url: str, payload: dict[str, Any], headers: dict[str, str], timeo
 
 
 def provider_from_env():
-    """Select a provider using ASTRO_AI_PROVIDER; xAI uses the compatible transport."""
-    name = os.getenv("ASTRO_AI_PROVIDER", "openai-compatible").strip().lower()
+    """Select the configured model transport using ASTRO_AI_PROVIDER."""
+    name = os.getenv("ASTRO_AI_PROVIDER", "chat-completions").strip().lower()
     if name in {"anthropic", "claude"}:
         return AnthropicMessagesProvider.from_env()
     if name in {"gemini", "google", "google-gemini"}:
         return GeminiGenerateContentProvider.from_env()
-    if name in {"openai", "openai-compatible", "local"}:
-        return OpenAICompatibleProvider.from_env()
+    if name in {"openai", "chat-completions", "local", "openai-compatible"}:
+        return ChatCompletionsProvider.from_env()
     if name in {"xai", "grok"}:
         key = os.getenv("XAI_API_KEY") or os.getenv("ASTRO_AI_API_KEY", "")
         base = os.getenv("ASTRO_AI_BASE_URL", "https://api.x.ai/v1").rstrip("/")
         model = os.getenv("ASTRO_AI_MODEL", "grok-4.20-non-reasoning")
         if not key:
             raise RuntimeError("Set XAI_API_KEY or ASTRO_AI_API_KEY for xAI")
-        return OpenAICompatibleProvider(ProviderConfig(base, key, model))
+        return ChatCompletionsProvider(ProviderConfig(base, key, model))
     if name == "perplexity":
         key = os.getenv("PERPLEXITY_API_KEY") or os.getenv("ASTRO_AI_API_KEY", "")
         base = os.getenv("ASTRO_AI_BASE_URL", os.getenv("PERPLEXITY_BASE_URL", "https://api.perplexity.ai")).rstrip("/")
         model = os.getenv("ASTRO_AI_MODEL", "sonar")
         if not key:
             raise RuntimeError("Set PERPLEXITY_API_KEY or ASTRO_AI_API_KEY for Perplexity")
-        return OpenAICompatibleProvider(ProviderConfig(base, key, model))
+        return ChatCompletionsProvider(ProviderConfig(base, key, model))
     raise RuntimeError(f"Unsupported ASTRO_AI_PROVIDER: {name}")
