@@ -60,10 +60,10 @@ class ExistingBrowsingToolTests(unittest.TestCase):
             _open_existing_browsing("https://example.org", max_chars=50000)
 
 
-    def test_deep_research_uses_active_openai_compatible_model(self):
+    def test_deep_research_uses_active_chat_completions_model(self):
         from types import SimpleNamespace
         from astrologically_intelligent.tools import _run_deep_research
-        provider = type("OpenAICompatibleProvider", (), {})()
+        provider = type("ChatCompletionsProvider", (), {})()
         provider.config = SimpleNamespace(base_url="https://model.example/v1", model="model-x", api_key="secret")
         fake_result = SimpleNamespace(query="topic", summary="Report", sources=[], duration_seconds=2.5, tokens_used=0)
         async def fake_research(*args, **kwargs):
