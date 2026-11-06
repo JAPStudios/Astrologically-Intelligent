@@ -491,25 +491,33 @@ async function streamToPane(paneIdx, sessionId, message, aiMsgEl, opts) {
       (json) => {
         try {
           if (json.type === 'fallback') {
-            const requested = String(json.selected_model || json.requested_model || 'Selected model');
-            const answered = String(json.answered_by || json.model || 'Fallback model');
-            const requestedEndpoint = String(json.selected_endpoint_label || json.requested_endpoint_label || '');
-            const answeredEndpoint = String(json.answered_by_endpoint_label || json.endpoint_label || '');
-            const route = requestedEndpoint || answeredEndpoint
-              ? ' (' + (requestedEndpoint || 'selected endpoint') + ' → ' + (answeredEndpoint || 'fallback endpoint') + ')'
-              : '';
-            _showPaneRouteNotice(aiMsgEl, 'Fallback: ' + requested + ' failed; answered by ' + answered + route, 'fallback');
+            if (state._blindMode) {
+              _showPaneRouteNotice(aiMsgEl, 'A fallback model answered this response.', 'fallback');
+            } else {
+              const requested = String(json.selected_model || json.requested_model || 'Selected model');
+              const answered = String(json.answered_by || json.model || 'Fallback model');
+              const requestedEndpoint = String(json.selected_endpoint_label || json.requested_endpoint_label || '');
+              const answeredEndpoint = String(json.answered_by_endpoint_label || json.endpoint_label || '');
+              const route = requestedEndpoint || answeredEndpoint
+                ? ' (' + (requestedEndpoint || 'selected endpoint') + ' → ' + (answeredEndpoint || 'fallback endpoint') + ')'
+                : '';
+              _showPaneRouteNotice(aiMsgEl, 'Fallback: ' + requested + ' failed; answered by ' + answered + route, 'fallback');
+            }
           } else if (json.type === 'model_actual') {
-            const requested = String(json.requested_model || json.selected_model || '');
-            const actual = String(json.model || json.answered_by || '');
-            const requestedEndpoint = String(json.requested_endpoint_label || json.selected_endpoint_label || '');
-            const actualEndpoint = String(json.endpoint_label || json.answered_by_endpoint_label || '');
-            const modelChanged = requested && actual && requested !== actual;
-            const endpointChanged = requestedEndpoint && actualEndpoint && requestedEndpoint !== actualEndpoint;
-            if (modelChanged || endpointChanged) {
-              const modelText = modelChanged ? requested + ' → ' + actual : actual;
-              const endpointText = endpointChanged ? ' (' + requestedEndpoint + ' → ' + actualEndpoint + ')' : '';
-              _showPaneRouteNotice(aiMsgEl, 'Route: ' + modelText + endpointText, 'route');
+            if (state._blindMode) {
+              _showPaneRouteNotice(aiMsgEl, 'The provider resolved a different model for this response.', 'route');
+            } else {
+              const requested = String(json.requested_model || json.selected_model || '');
+              const actual = String(json.model || json.answered_by || '');
+              const requestedEndpoint = String(json.requested_endpoint_label || json.selected_endpoint_label || '');
+              const actualEndpoint = String(json.endpoint_label || json.answered_by_endpoint_label || '');
+              const modelChanged = requested && actual && requested !== actual;
+              const endpointChanged = requestedEndpoint && actualEndpoint && requestedEndpoint !== actualEndpoint;
+              if (modelChanged || endpointChanged) {
+                const modelText = modelChanged ? requested + ' → ' + actual : actual;
+                const endpointText = endpointChanged ? ' (' + requestedEndpoint + ' → ' + actualEndpoint + ')' : '';
+                _showPaneRouteNotice(aiMsgEl, 'Route: ' + modelText + endpointText, 'route');
+              }
             }
           } else if (json.type === 'metrics') {
             metrics = json.data;
