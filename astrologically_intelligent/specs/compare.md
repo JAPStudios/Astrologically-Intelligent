@@ -81,5 +81,5 @@ Compare frontend code is part of the app DOM security surface. Current stream/se
 - `/api/compare/start` retains a raw-URL input for compatibility, but `_reject_raw_endpoint_url_for_non_admin` rejects unregistered raw endpoints for signed-in non-admin users after owner-scoped endpoint resolution. Keep this guard aligned with `/api/session` if either route changes.
 - `src/agent_loop.py` advertises stale compare app API endpoints.
 - Compare streaming and chat streaming are separate frontend paths but share model/provider infrastructure; regressions can happen when provider event shape changes.
-- Compare frontend needs explicit fallback/error event handling parity with chat streaming.
+- Compare frontend still needs explicit presentation and regression coverage for foreground fallback and model/endpoint route transitions.
 - Compare tests cover endpoint owner helper behavior, blind compare redaction, ask-user/tool-approval routing, and actual browser-driven SSE success/error/termination behavior. Remaining coverage gaps include full active `/api/session` pane creation, complete pane lifecycle, and foreground fallback/route-transition presentation.
