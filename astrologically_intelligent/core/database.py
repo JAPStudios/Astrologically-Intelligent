@@ -594,6 +594,10 @@ class ModelEndpoint(TimestampMixin, Base):
     # Optional OAuth/session-backed credential row. Used by subscription-backed
     # providers that need refresh tokens instead of a static API key.
     provider_auth_id = Column(String, nullable=True, index=True)
+    # Last successfully observed canonical provider capability catalogue.
+    # Kept separate from cached model IDs so failed probes do not erase evidence.
+    capability_records = Column(Text, nullable=True)
+    capability_observed_at = Column(Float, nullable=True)
 
 
 class ProviderAuthSession(TimestampMixin, Base):
@@ -1262,6 +1266,16 @@ def _migrate_add_model_endpoint_refresh_columns():
             conn.close()
         except Exception:
             pass
+
+def _migrate_add_model_endpoint_capability_columns():
+    """Add durable canonical capability snapshot fields to model_endpoints."""
+    with engine.begin() as conn:
+        columns = {column["name"] for column in inspect(conn).get_columns("model_endpoints")}
+        if "capability_records" not in columns:
+            conn.execute(text("ALTER TABLE model_endpoints ADD COLUMN capability_records TEXT"))
+        if "capability_observed_at" not in columns:
+            conn.execute(text("ALTER TABLE model_endpoints ADD COLUMN capability_observed_at FLOAT"))
+
 
 def _migrate_add_task_run_model_column():
     """Add model column to task_runs if it doesn't exist (records which model ran)."""
@@ -2419,6 +2433,7 @@ def init_db():
     _migrate_add_provider_auth_id_column()
     _migrate_add_supports_tools_column()
     _migrate_add_model_tool_modes_column()
+    _migrate_add_model_endpoint_capability_columns()
     _migrate_add_task_run_model_column()
     _migrate_add_owner_column()
     _migrate_add_document_archived_column()
