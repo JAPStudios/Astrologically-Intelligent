@@ -1,7 +1,7 @@
 """
 image_gen_server.py
 
-MCP server exposing image generation via OpenAI-compatible APIs.
+MCP server exposing image generation through the configured image-generation API.
 """
 
 import asyncio
