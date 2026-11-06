@@ -3,6 +3,7 @@ import threading
 import unittest
 import urllib.error
 import urllib.request
+from urllib.parse import quote
 from http.server import ThreadingHTTPServer
 
 from astrologically_intelligent.runtime import AgentRuntime
@@ -103,6 +104,19 @@ class HistoryEndpointTests(unittest.TestCase):
             with self.subTest(session_id=repr(session_id)):
                 with self.assertRaises(urllib.error.HTTPError) as raised:
                     urllib.request.urlopen(request, timeout=3)
+                self.assertEqual(raised.exception.code, 400)
+                self.assertEqual(
+                    json.loads(raised.exception.read()),
+                    {"error": "invalid_session_id"},
+                )
+
+    def test_history_rejects_invalid_session_identifiers(self):
+        invalid_ids = ("", "session/1", "session-é", "session with spaces", "x" * 129)
+        for session_id in invalid_ids:
+            path = "/v1/history?session_id=" + quote(session_id, safe="")
+            with self.subTest(session_id=repr(session_id)):
+                with self.assertRaises(urllib.error.HTTPError) as raised:
+                    self.request(path)
                 self.assertEqual(raised.exception.code, 400)
                 self.assertEqual(
                     json.loads(raised.exception.read()),
