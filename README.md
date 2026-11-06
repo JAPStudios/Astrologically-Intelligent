@@ -39,15 +39,15 @@ python -m unittest discover -s tests -v
 
 ## Upstream source imports
 
-The committed upstream inventory currently covers **nine of the ten requested organizations**, with 741 pinned Git submodules. The previous inventory contained 744 public repositories; three empty repositories had no commit or source tree and were skipped. The `herdrdev` organization was omitted from that import and remains outstanding. The importer is now configured for all ten organizations, but the additional Herdr repositories still need to be inventoried, pinned, retrieved, reviewed, and committed.
+The current `.gitmodules` inventory contains **742 pinned public repositories across all ten requested GitHub organizations**, including five repositories from `herdrdev`. Three previously listed repositories were empty and had no source tree to pin. The inventory records upstream repositories as Git submodules; it does not claim that their applications or functionality have been merged into Astrologically Intelligent.
 
-Initialize and retrieve every imported source tree with:
+Retrieve the pinned source trees with:
 
 ```sh
 git submodule update --init --recursive
 ```
 
-The resumable importer in `scripts/import_upstream_orgs.py` can add later upstream repositories or refresh the inventory. It includes archived repositories and forks and skips URLs already represented as submodules. It pins each default-branch commit; it does not flatten or rewrite upstream source files.
+The resumable importer in `scripts/import_upstream_orgs.py` can add later upstream repositories or refresh the inventory. It includes archived repositories and forks, skips URLs already represented as submodules, and pins each default-branch commit. It does not flatten or rewrite upstream source files.
 
 ## Upstream organizations
 
