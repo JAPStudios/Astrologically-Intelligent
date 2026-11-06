@@ -290,7 +290,9 @@ function _renderSearchResults(data) {
 
 /** Run synthesis for a search pane — sends search results to an LLM for analysis. */
 async function _runSynthForPane(modelToUse, synthPrompt, synthBody, spinner, hist) {
-  // Create temp session for synthesis
+  // Create temp session for synthesis. Keep its ID outside the try block so
+  // every failure path can remove the temporary session in finally.
+  let tempSessionId = '';
   const fd = new FormData();
   fd.append('name', 'Synthesis');
   fd.append('endpoint_url', modelToUse.endpoint || '');
@@ -307,6 +309,10 @@ async function _runSynthForPane(modelToUse, synthPrompt, synthBody, spinner, his
       throw new Error(errData.detail || 'Failed to create session');
     }
     const createData = await createRes.json();
+    if (!createData || typeof createData.id !== 'string' || !createData.id.trim()) {
+      throw new Error('Synthesis session creation returned no valid session ID');
+    }
+    tempSessionId = createData.id;
 
     const synthAc = new AbortController();
     state._abortControllers.push(synthAc);
@@ -317,6 +323,11 @@ async function _runSynthForPane(modelToUse, synthPrompt, synthBody, spinner, his
       signal: synthAc.signal,
     });
 
+    if (!streamRes.ok) {
+      const detail = await streamRes.text().catch(() => '');
+      throw new Error('Synthesis request failed (HTTP ' + streamRes.status + ')' + (detail ? ': ' + detail.slice(0, 240) : ''));
+    }
+    if (!streamRes.body) throw new Error('Synthesis response had no stream body');
     if (spinner) spinner.stop();
     synthBody.innerHTML = '';
     const reader = streamRes.body.getReader();
@@ -351,11 +362,16 @@ async function _runSynthForPane(modelToUse, synthPrompt, synthBody, spinner, his
     // Final highlight
     if (window.hljs) synthBody.querySelectorAll('pre code:not(.hljs)').forEach(b => window.hljs.highlightElement(b));
 
-    // Cleanup temp session
-    fetch(`${state.API_BASE}/api/session/${createData.id}`, { method: 'DELETE' }).catch(() => {});
   } catch (e) {
     if (spinner) spinner.stop();
     synthBody.innerHTML = '<div style="color:var(--color-error);font-size:0.85em;">Synthesis failed: ' + escapeHtml(e.message) + '</div>';
+  } finally {
+    if (tempSessionId) {
+      fetch(`${state.API_BASE}/api/session/${encodeURIComponent(tempSessionId)}`, {
+        method: 'DELETE',
+        credentials: 'same-origin',
+      }).catch(() => {});
+    }
   }
 }
 
