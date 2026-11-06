@@ -87,6 +87,28 @@ class HistoryEndpointTests(unittest.TestCase):
             payload = json.loads(response.read())
         self.assertEqual(payload["status"], "ok")
 
+    def test_chat_rejects_invalid_session_identifiers_before_runtime(self):
+        invalid_ids = (42, {}, "", "session/1", "x" * 129)
+        for session_id in invalid_ids:
+            body = json.dumps({"message": "hello", "session_id": session_id}).encode("utf-8")
+            request = urllib.request.Request(
+                self.url + "/v1/chat",
+                data=body,
+                headers={
+                    "Authorization": "Bearer test-token",
+                    "Content-Type": "application/json",
+                },
+                method="POST",
+            )
+            with self.subTest(session_id=repr(session_id)):
+                with self.assertRaises(urllib.error.HTTPError) as raised:
+                    urllib.request.urlopen(request, timeout=3)
+                self.assertEqual(raised.exception.code, 400)
+                self.assertEqual(
+                    json.loads(raised.exception.read()),
+                    {"error": "invalid_session_id"},
+                )
+
     def test_history_requires_authentication(self):
         with self.assertRaises(urllib.error.HTTPError) as raised:
             self.request("/v1/history?session_id=session-1", token="")
