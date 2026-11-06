@@ -2177,6 +2177,16 @@ def setup_model_routes(model_discovery):
                 endpoint_kind=kind,
             )
             classified_ids = {record.model_id for record in records}
+            # Keep the last known-good snapshot if a probe yields no catalogue.
+            # A successful non-empty inventory replaces the snapshot atomically.
+            if records or model_ids:
+                endpoint.capability_records = json.dumps(
+                    [record.to_dict() for record in records],
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                )
+                endpoint.capability_observed_at = _time.time()
+                db.commit()
             return {
                 "endpoint_id": str(endpoint.id),
                 "endpoint_kind": kind,
@@ -2184,6 +2194,7 @@ def setup_model_routes(model_discovery):
                 "unclassified_model_ids": [
                     model_id for model_id in model_ids if model_id not in classified_ids
                 ],
+                "observed_at": getattr(endpoint, "capability_observed_at", None),
             }
         finally:
             db.close()
