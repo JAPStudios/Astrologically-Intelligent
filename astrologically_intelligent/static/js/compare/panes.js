@@ -831,7 +831,9 @@ async function _createAndAppendPane(m) {
     return true;
   } catch (error) {
     console.error('Compare pane creation failed:', error);
-    uiModule.showError('Could not add comparison pane: ' + (error?.message || 'unknown error'));
+    uiModule.showError(state._blindMode
+      ? 'Could not add comparison pane. Try again.'
+      : 'Could not add comparison pane: ' + (error?.message || 'unknown error'));
     return false;
   }
 }
