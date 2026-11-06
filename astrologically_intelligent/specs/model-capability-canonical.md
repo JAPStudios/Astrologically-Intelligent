@@ -15,7 +15,7 @@ This spec covers the implementation introduced on current `dev` in:
 - regression coverage in `tests/test_model_capabilities.py` and
   `tests/test_model_capability_readers.py`.
 
-The reader modules normalize JSON returned by existing endpoint probes. The admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. It captures native Anthropic and Google catalogues plus OpenAI-compatible and Ollama model-list responses. The admin endpoint settings UI renders the returned families, modalities, limits and capability tokens. Records are not persisted or consumed by model routing or model pickers. OAuth-backed endpoints are not supported by this route.
+The reader modules normalize JSON returned by existing endpoint probes. The admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. It captures native Anthropic and Google catalogues plus OpenAI-compatible and Ollama model-list responses. The route persists a non-empty observed catalogue as JSON on its `ModelEndpoint` row, with a Unix observation timestamp. A probe returning no model IDs or records leaves the previous snapshot intact. The admin endpoint settings UI renders the returned families, modalities, limits and capability tokens. Persisted records are not yet consumed by model routing or model pickers. OAuth-backed endpoints are not supported by this route.
 
 There is no `src/provider_capability_schemas.py`, capability-specific diagnostics module, or runtime model-quirk registry on current `dev`.
 
@@ -131,8 +131,8 @@ The provider detector has narrow production consumers in `src/ai_interaction.py`
 
 ## Current Gaps
 
-- The admin capability endpoint exposes live normalized records. Canonical records are not yet persisted or used by model routing, endpoint resolution, model context, request shaping or frontend pickers.
-- Reader output is refreshed on explicit capability requests but is not persisted, merged or expired.
+- The admin capability endpoint persists the latest non-empty normalized catalogue on its endpoint row. Canonical records are not yet consumed by model routing, endpoint resolution, model context, request shaping or frontend pickers.
+- Reader output is refreshed and persisted on explicit capability requests. Evidence merging, conflict resolution and expiry are not implemented.
 - Provider detection still uses common-port hints; consumers must not promote normalization hints into trust decisions.
 - Ten concrete readers exist; SGLang and other providers use the identity-only generic reader.
 - Generic fallback accepts mapping payloads with `data[]` or `models[]`, plus bare lists; identity may come from `id`, `name`, `model`, `key`, or `slug`. These records remain identity-only and do not infer capabilities.
