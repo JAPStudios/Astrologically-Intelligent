@@ -130,6 +130,34 @@ class RuntimeTests(unittest.TestCase):
                     with self.assertRaisesRegex(RuntimeError, "choices"):
                         provider.chat([{"role": "user", "content": "hello"}])
 
+    def test_chat_completions_provider_rejects_non_object_responses(self):
+        provider = ChatCompletionsProvider(
+            ProviderConfig("http://localhost:1234/v1", "test-key", "test-model")
+        )
+        for response in (None, [], "invalid"):
+            with self.subTest(response=response):
+                with patch("astrologically_intelligent.providers._post_json", return_value=response):
+                    with self.assertRaisesRegex(RuntimeError, "JSON object"):
+                        provider.chat([{"role": "user", "content": "hello"}])
+
+    def test_anthropic_provider_rejects_malformed_response_content(self):
+        provider = AnthropicMessagesProvider(
+            ProviderConfig("https://api.anthropic.com", "test-key", "test-model")
+        )
+        for response in (None, [], {"content": [None]}, {"content": [{"type": "text", "text": 42}]}):
+            with self.subTest(response=response):
+                with patch("astrologically_intelligent.providers._post_json", return_value=response):
+                    with self.assertRaises(RuntimeError):
+                        provider.chat([{"role": "user", "content": "hello"}])
+
+    def test_gemini_provider_rejects_non_object_responses(self):
+        provider = GeminiGenerateContentProvider(
+            ProviderConfig("https://generativelanguage.googleapis.com/v1beta", "test-key", "test-model")
+        )
+        with patch("astrologically_intelligent.providers._post_json", return_value=None):
+            with self.assertRaisesRegex(RuntimeError, "JSON object"):
+                provider.chat([{"role": "user", "content": "hello"}])
+
     def test_provider_request_shape(self):
         provider=ChatCompletionsProvider(ProviderConfig("http://localhost:1234/v1","","test-model"))
         self.assertEqual(provider.config.model,"test-model")
