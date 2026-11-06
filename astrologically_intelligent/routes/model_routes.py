@@ -2177,9 +2177,8 @@ def setup_model_routes(model_discovery):
                 endpoint_kind=kind,
             )
             classified_ids = {record.model_id for record in records}
-            # Keep the last known-good snapshot if a probe yields no catalogue.
-            # A successful non-empty inventory replaces the snapshot atomically.
-            if records or model_ids:
+            # Keep the last known-good snapshot when the probe supplies no capability records.
+            if records:
                 endpoint.capability_records = json.dumps(
                     [record.to_dict() for record in records],
                     ensure_ascii=False,
@@ -2669,10 +2668,16 @@ def setup_model_routes(model_discovery):
                 stored_capabilities = json.loads(getattr(ep, "capability_records", None) or "[]")
             except (TypeError, ValueError):
                 stored_capabilities = []
+            if not isinstance(stored_capabilities, list):
+                stored_capabilities = []
             capabilities_by_model = {
                 str(item.get("model_id")): item.get("capability")
                 for item in stored_capabilities
-                if isinstance(item, dict) and item.get("model_id") and isinstance(item.get("capability"), dict)
+                if (
+                    isinstance(item, dict)
+                    and item.get("model_id")
+                    and isinstance(item.get("capability"), dict)
+                )
             }
             return [
                 {
