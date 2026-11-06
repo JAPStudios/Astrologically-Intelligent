@@ -2665,6 +2665,15 @@ def setup_model_routes(model_discovery):
             _, pinned = _picker_models_for_endpoint(ep, base, kind)
             pinned_set = set(pinned)
             tool_modes = _model_tool_modes(ep)
+            try:
+                stored_capabilities = json.loads(getattr(ep, "capability_records", None) or "[]")
+            except (TypeError, ValueError):
+                stored_capabilities = []
+            capabilities_by_model = {
+                str(item.get("model_id")): item.get("capability")
+                for item in stored_capabilities
+                if isinstance(item, dict) and item.get("model_id") and isinstance(item.get("capability"), dict)
+            }
             return [
                 {
                     "id": m,
@@ -2673,6 +2682,7 @@ def setup_model_routes(model_discovery):
                     "is_pinned": m in pinned_set,
                     "picker_requires_pinning": picker_requires_pinning,
                     "tool_mode": tool_modes.get(m, ""),
+                    "capability": capabilities_by_model.get(m),
                 }
                 for m in _merge_model_ids(all_models, pinned)
             ]
