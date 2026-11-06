@@ -29,10 +29,11 @@ Resuming a checkpoint continues the saved random sequence. Version-1 and
 version-2 single-hidden-layer checkpoints remain loadable. Loading disables
 pickle deserialization.
 
-This is a genuine trainable neural-network classifier, not a pretrained large
+This is a trainable neural-network classifier, not a pretrained large
 language model. It does not generate natural-language responses by itself
-nor claim to have been trained on a production corpus. A downstream
-Astrologically Intelligent capability requires an appropriate labelled
-dataset plus an explicit integration before this classifier can serve that
-capability.
+nor claim to have been trained on a production corpus. The classifier is
+currently a standalone component: the web application and the Python agent
+runtime do not call it for user-facing tasks. Using it for a defined task
+requires a suitable labelled dataset, a documented task contract and a
+tested application call site.
 
