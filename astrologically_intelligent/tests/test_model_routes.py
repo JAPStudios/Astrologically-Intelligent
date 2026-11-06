@@ -1770,6 +1770,33 @@ def test_api_models_scopes_api_token_to_token_owner(monkeypatch):
     assert admin_checks == ["alice"]
 
 
+def test_api_models_includes_persisted_capability_metadata(monkeypatch):
+    row = _route_ep(
+        "endpoint",
+        "https://api.example/v1",
+        cached_models=["model-a", "model-b"],
+    )
+    row.capability_records = json.dumps([
+        {"model_id": "model-a", "capability": {"family": "chat", "capabilities": ["tool_call"]}},
+        {"model_id": "model-b", "capability": {"family": "embedding", "capabilities": []}},
+    ])
+    db = _RouteDb([row])
+    router = model_routes.setup_model_routes(model_discovery=None)
+    monkeypatch.setattr(model_routes, "ModelEndpoint", _RouteModelEndpoint)
+    monkeypatch.setattr(model_routes, "SessionLocal", lambda: db)
+    monkeypatch.setattr(model_routes, "_auth_disabled", lambda: True)
+    monkeypatch.setattr(model_routes, "build_chat_url", lambda base: f"{base}/chat/completions")
+    monkeypatch.setattr(threading, "Thread", _NoopThread)
+
+    result = _route_endpoint(router, "/api/models")(_route_request())
+    item = result["items"][0]
+
+    assert item["model_capabilities"] == {
+        "model-a": {"family": "chat", "capabilities": ["tool_call"]},
+        "model-b": {"family": "embedding", "capabilities": []},
+    }
+
+
 def test_api_models_returns_only_pinned_proxy_models_without_refresh_probe(monkeypatch):
     row = _route_ep(
         "proxy",
