@@ -850,6 +850,21 @@ async function _createAndAppendPane(m) {
     return true;
   } catch (error) {
     if (createdSessionId) {
+      const addedIndex = state._paneSessionIds.indexOf(createdSessionId);
+      if (addedIndex >= 0) {
+        state._selectedModels.splice(addedIndex, 1);
+        state._paneSessionIds.splice(addedIndex, 1);
+        state._paneGenerationSettings.splice(addedIndex, 1);
+        state._paneMetrics.splice(addedIndex, 1);
+        state._abortControllers.splice(addedIndex, 1);
+        document.querySelector(`.compare-grid > .compare-pane[data-pane="${addedIndex}"]`)?.remove();
+        const remaining = state._selectedModels.length;
+        const currentGrid = document.querySelector('.compare-grid');
+        if (currentGrid) currentGrid.dataset.cols = String(Math.min(remaining, 4));
+        _persistSelections();
+        if (window._updateCheckBtnState) window._updateCheckBtnState();
+        refreshMobilePaneTabs(Math.min(state._activeMobilePane, Math.max(0, remaining - 1)));
+      }
       await fetch(`${state.API_BASE}/api/session/${encodeURIComponent(createdSessionId)}`, {
         method: 'DELETE',
         keepalive: true,
@@ -868,7 +883,7 @@ async function _createAndAppendPane(m) {
 
 /** Remove a pane from the compare grid. If only 1 remains, exit compare mode. */
 function _removePane(paneIdx) {
-  if (state._streaming) return;
+  if (state._streaming || state._paneCreationPending) return;
 
   // Abort if streaming
   if (state._abortControllers[paneIdx]) state._abortControllers[paneIdx].abort();
