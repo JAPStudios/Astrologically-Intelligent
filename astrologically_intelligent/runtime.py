@@ -9,6 +9,15 @@ from .providers import provider_from_env
 from .storage import Store
 from .tools import ToolRegistry
 
+def _valid_session_id(value: object) -> bool:
+    """Accept bounded ASCII session identifiers shared by every runtime entrypoint."""
+    return (
+        isinstance(value, str)
+        and 1 <= len(value) <= 128
+        and all((char.isascii() and char.isalnum()) or char in "_-" for char in value)
+    )
+
+
 SYSTEM_PROMPT = """You are Astrologically Intelligent, an AI assistant. Follow the user's actual request and the configured application context.
 Be explicit about uncertainty. Never invent facts, calculations, tool results, or personal data.
 You are software, not a human; do not imitate human identity, claim personal experiences, or fabricate emotions.
@@ -34,9 +43,16 @@ class AgentRuntime:
     def chat(self, message: str, session_id: str | None = None) -> dict[str, str]:
         if not isinstance(message, str) or not message.strip():
             raise ValueError("message must be a non-empty string")
-        if not isinstance(self.config.max_tool_rounds, int) or self.config.max_tool_rounds < 0:
+        if (
+            isinstance(self.config.max_tool_rounds, bool)
+            or not isinstance(self.config.max_tool_rounds, int)
+            or self.config.max_tool_rounds < 0
+        ):
             raise ValueError("max_tool_rounds must be a non-negative integer")
-        session_id = session_id or uuid.uuid4().hex
+        if session_id is None:
+            session_id = uuid.uuid4().hex
+        elif not _valid_session_id(session_id):
+            raise ValueError("session_id must be 1 to 128 ASCII letters, digits, underscores, or hyphens")
         history = self.store.history(session_id, self.config.history_limit)
         self.store.add_message(session_id, "user", message.strip())
         messages = [
@@ -83,6 +99,7 @@ class AgentRuntime:
                 return {"session_id": session_id, "response": content}
 
             messages.append(response)
+            seen_call_ids = set()
             for call in tool_calls:
                 if not isinstance(call, dict):
                     raise RuntimeError("Model provider returned an invalid tool call")
@@ -92,10 +109,19 @@ class AgentRuntime:
                 name = function.get("name")
                 if not isinstance(name, str) or not name:
                     raise RuntimeError("Model provider returned a tool call without a name")
+                call_id = call.get("id")
+                if (
+                    not isinstance(call_id, str)
+                    or not call_id
+                    or len(call_id) > 256
+                    or call_id in seen_call_ids
+                ):
+                    raise RuntimeError("Model provider returned an invalid or duplicate tool-call ID")
+                seen_call_ids.add(call_id)
                 result = self.tools.execute(name, function.get("arguments", "{}"))
                 messages.append({
                     "role": "tool",
-                    "tool_call_id": call.get("id", ""),
+                    "tool_call_id": call_id,
                     "name": name,
                     "content": result,
                 })
