@@ -4,6 +4,7 @@ const state = {
   isActive: false,
   _openingSelector: false,        // prevents duplicate compare modals on rapid re-clicks
   _streaming: false,
+  _paneCreationPending: false,      // serializes asynchronous Add-pane session creation
   _blindMode: true,
   _saveOnClose: false,
   _continueChat: false,
@@ -41,6 +42,7 @@ const state = {
 export function reset() {
   state._openingSelector = false;
   state._streaming = false;
+  state._paneCreationPending = false;
   state._finishOrder = 0;
   state._paneElapsed = [];
   state._abortControllers.forEach(c => { if (c) c.abort(); });
