@@ -5,7 +5,7 @@ from io import BytesIO
 from unittest.mock import patch
 
 from astrologically_intelligent.providers import (
-    AnthropicMessagesProvider, GeminiGenerateContentProvider, OpenAICompatibleProvider, ProviderConfig, _post_json, provider_from_env,
+    AnthropicMessagesProvider, GeminiGenerateContentProvider, ChatCompletionsProvider, ProviderConfig, _post_json, provider_from_env,
 )
 from astrologically_intelligent.runtime import AgentRuntime, RuntimeConfig
 from astrologically_intelligent.storage import Store
