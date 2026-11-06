@@ -228,8 +228,11 @@ class NeuralNetworkClassifier:
                     raise ValueError(f"invalid checkpoint parameter: {name}")
                 parameter[...] = value
                 first, second = archive[f"adam_{name}_m"].copy(), archive[f"adam_{name}_v"].copy()
-                if any(v.shape != parameter.shape or not np.isfinite(v).all()
-                       for v in (first, second)):
+                if (
+                    any(v.shape != parameter.shape or not np.isfinite(v).all()
+                        for v in (first, second))
+                    or np.any(second < 0.0)
+                ):
                     raise ValueError(f"invalid optimizer state: {name}")
                 model._adam[name] = (first, second)
             model._step = int(archive["step"])
