@@ -118,7 +118,7 @@ def test_compare_model_swap_creates_replacement_before_mutating_current_pane():
 
     create_idx = swap.index("const res = await fetch(`${state.API_BASE}/api/session`")
     ok_idx = swap.index("if (!res.ok) throw new Error('HTTP ' + res.status);")
-    id_idx = swap.index("newSessionId = data.id || '';")
+    id_idx = swap.index("newSessionId = data.id;")
     state_idx = swap.index("state._selectedModels[paneIdx] = {")
     delete_idx = swap.index("fetch(`${state.API_BASE}/api/session/${oldSid}`")
 
