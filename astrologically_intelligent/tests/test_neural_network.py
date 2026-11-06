@@ -76,6 +76,28 @@ def test_checkpoint_rejects_invalid_architecture_metadata(tmp_path):
             NeuralNetworkClassifier.load(invalid_checkpoint)
 
 
+def test_checkpoint_rejects_invalid_version_step_and_random_state(tmp_path):
+    model = NeuralNetworkClassifier(2, 8, 3, seed=47)
+    checkpoint = tmp_path / "valid-state.npz"
+    model.save(checkpoint)
+
+    with np.load(checkpoint, allow_pickle=False) as archive:
+        original = {name: item.copy() for name, item in archive.items()}
+
+    invalid_metadata = {
+        "fractional-version": ("format_version", np.array(3.5)),
+        "fractional-step": ("step", np.array(0.5)),
+        "invalid-random-state": ("rng_state", np.array("{not-json")),
+    }
+    for name, (field, value) in invalid_metadata.items():
+        arrays = {key: item.copy() for key, item in original.items()}
+        arrays[field] = value
+        invalid_checkpoint = tmp_path / f"{name}.npz"
+        np.savez_compressed(invalid_checkpoint, **arrays)
+        with pytest.raises(ValueError):
+            NeuralNetworkClassifier.load(invalid_checkpoint)
+
+
 def test_rejects_invalid_dimensions_and_training_data():
     with pytest.raises(ValueError, match="dimensions"):
         NeuralNetworkClassifier(2, 0, 3)
