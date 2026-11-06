@@ -208,7 +208,10 @@ class NeuralNetworkClassifier:
     @classmethod
     def load(cls, path: str | os.PathLike[str]) -> "NeuralNetworkClassifier":
         with np.load(path, allow_pickle=False) as archive:
-            version = int(archive["format_version"])
+            raw_version = archive["format_version"]
+            if raw_version.ndim != 0 or not np.issubdtype(raw_version.dtype, np.integer):
+                raise ValueError("invalid neural-network checkpoint version")
+            version = int(raw_version)
             if version not in (1, 2, cls.FORMAT_VERSION):
                 raise ValueError(f"unsupported neural-network checkpoint version: {version}")
             raw_dimensions = archive["dimensions"]
@@ -253,11 +256,23 @@ class NeuralNetworkClassifier:
                 ):
                     raise ValueError(f"invalid optimizer state: {name}")
                 model._adam[name] = (first, second)
-            model._step = int(archive["step"])
-            if version >= 2:
-                model._rng.bit_generator.state = json.loads(str(archive["rng_state"]))
+            raw_step = archive["step"]
+            if raw_step.ndim != 0 or not np.issubdtype(raw_step.dtype, np.integer):
+                raise ValueError("invalid optimizer step")
+            model._step = int(raw_step)
             if model._step < 0:
                 raise ValueError("invalid optimizer step")
+            if version >= 2:
+                try:
+                    raw_rng_state = archive["rng_state"]
+                    if raw_rng_state.ndim != 0 or raw_rng_state.dtype.kind not in {"U", "S"}:
+                        raise ValueError
+                    rng_state = json.loads(str(raw_rng_state))
+                    if not isinstance(rng_state, dict):
+                        raise ValueError
+                    model._rng.bit_generator.state = rng_state
+                except (TypeError, ValueError, json.JSONDecodeError) as exc:
+                    raise ValueError("invalid checkpoint random-generator state") from exc
             return model
 
     def _features(self, features):
