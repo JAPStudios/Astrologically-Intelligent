@@ -46,9 +46,9 @@ class N8nClientTests(unittest.TestCase):
             self.client.get_execution("ex-1")
             request.assert_called_once_with("GET", "/api/v1/executions/ex-1", None)
             self.client.get_execution("ex-1", include_data=True)
-            request.assert_called_once_with(
-                "GET", "/api/v1/executions/ex-1", {"includeData": "true"}
-            )
+            self.assertEqual(request.call_count, 2)
+            self.assertEqual(request.call_args_list[1].args,
+                             ("GET", "/api/v1/executions/ex-1", {"includeData": "true"}))
 
     def test_execution_queries_validate_ids_filters_and_bounds(self):
         with self.assertRaises(ValueError):
