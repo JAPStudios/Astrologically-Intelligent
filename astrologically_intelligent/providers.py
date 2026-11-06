@@ -48,6 +48,8 @@ class ChatCompletionsProvider:
             {"Authorization": f"Bearer {self.config.api_key}"} if self.config.api_key else {},
             timeout if timeout is not None else self.config.timeout,
         )
+        if not isinstance(result, dict):
+            raise RuntimeError("Provider response must be a JSON object")
         choices = result.get("choices")
         if (
             not isinstance(choices, list)
@@ -165,18 +167,30 @@ class AnthropicMessagesProvider:
             {"x-api-key": self.config.api_key, "anthropic-version": self.api_version},
             timeout if timeout is not None else self.config.timeout,
         )
+        if not isinstance(result, dict):
+            raise RuntimeError("Anthropic response must be a JSON object")
         content = result.get("content")
         if not isinstance(content, list):
             raise RuntimeError("Anthropic response did not contain a content array")
         text_parts, tool_calls = [], []
         for block in content:
+            if not isinstance(block, dict):
+                raise RuntimeError("Anthropic response contains an invalid content block")
             if block.get("type") == "text":
-                text_parts.append(block.get("text", ""))
+                text = block.get("text", "")
+                if not isinstance(text, str):
+                    raise RuntimeError("Anthropic response contains invalid text content")
+                text_parts.append(text)
             elif block.get("type") == "tool_use":
+                name, call_id, arguments = block.get("name"), block.get("id"), block.get("input", {})
+                if not isinstance(name, str) or not name or not isinstance(call_id, str) or not call_id:
+                    raise RuntimeError("Anthropic response contains an invalid tool call")
+                if not isinstance(arguments, dict):
+                    raise RuntimeError("Anthropic tool input must be a JSON object")
                 tool_calls.append({
-                    "id": block.get("id", ""), "type": "function",
-                    "function": {"name": block.get("name", ""),
-                                 "arguments": json.dumps(block.get("input", {}), ensure_ascii=False)},
+                    "id": call_id, "type": "function",
+                    "function": {"name": name,
+                                 "arguments": json.dumps(arguments, ensure_ascii=False)},
                 })
         response: dict[str, Any] = {"role": "assistant", "content": "\n".join(text_parts) or None}
         if tool_calls:
@@ -321,6 +335,8 @@ class GeminiGenerateContentProvider:
             payload, {"x-goog-api-key": self.config.api_key},
             timeout if timeout is not None else self.config.timeout,
         )
+        if not isinstance(result, dict):
+            raise RuntimeError("Gemini response must be a JSON object")
         candidates = result.get("candidates")
         if not isinstance(candidates, list) or not candidates or not isinstance(candidates[0], dict):
             raise RuntimeError("Gemini response did not contain candidates[0]")
