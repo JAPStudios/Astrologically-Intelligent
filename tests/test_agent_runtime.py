@@ -95,14 +95,13 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(perplexity.config.base_url,"https://api.perplexity.ai")
         self.assertEqual(perplexity.config.model,"sonar")
 
-    def test_external_platform_tools_are_registered(self):
+    def test_external_competitor_connectors_are_not_exposed_as_native_tools(self):
         names={item["function"]["name"] for item in self.runtime.tools.definitions()}
-        expected={
-            "n8n.workflows.list","n8n.workflows.get","n8n.workflows.activate","n8n.workflows.deactivate",
-            "paperclip.agents.list","paperclip.issues.list","paperclip.issues.create",
-            "paperclip.goals.create","paperclip.approvals.list","perplexity.search","openclaw.sessions.list",
-        }
-        self.assertTrue(expected <= names)
+        self.assertFalse(any(
+            name.startswith(("n8n.", "paperclip.", "openclaw."))
+            or name == "perplexity.search"
+            for name in names
+        ))
 
     def test_provider_http_error_body_is_not_exposed(self):
         error = urllib.error.HTTPError(
