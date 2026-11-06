@@ -53,6 +53,29 @@ def test_checkpoint_rejects_negative_adam_second_moment(tmp_path):
         NeuralNetworkClassifier.load(checkpoint)
 
 
+def test_checkpoint_rejects_invalid_architecture_metadata(tmp_path):
+    model = NeuralNetworkClassifier(2, 8, 3, seed=43)
+    checkpoint = tmp_path / "valid-metadata.npz"
+    model.save(checkpoint)
+
+    with np.load(checkpoint, allow_pickle=False) as archive:
+        original = {name: archive[name].copy() for name in archive.files}
+
+    invalid_metadata = {
+        "fractional-dimensions": ("dimensions", np.array([2.5, 8, 3])),
+        "zero-dimension": ("dimensions", np.array([2, 0, 3])),
+        "fractional-layer-count": ("layer_count", np.array(1.5)),
+        "non-finite-learning-rate": ("learning_rate", np.array(float("nan"))),
+    }
+    for name, (field, value) in invalid_metadata.items():
+        arrays = {key: item.copy() for key, item in original.items()}
+        arrays[field] = value
+        invalid_checkpoint = tmp_path / f"{name}.npz"
+        np.savez_compressed(invalid_checkpoint, **arrays)
+        with pytest.raises(ValueError):
+            NeuralNetworkClassifier.load(invalid_checkpoint)
+
+
 def test_rejects_invalid_dimensions_and_training_data():
     with pytest.raises(ValueError, match="dimensions"):
         NeuralNetworkClassifier(2, 0, 3)
