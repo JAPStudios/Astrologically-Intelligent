@@ -825,3 +825,50 @@ def test_huggingface_reader_distinguishes_conversation_from_text_generation():
     assert records[0].capability.family == mc.FAMILY_UNKNOWN
     assert records[1].capability.family == mc.FAMILY_CHAT
     assert records[2].capability.family == mc.FAMILY_CLASSIFICATION
+
+
+def test_generic_reader_accepts_bare_lists_and_key_or_slug_identity_only():
+    records = readers.records_from_payload(
+        [
+            {"key": "gateway/key-model", "name": "Key Model"},
+            {"slug": "gateway/slug-model", "display_name": "Slug Model"},
+            {"id": "gateway/id-model"},
+            {"name": "gateway/name-model"},
+            {"description": "No model identity"},
+            "not-a-model-object",
+        ],
+        vendor=VENDOR_GENERIC_OPENAI,
+        endpoint_id="gateway-1",
+    )
+
+    assert [record.model_id for record in records] == [
+        "gateway/key-model",
+        "gateway/slug-model",
+        "gateway/id-model",
+        "gateway/name-model",
+    ]
+    assert [record.display_name for record in records] == [
+        "Key Model",
+        "Slug Model",
+        "",
+        "gateway/name-model",
+    ]
+    assert all(record.capability.family == mc.FAMILY_UNKNOWN for record in records)
+    assert all(record.capability.capabilities == () for record in records)
+    assert all(record.capability_assertions == () for record in records)
+    assert all(record.stable_model_id.startswith("generic_openai|endpoint:gateway-1|") for record in records)
+
+
+def test_generic_reader_deduplicates_identity_across_supported_payload_shapes():
+    records = readers.records_from_payload(
+        {
+            "models": [
+                {"slug": "same-model"},
+                {"id": "same-model"},
+                {"key": "different-model"},
+            ]
+        }
+    )
+
+    assert [record.model_id for record in records] == ["same-model", "different-model"]
+    assert all(record.capability.family == mc.FAMILY_UNKNOWN for record in records)
