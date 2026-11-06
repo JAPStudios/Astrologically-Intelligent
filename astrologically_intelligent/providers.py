@@ -421,7 +421,7 @@ def provider_from_env():
         return AnthropicMessagesProvider.from_env()
     if name in {"gemini", "google", "google-gemini"}:
         return GeminiGenerateContentProvider.from_env()
-    if name in {"openai", "chat-completions", "local", "openai-compatible"}:
+    if name in {"openai", "chat-completions", "local"}:
         return ChatCompletionsProvider.from_env()
     if name in {"xai", "grok"}:
         key = os.getenv("XAI_API_KEY") or os.getenv("ASTRO_AI_API_KEY", "")
