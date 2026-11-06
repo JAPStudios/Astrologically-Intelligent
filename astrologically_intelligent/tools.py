@@ -594,7 +594,7 @@ class ToolRegistry:
 
         repo_root = Path(__file__).resolve().parent.parent
         skills_root = repo_root / "skills"
-        roots = [(skills_root, ""), (skills_root / "upstream", "upstream/")]
+        roots = [(skills_root, "")]
         results = []
         for root, prefix in roots:
             if not root.is_dir():
