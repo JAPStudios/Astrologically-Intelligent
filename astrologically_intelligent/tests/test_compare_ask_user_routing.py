@@ -256,6 +256,9 @@ def test_compare_add_pane_serializes_creation_and_cleans_up_failed_sessions():
     remove = panes[remove_start:remove_end]
 
     assert "if (state._paneCreationPending) return false;" in create
+    assert "if (state._paneCreationPending)" in panes[panes.index("async function _addPane"):start]
+    assert "A comparison pane is already being added." in panes[panes.index("async function _addPane"):start]
+    assert "addButton.disabled = !!state._streaming || !!state._paneCreationPending;" in panes
     assert "state._paneCreationPending = true;" in create
     assert "state._paneCreationPending = false;" in create
     assert "finally {" in create
