@@ -2269,6 +2269,10 @@ def test_capabilities_route_returns_fresh_normalized_records(monkeypatch):
         }
     ]
     assert result["unclassified_model_ids"] == ["legacy-model"]
+    assert json.loads(ep.capability_records) == result["models"]
+    assert result["observed_at"] == ep.capability_observed_at
+    assert isinstance(ep.capability_observed_at, float)
+    assert db.commits == 1
     assert db.closed is True
 
 
