@@ -22,8 +22,8 @@ CASES = [
     ("cr", 'data: {"delta":"Hello"}\r\rdata:[DONE]\r\r', False, True, "Hello"),
     ("fallback-route", 'data: {"type":"fallback","selected_model":"primary","answered_by":"backup","selected_endpoint_label":"Primary endpoint","answered_by_endpoint_label":"Backup endpoint"}\n\ndata: {"delta":"Answer"}\n\ndata: [DONE]\n\n', False, True, "Fallback: primary failed; answered by backup (Primary endpoint → Backup endpoint)"),
     ("model-route", 'data: {"type":"model_actual","requested_model":"primary","model":"provider/backup"}\n\ndata: {"delta":"Answer"}\n\ndata: [DONE]\n\n', False, True, "Route: primary → provider/backup"),
-    ("blind-fallback-route", 'data: {"type":"fallback","selected_model":"private-primary","answered_by":"private-backup"}\\n\\ndata: {"delta":"Answer"}\\n\\ndata: [DONE]\\n\\n', True, True, "A fallback model answered this response."),
-    ("blind-model-route", 'data: {"type":"model_actual","requested_model":"private-primary","model":"private-backup"}\\n\\ndata: {"delta":"Answer"}\\n\\ndata: [DONE]\\n\\n', True, True, "The provider resolved a different model for this response."),
+    ("blind-fallback-route", 'data: {"type":"fallback","selected_model":"private-primary","answered_by":"private-backup"}\n\ndata: {"delta":"Answer"}\n\ndata: [DONE]\n\n', True, True, "A fallback model answered this response."),
+    ("blind-model-route", 'data: {"type":"model_actual","requested_model":"private-primary","model":"private-backup"}\n\ndata: {"delta":"Answer"}\n\ndata: [DONE]\n\n', True, True, "The provider resolved a different model for this response."),
     ("invalid", 'data: not-json\n\ndata: [DONE]\n\n', False, False, "Invalid model stream data"),
 ]
 
