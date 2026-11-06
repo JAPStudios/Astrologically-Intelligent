@@ -22,6 +22,8 @@ CASES = [
     ("cr", 'data: {"delta":"Hello"}\r\rdata:[DONE]\r\r', False, True, "Hello"),
     ("fallback-route", 'data: {"type":"fallback","selected_model":"primary","answered_by":"backup","selected_endpoint_label":"Primary endpoint","answered_by_endpoint_label":"Backup endpoint"}\n\ndata: {"delta":"Answer"}\n\ndata: [DONE]\n\n', False, True, "Fallback: primary failed; answered by backup (Primary endpoint → Backup endpoint)"),
     ("model-route", 'data: {"type":"model_actual","requested_model":"primary","model":"provider/backup"}\n\ndata: {"delta":"Answer"}\n\ndata: [DONE]\n\n', False, True, "Route: primary → provider/backup"),
+    ("blind-fallback-route", 'data: {"type":"fallback","selected_model":"private-primary","answered_by":"private-backup"}\\n\\ndata: {"delta":"Answer"}\\n\\ndata: [DONE]\\n\\n', True, True, "A fallback model answered this response."),
+    ("blind-model-route", 'data: {"type":"model_actual","requested_model":"private-primary","model":"private-backup"}\\n\\ndata: {"delta":"Answer"}\\n\\ndata: [DONE]\\n\\n', True, True, "The provider resolved a different model for this response."),
     ("invalid", 'data: not-json\n\ndata: [DONE]\n\n', False, False, "Invalid model stream data"),
 ]
 
@@ -58,7 +60,7 @@ let chromium;try{({chromium}=require('playwright'));}catch(e){if(e.code==='MODUL
   const expected=JSON.parse(process.argv[1]);
   assert.equal(result.done,expected.success);assert.equal(result.failed,!expected.success);assert(result.text.includes(expected.text),JSON.stringify(result));assert.equal(result.images,0);
   assert(result.spinnerDestroyed);assert(!result.spinnerOwned);
-  if(expected.blind)assert(!/Provider Z|private-model/.test(result.text),JSON.stringify(result));
+  if(expected.blind)assert(!/Provider Z|private-model|private-primary|private-backup/.test(result.text),JSON.stringify(result));
   if(expected.kind==='done-open')assert(result.cancelled);
   console.log(JSON.stringify(result));
  }finally{await browser.close();}
