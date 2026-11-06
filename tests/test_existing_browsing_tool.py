@@ -68,7 +68,8 @@ class ExistingBrowsingToolTests(unittest.TestCase):
         fake_result = SimpleNamespace(query="topic", summary="Report", sources=[], duration_seconds=2.5, tokens_used=0)
         async def fake_research(*args, **kwargs):
             return fake_result
-        with patch("astrologically_intelligent.services.research.service.ResearchService.research", new=fake_research):
+        from astrologically_intelligent.services.research import service as research_service
+        with patch.object(research_service.ResearchService, "research", new=fake_research):
             result = _run_deep_research(provider, "topic", 60)
         self.assertEqual(result["report"], "Report")
         self.assertEqual(result["query"], "topic")
