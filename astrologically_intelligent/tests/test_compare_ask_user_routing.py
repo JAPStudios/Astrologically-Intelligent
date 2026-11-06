@@ -134,11 +134,13 @@ def test_compare_model_swap_creates_replacement_before_mutating_current_pane():
     assert "finally {" in swap
     assert "await _savePaneGenerationSettings(paneIdx, {});" in swap
     assert "Compare mode closed while the model was being changed." in swap
-    assert "if (state.isActive)" in swap[swap.index("catch (err)"):]
+    catch_idx = swap.index("catch (err)")
+    finally_idx = swap.index("finally {", catch_idx)
+    assert "if (state.isActive)" in swap[catch_idx:]
     assert "if (state._paneCreationPending)" in panes[:swap_start]
     assert "if (state._streaming || state._paneCreationPending) return;" in panes[panes.index("function _removePane("):panes.index("/** Show a dropdown")]
     assert "if (state._streaming || state._paneCreationPending) return;" in panes[panes.index("function shufflePanePositions()"):]
-    assert "return;" in swap[swap.index("catch (err)") : state_idx]
+    assert "return;" in swap[catch_idx:finally_idx]
 
 
 def test_compare_restores_the_card_instead_of_dropping_a_timed_out_choice():
