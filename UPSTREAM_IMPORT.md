@@ -2,45 +2,29 @@
 
 ## Result
 
-**Status: Partial — nine of ten requested organizations imported**
+**Status: Source inventory imported — functionality integration and validation remain separate work.**
 
-- Public repositories discovered across the nine imported GitHub organizations: **744**
-- Non-empty repositories pinned in the destination: **741**
-- Empty repositories skipped because they had no commit/source tree: **3**
-- Gitlinks in the destination tree: **741**
-- Entries in `.gitmodules`: **741**
-- Import workflow: `Import Upstream Repositories`
-- Successful import run: [41318801539](https://github.com/JAPStudios/Astrologically-Intelligent/actions/runs/41318801539)
-- Final import batch commit: [b83cb83](https://github.com/JAPStudios/Astrologically-Intelligent/commit/b83cb83e682aa724a5794b2a8dfb723e0a073721)
+The current `.gitmodules` file contains **742 pinned public repositories across all ten requested GitHub organizations**. Five repositories from `herdrdev` were added in the latest Herdr import batch. The current organization-directory counts are:
 
-## Imported repositories by organization
-
-| Organization | Imported submodules |
+| Organization | Pinned submodules |
 | --- | ---: |
 | anthropics | 115 |
+| herdrdev | 5 |
 | n8n-io | 52 |
 | NousResearch | 114 |
 | odysseus-dev | 2 |
 | openai | 277 |
 | openclaw | 97 |
 | paperclipai | 11 |
-| perplexityai | 56 |
+| perplexityai | 57 |
 | xai-org | 12 |
-| **Total under `upstream/<organization>/`** | **736** |
+| **Total** | **742** |
 
-Five skill-oriented repositories are located under `skills/upstream/` so the runtime's recursive skill loader can discover their `SKILL.md` files. They are included in the 741 total Gitlinks but are excluded from the organization-directory table above. The remaining 736 repositories are under `upstream/<organization>/<repository>`.
-
-## Empty repositories skipped
-
-These three public repository records had no importable commit:
-
-- `anthropics/homebrew-claude`
-- `NousResearch/forge-feedback`
-- `perplexityai/pplx-rs`
+The inventory was counted directly from the current `.gitmodules` file. It records pinned Git submodules; it does not establish that every upstream source tree has been checked out, reviewed, built, or integrated into the application.
 
 ## Retrieving the source
 
-The destination stores each upstream repository as a Git submodule pinned to the commit resolved from its default branch at import time. The upstream source trees are retrieved with:
+The destination stores each upstream repository as a Git submodule pinned to a commit resolved from its default branch at import time. Retrieve the pinned source trees with:
 
 ```sh
 git submodule update --init --recursive
@@ -56,8 +40,12 @@ Each submodule retains its upstream repository boundary, source layout, and lice
 
 ## Import tooling
 
-`scripts/import_upstream_orgs.py` lists all public repositories for the nine configured organizations, resolves each default-branch commit, and records its Gitlink and `.gitmodules` entry. It is resumable and skips existing submodule URLs. The `Import Upstream Repositories` workflow performs the import in bounded batches.
+`scripts/import_upstream_orgs.py` lists public repositories for the ten configured organizations, resolves default-branch commits, and records Gitlinks and `.gitmodules` entries. It is resumable and skips existing submodule URLs. The `Import Upstream Repositories` workflow performs imports in bounded batches.
 
 ## Runtime integrations
 
-The destination also contains working API integrations for n8n workflow management, Paperclip company/issue operations, Perplexity Search, and read-only OpenClaw session listing, plus native Anthropic Messages API transport and provider routing for xAI and Perplexity. These connectors complement the imported source; they do not imply that every upstream application is already merged into one runtime.
+The application also contains API integrations for n8n workflow management, Paperclip company/issue operations, Perplexity Search, and read-only OpenClaw session access, plus native Anthropic Messages API transport and provider routing for xAI and Perplexity. These are specific application integrations; they do not mean the upstream applications themselves have all been merged into one runtime.
+
+## Remaining work
+
+The source inventory is not the completion criterion for the software. Each upstream project still needs an evidence-based disposition: relevant functionality identified, license and dependency obligations reviewed, compatibility assessed, any selected functionality integrated into the application, and automated tests added. Projects that are irrelevant, incompatible, redundant, or unsafe to incorporate should be documented as such rather than copied indiscriminately. The complete application also requires repeatable dependency installation, test execution, security checks, and deployment validation.
