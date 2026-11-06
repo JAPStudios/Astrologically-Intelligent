@@ -89,7 +89,7 @@ Stable model identity is scoped in this order:
 
 ## Generic Identity-Only Contract
 
-The generic reader accepts mapping payloads containing `data[]` or `models[]`. Each item must itself be a mapping and provide `id`, `name`, or `model`. Bare-list payloads and `key`/`slug`-only items are not accepted by the current implementation.
+The generic reader accepts mapping payloads containing `data[]` or `models[]`, plus bare lists. Each item must itself be a mapping and provide `id`, `name`, `model`, `key`, or `slug`. Duplicate model IDs within one payload are retained only once. These records remain identity-only; the reader does not infer capabilities from names or other descriptive fields.
 
 The reader deliberately returns unknown family, modalities, capabilities, and controls. It preserves the raw item on the in-memory record but does not parse type/task fields, descriptions, ownership, supported-parameter lists, capability-looking booleans, or token limits.
 
