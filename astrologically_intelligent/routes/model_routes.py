@@ -492,6 +492,23 @@ def _normalize_model_tool_mode(value: Any) -> str:
     return mode if mode in _MODEL_TOOL_MODES else ""
 
 
+def _endpoint_capabilities_by_model(ep: Any) -> Dict[str, Dict[str, Any]]:
+    """Return stored, normalized capability metadata keyed by exact model ID."""
+    try:
+        records = json.loads(getattr(ep, "capability_records", None) or "[]")
+    except (TypeError, ValueError):
+        return {}
+    if not isinstance(records, list):
+        return {}
+    return {
+        str(item["model_id"]): item["capability"]
+        for item in records
+        if isinstance(item, dict)
+        and item.get("model_id")
+        and isinstance(item.get("capability"), dict)
+    }
+
+
 def _model_tool_modes(ep: Any) -> Dict[str, str]:
     raw = getattr(ep, "model_tool_modes", None)
     if not raw:
@@ -1767,6 +1784,7 @@ def setup_model_routes(model_discovery):
             kind = _effective_endpoint_kind(ep, base)
             category = _classify_endpoint(base, kind)
             model_ids, pinned = _picker_models_for_endpoint(ep, base, kind)
+            model_capabilities = _endpoint_capabilities_by_model(ep)
 
             if model_ids:
                 curated_key = _match_provider_curated(base, None)
@@ -1796,6 +1814,7 @@ def setup_model_routes(model_discovery):
                     "endpoint_kind": kind,
                     "model_type": ep_model_type,
                     "models_metadata": models_metadata,
+                    "model_capabilities": model_capabilities,
                 })
             else:
                 # Endpoint unreachable but still show it greyed out
@@ -1812,6 +1831,7 @@ def setup_model_routes(model_discovery):
                     "category": category,
                     "endpoint_kind": kind,
                     "model_type": ep_model_type,
+                    "model_capabilities": model_capabilities,
                     "offline": True,
                 })
 
@@ -2664,21 +2684,7 @@ def setup_model_routes(model_discovery):
             _, pinned = _picker_models_for_endpoint(ep, base, kind)
             pinned_set = set(pinned)
             tool_modes = _model_tool_modes(ep)
-            try:
-                stored_capabilities = json.loads(getattr(ep, "capability_records", None) or "[]")
-            except (TypeError, ValueError):
-                stored_capabilities = []
-            if not isinstance(stored_capabilities, list):
-                stored_capabilities = []
-            capabilities_by_model = {
-                str(item.get("model_id")): item.get("capability")
-                for item in stored_capabilities
-                if (
-                    isinstance(item, dict)
-                    and item.get("model_id")
-                    and isinstance(item.get("capability"), dict)
-                )
-            }
+            capabilities_by_model = _endpoint_capabilities_by_model(ep)
             return [
                 {
                     "id": m,
