@@ -322,7 +322,7 @@ def _json_from_text(text: str) -> Any:
     try:
         return json.loads(value)
     except json.JSONDecodeError:
-        # OpenAI-compatible gateways occasionally prepend prose or concatenate
+        # Some model gateways occasionally prepend prose or concatenate
         # a second object despite response_format=json_object. Recover the
         # first complete JSON value rather than expanding from the first open
         # bracket to the final close bracket, which turns concatenation into
