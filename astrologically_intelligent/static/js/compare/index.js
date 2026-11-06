@@ -199,6 +199,26 @@ async function toggleMode() {
     return true;
   } catch (err) {
     console.error('Compare toggleMode error:', err);
+    const failedSessionIds = [...(state._paneSessionIds || [])];
+    await Promise.all(failedSessionIds.map((sid) =>
+      fetch(`${state.API_BASE}/api/session/${encodeURIComponent(sid)}`, {
+        method: 'DELETE',
+        keepalive: true,
+        credentials: 'same-origin',
+      }).catch(() => {})
+    ));
+    // Restore the normal toolbar and compare state after any failure that
+    // occurs after session creation or partial UI construction.
+    try {
+      await deactivate(false);
+    } catch (cleanupError) {
+      state.isActive = false;
+      state._streaming = false;
+      state._paneSessionIds = [];
+      _syncToolbarIndicator(false);
+      console.error('Compare startup cleanup error:', cleanupError);
+    }
+    if (uiModule) uiModule.showError('Could not start comparison: ' + (err?.message || 'unknown error'));
     return false;
   } finally {
     state._openingSelector = false;
