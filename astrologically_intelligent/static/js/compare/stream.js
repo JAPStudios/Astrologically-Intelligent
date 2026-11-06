@@ -111,6 +111,20 @@ function _setPaneSummary(paneIdx, metrics, cost) {
   summary.title = bits.length ? 'Response summary: ' + bits.join(', ') : '';
 }
 
+function _showPaneRouteNotice(paneIdx, message, kind) {
+  const body = document.querySelector('#cmp-history-' + paneIdx + ' .msg-ai:last-child .body');
+  if (!body || !message) return;
+  let notice = body.querySelector('.compare-route-notice');
+  if (!notice) {
+    notice = document.createElement('div');
+    notice.className = 'compare-route-notice';
+    notice.setAttribute('role', 'status');
+    body.insertBefore(notice, body.firstChild);
+  }
+  notice.dataset.routeKind = kind || 'route';
+  notice.textContent = message;
+}
+
 function _appendPaneMessage(hist, role, text) {
   const message = document.createElement('div');
   message.className = 'msg ' + (role === 'user' ? 'msg-user' : 'msg-ai');
@@ -476,7 +490,28 @@ async function streamToPane(paneIdx, sessionId, message, aiMsgEl, opts) {
     await consumeCompareEvents(response,
       (json) => {
         try {
-          if (json.type === 'metrics') {
+          if (json.type === 'fallback') {
+            const requested = String(json.selected_model || json.requested_model || 'Selected model');
+            const answered = String(json.answered_by || json.model || 'Fallback model');
+            const requestedEndpoint = String(json.selected_endpoint_label || json.requested_endpoint_label || '');
+            const answeredEndpoint = String(json.answered_by_endpoint_label || json.endpoint_label || '');
+            const route = requestedEndpoint || answeredEndpoint
+              ? ' (' + (requestedEndpoint || 'selected endpoint') + ' → ' + (answeredEndpoint || 'fallback endpoint') + ')'
+              : '';
+            _showPaneRouteNotice(paneIdx, 'Fallback: ' + requested + ' failed; answered by ' + answered + route, 'fallback');
+          } else if (json.type === 'model_actual') {
+            const requested = String(json.requested_model || json.selected_model || '');
+            const actual = String(json.model || json.answered_by || '');
+            const requestedEndpoint = String(json.requested_endpoint_label || json.selected_endpoint_label || '');
+            const actualEndpoint = String(json.endpoint_label || json.answered_by_endpoint_label || '');
+            const modelChanged = requested && actual && requested !== actual;
+            const endpointChanged = requestedEndpoint && actualEndpoint && requestedEndpoint !== actualEndpoint;
+            if (modelChanged || endpointChanged) {
+              const modelText = modelChanged ? requested + ' → ' + actual : actual;
+              const endpointText = endpointChanged ? ' (' + requestedEndpoint + ' → ' + actualEndpoint + ')' : '';
+              _showPaneRouteNotice(paneIdx, 'Route: ' + modelText + endpointText, 'route');
+            }
+          } else if (json.type === 'metrics') {
             metrics = json.data;
 
           // ── Research progress (spinner updates) ──
