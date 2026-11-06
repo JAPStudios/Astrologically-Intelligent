@@ -6,7 +6,10 @@ import importlib.util
 from unittest.mock import MagicMock
 import pytest
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+app_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+repo_root = os.path.dirname(app_root)
+sys.path.insert(0, repo_root)
+sys.path.insert(0, app_root)
 
 # Isolate import-time database and filesystem defaults before collection.
 # File-backed databases remain fixture-owned. Cleanup restores the caller.
