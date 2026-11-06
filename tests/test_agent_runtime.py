@@ -120,8 +120,8 @@ class RuntimeTests(unittest.TestCase):
                 _post_json("https://provider.example/v1/chat/completions", {}, {}, 5)
         self.assertNotIn("secret-endpoint-detail", str(raised.exception))
 
-    def test_openai_compatible_provider_rejects_malformed_choice_entries(self):
-        provider = OpenAICompatibleProvider(
+    def test_chat_completions_provider_rejects_malformed_choice_entries(self):
+        provider = ChatCompletionsProvider(
             ProviderConfig("http://localhost:1234/v1", "test-key", "test-model")
         )
         for response in ({"choices": [None]}, {"choices": ["invalid"]}, {"choices": [{}]}):
@@ -131,7 +131,7 @@ class RuntimeTests(unittest.TestCase):
                         provider.chat([{"role": "user", "content": "hello"}])
 
     def test_provider_request_shape(self):
-        provider=OpenAICompatibleProvider(ProviderConfig("http://localhost:1234/v1","","test-model"))
+        provider=ChatCompletionsProvider(ProviderConfig("http://localhost:1234/v1","","test-model"))
         self.assertEqual(provider.config.model,"test-model")
     def test_gemini_provider_defaults_and_tool_schema_translation(self):
         with patch.dict("os.environ", {"ASTRO_AI_PROVIDER":"gemini", "GEMINI_API_KEY":"gemini-test"}, clear=True):
