@@ -309,6 +309,7 @@ function _initModelPickerDropdown() {
           epName: item.endpoint_name || '',
           category: item.category || '',
           modelsMetadata: item.models_metadata || {},
+          capability: item.model_capabilities && item.model_capabilities[mid] || null,
           providerText: [
             item.endpoint_name || '',
             item.category || '',
@@ -501,6 +502,23 @@ function _initModelPickerDropdown() {
       // hover so the suffix/variant tag is still discoverable (#1982).
       nameSpan.title = m.display;
       row.appendChild(nameSpan);
+      // Display only explicit provider-reported capability metadata.
+      if (m.capability && typeof m.capability === 'object') {
+        const family = typeof m.capability.family === 'string' ? m.capability.family : '';
+        const tokens = Array.isArray(m.capability.capabilities)
+          ? m.capability.capabilities.filter(value => typeof value === 'string' && value.trim())
+          : [];
+        const labels = [];
+        if (family && family !== 'unknown') labels.push(family);
+        labels.push(...tokens.slice(0, 2));
+        if (labels.length) {
+          const capabilityBadge = document.createElement('span');
+          capabilityBadge.className = 'mp-model-capabilities';
+          capabilityBadge.textContent = labels.join(' · ');
+          capabilityBadge.title = 'Provider-reported capabilities: ' + labels.join(', ');
+          row.appendChild(capabilityBadge);
+        }
+      }
       // Offline state is already conveyed by the row's reduced opacity —
       // a redundant "offline" pill on top of that just added clutter.
       // (Class kept on `row` so the opacity rule still applies; the text
