@@ -296,22 +296,42 @@ async function _buildCompareUI() {
   // 1. Create sessions (skip for search mode — no LLM sessions needed)
   if (state._compareMode !== 'search') {
     const sessionIds = [];
-    for (let i = 0; i < n; i++) {
-      const m = state._selectedModels[i];
-      const fd = new FormData();
-      // Blind mode: name the session by its neutral slot so the sidebar /
-      // GET /api/sessions can't de-anonymize the comparison (issue #1285).
-      fd.append('name', '[CMP] ' + (state._blindMode ? 'Model ' + _slotChar(i) : modelShorts[i]));
-      fd.append('endpoint_url', m.endpoint || '');
-      fd.append('model', m.model || '');
-      if (m.endpointId) {
-        fd.append('endpoint_id', m.endpointId);
-        fd.append('skip_validation', 'true');
+    try {
+      for (let i = 0; i < n; i++) {
+        const m = state._selectedModels[i];
+        const fd = new FormData();
+        // Blind mode: name the session by its neutral slot so the sidebar /
+        // GET /api/sessions can't de-anonymize the comparison (issue #1285).
+        fd.append('name', '[CMP] ' + (state._blindMode ? 'Model ' + _slotChar(i) : modelShorts[i]));
+        fd.append('endpoint_url', m.endpoint || '');
+        fd.append('model', m.model || '');
+        if (m.endpointId) {
+          fd.append('endpoint_id', m.endpointId);
+          fd.append('skip_validation', 'true');
+        }
+        const res = await fetch(`${state.API_BASE}/api/session`, { method: 'POST', body: fd });
+        if (!res.ok) {
+          const detail = await res.text().catch(() => '');
+          throw new Error('Failed to create session for ' + modelShorts[i] + (detail ? ': ' + detail.slice(0, 240) : ''));
+        }
+        const data = await res.json();
+        if (!data || typeof data.id !== 'string' || !data.id.trim()) {
+          throw new Error('Session creation returned no valid session ID for ' + modelShorts[i]);
+        }
+        sessionIds.push(data.id);
       }
-      const res = await fetch(`${state.API_BASE}/api/session`, { method: 'POST', body: fd });
-      if (!res.ok) throw new Error('Failed to create session for ' + modelShorts[i]);
-      const data = await res.json();
-      sessionIds.push(data.id);
+    } catch (error) {
+      // Session creation is sequential. Remove every session created before
+      // the failure so a partial compare launch cannot leave orphaned [CMP]
+      // sessions in the user's session list.
+      await Promise.all(sessionIds.map((sid) =>
+        fetch(`${state.API_BASE}/api/session/${encodeURIComponent(sid)}`, {
+          method: 'DELETE',
+          keepalive: true,
+          credentials: 'same-origin',
+        }).catch(() => {})
+      ));
+      throw error;
     }
     state._paneSessionIds = sessionIds;
     state._paneGenerationSettings = sessionIds.map(() => ({
