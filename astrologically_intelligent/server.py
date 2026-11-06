@@ -66,7 +66,7 @@ def make_handler(runtime: AgentRuntime, token: str):
                 return self._send(401,{"error":"unauthorized"})
             session_id = parsed.path[len(prefix):]
             if not session_id or len(session_id) > 128 or not all(
-                char.isalnum() or char in "_-" for char in session_id
+                (char.isascii() and char.isalnum()) or char in "_-" for char in session_id
             ):
                 return self._send(400,{"error":"invalid_session_id"})
             if not runtime.store.delete_session(session_id):
@@ -86,7 +86,7 @@ def make_handler(runtime: AgentRuntime, token: str):
                 if session_id is not None and (
                     not isinstance(session_id, str)
                     or not 1 <= len(session_id) <= 128
-                    or not all(char.isalnum() or char in "_-" for char in session_id)
+                    or not all((char.isascii() and char.isalnum()) or char in "_-" for char in session_id)
                 ):
                     return self._send(400,{"error":"invalid_session_id"})
                 result=runtime.chat(data.get("message"),session_id)
