@@ -2961,3 +2961,27 @@
 	path = upstream/anthropics/FlashProve
 	url = https://github.com/anthropics/FlashProve.git
 	branch = main
+[submodule "upstream/herdrdev/herdr"]
+	path = upstream/herdrdev/herdr
+	url = https://github.com/herdrdev/herdr.git
+	branch = master
+[submodule "upstream/herdrdev/herdr-nix"]
+	path = upstream/herdrdev/herdr-nix
+	url = https://github.com/herdrdev/herdr-nix.git
+	branch = main
+[submodule "upstream/herdrdev/herdr-core"]
+	path = upstream/herdrdev/herdr-core
+	url = https://github.com/herdrdev/herdr-core.git
+	branch = master
+[submodule "upstream/herdrdev/herdr-app"]
+	path = upstream/herdrdev/herdr-app
+	url = https://github.com/herdrdev/herdr-app.git
+	branch = master
+[submodule "upstream/herdrdev/herdr-layout-examples"]
+	path = upstream/herdrdev/herdr-layout-examples
+	url = https://github.com/herdrdev/herdr-layout-examples.git
+	branch = main
+[submodule "upstream/perplexityai/RATION"]
+	path = upstream/perplexityai/RATION
+	url = https://github.com/perplexityai/RATION.git
+	branch = main
