@@ -358,7 +358,7 @@ def _pathless_host(base: str, host: str) -> bool:
 
 
 def _anthropic_api_root(base: str) -> str:
-    """Return Anthropic's API root, preserving /v1 for OpenAI-compatible APIs elsewhere."""
+    """Return Anthropic's API root, preserving /v1 for Chat Completions endpoints elsewhere."""
     base = (base or "").strip().rstrip("/")
     if _host_match(base, "anthropic.com") and base.endswith("/v1"):
         return base[:-3].rstrip("/")
