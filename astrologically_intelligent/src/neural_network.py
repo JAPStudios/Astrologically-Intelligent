@@ -211,17 +211,35 @@ class NeuralNetworkClassifier:
             version = int(archive["format_version"])
             if version not in (1, 2, cls.FORMAT_VERSION):
                 raise ValueError(f"unsupported neural-network checkpoint version: {version}")
-            dims = archive["dimensions"].astype(int).tolist()
+            raw_dimensions = archive["dimensions"]
+            if (
+                raw_dimensions.ndim != 1
+                or not np.issubdtype(raw_dimensions.dtype, np.integer)
+            ):
+                raise ValueError("invalid checkpoint dimensions")
+            dims = raw_dimensions.tolist()
+            if len(dims) < 3 or any(dimension <= 0 for dimension in dims):
+                raise ValueError("invalid checkpoint dimensions")
+            learning_rate = archive["learning_rate"]
+            if learning_rate.ndim != 0 or not np.isfinite(learning_rate):
+                raise ValueError("invalid checkpoint learning rate")
+            if float(learning_rate) <= 0:
+                raise ValueError("invalid checkpoint learning rate")
             if version < 3:
                 if len(dims) != 3:
                     raise ValueError("invalid legacy checkpoint dimensions")
                 model = cls(dims[0], dims[1], dims[2],
-                            learning_rate=float(archive["learning_rate"]))
+                            learning_rate=float(learning_rate))
             else:
-                if len(dims) < 3 or int(archive["layer_count"]) != len(dims) - 1:
+                layer_count = archive["layer_count"]
+                if (
+                    layer_count.ndim != 0
+                    or not np.issubdtype(layer_count.dtype, np.integer)
+                    or int(layer_count) != len(dims) - 1
+                ):
                     raise ValueError("invalid checkpoint architecture")
                 model = cls(dims[0], tuple(dims[1:-1]), dims[-1],
-                            learning_rate=float(archive["learning_rate"]))
+                            learning_rate=float(learning_rate))
             for name, parameter in model._parameters().items():
                 value = archive[name]
                 if value.shape != parameter.shape or not np.isfinite(value).all():
