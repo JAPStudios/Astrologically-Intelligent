@@ -727,19 +727,44 @@ async function _addPane(anchorBtn) {
 async function _createAndAppendPane(m) {
   const i = state._selectedModels.length;  // New index
 
-  // Create session
-  const fd = new FormData();
-  // Blind mode: neutral slot name only — never leak the model (issue #1285).
-  fd.append('name', '[CMP] ' + (state._blindMode ? 'Model ' + _slotChar(i) : m.name));
-  fd.append('endpoint_url', m.url || '');
-  fd.append('model', m.id || '');
-  if (m.endpointId) {
-    fd.append('endpoint_id', m.endpointId);
-    fd.append('skip_validation', 'true');
+  // Keep the compare limit consistent even if this function is called
+  // outside the currently visible Add controls.
+  if (!state.isActive || i >= 8) return false;
+  if (!m || typeof m.id !== 'string' || !m.id.trim()) {
+    uiModule.showError('Could not add pane: the selected model is invalid.');
+    return false;
   }
-  const res = await fetch(`${state.API_BASE}/api/session`, { method: 'POST', body: fd });
-  if (!res.ok) return;
-  const data = await res.json();
+  const grid = document.querySelector('.compare-grid');
+  if (!grid) {
+    uiModule.showError('Could not add pane: the comparison grid is unavailable.');
+    return false;
+  }
+
+  // Create session before changing pane state. A failed or malformed
+  // response must not leave the model/session arrays out of alignment.
+  try {
+    const fd = new FormData();
+    // Blind mode: neutral slot name only — never leak the model (issue #1285).
+    fd.append('name', '[CMP] ' + (state._blindMode ? 'Model ' + _slotChar(i) : (m.name || m.id)));
+    fd.append('endpoint_url', m.url || '');
+    fd.append('model', m.id);
+    if (m.endpointId) {
+      fd.append('endpoint_id', m.endpointId);
+      fd.append('skip_validation', 'true');
+    }
+    const res = await fetch(`${state.API_BASE}/api/session`, {
+      method: 'POST',
+      body: fd,
+      credentials: 'same-origin',
+    });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '');
+      throw new Error(detail ? detail.slice(0, 240) : `HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    if (!data || typeof data.id !== 'string' || !data.id.trim()) {
+      throw new Error('The session response did not contain a valid session ID.');
+    }
 
   // Update arrays
   state._selectedModels.push({ model: m.id, endpoint: m.url, endpointId: m.endpointId, name: m.name, endpointName: m.endpointName || '' });
@@ -779,7 +804,6 @@ async function _createAndAppendPane(m) {
     '</div>';
 
   // Append to grid
-  const grid = document.querySelector('.compare-grid');
   grid.appendChild(pane);
 
   // Update grid columns
@@ -804,7 +828,12 @@ async function _createAndAppendPane(m) {
 
   // Rebuild vote bar
   buildVoteBar(n);
-
+    return true;
+  } catch (error) {
+    console.error('Compare pane creation failed:', error);
+    uiModule.showError('Could not add comparison pane: ' + (error?.message || 'unknown error'));
+    return false;
+  }
 }
 
 /** Remove a pane from the compare grid. If only 1 remains, exit compare mode. */
@@ -817,7 +846,7 @@ function _removePane(paneIdx) {
   // Delete the session
   const sid = state._paneSessionIds[paneIdx];
   if (sid) {
-    fetch(`${state.API_BASE}/api/session/${sid}`, { method: 'DELETE' }).catch(() => {});
+    fetch(`${state.API_BASE}/api/session/${encodeURIComponent(sid)}`, { method: 'DELETE', credentials: 'same-origin' }).catch(() => {});
   }
 
   // Remove from arrays
