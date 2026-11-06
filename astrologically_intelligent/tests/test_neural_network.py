@@ -37,6 +37,22 @@ def test_checkpoint_round_trip_preserves_predictions_and_optimizer(tmp_path):
     assert np.array_equal(restored.predict(features[:8]), labels[:8])
 
 
+def test_checkpoint_rejects_negative_adam_second_moment(tmp_path):
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, 8, 3, seed=37)
+    model.fit(features, labels, epochs=2)
+    checkpoint = tmp_path / "invalid-optimizer.npz"
+    model.save(checkpoint)
+
+    with np.load(checkpoint, allow_pickle=False) as archive:
+        arrays = {name: archive[name].copy() for name in archive.files}
+    arrays["adam_weights1_v"][0, 0] = -1.0
+    np.savez_compressed(checkpoint, **arrays)
+
+    with pytest.raises(ValueError, match="invalid optimizer state"):
+        NeuralNetworkClassifier.load(checkpoint)
+
+
 def test_rejects_invalid_dimensions_and_training_data():
     with pytest.raises(ValueError, match="dimensions"):
         NeuralNetworkClassifier(2, 0, 3)
