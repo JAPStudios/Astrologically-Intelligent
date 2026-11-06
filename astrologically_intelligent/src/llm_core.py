@@ -2265,7 +2265,7 @@ def list_model_ids(
         r = httpx_get_kimi_aware(models_url, h, timeout=timeout)
         r.raise_for_status()
         data = r.json()
-        # Some OpenAI-compatible APIs (e.g. Together) return a bare list here.
+        # Some Chat Completions model endpoints return a bare list here.
         items = data if isinstance(data, list) else (data.get("data") or [])
         model_ids = [m.get("id") for m in items if isinstance(m, dict) and m.get("id")]
         if not model_ids and isinstance(data, dict):
