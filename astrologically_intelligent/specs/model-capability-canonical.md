@@ -36,7 +36,7 @@ There is no `src/provider_capability_schemas.py`, capability-specific diagnostic
   fail, or partial probe state into an assertion. The capability endpoint persists normalized reader records. It does not yet merge probe assertions from separate evidence sources.
 - `CapabilityQuery` and `display_surfaces_for()` map a normalized capability
   into candidate surfaces such as chat, vision chat, image generation,
-  embeddings, or reranking. They are now exposed by model-list APIs, but frontend picker components do not yet render or filter by them.
+  embeddings, or reranking. They are exposed by model-list APIs and displayed as labels in the sidebar and chat model pickers. The frontend does not yet filter or rank models by capability.
 - Reader `ModelCapabilityRecord` binds a vendor/model identity to the nested
   capability object, assertions, deterministic controls, and optional raw
   provider evidence.
