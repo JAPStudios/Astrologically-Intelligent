@@ -282,6 +282,7 @@ export async function refreshModels(force = false, opts = {}) {
             endpointId: item.endpoint_id || null,
             offline: isOffline,
             modelType: epModelType,
+            capability: item.model_capabilities && item.model_capabilities[mid] || null,
           });
         });
       });
