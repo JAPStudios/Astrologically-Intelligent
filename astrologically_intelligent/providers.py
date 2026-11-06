@@ -49,7 +49,12 @@ class OpenAICompatibleProvider:
             timeout if timeout is not None else self.config.timeout,
         )
         choices = result.get("choices")
-        if not isinstance(choices, list) or not choices or not isinstance(choices[0].get("message"), dict):
+        if (
+            not isinstance(choices, list)
+            or not choices
+            or not isinstance(choices[0], dict)
+            or not isinstance(choices[0].get("message"), dict)
+        ):
             raise RuntimeError("Provider response did not contain choices[0].message")
         return choices[0]["message"]
 
