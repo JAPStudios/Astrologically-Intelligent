@@ -242,6 +242,7 @@ def test_unsaved_compare_helper_sessions_do_not_render_in_sidebar():
     assert "const activeSessions = sessions.filter(s => !s.archived && !_isUnsavedCompareSession(s));" in sessions
     assert "s.folder === 'Assistant' || s.folder === 'Tasks' || _isUnsavedCompareSession(s)" in sessions
 
+
 def test_compare_add_pane_serializes_creation_and_cleans_up_failed_sessions():
     root = Path(__file__).resolve().parents[1]
     panes = (root / "static/js/compare/panes.js").read_text(encoding="utf-8")
