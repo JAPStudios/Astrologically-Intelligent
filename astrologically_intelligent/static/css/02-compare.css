@@ -1412,6 +1412,21 @@
       cursor: default;
     }
     .compare-sources-box .sources-label { font-weight: 600; }
+    .compare-route-notice {
+      margin: 0 0 8px;
+      padding: 6px 9px;
+      border-left: 3px solid var(--accent, var(--red));
+      border-radius: 4px;
+      background: color-mix(in srgb, var(--accent, var(--red)) 8%, transparent);
+      color: color-mix(in srgb, var(--fg) 82%, transparent);
+      font-size: 0.78em;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+    .compare-route-notice[data-route-kind="fallback"] {
+      border-left-color: var(--warning, #c58b35);
+      background: color-mix(in srgb, var(--warning, #c58b35) 9%, transparent);
+    }
     /* Compact tool blocks inside compare panes */
     .compare-pane .agent-thread-node {
       margin: 4px 0; font-size: 0.85em;
