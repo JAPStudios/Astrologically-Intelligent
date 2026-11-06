@@ -33,6 +33,51 @@ class RuntimeTests(unittest.TestCase):
         self.assertIn("Do not insult, harass, threaten, or demean users", SYSTEM_PROMPT)
         self.assertIn("Save personal memory only when the user explicitly asks", SYSTEM_PROMPT)
 
+    def test_direct_runtime_rejects_invalid_session_identifiers(self):
+        for session_id in ("", "bad/id", "contains space", "é", "x" * 129):
+            with self.subTest(session_id=session_id):
+                with self.assertRaisesRegex(ValueError, "session_id"):
+                    self.runtime.chat("hello", session_id)
+
+    def test_runtime_rejects_boolean_tool_round_limit(self):
+        store = Store(":memory:")
+        runtime = AgentRuntime(
+            provider=FakeProvider(), store=store, config=RuntimeConfig(max_tool_rounds=True)
+        )
+        try:
+            with self.assertRaisesRegex(ValueError, "max_tool_rounds"):
+                runtime.chat("hello")
+        finally:
+            runtime.close()
+
+    def test_runtime_rejects_missing_or_duplicate_tool_call_ids(self):
+        class InvalidCallProvider:
+            def __init__(self, calls):
+                self.calls = calls
+
+            def chat(self, messages, tools):
+                return {"role": "assistant", "content": None, "tool_calls": self.calls}
+
+        invalid_calls = (
+            [{"type": "function", "function": {"name": "memory.recall", "arguments": '{"namespace":"profile"}'}}],
+            [
+                {"id": "duplicate", "type": "function", "function": {"name": "memory.recall", "arguments": '{"namespace":"profile"}'}},
+                {"id": "duplicate", "type": "function", "function": {"name": "memory.recall", "arguments": '{"namespace":"profile"}'}},
+            ],
+        )
+        for calls in invalid_calls:
+            with self.subTest(calls=calls):
+                store = Store(":memory:")
+                runtime = AgentRuntime(
+                    provider=InvalidCallProvider(calls), store=store,
+                    config=RuntimeConfig(max_tool_rounds=1),
+                )
+                try:
+                    with self.assertRaisesRegex(RuntimeError, "tool-call ID"):
+                        runtime.chat("hello")
+                finally:
+                    runtime.close()
+
     def test_tool_call_and_session_persistence(self):
         result=self.runtime.chat("Remember my preferred name is Ada.","session-a")
         self.assertEqual(result["response"],"Memory saved.")
