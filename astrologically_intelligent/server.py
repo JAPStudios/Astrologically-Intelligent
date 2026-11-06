@@ -7,16 +7,7 @@ import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
-from .runtime import AgentRuntime
-
-
-def _valid_session_id(value: object) -> bool:
-    """Apply the same bounded ASCII identifier contract to every session route."""
-    return (
-        isinstance(value, str)
-        and 1 <= len(value) <= 128
-        and all((char.isascii() and char.isalnum()) or char in "_-" for char in value)
-    )
+from .runtime import AgentRuntime, _valid_session_id
 
 
 def make_handler(runtime: AgentRuntime, token: str):
