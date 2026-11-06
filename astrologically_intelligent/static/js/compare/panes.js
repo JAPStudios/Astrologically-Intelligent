@@ -883,7 +883,11 @@ async function _createAndAppendPane(m) {
     return false;
   } finally {
     state._paneCreationPending = false;
-    refreshMobilePaneTabs();
+    try {
+      refreshMobilePaneTabs();
+    } catch (tabError) {
+      console.error('Could not refresh comparison tabs after pane creation:', tabError);
+    }
   }
 }
 
@@ -1126,7 +1130,11 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
         }
       } finally {
         state._paneCreationPending = false;
-        refreshMobilePaneTabs();
+        try {
+          refreshMobilePaneTabs();
+        } catch (tabError) {
+          console.error('Could not refresh comparison tabs after model swap:', tabError);
+        }
       }
     });
     dropdown.appendChild(item);
