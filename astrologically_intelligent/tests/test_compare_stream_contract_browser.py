@@ -20,8 +20,8 @@ CASES = [
     ("done-open", 'data: {"delta":"Hello"}\n\ndata: [DONE]\n\n', False, True, "Hello"),
     ("heartbeat", 'data: {"delta":"Hello"}\n\ndata: [DONE]\n\n', False, True, "Hello"),
     ("cr", 'data: {"delta":"Hello"}\r\rdata:[DONE]\r\r', False, True, "Hello"),
-    ("fallback-route", 'data: {"type":"fallback","selected_model":"primary","answered_by":"backup","selected_endpoint_label":"Primary endpoint","answered_by_endpoint_label":"Backup endpoint"}\\n\\ndata: {"delta":"Answer"}\\n\\ndata: [DONE]\\n\\n', False, True, "Fallback: primary failed; answered by backup (Primary endpoint → Backup endpoint)"),
-    ("model-route", 'data: {"type":"model_actual","requested_model":"primary","model":"provider/backup"}\\n\\ndata: {"delta":"Answer"}\\n\\ndata: [DONE]\\n\\n', False, True, "Route: primary → provider/backup"),
+    ("fallback-route", 'data: {"type":"fallback","selected_model":"primary","answered_by":"backup","selected_endpoint_label":"Primary endpoint","answered_by_endpoint_label":"Backup endpoint"}\n\ndata: {"delta":"Answer"}\n\ndata: [DONE]\n\n', False, True, "Fallback: primary failed; answered by backup (Primary endpoint → Backup endpoint)"),
+    ("model-route", 'data: {"type":"model_actual","requested_model":"primary","model":"provider/backup"}\n\ndata: {"delta":"Answer"}\n\ndata: [DONE]\n\n', False, True, "Route: primary → provider/backup"),
     ("invalid", 'data: not-json\n\ndata: [DONE]\n\n', False, False, "Invalid model stream data"),
 ]
 
