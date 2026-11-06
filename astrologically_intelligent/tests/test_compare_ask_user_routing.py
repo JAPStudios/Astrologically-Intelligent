@@ -252,7 +252,7 @@ def test_compare_add_pane_serializes_creation_and_cleans_up_failed_sessions():
     end = panes.index("/** Remove a pane from the compare grid.", start)
     create = panes[start:end]
     remove_start = panes.index("function _removePane(")
-    remove_end = panes.index("//", remove_start)
+    remove_end = panes.index("/** Show a dropdown", remove_start)
     remove = panes[remove_start:remove_end]
 
     assert "if (state._paneCreationPending) return false;" in create
