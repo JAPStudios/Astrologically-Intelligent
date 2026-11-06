@@ -1,10 +1,10 @@
 # Astrologically Intelligent
 
-Astrologically Intelligent is an extensible AI application and agent platform with persistent conversations and memory, model-provider routing, tools, skills, multi-agent orchestration, and native Android access.
+Astrologically Intelligent is an AI application and agent platform for everyday work and research, with persistent conversations and memory, model-provider routing, native tools and skills, and multi-agent orchestration.
 
 ## Python agent platform
 
-See [AGENT_RUNTIME.md](AGENT_RUNTIME.md) for setup, provider configuration, API usage, orchestration tools, plugin entry points, external integrations, and security controls.
+See [AGENT_RUNTIME.md](AGENT_RUNTIME.md) for setup, provider configuration, API usage, orchestration tools, native capabilities, and security controls.
 
 Run with Python 3.10+:
 
@@ -19,17 +19,8 @@ The local service defaults to `127.0.0.1:8765`. It exposes `GET /health` and `PO
 
 ## Full web application
 
-The full-featured web application lives in `astrologically_intelligent/`. It is a separate FastAPI service with its own provider routing, web interface, documents, research, voice, tools, and integrations. Follow `astrologically_intelligent/README.md`; from that directory, start it with `python -m uvicorn app:app --host 127.0.0.1 --port 7000`. The root agent API described above is a separate service on port 8765; the two services are not yet a single process.
+The full-featured web application lives in `astrologically_intelligent/`. It is a separate FastAPI service with its own provider routing, web interface, documents, research, voice, and tools. Follow `astrologically_intelligent/README.md`; from that directory, start it with `python -m uvicorn app:app --host 127.0.0.1 --port 7000`. The root agent API described above is a separate service on port 8765; the two services are not yet a single process.
 
-## Android application
-
-The native Android client is in `app/`. It connects to the root Python agent API (`/v1/chat`) and restores its latest 40 messages from the authenticated `/v1/history` endpoint when a session opens. It defaults to `http://10.0.2.2:8765` for an Android emulator reaching the development host. It does not yet expose every feature in the full web application. Use HTTPS plus a configured bearer token for remote deployments.
-
-Build with Gradle 8.9, JDK 17, and Android SDK platform 35:
-
-```sh
-gradle assembleDebug
-```
 
 ## Tests
 
@@ -64,4 +55,4 @@ The requested upstream scope comprises public repositories from these GitHub org
 - [Perplexity](https://github.com/orgs/perplexityai/repositories)
 - [xAI](https://github.com/orgs/xai-org/repositories)
 
-This is a repository-wide integration effort. Provider compatibility, an API connector, a source reference, or a catalogue is not equivalent to importing an upstream repository's source and functionality. Track each upstream project against its actual imported code, required dependencies, executable behavior, and tests.
+These repositories are source references, not a claim that their projects or functionality have been incorporated into Astrologically Intelligent. Evaluate any proposed source use individually for licensing, compatibility, security, dependencies, executable behaviour, and tests.
