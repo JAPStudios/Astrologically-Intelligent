@@ -241,3 +241,31 @@ def test_unsaved_compare_helper_sessions_do_not_render_in_sidebar():
     assert "const visibleSessions = sessions.filter(s => !s.archived && !_isUnsavedCompareSession(s));" in sessions
     assert "const activeSessions = sessions.filter(s => !s.archived && !_isUnsavedCompareSession(s));" in sessions
     assert "s.folder === 'Assistant' || s.folder === 'Tasks' || _isUnsavedCompareSession(s)" in sessions
+
+def test_compare_add_pane_serializes_creation_and_cleans_up_failed_sessions():
+    root = Path(__file__).resolve().parents[1]
+    panes = (root / "static/js/compare/panes.js").read_text(encoding="utf-8")
+    state = (root / "static/js/compare/state.js").read_text(encoding="utf-8")
+
+    start = panes.index("async function _createAndAppendPane")
+    end = panes.index("/** Remove a pane from the compare grid.", start)
+    create = panes[start:end]
+    remove_start = panes.index("function _removePane(")
+    remove_end = panes.index("//", remove_start)
+    remove = panes[remove_start:remove_end]
+
+    assert "if (state._paneCreationPending) return false;" in create
+    assert "state._paneCreationPending = true;" in create
+    assert "state._paneCreationPending = false;" in create
+    assert "finally {" in create
+    assert "if (!state.isActive || !grid.isConnected)" in create
+    assert "credentials: 'same-origin'" in create
+    assert "const addedIndex = state._paneSessionIds.indexOf(createdSessionId);" in create
+    assert "state._selectedModels.splice(addedIndex, 1);" in create
+    assert "if (state._streaming || state._paneCreationPending) return;" in remove
+    assert "_paneCreationPending: false" in state
+    # A reset must not release a lock while its original network request is
+    # still pending; its finally block owns releasing that lock.
+    reset = state[state.index("export function reset()"):]
+    assert "state._paneCreationPending = false;" not in reset
+
