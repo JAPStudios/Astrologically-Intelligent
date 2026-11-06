@@ -132,6 +132,7 @@ def test_compare_model_swap_creates_replacement_before_mutating_current_pane():
     assert "state._paneCreationPending = true;" in swap
     assert "state._paneCreationPending = false;" in swap
     assert "finally {" in swap
+    assert "Could not refresh comparison tabs after model swap:" in swap
     assert "await _savePaneGenerationSettings(paneIdx, {});" in swap
     assert "Compare mode closed while the model was being changed." in swap
     catch_idx = swap.index("catch (err)")
@@ -279,6 +280,7 @@ def test_compare_add_pane_serializes_creation_and_cleans_up_failed_sessions():
     assert "state._paneCreationPending = false;" in create
     assert "try {\n    refreshMobilePaneTabs();" in create
     assert "finally {" in create
+    assert "Could not refresh comparison tabs after pane creation:" in create
     assert "if (!state.isActive || !grid.isConnected)" in create
     assert "credentials: 'same-origin'" in create
     assert "const addedIndex = state._paneSessionIds.indexOf(createdSessionId);" in create
