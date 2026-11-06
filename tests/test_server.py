@@ -88,7 +88,7 @@ class HistoryEndpointTests(unittest.TestCase):
         self.assertEqual(payload["status"], "ok")
 
     def test_chat_rejects_invalid_session_identifiers_before_runtime(self):
-        invalid_ids = (42, {}, "", "session/1", "x" * 129)
+        invalid_ids = (42, {}, "", "session/1", "session-é", "x" * 129)
         for session_id in invalid_ids:
             body = json.dumps({"message": "hello", "session_id": session_id}).encode("utf-8")
             request = urllib.request.Request(
