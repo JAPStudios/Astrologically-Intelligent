@@ -514,6 +514,7 @@ function _initModelPickerDropdown() {
         if (labels.length) {
           const capabilityBadge = document.createElement('span');
           capabilityBadge.className = 'mp-model-capabilities';
+          capabilityBadge.style.cssText = 'font-size:0.65em;padding:1px 4px;border-radius:3px;background:var(--panel-2,var(--bg));color:var(--muted);margin-left:6px;white-space:nowrap;';
           capabilityBadge.textContent = labels.join(' · ');
           capabilityBadge.title = 'Provider-reported capabilities: ' + labels.join(', ');
           row.appendChild(capabilityBadge);
