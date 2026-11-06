@@ -15,7 +15,7 @@ This spec covers the implementation introduced on current `dev` in:
 - regression coverage in `tests/test_model_capabilities.py` and
   `tests/test_model_capability_readers.py`.
 
-The reader modules normalize JSON returned by existing endpoint probes. The admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. It captures native Anthropic and Google catalogues plus OpenAI-compatible and Ollama model-list responses. The route persists a non-empty observed catalogue as JSON on its `ModelEndpoint` row, with a Unix observation timestamp. A probe returning no model IDs or records leaves the previous snapshot intact. The admin endpoint settings UI renders the returned families, modalities, limits and capability tokens. The endpoint model-list route attaches persisted per-model capability metadata to picker records. Model routing, endpoint resolution, model context and request shaping do not yet consume these records. OAuth-backed endpoints are not supported by this route.
+The reader modules normalize JSON returned by existing endpoint probes. The admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. It captures native Anthropic and Google catalogues plus OpenAI-compatible and Ollama model-list responses. The route persists a non-empty observed catalogue as JSON on its `ModelEndpoint` row, with a Unix observation timestamp. A probe returning no model IDs or records leaves the previous snapshot intact. The admin endpoint settings UI renders the returned families, modalities, limits and capability tokens. The endpoint model-list route attaches persisted per-model capability metadata to picker records. The normal owner-scoped `/api/models` catalog and endpoint-specific model-list route now expose persisted per-model capability metadata. Model routing, endpoint resolution, model context and request shaping do not yet consume these records. OAuth-backed endpoints are not supported by this route.
 
 There is no `src/provider_capability_schemas.py`, capability-specific diagnostics module, or runtime model-quirk registry on current `dev`.
 
@@ -33,10 +33,10 @@ There is no `src/provider_capability_schemas.py`, capability-specific diagnostic
   temperature, top-p, seed, tool choice, or prompt caching. A supported
   request control is not itself a model capability.
 - `CapabilityProbeResult` is an in-memory evidence shape that converts pass,
-  fail, or partial probe state into an assertion. The capability endpoint currently returns reader records without storing or merging probe assertions.
+  fail, or partial probe state into an assertion. The capability endpoint persists normalized reader records. It does not yet merge probe assertions from separate evidence sources.
 - `CapabilityQuery` and `display_surfaces_for()` map a normalized capability
   into candidate surfaces such as chat, vision chat, image generation,
-  embeddings, or reranking. They are not wired into current pickers.
+  embeddings, or reranking. They are now exposed by model-list APIs, but frontend picker components do not yet render or filter by them.
 - Reader `ModelCapabilityRecord` binds a vendor/model identity to the nested
   capability object, assertions, deterministic controls, and optional raw
   provider evidence.
