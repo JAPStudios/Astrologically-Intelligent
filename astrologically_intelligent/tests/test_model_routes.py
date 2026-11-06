@@ -2276,6 +2276,32 @@ def test_capabilities_route_returns_fresh_normalized_records(monkeypatch):
     assert db.closed is True
 
 
+
+
+def test_endpoint_model_picker_exposes_persisted_capability_metadata(monkeypatch):
+    snapshot = [{
+        "vendor": "anthropic",
+        "model_id": "claude-example",
+        "capability": {"family": "chat", "modalities": {"input": ["text"], "output": ["text"]}},
+    }]
+    ep = _make_endpoint(
+        id="anthropic-primary",
+        base_url="https://api.anthropic.com/v1",
+        cached_models=json.dumps(["claude-example", "unclassified"]),
+        capability_records=json.dumps(snapshot),
+    )
+    db = _PinnedFakeDb([ep])
+    monkeypatch.setattr(model_routes, "SessionLocal", lambda: db)
+    monkeypatch.setattr(model_routes, "require_admin", lambda request: None)
+    endpoint = _get_route("/api/model-endpoints/{ep_id}/models", "GET")
+
+    result = endpoint("anthropic-primary", _PinnedFakeRequest(), SimpleNamespace(headers={}))
+    by_id = {item["id"]: item for item in result}
+
+    assert by_id["claude-example"]["capability"] == snapshot[0]["capability"]
+    assert by_id["unclassified"]["capability"] is None
+    assert db.closed is True
+
 def test_capabilities_route_rejects_provider_managed_auth(monkeypatch):
     ep = _make_endpoint(id="oauth-endpoint", provider_auth_id="oauth-1")
     db = _PinnedFakeDb([ep])
