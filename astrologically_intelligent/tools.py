@@ -373,30 +373,6 @@ class ToolRegistry:
             ["topic"],lambda topic,max_time=180:
                 _run_deep_research(self.provider,topic,max_time))
 
-        reg("perplexity.search","Search the web using the Perplexity Search API.",
-            {"query":{"type":"string"},"max_results":{"type":"integer","minimum":1,"maximum":20}},
-            ["query"],lambda query,max_results=5:perplexity_client_from_env().search(query,max_results))
-
-        reg("openclaw.sessions.list","List visible sessions from a configured OpenClaw Gateway.",
-            {"session_key":{"type":"string","maxLength":256},
-             "limit":{"type":"integer","minimum":1,"maximum":200},
-             "active_minutes":{"type":"integer","minimum":1}},[],lambda session_key="main",limit=100,active_minutes=None:
-                openclaw_client_from_env().list_sessions(session_key,limit,active_minutes))
-
-        reg("openclaw.sessions.history","Read a bounded section of a visible OpenClaw session transcript. Supply message_id plus transcript_session_id from openclaw.sessions.search to reopen the exact matching context.",
-            {"session_key":{"type":"string","minLength":1,"maxLength":256},
-             "limit":{"type":"integer","minimum":1,"maximum":100},
-             "offset":{"type":"integer","minimum":0},
-             "include_tools":{"type":"boolean"},
-             "message_id":{"type":"string","maxLength":256},
-             "transcript_session_id":{"type":"string","maxLength":256}},["session_key"],lambda session_key,limit=20,offset=0,include_tools=False,message_id=None,transcript_session_id=None:
-                openclaw_client_from_env().read_session_history(session_key,limit,offset,include_tools,message_id,transcript_session_id))
-
-        reg("openclaw.sessions.search","Find matching text in visible OpenClaw session transcripts. Returns bounded excerpts that can be reopened with openclaw.sessions.history.",
-            {"query":{"type":"string","minLength":1,"maxLength":4096},
-             "session_key":{"type":"string","maxLength":256},
-             "limit":{"type":"integer","minimum":1,"maximum":25}},["query"],lambda query,session_key="main",limit=10:
-                openclaw_client_from_env().search_sessions(query,session_key,limit))
 
     def _execute_agent(self, agent_id: str, prompt: str) -> dict[str, Any]:
         if not isinstance(prompt, str) or not prompt.strip():
