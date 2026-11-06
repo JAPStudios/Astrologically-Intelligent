@@ -39,7 +39,7 @@ python -m unittest discover -s tests -v
 
 ## Upstream source imports
 
-The complete public-repository inventory from all nine requested organizations has been imported as **741 pinned Git submodules**. The original inventory contained 744 public repositories; three empty repositories had no commit or source tree and were skipped. The import is recorded in `.gitmodules` and the Git tree.
+The committed upstream inventory currently covers **nine of the ten requested organizations**, with 741 pinned Git submodules. The previous inventory contained 744 public repositories; three empty repositories had no commit or source tree and were skipped. The `herdrdev` organization was omitted from that import and remains outstanding. The importer is now configured for all ten organizations, but the additional Herdr repositories still need to be inventoried, pinned, retrieved, reviewed, and committed.
 
 Initialize and retrieve every imported source tree with:
 
@@ -54,6 +54,7 @@ The resumable importer in `scripts/import_upstream_orgs.py` can add later upstre
 The requested upstream scope comprises public repositories from these GitHub organizations:
 
 - [Anthropic](https://github.com/orgs/anthropics/repositories)
+- [Herdr](https://github.com/orgs/herdrdev/repositories)
 - [n8n](https://github.com/orgs/n8n-io/repositories)
 - [NousResearch](https://github.com/orgs/NousResearch/repositories)
 - [Odysseus](https://github.com/orgs/odysseus-dev/repositories)
