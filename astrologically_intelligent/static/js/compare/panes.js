@@ -974,6 +974,10 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
     uiModule.showToast('Stop the response or wait for it to finish before changing models.');
     return;
   }
+  if (state._paneCreationPending) {
+    uiModule.showToast('Wait for the comparison pane to finish adding before changing models.');
+    return;
+  }
 
   // Remove any existing dropdown
   const existing = document.querySelector('.pane-model-dropdown');
@@ -1002,61 +1006,108 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
       e.stopPropagation();
       closeMenu();
 
+      if (!m || typeof m.id !== 'string' || !m.id.trim()) {
+        uiModule?.showError('Could not swap comparison model: the selected model is invalid.');
+        return;
+      }
+      const originGrid = document.querySelector('.compare-grid');
+      const oldSid = state._paneSessionIds[paneIdx];
+      const oldModel = state._selectedModels[paneIdx];
+      const oldSettings = { ...(state._paneGenerationSettings[paneIdx] || {}) };
       const fd = new FormData();
       // Blind mode: neutral slot name only — never leak the model (issue #1285).
       fd.append('name', '[CMP] ' + (state._blindMode ? 'Model ' + _slotChar(paneIdx) : m.name));
       fd.append('endpoint_url', m.url || '');
-      fd.append('model', m.id || '');
+      fd.append('model', m.id);
       if (m.endpointId) {
         fd.append('endpoint_id', m.endpointId);
         fd.append('skip_validation', 'true');
       }
       let newSessionId = '';
+      let stateChanged = false;
       try {
-        const res = await fetch(`${state.API_BASE}/api/session`, { method: 'POST', body: fd });
+        const res = await fetch(`${state.API_BASE}/api/session`, {
+          method: 'POST',
+          body: fd,
+          credentials: 'same-origin',
+        });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
-        newSessionId = data.id || '';
-        if (!newSessionId) throw new Error('Missing session id');
+        if (!data || typeof data.id !== 'string' || !data.id.trim()) {
+          throw new Error('The session response did not contain a valid session ID.');
+        }
+        newSessionId = data.id;
+
+        // The pane may have been removed or the comparison closed while the
+        // session request was pending. Never apply a late swap to a new pane.
+        if (!state.isActive || !originGrid?.isConnected
+            || document.querySelector('.compare-grid') !== originGrid
+            || state._paneSessionIds[paneIdx] !== oldSid) {
+          await fetch(`${state.API_BASE}/api/session/${encodeURIComponent(newSessionId)}`, {
+            method: 'DELETE', keepalive: true, credentials: 'same-origin',
+          }).catch(() => {});
+          return;
+        }
+
+        state._selectedModels[paneIdx] = {
+          model: m.id, endpoint: m.url, endpointId: m.endpointId, name: m.name,
+        };
+        state._paneSessionIds[paneIdx] = newSessionId;
+        state._paneGenerationSettings[paneIdx] = {
+          thinking_mode: '', temperature_override: null, max_tokens_override: null,
+        };
+        stateChanged = true;
+        await _savePaneGenerationSettings(paneIdx, {});
+        _persistSelections();
+        if (window._updateCheckBtnState) window._updateCheckBtnState();
+
+        // Update title display
+        const titleEl = document.getElementById('cmp-title-' + paneIdx);
+        if (titleEl) {
+          const displayName = state._blindMode
+            ? 'Model ' + _slotChar(paneIdx)
+            : m.name;
+          titleEl.textContent = displayName;
+          const caret = document.createElement('span');
+          caret.className = 'pane-title-caret';
+          caret.textContent = '▾';
+          titleEl.append(' ', caret);
+        }
+
+        // Clear pane history for fresh start
+        const hist = document.getElementById('cmp-history-' + paneIdx);
+        if (hist) { hist.innerHTML = ''; hist.style.display = ''; }
+        const iframe = document.getElementById('cmp-iframe-' + paneIdx);
+        if (iframe) { iframe.srcdoc = ''; iframe.style.display = 'none'; iframe._htmlCode = null; }
+        const previewBtn = document.getElementById('cmp-preview-' + paneIdx);
+        if (previewBtn) { previewBtn.style.display = 'none'; previewBtn.classList.remove('active'); }
+        const badge = document.getElementById('cmp-badge-' + paneIdx);
+        if (badge) { badge.textContent = ''; badge.style.color = ''; }
+        const summary = document.getElementById('cmp-summary-' + paneIdx);
+        if (summary) { summary.textContent = ''; summary.title = ''; }
+        refreshMobilePaneTabs(paneIdx);
+
+        if (oldSid) {
+          fetch(`${state.API_BASE}/api/session/${encodeURIComponent(oldSid)}`, {
+            method: 'DELETE', credentials: 'same-origin',
+          }).catch(() => {});
+        }
       } catch (err) {
-        console.error('Failed to create session for swapped model:', err);
+        if (stateChanged && state._paneSessionIds[paneIdx] === newSessionId) {
+          state._selectedModels[paneIdx] = oldModel;
+          state._paneSessionIds[paneIdx] = oldSid;
+          state._paneGenerationSettings[paneIdx] = oldSettings;
+          _persistSelections();
+          if (window._updateCheckBtnState) window._updateCheckBtnState();
+        }
+        if (newSessionId) {
+          await fetch(`${state.API_BASE}/api/session/${encodeURIComponent(newSessionId)}`, {
+            method: 'DELETE', keepalive: true, credentials: 'same-origin',
+          }).catch(() => {});
+        }
+        console.error('Failed to swap compare model:', err);
         if (uiModule?.showError) uiModule.showError('Failed to swap compare model: ' + (err?.message || 'unknown'));
-        return;
       }
-
-      const oldSid = state._paneSessionIds[paneIdx];
-      state._selectedModels[paneIdx] = {
-        model: m.id, endpoint: m.url, endpointId: m.endpointId, name: m.name,
-      };
-      state._paneSessionIds[paneIdx] = newSessionId;
-      await _savePaneGenerationSettings(paneIdx, {});
-      _persistSelections();
-      if (window._updateCheckBtnState) window._updateCheckBtnState();
-      if (oldSid) {
-        fetch(`${state.API_BASE}/api/session/${oldSid}`, { method: 'DELETE' }).catch(() => {});
-      }
-
-      // Update title display
-      const titleEl = document.getElementById('cmp-title-' + paneIdx);
-      if (titleEl) {
-        const displayName = state._blindMode
-          ? 'Model ' + _slotChar(paneIdx)
-          : m.name;
-        titleEl.innerHTML = escapeHtml(displayName) + ' <span class="pane-title-caret">&#x25BE;</span>';
-      }
-
-      // Clear pane history for fresh start
-      const hist = document.getElementById('cmp-history-' + paneIdx);
-      if (hist) { hist.innerHTML = ''; hist.style.display = ''; }
-      const iframe = document.getElementById('cmp-iframe-' + paneIdx);
-      if (iframe) { iframe.srcdoc = ''; iframe.style.display = 'none'; iframe._htmlCode = null; }
-      const previewBtn = document.getElementById('cmp-preview-' + paneIdx);
-      if (previewBtn) { previewBtn.style.display = 'none'; previewBtn.classList.remove('active'); }
-      const badge = document.getElementById('cmp-badge-' + paneIdx);
-      if (badge) { badge.textContent = ''; badge.style.color = ''; }
-      const summary = document.getElementById('cmp-summary-' + paneIdx);
-      if (summary) { summary.textContent = ''; summary.title = ''; }
-      refreshMobilePaneTabs(paneIdx);
     });
     dropdown.appendChild(item);
   });
