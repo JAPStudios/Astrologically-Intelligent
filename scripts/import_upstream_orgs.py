@@ -24,7 +24,7 @@ import urllib.request
 from pathlib import Path
 
 ORGANIZATIONS = (
-    "anthropics", "n8n-io", "NousResearch", "odysseus-dev", "openai",
+    "anthropics", "herdrdev", "n8n-io", "NousResearch", "odysseus-dev", "openai",
     "openclaw", "paperclipai", "perplexityai", "xai-org",
 )
 API_ROOT = "https://api.github.com"
@@ -161,7 +161,7 @@ def import_repositories(root: Path, repositories: list[dict], dry_run: bool = Fa
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--org", action="append", choices=ORGANIZATIONS,
-                        help="Import one organization; repeat to select several. Default: all nine.")
+                        help="Import one organization; repeat to select several. Default: all ten.")
     parser.add_argument("--dry-run", action="store_true", help="List imports without cloning repositories.")
     parser.add_argument("--limit", type=int, help="Stop after adding this many new submodules.")
     args = parser.parse_args(argv)
