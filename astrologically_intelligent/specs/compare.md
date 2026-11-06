@@ -63,7 +63,7 @@ Compare frontend code is part of the app DOM security surface. Current stream/se
 ## Degraded And Compatibility Behavior
 
 - Missing/offline endpoints are surfaced by model/session routes; chat can clear orphaned endpoint references and recover empty models when possible.
-- Compare streams inherit chat's opt-in, eligible-pre-output-only foreground fallback and provider-normalized SSE events, but compare frontend handling for errors and model/endpoint route transitions is thinner than chat's stream path.
+- Compare SSE parsing explicitly handles named and typed provider errors, malformed payloads, premature EOF, terminal `[DONE]`, and blind-mode error redaction. `tests/test_compare_stream_contract_browser.py` exercises those cases through the actual pane consumer. Compare frontend handling for foreground fallback and model/endpoint route-transition events remains thinner than chat's stream path.
 - Shared legacy `ModelEndpoint.owner == NULL` rows remain visible through owner filters. Legacy `Comparison.owner == NULL` rows are not treated as shared for authenticated vote/delete/history flows.
 - `/api/compare/start` and `/{comp_id}/vote` remain implemented but are not the active frontend path.
 
@@ -78,8 +78,8 @@ Compare frontend code is part of the app DOM security surface. Current stream/se
 ## Current Gaps
 
 - Blind mode is not a confidentiality boundary; client/local state can still expose model identity before vote.
-- `/api/compare/start` accepts raw endpoint URLs and can diverge from `/api/session` endpoint-owner/raw-endpoint policy.
+- `/api/compare/start` retains a raw-URL input for compatibility, but `_reject_raw_endpoint_url_for_non_admin` rejects unregistered raw endpoints for signed-in non-admin users after owner-scoped endpoint resolution. Keep this guard aligned with `/api/session` if either route changes.
 - `src/agent_loop.py` advertises stale compare app API endpoints.
 - Compare streaming and chat streaming are separate frontend paths but share model/provider infrastructure; regressions can happen when provider event shape changes.
 - Compare frontend needs explicit fallback/error event handling parity with chat streaming.
-- Compare tests cover endpoint owner helper behavior, blind compare redaction, ask-user/tool-approval routing, and portable JS helpers, but not full active `/api/session` pane creation, frontend pane lifecycle, or complete SSE fallback/error handling.
+- Compare tests cover endpoint owner helper behavior, blind compare redaction, ask-user/tool-approval routing, and actual browser-driven SSE success/error/termination behavior. Remaining coverage gaps include full active `/api/session` pane creation, complete pane lifecycle, and foreground fallback/route-transition presentation.
