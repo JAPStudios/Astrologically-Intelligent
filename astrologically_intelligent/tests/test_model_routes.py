@@ -2302,6 +2302,7 @@ def test_endpoint_model_picker_exposes_persisted_capability_metadata(monkeypatch
     assert by_id["unclassified"]["capability"] is None
     assert db.closed is True
 
+
 def test_capabilities_route_rejects_provider_managed_auth(monkeypatch):
     ep = _make_endpoint(id="oauth-endpoint", provider_auth_id="oauth-1")
     db = _PinnedFakeDb([ep])
