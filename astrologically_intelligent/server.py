@@ -82,7 +82,14 @@ def make_handler(runtime: AgentRuntime, token: str):
                 if length<1 or length>1_000_000: return self._send(413,{"error":"invalid_body_size"})
                 data=json.loads(self.rfile.read(length))
                 if not isinstance(data,dict): return self._send(400,{"error":"body_must_be_object"})
-                result=runtime.chat(data.get("message"),data.get("session_id"))
+                session_id = data.get("session_id")
+                if session_id is not None and (
+                    not isinstance(session_id, str)
+                    or not 1 <= len(session_id) <= 128
+                    or not all(char.isalnum() or char in "_-" for char in session_id)
+                ):
+                    return self._send(400,{"error":"invalid_session_id"})
+                result=runtime.chat(data.get("message"),session_id)
                 self._send(200,result)
             except (ValueError,json.JSONDecodeError) as exc: self._send(400,{"error":str(exc)})
             except RuntimeError as exc: self._send(502,{"error":str(exc)})
