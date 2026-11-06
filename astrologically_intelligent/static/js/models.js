@@ -87,7 +87,7 @@ function _startChat(url, mid, endpointId) {
   }
 }
 
-function _buildModelRow(mid, url, displayName, endpointId, offline, modelType) {
+function _buildModelRow(mid, url, displayName, endpointId, offline, modelType, capability = null) {
   const row = document.createElement('div');
   row.className = 'models-row' + (offline ? ' models-row-offline' : '');
   row.setAttribute('data-model-id', mid);
@@ -128,6 +128,26 @@ function _buildModelRow(mid, url, displayName, endpointId, offline, modelType) {
     badge.title = 'Image generation model';
     badge.style.cssText = 'font-size:0.65em;padding:1px 4px;border-radius:3px;background:var(--accent,#7c3aed);color:#fff;margin-left:6px;vertical-align:middle;';
     span.appendChild(badge);
+  }
+
+  // Show only provider-reported capability metadata. Unknown or absent
+  // capability data stays unlabelled; model names are never used to infer it.
+  if (capability && typeof capability === 'object') {
+    const family = typeof capability.family === 'string' ? capability.family : '';
+    const tokens = Array.isArray(capability.capabilities)
+      ? capability.capabilities.filter(value => typeof value === 'string' && value.trim())
+      : [];
+    const labels = [];
+    if (family && family !== 'unknown') labels.push(family);
+    labels.push(...tokens.slice(0, 2));
+    if (labels.length) {
+      const badge = document.createElement('span');
+      badge.className = 'model-capability-badge';
+      badge.textContent = labels.join(' · ');
+      badge.title = 'Provider-reported capabilities: ' + labels.join(', ');
+      badge.style.cssText = 'font-size:0.62em;padding:1px 4px;border-radius:3px;background:var(--panel-2,var(--bg));color:var(--muted);margin-left:6px;vertical-align:middle;';
+      span.appendChild(badge);
+    }
   }
 
   const btn = document.createElement('button');
@@ -250,6 +270,7 @@ export async function refreshModels(force = false, opts = {}) {
             endpointId: item.endpoint_id || null,
             offline: isOffline,
             modelType: epModelType,
+            capability: item.model_capabilities && item.model_capabilities[mid] || null,
           });
         });
         // Extra (non-curated) models from server
@@ -321,8 +342,8 @@ export async function refreshModels(force = false, opts = {}) {
           const favContainer = document.createElement('div');
           favContainer.className = 'models-group-content';
           favContainer.id = 'models-group-' + (groupIdx++);
-          favModels.forEach(({ mid, url, displayName, endpointId, offline, modelType }) => {
-            favContainer.appendChild(_buildModelRow(mid, url, displayName, endpointId, offline, modelType));
+          favModels.forEach(({ mid, url, displayName, endpointId, offline, modelType, capability }) => {
+            favContainer.appendChild(_buildModelRow(mid, url, displayName, endpointId, offline, modelType, capability));
           });
           box.appendChild(favContainer);
         }
@@ -456,8 +477,8 @@ export async function refreshModels(force = false, opts = {}) {
         const overflow = epModels.slice(MAX_VISIBLE);
         const allHidden = [...overflow, ...epExtra];
 
-        visible.forEach(({ mid, url, displayName, endpointId, offline, modelType }) => {
-          target.appendChild(_buildModelRow(mid, url, displayName, endpointId, offline, modelType));
+        visible.forEach(({ mid, url, displayName, endpointId, offline, modelType, capability }) => {
+          target.appendChild(_buildModelRow(mid, url, displayName, endpointId, offline, modelType, capability));
         });
 
         if (allHidden.length > 0) {
@@ -468,8 +489,8 @@ export async function refreshModels(force = false, opts = {}) {
           showMoreBtn._target = target;
           showMoreBtn.addEventListener('click', () => {
             showMoreBtn.remove();
-            allHidden.forEach(({ mid, url, displayName, endpointId, offline, modelType }) => {
-              target.appendChild(_buildModelRow(mid, url, displayName, endpointId, offline, modelType));
+            allHidden.forEach(({ mid, url, displayName, endpointId, offline, modelType, capability }) => {
+              target.appendChild(_buildModelRow(mid, url, displayName, endpointId, offline, modelType, capability));
             });
           });
           target.appendChild(showMoreBtn);
@@ -563,7 +584,7 @@ export async function refreshModels(force = false, opts = {}) {
             const display = allDisplay[i] || mid;
             if (!mid.toLowerCase().includes(q) && !display.toLowerCase().includes(q)) return;
             searchResults.appendChild(
-              _buildModelRow(mid, item.url, display, item.endpoint_id || null, false, item.model_type || 'llm')
+              _buildModelRow(mid, item.url, display, item.endpoint_id || null, false, item.model_type || 'llm', item.model_capabilities && item.model_capabilities[mid] || null)
             );
           });
         });
