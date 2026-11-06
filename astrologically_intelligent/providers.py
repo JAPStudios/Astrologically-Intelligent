@@ -1,4 +1,4 @@
-"""Model-provider transports for OpenAI-compatible APIs and Anthropic Messages."""
+"""Model-provider transports for the Chat Completions API and Anthropic Messages."""
 from __future__ import annotations
 
 import json
@@ -19,8 +19,8 @@ class ProviderConfig:
     timeout: float = 90.0
 
 
-class OpenAICompatibleProvider:
-    """Chat Completions transport for OpenAI, xAI, local servers, and compatible gateways."""
+class ChatCompletionsProvider:
+    """Chat Completions transport for configured model endpoints."""
 
     def __init__(self, config: ProviderConfig):
         self.config = config
