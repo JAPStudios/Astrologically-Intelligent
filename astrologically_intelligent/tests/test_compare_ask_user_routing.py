@@ -123,6 +123,12 @@ def test_compare_model_swap_creates_replacement_before_mutating_current_pane():
     delete_idx = swap.index("fetch(`${state.API_BASE}/api/session/${encodeURIComponent(oldSid)}`")
 
     assert create_idx < ok_idx < id_idx < state_idx < delete_idx
+    assert "credentials: 'same-origin'" in swap
+    assert "typeof data.id !== 'string' || !data.id.trim()" in swap
+    assert "document.querySelector('.compare-grid') !== originGrid" in swap
+    assert "state._paneSessionIds[paneIdx] !== oldSid" in swap
+    assert "encodeURIComponent(newSessionId)" in swap
+    assert "if (state._paneCreationPending)" in panes[:swap_start]
     assert "if (uiModule?.showError) uiModule.showError('Failed to swap compare model:" in swap
     assert "return;" in swap[swap.index("catch (err)") : state_idx]
 
