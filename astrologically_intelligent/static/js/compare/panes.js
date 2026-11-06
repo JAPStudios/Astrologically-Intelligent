@@ -725,7 +725,11 @@ async function _addPane(anchorBtn) {
 
 /** Create a new pane for the given model and append it to the compare grid. */
 async function _createAndAppendPane(m) {
-  const i = state._selectedModels.length;  // New index
+  // Reserve the single creation slot synchronously. Without this guard,
+  // two rapid Add actions can both observe the same pane index before
+  // either session request completes, corrupting the parallel state arrays.
+  if (state._paneCreationPending) return false;
+  const i = state._selectedModels.length;
 
   // Keep the compare limit consistent even if this function is called
   // outside the currently visible Add controls.
@@ -742,6 +746,8 @@ async function _createAndAppendPane(m) {
 
   // Create session before changing pane state. A failed or malformed
   // response must not leave the model/session arrays out of alignment.
+  state._paneCreationPending = true;
+  let createdSessionId = '';
   try {
     const fd = new FormData();
     // Blind mode: neutral slot name only — never leak the model (issue #1285).
@@ -764,6 +770,19 @@ async function _createAndAppendPane(m) {
     const data = await res.json();
     if (!data || typeof data.id !== 'string' || !data.id.trim()) {
       throw new Error('The session response did not contain a valid session ID.');
+    }
+    createdSessionId = data.id;
+
+    // Compare mode may have been closed while the request was in flight.
+    // Do not append a pane to a torn-down interface or leave an orphan session.
+    if (!state.isActive || !grid.isConnected) {
+      await fetch(`${state.API_BASE}/api/session/${encodeURIComponent(createdSessionId)}`, {
+        method: 'DELETE',
+        keepalive: true,
+        credentials: 'same-origin',
+      }).catch(() => {});
+      createdSessionId = '';
+      return false;
     }
 
   // Update arrays
@@ -830,11 +849,20 @@ async function _createAndAppendPane(m) {
   buildVoteBar(n);
     return true;
   } catch (error) {
+    if (createdSessionId) {
+      await fetch(`${state.API_BASE}/api/session/${encodeURIComponent(createdSessionId)}`, {
+        method: 'DELETE',
+        keepalive: true,
+        credentials: 'same-origin',
+      }).catch(() => {});
+    }
     console.error('Compare pane creation failed:', error);
     uiModule.showError(state._blindMode
       ? 'Could not add comparison pane. Try again.'
       : 'Could not add comparison pane: ' + (error?.message || 'unknown error'));
     return false;
+  } finally {
+    state._paneCreationPending = false;
   }
 }
 
