@@ -2278,6 +2278,31 @@ def test_capabilities_route_returns_fresh_normalized_records(monkeypatch):
 
 
 
+def test_empty_capability_probe_preserves_last_known_snapshot(monkeypatch):
+    previous = [{"vendor": "anthropic", "model_id": "claude-example", "capability": {"family": "chat"}}]
+    ep = _make_endpoint(
+        id="anthropic-primary",
+        base_url="https://api.anthropic.com/v1",
+        endpoint_kind="api",
+        capability_records=json.dumps(previous),
+        capability_observed_at=1234.5,
+    )
+    db = _PinnedFakeDb([ep])
+    monkeypatch.setattr(model_routes, "SessionLocal", lambda: db)
+    monkeypatch.setattr(model_routes, "require_admin", lambda request: None)
+    monkeypatch.setattr(model_routes, "check_outbound_url", lambda *a, **k: (True, ""))
+    monkeypatch.setattr(endpoint_resolver, "resolve_url", lambda url: url, raising=False)
+    monkeypatch.setattr(model_routes, "_probe_endpoint", lambda *a, **k: [])
+    endpoint = _get_route("/api/model-endpoints/{endpoint_id}/capabilities", "GET")
+
+    result = endpoint(_PinnedFakeRequest(), "anthropic-primary")
+
+    assert result["models"] == []
+    assert json.loads(ep.capability_records) == previous
+    assert ep.capability_observed_at == 1234.5
+    assert db.commits == 0
+    assert db.closed is True
+
 def test_endpoint_model_picker_exposes_persisted_capability_metadata(monkeypatch):
     snapshot = [{
         "vendor": "anthropic",
