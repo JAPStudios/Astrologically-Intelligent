@@ -111,15 +111,15 @@ function _setPaneSummary(paneIdx, metrics, cost) {
   summary.title = bits.length ? 'Response summary: ' + bits.join(', ') : '';
 }
 
-function _showPaneRouteNotice(paneIdx, message, kind) {
-  const body = document.querySelector('#cmp-history-' + paneIdx + ' .msg-ai:last-child .body');
-  if (!body || !message) return;
-  let notice = body.querySelector('.compare-route-notice');
+function _showPaneRouteNotice(aiMsgEl, message, kind) {
+  if (!aiMsgEl || !message) return;
+  let notice = aiMsgEl.querySelector('.compare-route-notice');
   if (!notice) {
     notice = document.createElement('div');
     notice.className = 'compare-route-notice';
     notice.setAttribute('role', 'status');
-    body.insertBefore(notice, body.firstChild);
+    const body = aiMsgEl.querySelector('.body');
+    aiMsgEl.insertBefore(notice, body || aiMsgEl.firstChild);
   }
   notice.dataset.routeKind = kind || 'route';
   notice.textContent = message;
@@ -498,7 +498,7 @@ async function streamToPane(paneIdx, sessionId, message, aiMsgEl, opts) {
             const route = requestedEndpoint || answeredEndpoint
               ? ' (' + (requestedEndpoint || 'selected endpoint') + ' → ' + (answeredEndpoint || 'fallback endpoint') + ')'
               : '';
-            _showPaneRouteNotice(paneIdx, 'Fallback: ' + requested + ' failed; answered by ' + answered + route, 'fallback');
+            _showPaneRouteNotice(aiMsgEl, 'Fallback: ' + requested + ' failed; answered by ' + answered + route, 'fallback');
           } else if (json.type === 'model_actual') {
             const requested = String(json.requested_model || json.selected_model || '');
             const actual = String(json.model || json.answered_by || '');
@@ -509,7 +509,7 @@ async function streamToPane(paneIdx, sessionId, message, aiMsgEl, opts) {
             if (modelChanged || endpointChanged) {
               const modelText = modelChanged ? requested + ' → ' + actual : actual;
               const endpointText = endpointChanged ? ' (' + requestedEndpoint + ' → ' + actualEndpoint + ')' : '';
-              _showPaneRouteNotice(paneIdx, 'Route: ' + modelText + endpointText, 'route');
+              _showPaneRouteNotice(aiMsgEl, 'Route: ' + modelText + endpointText, 'route');
             }
           } else if (json.type === 'metrics') {
             metrics = json.data;
