@@ -261,6 +261,7 @@ def test_compare_add_pane_serializes_creation_and_cleans_up_failed_sessions():
     assert "addButton.disabled = !!state._streaming || !!state._paneCreationPending;" in panes
     assert "state._paneCreationPending = true;" in create
     assert "state._paneCreationPending = false;" in create
+    assert "try {\n    refreshMobilePaneTabs();" in create
     assert "finally {" in create
     assert "if (!state.isActive || !grid.isConnected)" in create
     assert "credentials: 'same-origin'" in create
