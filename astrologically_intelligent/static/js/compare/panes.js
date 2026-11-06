@@ -240,7 +240,7 @@ function refreshMobilePaneTabs(preferredIndex = state._activeMobilePane) {
     });
   }
   if (addButton) {
-    addButton.disabled = !!state._streaming;
+    addButton.disabled = !!state._streaming || !!state._paneCreationPending;
     addButton.style.display = panes.length >= 8 ? 'none' : '';
     tabs.appendChild(addButton);
   }
@@ -620,6 +620,10 @@ async function copyPaneResponse(paneIdx) {
 /** Show a model picker dropdown anchored to the "+" button in the pane header. */
 async function _addPane(anchorBtn) {
   if (state._streaming) return;
+  if (state._paneCreationPending) {
+    uiModule.showToast('A comparison pane is already being added. Wait for it to finish.');
+    return;
+  }
   const _effectiveType = (state._compareMode === 'agent' || state._compareMode === 'research') ? 'chat' : state._compareMode;
   const filtered = state._cachedModels.filter(m => m.type === _effectiveType);
   if (!filtered.length) return;
@@ -747,6 +751,7 @@ async function _createAndAppendPane(m) {
   // Create session before changing pane state. A failed or malformed
   // response must not leave the model/session arrays out of alignment.
   state._paneCreationPending = true;
+  refreshMobilePaneTabs();
   let createdSessionId = '';
   try {
     const fd = new FormData();
@@ -878,6 +883,7 @@ async function _createAndAppendPane(m) {
     return false;
   } finally {
     state._paneCreationPending = false;
+    refreshMobilePaneTabs();
   }
 }
 
