@@ -293,6 +293,7 @@ async function _runSynthForPane(modelToUse, synthPrompt, synthBody, spinner, his
   // Create temp session for synthesis. Keep its ID outside the try block so
   // every failure path can remove the temporary session in finally.
   let tempSessionId = '';
+  let synthAbortController = null;
   const fd = new FormData();
   fd.append('name', 'Synthesis');
   fd.append('endpoint_url', modelToUse.endpoint || '');
@@ -314,13 +315,13 @@ async function _runSynthForPane(modelToUse, synthPrompt, synthBody, spinner, his
     }
     tempSessionId = createData.id;
 
-    const synthAc = new AbortController();
-    state._abortControllers.push(synthAc);
+    synthAbortController = new AbortController();
+    state._abortControllers.push(synthAbortController);
     const streamRes = await fetch(`${state.API_BASE}/api/chat_stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ session: createData.id, message: synthPrompt }),
-      signal: synthAc.signal,
+      signal: synthAbortController.signal,
     });
 
     if (!streamRes.ok) {
@@ -366,6 +367,10 @@ async function _runSynthForPane(modelToUse, synthPrompt, synthBody, spinner, his
     if (spinner) spinner.stop();
     synthBody.innerHTML = '<div style="color:var(--color-error);font-size:0.85em;">Synthesis failed: ' + escapeHtml(e.message) + '</div>';
   } finally {
+    if (synthAbortController) {
+      const controllerIndex = state._abortControllers.indexOf(synthAbortController);
+      if (controllerIndex >= 0) state._abortControllers.splice(controllerIndex, 1);
+    }
     if (tempSessionId) {
       fetch(`${state.API_BASE}/api/session/${encodeURIComponent(tempSessionId)}`, {
         method: 'DELETE',
