@@ -119,7 +119,7 @@ Focused tests pin:
 
 - endpoint-kind, host and common-port vendor detection;
 - endpoint/base-URL-scoped stable IDs;
-- unknown behavior for generic and official OpenAI lists;
+- unknown behavior for generic and official OpenAI lists, including bare-list, `key`/`slug` identity, and duplicate identifiers;
 - canonical normalization and display-surface matching;
 - assertion, deterministic-control and probe-result shapes;
 - OpenRouter, Google, Anthropic, Hugging Face, Ollama, LM Studio, llama.cpp and vLLM mappings;
@@ -135,6 +135,6 @@ The provider detector has narrow production consumers in `src/ai_interaction.py`
 - Reader output is refreshed on explicit capability requests but is not persisted, merged or expired.
 - Provider detection still uses common-port hints; consumers must not promote normalization hints into trust decisions.
 - Ten concrete readers exist; SGLang and other providers use the identity-only generic reader.
-- Generic fallback does not accept bare-list or `key`/`slug`-only payloads.
+- Generic fallback accepts mapping payloads with `data[]` or `models[]`, plus bare lists; identity may come from `id`, `name`, `model`, `key`, or `slug`. These records remain identity-only and do not infer capabilities.
 - There is no capability-specific diagnostic/logging path.
 - Runtime request builders still contain model-name heuristics outside this canonical layer.
