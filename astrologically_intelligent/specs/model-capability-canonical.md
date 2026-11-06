@@ -15,7 +15,7 @@ This spec covers the implementation introduced on current `dev` in:
 - regression coverage in `tests/test_model_capabilities.py` and
   `tests/test_model_capability_readers.py`.
 
-The reader modules normalize JSON returned by existing endpoint probes. The admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. It captures native Anthropic and Google catalogues plus OpenAI-compatible and Ollama model-list responses. The route persists a non-empty observed catalogue as JSON on its `ModelEndpoint` row, with a Unix observation timestamp. A probe returning no model IDs or records leaves the previous snapshot intact. The admin endpoint settings UI renders the returned families, modalities, limits and capability tokens. Persisted records are not yet consumed by model routing or model pickers. OAuth-backed endpoints are not supported by this route.
+The reader modules normalize JSON returned by existing endpoint probes. The admin-only `GET /api/model-endpoints/{endpoint_id}/capabilities` route performs a fresh probe then returns canonical records without raw provider payloads. It captures native Anthropic and Google catalogues plus OpenAI-compatible and Ollama model-list responses. The route persists a non-empty observed catalogue as JSON on its `ModelEndpoint` row, with a Unix observation timestamp. A probe returning no model IDs or records leaves the previous snapshot intact. The admin endpoint settings UI renders the returned families, modalities, limits and capability tokens. The endpoint model-list route attaches persisted per-model capability metadata to picker records. Model routing, endpoint resolution, model context and request shaping do not yet consume these records. OAuth-backed endpoints are not supported by this route.
 
 There is no `src/provider_capability_schemas.py`, capability-specific diagnostics module, or runtime model-quirk registry on current `dev`.
 
@@ -131,7 +131,7 @@ The provider detector has narrow production consumers in `src/ai_interaction.py`
 
 ## Current Gaps
 
-- The admin capability endpoint persists the latest non-empty normalized catalogue on its endpoint row. Canonical records are not yet consumed by model routing, endpoint resolution, model context, request shaping or frontend pickers.
+- The admin capability endpoint persists the latest non-empty normalized catalogue on its endpoint row. Canonical records are now exposed by the endpoint model-list route for picker clients. They are not yet consumed by model routing, endpoint resolution, model context or request shaping.
 - Reader output is refreshed and persisted on explicit capability requests. Evidence merging, conflict resolution and expiry are not implemented.
 - Provider detection still uses common-port hints; consumers must not promote normalization hints into trust decisions.
 - Ten concrete readers exist; SGLang and other providers use the identity-only generic reader.
