@@ -10,6 +10,15 @@ from urllib.parse import parse_qs, urlsplit
 from .runtime import AgentRuntime
 
 
+def _valid_session_id(value: object) -> bool:
+    """Apply the same bounded ASCII identifier contract to every session route."""
+    return (
+        isinstance(value, str)
+        and 1 <= len(value) <= 128
+        and all((char.isascii() and char.isalnum()) or char in "_-" for char in value)
+    )
+
+
 def make_handler(runtime: AgentRuntime, token: str):
     class Handler(BaseHTTPRequestHandler):
         def _send(self,status:int,payload:dict):
@@ -44,7 +53,7 @@ def make_handler(runtime: AgentRuntime, token: str):
                     return self._send(400,{"error":"invalid_limit"})
                 return self._send(200, {"sessions": runtime.store.list_sessions(limit)})
             session_id = query.get("session_id", [""])[0]
-            if not session_id or len(session_id) > 128:
+            if not _valid_session_id(session_id):
                 return self._send(400,{"error":"invalid_session_id"})
             try:
                 limit = int(query.get("limit", ["40"])[0])
@@ -65,9 +74,7 @@ def make_handler(runtime: AgentRuntime, token: str):
             if not self._authorized():
                 return self._send(401,{"error":"unauthorized"})
             session_id = parsed.path[len(prefix):]
-            if not session_id or len(session_id) > 128 or not all(
-                (char.isascii() and char.isalnum()) or char in "_-" for char in session_id
-            ):
+            if not _valid_session_id(session_id):
                 return self._send(400,{"error":"invalid_session_id"})
             if not runtime.store.delete_session(session_id):
                 return self._send(404,{"error":"session_not_found"})
@@ -83,11 +90,7 @@ def make_handler(runtime: AgentRuntime, token: str):
                 data=json.loads(self.rfile.read(length))
                 if not isinstance(data,dict): return self._send(400,{"error":"body_must_be_object"})
                 session_id = data.get("session_id")
-                if session_id is not None and (
-                    not isinstance(session_id, str)
-                    or not 1 <= len(session_id) <= 128
-                    or not all((char.isascii() and char.isalnum()) or char in "_-" for char in session_id)
-                ):
+                if session_id is not None and not _valid_session_id(session_id):
                     return self._send(400,{"error":"invalid_session_id"})
                 result=runtime.chat(data.get("message"),session_id)
                 self._send(200,result)
