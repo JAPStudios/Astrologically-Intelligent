@@ -120,6 +120,16 @@ class RuntimeTests(unittest.TestCase):
                 _post_json("https://provider.example/v1/chat/completions", {}, {}, 5)
         self.assertNotIn("secret-endpoint-detail", str(raised.exception))
 
+    def test_openai_compatible_provider_rejects_malformed_choice_entries(self):
+        provider = OpenAICompatibleProvider(
+            ProviderConfig("http://localhost:1234/v1", "test-key", "test-model")
+        )
+        for response in ({"choices": [None]}, {"choices": ["invalid"]}, {"choices": [{}]}):
+            with self.subTest(response=response):
+                with patch("astrologically_intelligent.providers._post_json", return_value=response):
+                    with self.assertRaisesRegex(RuntimeError, "choices"):
+                        provider.chat([{"role": "user", "content": "hello"}])
+
     def test_provider_request_shape(self):
         provider=OpenAICompatibleProvider(ProviderConfig("http://localhost:1234/v1","","test-model"))
         self.assertEqual(provider.config.model,"test-model")
