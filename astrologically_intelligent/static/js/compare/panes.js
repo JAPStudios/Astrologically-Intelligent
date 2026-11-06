@@ -975,7 +975,7 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
     return;
   }
   if (state._paneCreationPending) {
-    uiModule.showToast('Wait for the comparison pane to finish adding before changing models.');
+    uiModule.showToast('Wait for the current comparison pane change to finish before changing models.');
     return;
   }
 
@@ -1010,6 +1010,16 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
         uiModule?.showError('Could not swap comparison model: the selected model is invalid.');
         return;
       }
+      if (state._paneCreationPending) {
+        uiModule?.showToast('Another comparison pane change is already in progress.');
+        return;
+      }
+      if (!state.isActive || !document.querySelector('.compare-grid')?.isConnected
+          || !state._paneSessionIds[paneIdx]) {
+        uiModule?.showError('Could not swap comparison model: the pane is no longer available.');
+        return;
+      }
+      state._paneCreationPending = true;
       const originGrid = document.querySelector('.compare-grid');
       const oldSid = state._paneSessionIds[paneIdx];
       const oldModel = state._selectedModels[paneIdx];
@@ -1107,6 +1117,9 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
         }
         console.error('Failed to swap compare model:', err);
         if (uiModule?.showError) uiModule.showError('Failed to swap compare model: ' + (err?.message || 'unknown'));
+      } finally {
+        state._paneCreationPending = false;
+        refreshMobilePaneTabs();
       }
     });
     dropdown.appendChild(item);
@@ -1146,7 +1159,7 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
 // ── Shuffle / reset ──
 
 function shufflePanePositions() {
-  if (state._streaming) return;
+  if (state._streaming || state._paneCreationPending) return;
   // Remove shuffle prompt bubble if present
   const shuffleBtn = document.getElementById('compare-shuffle-btn');
   if (shuffleBtn) { const b = shuffleBtn.querySelector('div'); if (b) b.remove(); }
