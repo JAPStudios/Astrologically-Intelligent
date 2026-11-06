@@ -751,9 +751,9 @@ async function _createAndAppendPane(m) {
   // Create session before changing pane state. A failed or malformed
   // response must not leave the model/session arrays out of alignment.
   state._paneCreationPending = true;
-  refreshMobilePaneTabs();
   let createdSessionId = '';
   try {
+    refreshMobilePaneTabs();
     const fd = new FormData();
     // Blind mode: neutral slot name only — never leak the model (issue #1285).
     fd.append('name', '[CMP] ' + (state._blindMode ? 'Model ' + _slotChar(i) : (m.name || m.id)));
