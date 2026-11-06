@@ -26,7 +26,9 @@ def record_from_model(
     endpoint_id: Any = "",
     base_url: Any = "",
 ) -> ModelCapabilityRecord | None:
-    model_id = model_id_from(raw, "id", "name", "model")
+    # Generic gateways do not share one model identifier field. Accept common
+    # identity-only keys, but never infer capabilities from their values.
+    model_id = model_id_from(raw, "id", "name", "model", "key", "slug")
     if not model_id:
         return None
     capability = mc.unknown_capability(
@@ -44,15 +46,23 @@ def record_from_model(
 
 
 def records_from_payload(
-    payload: Mapping[str, Any],
+    payload: Any,
     *,
     vendor_id: str = VENDOR_GENERIC_OPENAI,
     endpoint_id: Any = "",
     base_url: Any = "",
 ) -> tuple[ModelCapabilityRecord, ...]:
+    # Most gateways use {"data": [...]} or {"models": [...]}; a few return the
+    # array directly. Keep this fallback deliberately identity-only.
+    if isinstance(payload, list):
+        items = tuple(item for item in payload if isinstance(item, Mapping))
+    else:
+        items = openai_model_items(payload)
     records: list[ModelCapabilityRecord] = []
-    for item in openai_model_items(payload):
+    seen: set[str] = set()
+    for item in items:
         record = record_from_model(item, vendor_id=vendor_id, endpoint_id=endpoint_id, base_url=base_url)
-        if record:
+        if record and record.model_id not in seen:
             records.append(record)
+            seen.add(record.model_id)
     return tuple(records)
