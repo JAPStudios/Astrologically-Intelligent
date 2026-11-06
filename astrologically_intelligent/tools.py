@@ -520,8 +520,7 @@ class ToolRegistry:
         from pathlib import Path
 
         repo_root = Path(__file__).resolve().parent.parent
-        skills_root = repo_root / "skills"
-        roots = [(skills_root, "")]
+        roots = [(repo_root / "skills", ""), (repo_root / "upstream", "upstream/")]
         results = []
         for root, prefix in roots:
             if not root.is_dir():
@@ -538,27 +537,33 @@ class ToolRegistry:
                 results.append({"name": name, "summary": summary})
         return sorted(results, key=lambda item: item["name"])
 
-    def _read_skill(self, name: str) -> dict[str, str]:
+    @staticmethod
+    def _resolve_skill_path(name: str, repo_root):
         from pathlib import Path
+
         if (not isinstance(name, str) or len(name) > 512 or name.startswith("/") or "\\" in name
                 or any(part in {"", ".", ".."} for part in name.split("/"))):
             raise ValueError("Invalid skill name")
-        repo_root = Path(__file__).resolve().parent.parent
-        skills_root = (repo_root / "skills").resolve()
-        upstream_root = (skills_root / "upstream").resolve()
+        repo_root = Path(repo_root)
         if name.startswith("upstream/"):
-            nested_skill=(skills_root/name/"SKILL.md").resolve()
-            if nested_skill.is_relative_to(skills_root) and nested_skill.is_file():
-                root, path = skills_root, nested_skill
-            else:
-                root=upstream_root
-                path=(root/name[len("upstream/"):]/"SKILL.md").resolve()
+            root = (repo_root / "upstream").resolve()
+            relative_name = name[len("upstream/"):]
         else:
-            root=skills_root
-            path=(root/name/"SKILL.md").resolve()
-        if not path.is_relative_to(root) or not path.is_file(): raise ValueError("Skill not found")
-        if path.stat().st_size > 131072: raise ValueError("Skill exceeds 128 KiB limit")
-        return {"name":name,"content":path.read_text(encoding="utf-8")}
+            root = (repo_root / "skills").resolve()
+            relative_name = name
+        path = (root / relative_name / "SKILL.md").resolve()
+        if not path.is_relative_to(root) or not path.is_file():
+            raise ValueError("Skill not found")
+        return path
+
+    def _read_skill(self, name: str) -> dict[str, str]:
+        from pathlib import Path
+
+        repo_root = Path(__file__).resolve().parent.parent
+        path = self._resolve_skill_path(name, repo_root)
+        if path.stat().st_size > 131072:
+            raise ValueError("Skill exceeds 128 KiB limit")
+        return {"name": name, "content": path.read_text(encoding="utf-8")}
 
     def _remember(self, namespace: str, key: str, value: Any) -> dict[str, bool]:
         self.store.remember(namespace,key,value)
