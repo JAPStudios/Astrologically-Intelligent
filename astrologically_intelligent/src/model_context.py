@@ -1,7 +1,7 @@
 """
 model_context.py
 
-Query and cache model context window sizes from OpenAI-compatible APIs.
+Query and cache model context window sizes from Chat Completions model endpoints.
 Provides token estimation for context usage tracking.
 """
 
