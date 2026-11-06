@@ -1019,7 +1019,6 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
         uiModule?.showError('Could not swap comparison model: the pane is no longer available.');
         return;
       }
-      state._paneCreationPending = true;
       const originGrid = document.querySelector('.compare-grid');
       const oldSid = state._paneSessionIds[paneIdx];
       const oldModel = state._selectedModels[paneIdx];
@@ -1035,6 +1034,7 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
       }
       let newSessionId = '';
       let stateChanged = false;
+      state._paneCreationPending = true;
       try {
         const res = await fetch(`${state.API_BASE}/api/session`, {
           method: 'POST',
@@ -1068,6 +1068,11 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
         };
         stateChanged = true;
         await _savePaneGenerationSettings(paneIdx, {});
+        if (!state.isActive || !originGrid.isConnected
+            || document.querySelector('.compare-grid') !== originGrid
+            || state._paneSessionIds[paneIdx] !== newSessionId) {
+          throw new Error('Compare mode closed while the model was being changed.');
+        }
         _persistSelections();
         if (window._updateCheckBtnState) window._updateCheckBtnState();
 
@@ -1115,8 +1120,10 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
             method: 'DELETE', keepalive: true, credentials: 'same-origin',
           }).catch(() => {});
         }
-        console.error('Failed to swap compare model:', err);
-        if (uiModule?.showError) uiModule.showError('Failed to swap compare model: ' + (err?.message || 'unknown'));
+        if (state.isActive) {
+          console.error('Failed to swap compare model:', err);
+          if (uiModule?.showError) uiModule.showError('Failed to swap compare model: ' + (err?.message || 'unknown'));
+        }
       } finally {
         state._paneCreationPending = false;
         refreshMobilePaneTabs();
