@@ -113,14 +113,14 @@ def test_compare_model_swap_creates_replacement_before_mutating_current_pane():
     panes = (root / "static/js/compare/panes.js").read_text(encoding="utf-8")
 
     swap_start = panes.index("item.addEventListener('click', async (e) => {")
-    swap_end = panes.index("// Update title display", swap_start)
+    swap_end = panes.index("    });\n    dropdown.appendChild(item);", swap_start)
     swap = panes[swap_start:swap_end]
 
     create_idx = swap.index("const res = await fetch(`${state.API_BASE}/api/session`")
     ok_idx = swap.index("if (!res.ok) throw new Error('HTTP ' + res.status);")
     id_idx = swap.index("newSessionId = data.id;")
     state_idx = swap.index("state._selectedModels[paneIdx] = {")
-    delete_idx = swap.index("fetch(`${state.API_BASE}/api/session/${oldSid}`")
+    delete_idx = swap.index("fetch(`${state.API_BASE}/api/session/${encodeURIComponent(oldSid)}`")
 
     assert create_idx < ok_idx < id_idx < state_idx < delete_idx
     assert "if (uiModule?.showError) uiModule.showError('Failed to swap compare model:" in swap
