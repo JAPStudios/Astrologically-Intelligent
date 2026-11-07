@@ -4785,3 +4785,103 @@
 	path = upstream/microsoft/aitour26-LTG158-level-up-as-a-data-expert-with-ai-ready-databases-and-tools
 	url = https://github.com/microsoft/aitour26-LTG158-level-up-as-a-data-expert-with-ai-ready-databases-and-tools.git
 	branch = main
+[submodule "upstream/microsoft/InnerEye-Gateway"]
+	path = upstream/microsoft/InnerEye-Gateway
+	url = https://github.com/microsoft/InnerEye-Gateway.git
+	branch = main
+[submodule "upstream/microsoft/agent365-skills"]
+	path = upstream/microsoft/agent365-skills
+	url = https://github.com/microsoft/agent365-skills.git
+	branch = main
+[submodule "upstream/microsoft/ai-freezer-monitor"]
+	path = upstream/microsoft/ai-freezer-monitor
+	url = https://github.com/microsoft/ai-freezer-monitor.git
+	branch = main
+[submodule "upstream/microsoft/frontiertour27-ILL335-building-deploying-ai-agents-with-microsoft-foundry"]
+	path = upstream/microsoft/frontiertour27-ILL335-building-deploying-ai-agents-with-microsoft-foundry
+	url = https://github.com/microsoft/frontiertour27-ILL335-building-deploying-ai-agents-with-microsoft-foundry.git
+	branch = main
+[submodule "upstream/microsoft/aitour-ai-and-low-code-innovation"]
+	path = upstream/microsoft/aitour-ai-and-low-code-innovation
+	url = https://github.com/microsoft/aitour-ai-and-low-code-innovation.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-LTG150-Microsoft-Agent-Framework-for-next-gen-multi-agent-solution"]
+	path = upstream/microsoft/aitour26-LTG150-Microsoft-Agent-Framework-for-next-gen-multi-agent-solution
+	url = https://github.com/microsoft/aitour26-LTG150-Microsoft-Agent-Framework-for-next-gen-multi-agent-solution.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-BRK461-whats-new-in-microsoft-databases-empowering-ai-driven-app-dev"]
+	path = upstream/microsoft/aitour26-BRK461-whats-new-in-microsoft-databases-empowering-ai-driven-app-dev
+	url = https://github.com/microsoft/aitour26-BRK461-whats-new-in-microsoft-databases-empowering-ai-driven-app-dev.git
+	branch = main
+[submodule "upstream/microsoft/deep_bait"]
+	path = upstream/microsoft/deep_bait
+	url = https://github.com/microsoft/deep_bait.git
+	branch = master
+[submodule "upstream/microsoft/azure-ai-foundry-whatsapp-bot"]
+	path = upstream/microsoft/azure-ai-foundry-whatsapp-bot
+	url = https://github.com/microsoft/azure-ai-foundry-whatsapp-bot.git
+	branch = main
+[submodule "upstream/microsoft/simplechat"]
+	path = upstream/microsoft/simplechat
+	url = https://github.com/microsoft/simplechat.git
+	branch = main
+[submodule "upstream/microsoft/ai-gallery-extension"]
+	path = upstream/microsoft/ai-gallery-extension
+	url = https://github.com/microsoft/ai-gallery-extension.git
+	branch = main
+[submodule "upstream/microsoft/aoc"]
+	path = upstream/microsoft/aoc
+	url = https://github.com/microsoft/aoc.git
+	branch = main
+[submodule "upstream/microsoft/Document-Knowledge-Mining-Solution-Accelerator"]
+	path = upstream/microsoft/Document-Knowledge-Mining-Solution-Accelerator
+	url = https://github.com/microsoft/Document-Knowledge-Mining-Solution-Accelerator.git
+	branch = main
+[submodule "upstream/microsoft/foodvibes-ai"]
+	path = upstream/microsoft/foodvibes-ai
+	url = https://github.com/microsoft/foodvibes-ai.git
+	branch = main
+[submodule "upstream/microsoft/Early-Access-Engineering"]
+	path = upstream/microsoft/Early-Access-Engineering
+	url = https://github.com/microsoft/Early-Access-Engineering.git
+	branch = main
+[submodule "upstream/microsoft/prompty"]
+	path = upstream/microsoft/prompty
+	url = https://github.com/microsoft/prompty.git
+	branch = main
+[submodule "upstream/microsoft/azure-ai-hands-on-training"]
+	path = upstream/microsoft/azure-ai-hands-on-training
+	url = https://github.com/microsoft/azure-ai-hands-on-training.git
+	branch = main
+[submodule "upstream/microsoft/chexprompt"]
+	path = upstream/microsoft/chexprompt
+	url = https://github.com/microsoft/chexprompt.git
+	branch = main
+[submodule "upstream/microsoft/aitour-modern-security-with-copilot"]
+	path = upstream/microsoft/aitour-modern-security-with-copilot
+	url = https://github.com/microsoft/aitour-modern-security-with-copilot.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB519-governing-ai-apps-agents-with-ai-gateway-in-azure-api-management"]
+	path = upstream/microsoft/ignite25-LAB519-governing-ai-apps-agents-with-ai-gateway-in-azure-api-management
+	url = https://github.com/microsoft/ignite25-LAB519-governing-ai-apps-agents-with-ai-gateway-in-azure-api-management.git
+	branch = main
+[submodule "upstream/microsoft/SimpleRacerResearchPlatform"]
+	path = upstream/microsoft/SimpleRacerResearchPlatform
+	url = https://github.com/microsoft/SimpleRacerResearchPlatform.git
+	branch = main
+[submodule "upstream/microsoft/AIInstitute"]
+	path = upstream/microsoft/AIInstitute
+	url = https://github.com/microsoft/AIInstitute.git
+	branch = master
+[submodule "upstream/microsoft/aitour-whats-new-with-fabric"]
+	path = upstream/microsoft/aitour-whats-new-with-fabric
+	url = https://github.com/microsoft/aitour-whats-new-with-fabric.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB564-architect-a-goal-driven-ai-agent-with-copilot-studio"]
+	path = upstream/microsoft/ignite25-LAB564-architect-a-goal-driven-ai-agent-with-copilot-studio
+	url = https://github.com/microsoft/ignite25-LAB564-architect-a-goal-driven-ai-agent-with-copilot-studio.git
+	branch = main
+[submodule "upstream/microsoft/AI-Pex-for-SDC"]
+	path = upstream/microsoft/AI-Pex-for-SDC
+	url = https://github.com/microsoft/AI-Pex-for-SDC.git
+	branch = main
