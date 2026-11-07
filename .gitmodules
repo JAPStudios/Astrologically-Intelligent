@@ -5085,3 +5085,103 @@
 	path = upstream/microsoft/aitour-copilot-implementation-essentials
 	url = https://github.com/microsoft/aitour-copilot-implementation-essentials.git
 	branch = main
+[submodule "upstream/microsoft/PowerPlatform-DataverseClient-Python"]
+	path = upstream/microsoft/PowerPlatform-DataverseClient-Python
+	url = https://github.com/microsoft/PowerPlatform-DataverseClient-Python.git
+	branch = main
+[submodule "upstream/microsoft/AutoGenesis"]
+	path = upstream/microsoft/AutoGenesis
+	url = https://github.com/microsoft/AutoGenesis.git
+	branch = main
+[submodule "upstream/microsoft/ai-discovery-agent"]
+	path = upstream/microsoft/ai-discovery-agent
+	url = https://github.com/microsoft/ai-discovery-agent.git
+	branch = dev
+[submodule "upstream/microsoft/PhiCookBook"]
+	path = upstream/microsoft/PhiCookBook
+	url = https://github.com/microsoft/PhiCookBook.git
+	branch = main
+[submodule "upstream/microsoft/aitour-eshop-api"]
+	path = upstream/microsoft/aitour-eshop-api
+	url = https://github.com/microsoft/aitour-eshop-api.git
+	branch = main
+[submodule "upstream/microsoft/Custom-Vision-Autotrainer"]
+	path = upstream/microsoft/Custom-Vision-Autotrainer
+	url = https://github.com/microsoft/Custom-Vision-Autotrainer.git
+	branch = master
+[submodule "upstream/microsoft/dstoolkit-AI-Jumpstart-Kit"]
+	path = upstream/microsoft/dstoolkit-AI-Jumpstart-Kit
+	url = https://github.com/microsoft/dstoolkit-AI-Jumpstart-Kit.git
+	branch = main
+[submodule "upstream/microsoft/ai-freezer-azure"]
+	path = upstream/microsoft/ai-freezer-azure
+	url = https://github.com/microsoft/ai-freezer-azure.git
+	branch = main
+[submodule "upstream/microsoft/hack-workshop-lobe"]
+	path = upstream/microsoft/hack-workshop-lobe
+	url = https://github.com/microsoft/hack-workshop-lobe.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB533-build-scalable-ai-and-data-solutions-in-sql-database-in-microsoft-fabric"]
+	path = upstream/microsoft/ignite25-LAB533-build-scalable-ai-and-data-solutions-in-sql-database-in-microsoft-fabric
+	url = https://github.com/microsoft/ignite25-LAB533-build-scalable-ai-and-data-solutions-in-sql-database-in-microsoft-fabric.git
+	branch = main
+[submodule "upstream/microsoft/dstoolkit-ai-ux"]
+	path = upstream/microsoft/dstoolkit-ai-ux
+	url = https://github.com/microsoft/dstoolkit-ai-ux.git
+	branch = main
+[submodule "upstream/microsoft/eval-guide"]
+	path = upstream/microsoft/eval-guide
+	url = https://github.com/microsoft/eval-guide.git
+	branch = main
+[submodule "upstream/microsoft/BUILD25-LAB333"]
+	path = upstream/microsoft/BUILD25-LAB333
+	url = https://github.com/microsoft/BUILD25-LAB333.git
+	branch = main
+[submodule "upstream/microsoft/group_ai_lab"]
+	path = upstream/microsoft/group_ai_lab
+	url = https://github.com/microsoft/group_ai_lab.git
+	branch = main
+[submodule "upstream/microsoft/multilspy"]
+	path = upstream/microsoft/multilspy
+	url = https://github.com/microsoft/multilspy.git
+	branch = main
+[submodule "upstream/microsoft/dstoolkit-km-solution-accelerator"]
+	path = upstream/microsoft/dstoolkit-km-solution-accelerator
+	url = https://github.com/microsoft/dstoolkit-km-solution-accelerator.git
+	branch = main
+[submodule "upstream/microsoft/BUILD25-LAB334"]
+	path = upstream/microsoft/BUILD25-LAB334
+	url = https://github.com/microsoft/BUILD25-LAB334.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB545-manage-sensitive-data-using-information-protection-in-the-age-of-ai"]
+	path = upstream/microsoft/ignite25-LAB545-manage-sensitive-data-using-information-protection-in-the-age-of-ai
+	url = https://github.com/microsoft/ignite25-LAB545-manage-sensitive-data-using-information-protection-in-the-age-of-ai.git
+	branch = main
+[submodule "upstream/microsoft/easycopilotlab"]
+	path = upstream/microsoft/easycopilotlab
+	url = https://github.com/microsoft/easycopilotlab.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-PREL15-ai-ready-apps-containerize-and-modernize-with-azure"]
+	path = upstream/microsoft/ignite25-PREL15-ai-ready-apps-containerize-and-modernize-with-azure
+	url = https://github.com/microsoft/ignite25-PREL15-ai-ready-apps-containerize-and-modernize-with-azure.git
+	branch = main
+[submodule "upstream/microsoft/WindowsML"]
+	path = upstream/microsoft/WindowsML
+	url = https://github.com/microsoft/WindowsML.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB598-agentic-ai-in-healthcare-multi-agent-orchestration-in-action"]
+	path = upstream/microsoft/ignite25-LAB598-agentic-ai-in-healthcare-multi-agent-orchestration-in-action
+	url = https://github.com/microsoft/ignite25-LAB598-agentic-ai-in-healthcare-multi-agent-orchestration-in-action.git
+	branch = main
+[submodule "upstream/microsoft/Moonlit"]
+	path = upstream/microsoft/Moonlit
+	url = https://github.com/microsoft/Moonlit.git
+	branch = main
+[submodule "upstream/microsoft/Resource2Skill"]
+	path = upstream/microsoft/Resource2Skill
+	url = https://github.com/microsoft/Resource2Skill.git
+	branch = main
+[submodule "upstream/microsoft/Data-AI-Hackathon"]
+	path = upstream/microsoft/Data-AI-Hackathon
+	url = https://github.com/microsoft/Data-AI-Hackathon.git
+	branch = main
