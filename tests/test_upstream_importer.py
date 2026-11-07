@@ -99,7 +99,7 @@ class UpstreamImporterTests(unittest.TestCase):
             "default_branch": "main",
             "size": 10,
         }
-        with patch("scripts.import_upstream_orgs.fetch_search_page", return_value=[item]) as search:
+        with patch("scripts.import_upstream_orgs.fetch_search_page", return_value=([item], 1)) as search:
             with patch("scripts.import_upstream_orgs.fetch_page") as listing:
                 repos = list_repositories(("apple",))
         self.assertEqual([repo["name"] for repo in repos], ["ml-project"])
@@ -111,7 +111,7 @@ class UpstreamImporterTests(unittest.TestCase):
 
         response = io.BytesIO(json.dumps({"items": []}).encode("utf-8"))
         with patch("scripts.import_upstream_orgs.urllib.request.urlopen", return_value=response) as open_url:
-            self.assertEqual(fetch_search_page("apple", 1, "test-token"), [])
+            self.assertEqual(fetch_search_page("apple", 1, "test-token"), ([], 0))
         request = open_url.call_args.args[0]
         parsed = urllib.parse.urlparse(request.full_url)
         self.assertEqual(parsed.path, "/search/repositories")
@@ -133,6 +133,25 @@ class UpstreamImporterTests(unittest.TestCase):
         self.assertEqual([repo["name"] for repo in repos], ["repo"])
         listing.assert_called_once_with("cursor", 1, None)
         search.assert_not_called()
+
+    def test_ai_search_stops_at_github_search_limit_and_reports_truncation(self):
+        pages = []
+        for page in range(10):
+            pages.append(([{
+                "name": f"repo-{page}-{index}",
+                "owner": {"login": "microsoft"},
+                "private": False,
+                "clone_url": f"https://github.com/microsoft/repo-{page}-{index}.git",
+                "default_branch": "main",
+                "size": 10,
+            } for index in range(100)], 1200))
+        with patch("scripts.import_upstream_orgs.fetch_search_page", side_effect=pages) as search:
+            with patch("builtins.print") as output:
+                repos = list_repositories(("microsoft",))
+        self.assertEqual(len(repos), 1000)
+        self.assertEqual(search.call_count, 10)
+        output.assert_called_once()
+        self.assertIn("first 1,000", output.call_args.args[0])
 
 if __name__ == "__main__":
     unittest.main()

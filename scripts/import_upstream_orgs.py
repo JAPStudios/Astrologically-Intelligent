@@ -57,7 +57,7 @@ def fetch_page(org: str, page: int, token: str | None = None) -> list[dict]:
     return result
 
 
-def fetch_search_page(org: str, page: int, token: str | None = None) -> list[dict]:
+def fetch_search_page(org: str, page: int, token: str | None = None) -> tuple[list[dict], int]:
     """Search AI-related public repositories within a broad organization.
 
     The requested AI-query organizations are not imported wholesale: only
@@ -86,7 +86,10 @@ def fetch_search_page(org: str, page: int, token: str | None = None) -> list[dic
         raise RuntimeError(f"Could not search AI repositories for {org}: {exc}") from exc
     if not isinstance(result, dict) or not isinstance(result.get("items"), list):
         raise RuntimeError(f"GitHub returned an invalid AI repository search for {org}")
-    return result["items"]
+    total_count = result.get("total_count")
+    if isinstance(total_count, bool) or not isinstance(total_count, int) or total_count < 0:
+        total_count = len(result["items"])
+    return result["items"], total_count
 
 
 def list_repositories(orgs: tuple[str, ...], token: str | None = None) -> list[dict]:
@@ -94,8 +97,11 @@ def list_repositories(orgs: tuple[str, ...], token: str | None = None) -> list[d
     for org in orgs:
         page = 1
         while True:
-            fetcher = fetch_search_page if org in AI_QUERY_ORGANIZATIONS else fetch_page
-            batch = fetcher(org, page, token)
+            if org in AI_QUERY_ORGANIZATIONS:
+                batch, total_count = fetch_search_page(org, page, token)
+            else:
+                batch = fetch_page(org, page, token)
+                total_count = None
             if not batch:
                 break
             for item in batch:
@@ -112,6 +118,13 @@ def list_repositories(orgs: tuple[str, ...], token: str | None = None) -> list[d
                     "fork": bool(item.get("fork")), "empty": not branch or int(item.get("size") or 0) == 0,
                 })
             if len(batch) < 100:
+                break
+            if org in AI_QUERY_ORGANIZATIONS and page >= 10:
+                if total_count is not None and total_count > 1000:
+                    print(
+                        f"[search cap] {org}: GitHub returned {total_count} matches; "
+                        "only the first 1,000 are available per query."
+                    )
                 break
             page += 1
     return repositories

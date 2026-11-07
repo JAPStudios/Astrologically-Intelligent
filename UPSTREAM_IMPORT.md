@@ -40,7 +40,7 @@ Each submodule retains its upstream repository boundary, source layout, and lice
 
 ## Import tooling
 
-`scripts/import_upstream_orgs.py` lists public repositories for the configured organizations, resolves default-branch commits, and records Gitlinks and `.gitmodules` entries. It is resumable and skips existing submodule URLs. Six broad organizations use a repository search for `AI` rather than importing every public repository. The `Import Upstream Repositories` workflow performs imports in bounded batches.
+`scripts/import_upstream_orgs.py` lists public repositories for the configured organizations, resolves default-branch commits, and records Gitlinks and `.gitmodules` entries. It is resumable and skips existing submodule URLs. Six broad organizations use a repository search for `AI` rather than importing every public repository. GitHub limits each repository-search query to 1,000 results; the importer reports when an organization reaches that limit instead of failing on page eleven. The `Import Upstream Repositories` workflow performs imports in bounded batches.
 
 ## Runtime integrations
 
