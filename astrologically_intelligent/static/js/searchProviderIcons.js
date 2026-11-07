@@ -1,5 +1,6 @@
 // Shared search-provider marks used by Settings and Deep Research.
 export const SEARCH_PROVIDER_LOGOS = {
+  peanut_browsing: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.4 3.2c-2.7 0-4.7 2.4-4.7 5.1 0 1.7.7 3.1 2 4.2-.9 1.1-1.4 2.3-1.4 3.7 0 2.8 2 4.8 4.7 4.8 1.7 0 2.9-.8 4-2.1 1.1 1.3 2.3 2.1 4 2.1 2.7 0 4.7-2 4.7-4.8 0-1.4-.5-2.6-1.4-3.7 1.3-1.1 2-2.5 2-4.2 0-2.7-2-5.1-4.7-5.1-1.8 0-3.2.9-4.6 2.5-1.4-1.6-2.8-2.5-4.6-2.5z"/></svg>',
   searxng: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0-2a8 8 0 1 1-4.93 14.32l-3.4 3.4a1 1 0 1 1-1.4-1.4l3.4-3.4A8 8 0 0 1 10 2zM13 8.5L11.5 10 13 11.5l-1 1L10.5 11 9 12.5l-1-1L9.5 10 8 8.5l1-1L10.5 9 12 7.5z"/></svg>',
   duckduckgo: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.5 5.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zm5 0a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zM12 13c-1.5 0-3.6.8-3.6 2.5C8.4 17.2 10.4 18 12 18s3.6-.8 3.6-2.5C15.6 13.8 13.5 13 12 13z"/></svg>',
   brave: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 4l-1.5 1L15 3l-3 .5L9 3 6.5 5 5 4 3 7l1.5 2L4 12l3 5 4 3 1 1 1-1 4-3 3-5-.5-3L21 7l-2-3zM12 17l-2.5-2 .5-3-2-1.5 2-1.5L11 7l3-1 3 1-.5 2 2 1.5-2 1.5.5 3L14.5 17 12 17z"/></svg>',
