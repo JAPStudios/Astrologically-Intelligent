@@ -5885,3 +5885,103 @@
 	path = upstream/microsoft/HC-Lotus-Modernization-Hackathon
 	url = https://github.com/microsoft/HC-Lotus-Modernization-Hackathon.git
 	branch = main
+[submodule "upstream/microsoft/atp-edu"]
+	path = upstream/microsoft/atp-edu
+	url = https://github.com/microsoft/atp-edu.git
+	branch = main
+[submodule "upstream/microsoft/sql-apps"]
+	path = upstream/microsoft/sql-apps
+	url = https://github.com/microsoft/sql-apps.git
+	branch = main
+[submodule "upstream/microsoft/Cobra"]
+	path = upstream/microsoft/Cobra
+	url = https://github.com/microsoft/Cobra.git
+	branch = main
+[submodule "upstream/microsoft/Safeguard-your-agents-with-AI-Red-Teaming-Agent-in-Azure-AIFoundry"]
+	path = upstream/microsoft/Safeguard-your-agents-with-AI-Red-Teaming-Agent-in-Azure-AIFoundry
+	url = https://github.com/microsoft/Safeguard-your-agents-with-AI-Red-Teaming-Agent-in-Azure-AIFoundry.git
+	branch = main
+[submodule "upstream/microsoft/Prototyping-multimodal-agents-with-Azure-AI-Foundry-and-the-AI-Toolkit"]
+	path = upstream/microsoft/Prototyping-multimodal-agents-with-Azure-AI-Foundry-and-the-AI-Toolkit
+	url = https://github.com/microsoft/Prototyping-multimodal-agents-with-Azure-AI-Foundry-and-the-AI-Toolkit.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK247-scott-and-mark-learn-how-agents-reshape-software-engineering"]
+	path = upstream/microsoft/Build26-BRK247-scott-and-mark-learn-how-agents-reshape-software-engineering
+	url = https://github.com/microsoft/Build26-BRK247-scott-and-mark-learn-how-agents-reshape-software-engineering.git
+	branch = main
+[submodule "upstream/microsoft/PyAImOpt"]
+	path = upstream/microsoft/PyAImOpt
+	url = https://github.com/microsoft/PyAImOpt.git
+	branch = main
+[submodule "upstream/microsoft/monodex.ai-website"]
+	path = upstream/microsoft/monodex.ai-website
+	url = https://github.com/microsoft/monodex.ai-website.git
+	branch = main
+[submodule "upstream/microsoft/amplifier-app-aiuser"]
+	path = upstream/microsoft/amplifier-app-aiuser
+	url = https://github.com/microsoft/amplifier-app-aiuser.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM364-simplify-app-dev-with-cloud-native-postgresql-in-azure-horizondb"]
+	path = upstream/microsoft/Build26-DEM364-simplify-app-dev-with-cloud-native-postgresql-in-azure-horizondb
+	url = https://github.com/microsoft/Build26-DEM364-simplify-app-dev-with-cloud-native-postgresql-in-azure-horizondb.git
+	branch = main
+[submodule "upstream/microsoft/Governing-AI-Apps-and-Agents-with-AI-Gateway-in-Azure-API-Management"]
+	path = upstream/microsoft/Governing-AI-Apps-and-Agents-with-AI-Gateway-in-Azure-API-Management
+	url = https://github.com/microsoft/Governing-AI-Apps-and-Agents-with-AI-Gateway-in-Azure-API-Management.git
+	branch = main
+[submodule "upstream/microsoft/TechLab-Azure-landing-zone-AI-Ready-Landing-Zone-Accelerator-for-AI"]
+	path = upstream/microsoft/TechLab-Azure-landing-zone-AI-Ready-Landing-Zone-Accelerator-for-AI
+	url = https://github.com/microsoft/TechLab-Azure-landing-zone-AI-Ready-Landing-Zone-Accelerator-for-AI.git
+	branch = main
+[submodule "upstream/microsoft/Jumpstart-AI-powered-HR-and-IT-support-with-Employee-Self-Service-Agent"]
+	path = upstream/microsoft/Jumpstart-AI-powered-HR-and-IT-support-with-Employee-Self-Service-Agent
+	url = https://github.com/microsoft/Jumpstart-AI-powered-HR-and-IT-support-with-Employee-Self-Service-Agent.git
+	branch = main
+[submodule "upstream/microsoft/ai-regulatory-inspection-accelerator"]
+	path = upstream/microsoft/ai-regulatory-inspection-accelerator
+	url = https://github.com/microsoft/ai-regulatory-inspection-accelerator.git
+	branch = main
+[submodule "upstream/microsoft/TWL400-Securing-AI"]
+	path = upstream/microsoft/TWL400-Securing-AI
+	url = https://github.com/microsoft/TWL400-Securing-AI.git
+	branch = main
+[submodule "upstream/microsoft/TRPL"]
+	path = upstream/microsoft/TRPL
+	url = https://github.com/microsoft/TRPL.git
+	branch = main
+[submodule "upstream/microsoft/frontier-ai-governance-rvas"]
+	path = upstream/microsoft/frontier-ai-governance-rvas
+	url = https://github.com/microsoft/frontier-ai-governance-rvas.git
+	branch = main
+[submodule "upstream/microsoft/app-service-ai-sample"]
+	path = upstream/microsoft/app-service-ai-sample
+	url = https://github.com/microsoft/app-service-ai-sample.git
+	branch = main
+[submodule "upstream/microsoft/fabric-airflow-api-client-sample"]
+	path = upstream/microsoft/fabric-airflow-api-client-sample
+	url = https://github.com/microsoft/fabric-airflow-api-client-sample.git
+	branch = main
+[submodule "upstream/microsoft/aloop"]
+	path = upstream/microsoft/aloop
+	url = https://github.com/microsoft/aloop.git
+	branch = main
+[submodule "upstream/microsoft/Using-the-AI-Migrate-Copilot-Agents"]
+	path = upstream/microsoft/Using-the-AI-Migrate-Copilot-Agents
+	url = https://github.com/microsoft/Using-the-AI-Migrate-Copilot-Agents.git
+	branch = main
+[submodule "upstream/microsoft/synthetic_proposals"]
+	path = upstream/microsoft/synthetic_proposals
+	url = https://github.com/microsoft/synthetic_proposals.git
+	branch = main
+[submodule "upstream/microsoft/hands-on-lab-migrate-and-modernize-with-ai"]
+	path = upstream/microsoft/hands-on-lab-migrate-and-modernize-with-ai
+	url = https://github.com/microsoft/hands-on-lab-migrate-and-modernize-with-ai.git
+	branch = main
+[submodule "upstream/microsoft/Build-new-AI-Applications-with-Azure-SQL-Databases"]
+	path = upstream/microsoft/Build-new-AI-Applications-with-Azure-SQL-Databases
+	url = https://github.com/microsoft/Build-new-AI-Applications-with-Azure-SQL-Databases.git
+	branch = main
+[submodule "upstream/microsoft/TechLab-Module24-AI-Services-iSIM"]
+	path = upstream/microsoft/TechLab-Module24-AI-Services-iSIM
+	url = https://github.com/microsoft/TechLab-Module24-AI-Services-iSIM.git
+	branch = main
