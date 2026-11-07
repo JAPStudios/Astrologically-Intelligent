@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 from .subprocess_tools import BashTool, HostShellTool, PythonTool
 from .web_tools import WebSearchTool, WebFetchTool, PdfExtractTool, PrivateBrowserTool, YouTubeTool
 from .peanut_tools import PeanutWebSearchTool, PeanutCrawlTool
+from . import herdr_tools as herdr_tools
 from .herdr_tools import HerdrAgentListTool, HerdrAgentGetTool, HerdrAgentReadTool, HerdrAgentExplainTool
 from .weather_tools import WeatherTool
 from .media_tools import ExtractTextTool, InspectMediaTool, TranscribeMediaTool
