@@ -1,15 +1,15 @@
 """Documents (RAG): an uploaded file is chunked, indexed and then listed.
 
-This is the one area whose dependency is not satisfiable from a clean
-checkout. `requirements.txt` pins `chromadb-client`, the HTTP client;
-the ChromaDB *server* is a separate install, and without one reachable
-the app returns a deliberate 503 from the upload route rather than
-indexing into nothing. So the scenario skips with that reason printed in
-the table instead of being quietly dropped - a row saying SKIP and why
-is the honest report, and it goes green as soon as a vector service is
-there.
+The app requirements pin `chromadb-client`; the ChromaDB server is a
+separate install. The release-smoke CI job installs the matching pinned
+server, requires its health endpoint to answer before app boot, then
+fails rather than skips if the upload route still reports an unavailable
+vector store. Local smoke runs without a server retain the explanatory
+SKIP behavior.
 """
 from __future__ import annotations
+
+import os
 
 import pytest
 
@@ -32,11 +32,14 @@ def test_an_uploaded_file_is_indexed_and_listed(client):
     response = client.post(UPLOAD_PATH,
                            files={"files": (FILENAME, CONTENT.encode("utf-8"), "text/plain")})
     if response.status_code == 503 and UNAVAILABLE_MARKER in response.text:
-        pytest.skip(
+        reason = (
             "no vector service reachable, so indexing is unavailable. "
             "requirements.txt pins chromadb-client, not the server; install "
             "chromadb in the venv and re-run to cover this area."
         )
+        if os.getenv("ODYSSEUS_REQUIRE_CHROMA") == "1":
+            pytest.fail(reason)
+        pytest.skip(reason)
     assert response.status_code == 200, response.text
     body = response.json()
     try:

@@ -90,7 +90,8 @@ a status code. `scripts/odysseus-smoke --areas` prints the current list.
 | Tasks | a daily task is accepted with a computed next run, is listed, and pauses |
 | Documents (editor) | an edit adds a version, both versions read back, and a restore returns the first |
 | Documents (RAG) | an uploaded file is chunked, indexed and listed |
-| Peanut Browsing | a native search tool cycle retrieves an indexed result; the crawl handler submits a public URL to the first-party gateway |\n| Email | the fixture inbox lists, opens with its body, then the unread count drops on mark-read |
+| Peanut Browsing | a native search tool cycle retrieves an indexed result; the crawl handler submits a public URL to the first-party gateway |
+| Email | the fixture inbox lists, opens with its body, then the unread count drops on mark-read |
 | Memory | a fact is listed, found by search, and gone after delete |
 | Uploads | an attachment reads back byte for byte |
 | Cookbook | CPU/RAM hardware is detected; GPU probing either returns device data or an explicit no-NVIDIA-utility status; a fresh install's recommendation request returns the empty-catalog Rescan guidance; state persists |
@@ -102,9 +103,7 @@ Printed next to the results on every run, so a reader cannot mistake the
 table for coverage of everything it does not mention. `DECLARED_GAPS` in
 `areas.py` is the list; the short version:
 
-- **Deep Research** and **Web Search** need live egress. A deterministic
-  stub for the crawler would be an application change, which this is
-  not.
+- **Deep Research** still needs live indexed evidence plus multi-source synthesis. The local Peanut Browsing fixture validates search and crawl tool transport; it does not validate live crawl coverage or research quality.
 - **Email over IMAP/SMTP** is covered only as far as the fixture path
   goes. There is no local mail server, so real account sync and send are
   untested.
@@ -112,17 +111,12 @@ table for coverage of everything it does not mention. `DECLARED_GAPS` in
   multi-gigabyte download.
 - **Gallery and the photo editor** already have the repo's only
   Playwright specs.
-- **The agent tool loop** is what the checkpoint benchmark measures.
+- **Multi-agent orchestration** has separate core-runtime coverage through the Agent Runtime workflow. The full web app smoke exercises one native Peanut search tool cycle; multi-agent handoff plus approval still need a dedicated end-to-end scenario.
 - **MCP servers** are stdio subprocesses outside the app's readiness
   contract.
 - **Rendering and layout** are pinned by the computed-style snapshot.
 
-`Documents (RAG)` is the one covered area that can report `SKIP` on a
-clean checkout: `requirements.txt` pins `chromadb-client`, the HTTP
-client, and the ChromaDB *server* is a separate install. Without one
-reachable, the upload route returns a deliberate 503 and the row reads
-`SKIP` with that reason. Install `chromadb` in the venv and it goes
-green.
+`Documents (RAG)` is exercised in release-smoke CI. The job installs the pinned ChromaDB server, requires its health endpoint to answer before app boot, then fails rather than skips if the upload route still reports an unavailable vector store. Local runs without a server retain the explanatory `SKIP` result.
 
 ## Reading the report
 

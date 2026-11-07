@@ -307,11 +307,14 @@ def start_chroma(venv_python, port, chroma_path, log_path):
     """
     binary = Path(venv_python).parent / "chroma"
     if not binary.exists():
-        return None, (
+        note = (
             "keyword-only mode: no `chroma` binary in this venv "
             "(requirements.txt pins chromadb-client, the HTTP client). "
             f"Install the server with `{venv_python} -m pip install chromadb` to enable vectors."
         )
+        if os.getenv("ODYSSEUS_REQUIRE_CHROMA") == "1":
+            fail("ChromaDB is required for this run, but the server binary is missing. " + note)
+        return None, note
     chroma_path.mkdir(parents=True, exist_ok=True)
     command = [
         str(binary), "run",
@@ -324,6 +327,33 @@ def start_chroma(venv_python, port, chroma_path, log_path):
             command, stdout=log, stderr=subprocess.STDOUT,
             start_new_session=True, cwd=str(chroma_path.parent),
         )
+    deadline = time.monotonic() + 30
+    heartbeat = f"http://127.0.0.1:{port}/api/v2/heartbeat"
+    ready = False
+    while time.monotonic() < deadline:
+        if process.poll() is not None:
+            break
+        try:
+            with urllib.request.urlopen(heartbeat, timeout=1) as response:
+                if response.status == 200:
+                    ready = True
+                    break
+        except (OSError, urllib.error.URLError):
+            time.sleep(0.25)
+    if not ready:
+        process.terminate()
+        try:
+            process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait(timeout=5)
+        note = (
+            f"ChromaDB did not become ready at {heartbeat} within 30 seconds; "
+            f"inspect {log_path} for server output."
+        )
+        if os.getenv("ODYSSEUS_REQUIRE_CHROMA") == "1":
+            fail(note)
+        return None, note
     entry = {
         "pid": process.pid,
         "port": port,

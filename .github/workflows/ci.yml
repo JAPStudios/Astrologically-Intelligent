@@ -289,7 +289,9 @@ jobs:
   release-smoke:
     name: Full web application release smoke
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 35
+    env:
+      ODYSSEUS_REQUIRE_CHROMA: "1"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -310,8 +312,12 @@ jobs:
         run: |
           uv venv venv --python 3.11
           uv pip install --python venv/bin/python -r requirements.txt
+      - name: Install ChromaDB server for RAG smoke
+        run: uv pip install --python ./venv/bin/python "chromadb==1.5.9"
+      - name: Validate Docker Compose deployment configuration
+        run: docker compose config --quiet
       - name: Exercise the full web application
-        run: scripts/odysseus-smoke --venv ./venv --no-chroma
+        run: scripts/odysseus-smoke --venv ./venv
       - name: Stop the isolated smoke instance
         if: always()
         run: scripts/odysseus-dev down
