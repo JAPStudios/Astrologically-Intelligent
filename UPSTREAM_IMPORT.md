@@ -1,51 +1,36 @@
-# Upstream repository import
+# Upstream implementation map
 
-## Result
+Astrologically Intelligent uses upstream work through runtime adapters, native tools, skills, model discovery and inherited codebase components. The organization list is a development scope, not a repository-count metric.
 
-**Status: Source inventory imported — functionality integration and validation remain separate work.**
+| Upstream organization | Functionality in the system |
+| --- | --- |
+| [Anthropic](https://github.com/orgs/anthropics/repositories) | Native Messages API transport, tool-use blocks and tool-result conversion |
+| [Herdr](https://github.com/orgs/herdrdev/repositories) | Guarded read-only agent listing, status inspection and terminal-output tools |
+| [n8n](https://github.com/orgs/n8n-io/repositories) | Workflow management operations |
+| [NousResearch](https://github.com/orgs/NousResearch/repositories) | Hermes progressive skill-disclosure patterns and NousResearch model discovery |
+| [Odysseus](https://github.com/orgs/odysseus-dev/repositories) | Upstream codebase lineage and inherited runtime components |
+| [OpenAI](https://github.com/orgs/openai/repositories) | Chat Completions and Responses transports plus model-capability discovery |
+| [OpenClaw](https://github.com/orgs/openclaw/repositories) | Read-only session inspection |
+| [PaperclipAI](https://github.com/orgs/paperclipai/repositories) | Company and issue management operations |
+| [Perplexity](https://github.com/orgs/perplexityai/repositories) | Provider transport |
+| [xAI](https://github.com/orgs/xai-org/repositories) | Grok provider transport |
 
-The current `.gitmodules` file contains **742 pinned public repositories across all ten requested GitHub organizations**. Five repositories from `herdrdev` were added in the latest Herdr import batch. The current organization-directory counts are:
+## JAPStudios service roles
 
-| Organization | Pinned submodules |
-| --- | ---: |
-| anthropics | 115 |
-| herdrdev | 5 |
-| n8n-io | 52 |
-| NousResearch | 114 |
-| odysseus-dev | 2 |
-| openai | 277 |
-| openclaw | 97 |
-| paperclipai | 11 |
-| perplexityai | 57 |
-| xai-org | 12 |
-| **Total** | **742** |
+- CatChat is the direct-message surface. Its assistant account uses the full Astrologically Intelligent session and chat routes, maintaining a continuing AI session for each direct-message conversation.
+- Peanut Browsing is the first-party research engine. The agent's search tool queries its index and its crawl tool submits public sites to its crawler.
+- PanMedia is intended to manage agents. The current PanMedia repository does not yet publish a usable API or implementation contract for an in-process adapter.
+- Engzen is intended to provide programming capabilities. The current Engzen repository identifies its contents as a MyOutlet extension rather than documenting a programming API.
+- Honest Education is intended to provide verified information and fact-checking. A corresponding public repository or API contract has not yet been located in the connected GitHub account.
 
-The inventory was counted directly from the current `.gitmodules` file. It records pinned Git submodules; it does not establish that every upstream source tree has been checked out, reviewed, built, or integrated into the application.
+## Source boundaries
 
-## Retrieving the source
-
-The destination stores each upstream repository as a Git submodule pinned to a commit resolved from its default branch at import time. Retrieve the pinned source trees with:
-
-```sh
-git submodule update --init --recursive
-```
-
-Repositories using Git LFS may require Git LFS to be installed and their LFS objects fetched separately:
-
-```sh
-git submodule foreach --recursive 'git lfs pull'
-```
-
-Each submodule retains its upstream repository boundary, source layout, and license files. The submodules are not flattened into one directory or relicensed by the destination repository.
+Upstream repositories retain their own source layout, license files and version history. A submodule reference alone is not treated as a completed integration: runtime functionality is provided by the adapters, tools and skills listed above. Changes to upstream code are reviewed for license obligations, dependency compatibility, security and tests before they are incorporated.
 
 ## Import tooling
 
-`scripts/import_upstream_orgs.py` lists public repositories for the ten configured organizations, resolves default-branch commits, and records Gitlinks and `.gitmodules` entries. It is resumable and skips existing submodule URLs. The `Import Upstream Repositories` workflow performs imports in bounded batches.
+`scripts/import_upstream_orgs.py` maintains the upstream source references for the ten configured organizations. It resolves default-branch commits and records Gitlinks and `.gitmodules` entries. The `Import Upstream Repositories` workflow performs imports in bounded batches.
 
-## Runtime integrations
+## Validation
 
-The application also contains API integrations for n8n workflow management, Paperclip company/issue operations, Perplexity Search, and read-only OpenClaw session access, plus native Anthropic Messages API transport and provider routing for xAI and Perplexity. These are specific application integrations; they do not mean the upstream applications themselves have all been merged into one runtime.
-
-## Remaining work
-
-The source inventory is not the completion criterion for the software. Each upstream project still needs an evidence-based disposition: relevant functionality identified, license and dependency obligations reviewed, compatibility assessed, any selected functionality integrated into the application, and automated tests added. Projects that are irrelevant, incompatible, redundant, or unsafe to incorporate should be documented as such rather than copied indiscriminately. The complete application also requires repeatable dependency installation, test execution, security checks, and deployment validation.
+Provider adapters, native tools, skills and service interfaces require automated tests. Full completion also requires repeatable dependency installation, test execution, security checks and deployment validation.
