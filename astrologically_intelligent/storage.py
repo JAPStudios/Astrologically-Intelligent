@@ -26,7 +26,8 @@ class Store:
             self._db.executescript("""
             CREATE TABLE IF NOT EXISTS messages (
                 id TEXT PRIMARY KEY, session_id TEXT NOT NULL, role TEXT NOT NULL,
-                content TEXT NOT NULL, created_at REAL NOT NULL
+                content TEXT NOT NULL, created_at REAL NOT NULL,
+                metadata TEXT NOT NULL DEFAULT '{}'
             );
             CREATE INDEX IF NOT EXISTS messages_session_time ON messages(session_id, created_at);
             CREATE TABLE IF NOT EXISTS memories (
@@ -41,22 +42,37 @@ class Store:
             );
             CREATE INDEX IF NOT EXISTS tasks_status ON tasks(status, created_at);
             """)
+            message_columns = {row[1] for row in self._db.execute("PRAGMA table_info(messages)")}
+            if "metadata" not in message_columns:
+                self._db.execute("ALTER TABLE messages ADD COLUMN metadata TEXT NOT NULL DEFAULT '{}'")
 
-    def add_message(self, session_id: str, role: str, content: str) -> None:
+    def add_message(self, session_id: str, role: str, content: str, metadata: dict[str, Any] | None = None) -> None:
         with self._lock, self._db:
             self._db.execute(
-                "INSERT INTO messages VALUES (?, ?, ?, ?, ?)",
-                (uuid.uuid4().hex, session_id, role, content, time.time()),
+                "INSERT INTO messages(id, session_id, role, content, created_at, metadata) VALUES (?, ?, ?, ?, ?, ?)",
+                (uuid.uuid4().hex, session_id, role, content, time.time(), json.dumps(metadata or {}, ensure_ascii=False)),
             )
 
-    def history(self, session_id: str, limit: int = 40) -> list[dict[str, str]]:
+    def history(self, session_id: str, limit: int = 40) -> list[dict[str, Any]]:
         limit = max(1, min(int(limit), 200))
         with self._lock:
             rows = self._db.execute(
-                "SELECT role, content FROM messages WHERE session_id=? ORDER BY created_at DESC, rowid DESC LIMIT ?",
+                "SELECT role, content, metadata FROM messages WHERE session_id=? ORDER BY created_at DESC, rowid DESC LIMIT ?",
                 (session_id, limit),
             ).fetchall()
-        return [{"role": r["role"], "content": r["content"]} for r in reversed(rows)]
+        history: list[dict[str, Any]] = []
+        for row in reversed(rows):
+            message: dict[str, Any] = {"role": row["role"], "content": row["content"]}
+            try:
+                metadata = json.loads(row["metadata"] or "{}")
+            except (TypeError, json.JSONDecodeError):
+                metadata = {}
+            if isinstance(metadata, dict):
+                for key in ("tool_calls", "_gemini_content", "tool_call_id", "name"):
+                    if key in metadata:
+                        message[key] = metadata[key]
+            history.append(message)
+        return history
 
     def list_sessions(self, limit: int = 50) -> list[dict[str, Any]]:
         """Return recent conversations with their latest message preview."""

@@ -99,6 +99,10 @@ class AgentRuntime:
                 return {"session_id": session_id, "response": content}
 
             messages.append(response)
+            response_metadata = {
+                key: response[key] for key in ("tool_calls", "_gemini_content") if key in response
+            }
+            self.store.add_message(session_id, "assistant", response.get("content") or "", response_metadata)
             seen_call_ids = set()
             for call in tool_calls:
                 if not isinstance(call, dict):
@@ -125,7 +129,22 @@ class AgentRuntime:
                     "name": name,
                     "content": result,
                 })
+                self.store.add_message(
+                    session_id, "tool", str(result), {"tool_call_id": call_id, "name": name}
+                )
         raise RuntimeError("Conversation ended without a response")
+
+    def history(self, session_id: str) -> list[dict[str, str]]:
+        """Return display-safe user and assistant messages for one conversation."""
+        if not _valid_session_id(session_id):
+            raise ValueError("session_id must be 1 to 128 ASCII letters, digits, underscores, or hyphens")
+        return [
+            {"role": message["role"], "content": message["content"]}
+            for message in self.store.history(session_id, self.config.history_limit)
+            if message.get("role") in {"user", "assistant"}
+            and isinstance(message.get("content"), str)
+            and message["content"].strip()
+        ]
 
     def close(self):
         self.tools.close()
