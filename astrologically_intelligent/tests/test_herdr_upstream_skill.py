@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from tools import ToolRegistry
+from astrologically_intelligent.tools import ToolRegistry
 
 
 def test_herdr_upstream_skill_is_discoverable_and_keeps_its_safety_gate():
