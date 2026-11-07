@@ -24,7 +24,12 @@ class NeuralNetworkClassifier:
             raise ValueError("network dimensions must be positive integers")
         if output_size < 2:
             raise ValueError("output_size must be at least 2 for classification")
-        if not np.isfinite(learning_rate) or learning_rate <= 0:
+        if (
+            isinstance(learning_rate, (bool, np.bool_))
+            or not isinstance(learning_rate, (int, float, np.integer, np.floating))
+            or not np.isfinite(learning_rate)
+            or learning_rate <= 0
+        ):
             raise ValueError("learning_rate must be a positive finite number")
         self.input_size = input_size
         self.hidden_sizes = tuple(hidden_sizes)
@@ -105,7 +110,12 @@ class NeuralNetworkClassifier:
             isinstance(patience, bool) or not isinstance(patience, int) or patience < 1
         ):
             raise ValueError("patience must be a positive integer")
-        if not np.isfinite(min_delta) or min_delta < 0:
+        if (
+            isinstance(min_delta, (bool, np.bool_))
+            or not isinstance(min_delta, (int, float, np.integer, np.floating))
+            or not np.isfinite(min_delta)
+            or min_delta < 0
+        ):
             raise ValueError("min_delta must be a non-negative finite number")
         if not isinstance(restore_best_weights, bool):
             raise ValueError("restore_best_weights must be a boolean")
