@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Import every public repository from the configured upstream organizations as Git submodules.
+"""Import the requested public repositories from configured upstream organizations as Git submodules.
 
 Run from the root of a clean Astrologically Intelligent checkout:
     python scripts/import_upstream_orgs.py --dry-run
