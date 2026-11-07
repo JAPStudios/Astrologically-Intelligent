@@ -103,7 +103,9 @@ Printed next to the results on every run, so a reader cannot mistake the
 table for coverage of everything it does not mention. `DECLARED_GAPS` in
 `areas.py` is the list; the short version:
 
-- **Deep Research** still needs live indexed evidence plus multi-source synthesis. The local Peanut Browsing fixture validates search and crawl tool transport; it does not validate live crawl coverage or research quality.
+- **Deep Research** still needs live indexed evidence for multi-source
+  synthesis. The Peanut Browsing fixture validates search and crawl
+  transport only; it does not prove broad public-web coverage.
 - **Email over IMAP/SMTP** is covered only as far as the fixture path
   goes. There is no local mail server, so real account sync and send are
   untested.
@@ -111,12 +113,17 @@ table for coverage of everything it does not mention. `DECLARED_GAPS` in
   multi-gigabyte download.
 - **Gallery and the photo editor** already have the repo's only
   Playwright specs.
-- **Multi-agent orchestration** has separate core-runtime coverage through the Agent Runtime workflow. The full web app smoke exercises one native Peanut search tool cycle; multi-agent handoff plus approval still need a dedicated end-to-end scenario.
+- **Multi-agent orchestration** is covered by the core runtime workflow;
+  web-app handoff plus approval still need a dedicated end-to-end scenario.
 - **MCP servers** are stdio subprocesses outside the app's readiness
   contract.
 - **Rendering and layout** are pinned by the computed-style snapshot.
 
-`Documents (RAG)` is exercised in release-smoke CI. The job installs the pinned ChromaDB server, requires its health endpoint to answer before app boot, then fails rather than skips if the upload route still reports an unavailable vector store. Local runs without a server retain the explanatory `SKIP` result.
+`Documents (RAG)` uses the ChromaDB HTTP server. Release CI installs the
+pinned server, validates the Compose configuration, waits for its
+heartbeat, then runs with `ODYSSEUS_REQUIRE_CHROMA=1`; a missing server
+fails that required path. Local runs without a server retain the
+explanatory skip.
 
 ## Reading the report
 
