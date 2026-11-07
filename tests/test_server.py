@@ -11,6 +11,11 @@ from astrologically_intelligent.storage import Store
 from astrologically_intelligent.server import make_handler
 
 
+class StubProvider:
+    def chat(self, messages, tools):
+        return {"content": "agent execution complete", "tool_calls": []}
+
+
 class HistoryEndpointTests(unittest.TestCase):
     def setUp(self):
         self.store = Store(":memory:")
@@ -34,6 +39,16 @@ class HistoryEndpointTests(unittest.TestCase):
         if token:
             request.add_header("Authorization", f"Bearer {token}")
         return urllib.request.urlopen(request, timeout=3)
+
+    def json_request(self, path, payload=None, token="test-token", method="GET"):
+        data = None if payload is None else json.dumps(payload).encode("utf-8")
+        headers = {}
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+        if data is not None:
+            headers["Content-Type"] = "application/json"
+        request = urllib.request.Request(self.url + path, data=data, headers=headers, method=method)
+        return urllib.request.urlopen(request, timeout=5)
 
     def test_history_returns_session_messages_in_chronological_order(self):
         with self.request("/v1/history?session_id=session-1") as response:
@@ -135,6 +150,130 @@ class HistoryEndpointTests(unittest.TestCase):
             with self.assertRaises(urllib.error.HTTPError) as raised:
                 self.request(path)
             self.assertEqual(raised.exception.code, 400)
+
+    def test_panmedia_agent_management_api_requires_authentication(self):
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.request("/v1/agents", token="")
+        self.assertEqual(raised.exception.code, 401)
+
+    def test_panmedia_can_register_list_pause_and_execute_agents(self):
+        provider = StubProvider()
+        self.runtime.provider = provider
+        self.runtime.tools.provider = provider
+        with self.json_request("/v1/agents", {
+            "name": "Research assistant",
+            "adapter": "llm",
+            "role": "research",
+            "config": {"allowed_tools": [], "api_key": "do-not-return", "nested": {"refresh_token": "do-not-return-either"}, "system_prompt": "safe instructions"},
+            "heartbeat_seconds": 60,
+        }, method="POST") as response:
+            self.assertEqual(response.status, 201)
+            agent = json.loads(response.read())["agent"]
+        self.assertEqual(agent["name"], "Research assistant")
+        self.assertEqual(agent["config"]["api_key"], "[REDACTED]")
+        self.assertEqual(agent["config"]["nested"]["refresh_token"], "[REDACTED]")
+        self.assertEqual(agent["config"]["system_prompt"], "safe instructions")
+        with self.json_request("/v1/agents/" + agent["id"] + "/heartbeat", {}, method="POST") as response:
+            heartbeat_agent = json.loads(response.read())["agent"]
+        self.assertIsNotNone(heartbeat_agent["last_heartbeat"])
+        self.assertEqual(heartbeat_agent["config"]["api_key"], "[REDACTED]")
+        with self.request("/v1/agents") as response:
+            agents = json.loads(response.read())["agents"]
+        self.assertEqual([item["id"] for item in agents], [agent["id"]])
+        with self.request("/v1/agents/" + agent["id"]) as response:
+            lookup = json.loads(response.read())["agent"]
+        self.assertEqual(lookup["name"], "Research assistant")
+        self.assertEqual(lookup["config"]["nested"]["refresh_token"], "[REDACTED]")
+        with self.json_request("/v1/agents/" + agent["id"], {"state": "paused"}, method="PATCH") as response:
+            paused_agent = json.loads(response.read())["agent"]
+        self.assertEqual(paused_agent["state"], "paused")
+        self.assertEqual(paused_agent["config"]["api_key"], "[REDACTED]")
+        with self.json_request("/v1/agents/" + agent["id"], {"state": "active"}, method="PATCH") as response:
+            self.assertEqual(json.loads(response.read())["agent"]["state"], "active")
+        with self.json_request("/v1/agents/" + agent["id"] + "/execute", {"prompt": "Complete this task."}, method="POST") as response:
+            result = json.loads(response.read())
+        self.assertEqual(result["status"], "succeeded")
+        self.assertEqual(result["output"], "agent execution complete")
+        with self.request("/v1/runs/" + result["run_id"]) as response:
+            run = json.loads(response.read())["run"]
+        self.assertEqual(run["status"], "succeeded")
+        self.assertEqual(run["agent_id"], agent["id"])
+
+    def test_panmedia_can_manage_goals_approvals_and_budgets(self):
+        with self.json_request("/v1/agents", {
+            "name": "Operations agent", "adapter": "llm", "config": {},
+        }, method="POST") as response:
+            agent = json.loads(response.read())["agent"]
+        with self.json_request("/v1/goals", {
+            "title": "Complete research", "description": "Verify sources.",
+            "owner_agent_id": agent["id"],
+        }, method="POST") as response:
+            goal = json.loads(response.read())["goal"]
+        self.assertEqual(goal["owner_agent_id"], agent["id"])
+        with self.json_request("/v1/approvals", {
+            "action": "publish report", "details": {"report_id": "report-1"},
+            "agent_id": agent["id"],
+        }, method="POST") as response:
+            approval = json.loads(response.read())["approval"]
+        with self.request("/v1/approvals?status=pending") as response:
+            self.assertEqual(json.loads(response.read())["approvals"][0]["id"], approval["id"])
+        with self.json_request("/v1/approvals/" + approval["id"] + "/decision", {
+            "decision": "approved", "decided_by": "owner",
+        }, method="POST") as response:
+            self.assertEqual(json.loads(response.read())["approval"]["status"], "approved")
+        with self.json_request("/v1/budgets", {
+            "limit_amount": 25, "period": "2026-11", "agent_id": agent["id"],
+        }, method="POST") as response:
+            budget = json.loads(response.read())["budget"]
+        self.assertEqual(budget["limit_amount"], 25)
+        with self.json_request("/v1/budgets/costs", {
+            "amount": 5, "period": "2026-11", "agent_id": agent["id"],
+        }, method="POST") as response:
+            self.assertEqual(json.loads(response.read())["budget"]["spent_amount"], 5)
+
+    def test_panmedia_can_retrieve_an_agent_by_id(self):
+        with self.json_request("/v1/agents", {
+            "name": "Research assistant", "adapter": "llm", "config": {},
+        }, method="POST") as response:
+            agent = json.loads(response.read())["agent"]
+        with self.request("/v1/agents/" + agent["id"]) as response:
+            self.assertEqual(json.loads(response.read())["agent"]["id"], agent["id"])
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.request("/v1/agents/" + "f" * 32)
+        self.assertEqual(raised.exception.code, 404)
+
+    def test_panmedia_rejects_missing_foreign_key_references_as_client_errors(self):
+        cases = [
+            ("/v1/goals", {
+                "title": "Invalid owner", "owner_agent_id": "missing-agent",
+            }),
+            ("/v1/goals", {
+                "title": "Invalid parent", "parent_id": "missing-goal",
+            }),
+            ("/v1/approvals", {
+                "action": "publish", "details": {}, "agent_id": "missing-agent",
+            }),
+            ("/v1/budgets", {
+                "limit_amount": 10, "period": "2026-11", "agent_id": "missing-agent",
+            }),
+        ]
+        for path, payload in cases:
+            with self.subTest(path=path, payload=payload):
+                with self.assertRaises(urllib.error.HTTPError) as raised:
+                    self.json_request(path, payload, method="POST")
+                self.assertEqual(raised.exception.code, 400)
+                self.assertIn("error", json.loads(raised.exception.read()))
+
+    def test_panmedia_budget_limit_is_enforced(self):
+        with self.json_request("/v1/budgets", {
+            "limit_amount": 1, "period": "2026-11",
+        }, method="POST"):
+            pass
+        with self.assertRaises(urllib.error.HTTPError) as raised:
+            self.json_request("/v1/budgets/costs", {
+                "amount": 2, "period": "2026-11",
+            }, method="POST")
+        self.assertEqual(raised.exception.code, 409)
 
 
 if __name__ == "__main__":
