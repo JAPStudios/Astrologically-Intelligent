@@ -363,9 +363,10 @@ export function closePanel() {
 }
 
 function _buildPanelHTML() {
-  const searchProviders = ['', 'searxng', 'duckduckgo', 'tavily', 'brave', 'google', 'serper'];
+  const searchProviders = ['', 'peanut_browsing', 'searxng', 'duckduckgo', 'tavily', 'brave', 'google', 'serper'];
+  const providerLabels = { peanut_browsing: 'Peanut Browsing' };
   const providerOpts = searchProviders.map(p =>
-    `<option value="${p}">${p || 'Default'}</option>`
+    `<option value="${p}">${providerLabels[p] || p || 'Default'}</option>`
   ).join('');
 
   let roundOpts = '<option value="0" selected>Auto</option>';

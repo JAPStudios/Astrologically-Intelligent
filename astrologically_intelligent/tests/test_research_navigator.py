@@ -73,3 +73,58 @@ def test_assess_source_identifies_primary_and_commercial_sources():
     assert official.kind == "primary"
     assert official.score > commercial.score
     assert commercial.kind == "commercial"
+
+
+def test_research_navigator_uses_peanut_browsing_when_selected(monkeypatch):
+    from src.peanut_browsing import PeanutBrowsingClient
+
+    calls = []
+
+    async def fake_search(self, query, *, limit=20, offset=0):
+        calls.append((query, limit, offset))
+        return {
+            "results": [{
+                "url": "https://docs.example.com/official",
+                "title": "Official documentation",
+                "snippet": "First-party evidence.",
+                "score": 0.99,
+                "engine": "Peanut Browsing",
+            }],
+            "totalResults": 1,
+        }
+
+    monkeypatch.setattr(PeanutBrowsingClient, "search", fake_search)
+    nav = ResearchNavigator(search_provider="peanut_browsing")
+    results = asyncio.run(nav.search("verify the release", count=7))
+
+    assert calls == [("verify the release", 7, 0)]
+    assert results[0]["engine"] == "Peanut Browsing"
+    assert nav.providers_used == ["peanut_browsing"]
+    assert nav.last_search_error == ""
+
+
+def test_research_navigator_defaults_to_configured_peanut_index(monkeypatch):
+    from src.peanut_browsing import PeanutBrowsingClient
+
+    providers_mod = types.ModuleType("src.search.providers")
+    providers_mod._get_search_settings = lambda: {
+        "research_search_provider": "",
+        "search_provider": "searxng",
+    }
+    monkeypatch.setitem(sys.modules, "src.search.providers", providers_mod)
+    monkeypatch.setenv("PEANUT_SEARCH_API_URL", "https://peanut.example.test")
+    monkeypatch.setenv("PEANUT_SEARCH_API_KEY", "test-key")
+
+    calls = []
+
+    async def fake_search(self, query, *, limit=20, offset=0):
+        calls.append(query)
+        return {"results": [{"url": "https://example.com", "title": "Indexed"}], "totalResults": 1}
+
+    monkeypatch.setattr(PeanutBrowsingClient, "search", fake_search)
+    nav = ResearchNavigator()
+    results = asyncio.run(nav.search("configured index"))
+
+    assert calls == ["configured index"]
+    assert results[0]["title"] == "Indexed"
+    assert nav.providers_used == ["peanut_browsing"]

@@ -29,7 +29,7 @@ This spec covers web search, URL fetching, and search-derived context in:
 
 Compare mode uses both route shapes: shared presearch uses `/api/search`, while provider/search comparison panes use `/api/search/query`. Research panels can pass provider override settings through research routes into the deep-research search path.
 
-Research provider naming is not fully normalized in the UI: some frontend selectors still use `google`, while provider dispatch expects `google_pse`.
+Research provider naming is not fully normalized in the UI: some frontend selectors still use `google`, while provider dispatch expects `google_pse`. Deep Research also supports the first-party `peanut_browsing` provider. When explicitly selected, it calls `PeanutBrowsingClient` directly; when no research override is saved, a configured `PEANUT_SEARCH_API_URL` plus `PEANUT_SEARCH_API_KEY` makes Peanut Browsing the research default. The resulting URLs continue through the existing hardened page-fetch path. An empty or unavailable Peanut index is reported as such; selecting Peanut Browsing does not silently substitute a third-party search provider.
 
 ## Search Pipeline
 
