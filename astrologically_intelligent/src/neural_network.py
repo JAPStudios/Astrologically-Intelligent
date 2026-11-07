@@ -106,6 +106,8 @@ class NeuralNetworkClassifier:
             raise ValueError("epochs must be a positive integer")
         if isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size < 1:
             raise ValueError("batch_size must be a positive integer")
+        if not isinstance(shuffle, bool):
+            raise ValueError("shuffle must be a boolean")
         if patience is not None and (
             isinstance(patience, bool) or not isinstance(patience, int) or patience < 1
         ):
