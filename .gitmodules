@@ -3485,3 +3485,103 @@
 	path = upstream/lukalabs/replika-research
 	url = https://github.com/lukalabs/replika-research.git
 	branch = master
+[submodule "upstream/lukalabs/cakechat"]
+	path = upstream/lukalabs/cakechat
+	url = https://github.com/lukalabs/cakechat.git
+	branch = master
+[submodule "upstream/lukalabs/sceneform-android-sdk"]
+	path = upstream/lukalabs/sceneform-android-sdk
+	url = https://github.com/lukalabs/sceneform-android-sdk.git
+	branch = master
+[submodule "upstream/lukalabs/BlocksKit"]
+	path = upstream/lukalabs/BlocksKit
+	url = https://github.com/lukalabs/BlocksKit.git
+	branch = master
+[submodule "upstream/lukalabs/Mantle"]
+	path = upstream/lukalabs/Mantle
+	url = https://github.com/lukalabs/Mantle.git
+	branch = master
+[submodule "upstream/lukalabs/TransformerKit"]
+	path = upstream/lukalabs/TransformerKit
+	url = https://github.com/lukalabs/TransformerKit.git
+	branch = master
+[submodule "upstream/lukalabs/AsyncDisplayKit"]
+	path = upstream/lukalabs/AsyncDisplayKit
+	url = https://github.com/lukalabs/AsyncDisplayKit.git
+	branch = master
+[submodule "upstream/lukalabs/BSImagePicker"]
+	path = upstream/lukalabs/BSImagePicker
+	url = https://github.com/lukalabs/BSImagePicker.git
+	branch = master
+[submodule "upstream/lukalabs/SCPageViewController"]
+	path = upstream/lukalabs/SCPageViewController
+	url = https://github.com/lukalabs/SCPageViewController.git
+	branch = master
+[submodule "upstream/lukalabs/TTTAttributedLabel"]
+	path = upstream/lukalabs/TTTAttributedLabel
+	url = https://github.com/lukalabs/TTTAttributedLabel.git
+	branch = master
+[submodule "upstream/lukalabs/InstagramKit"]
+	path = upstream/lukalabs/InstagramKit
+	url = https://github.com/lukalabs/InstagramKit.git
+	branch = master
+[submodule "upstream/lukalabs/youtube-ios-player-helper"]
+	path = upstream/lukalabs/youtube-ios-player-helper
+	url = https://github.com/lukalabs/youtube-ios-player-helper.git
+	branch = master
+[submodule "upstream/lukalabs/kryo-serializers"]
+	path = upstream/lukalabs/kryo-serializers
+	url = https://github.com/lukalabs/kryo-serializers.git
+	branch = master
+[submodule "upstream/lukalabs/onnx_gpt_loop"]
+	path = upstream/lukalabs/onnx_gpt_loop
+	url = https://github.com/lukalabs/onnx_gpt_loop.git
+	branch = master
+[submodule "upstream/lukalabs/lukalabs-npm"]
+	path = upstream/lukalabs/lukalabs-npm
+	url = https://github.com/lukalabs/lukalabs-npm.git
+	branch = main
+[submodule "upstream/lukalabs/uLipSync"]
+	path = upstream/lukalabs/uLipSync
+	url = https://github.com/lukalabs/uLipSync.git
+	branch = main
+[submodule "upstream/lukalabs/unity-missing-references-finder"]
+	path = upstream/lukalabs/unity-missing-references-finder
+	url = https://github.com/lukalabs/unity-missing-references-finder.git
+	branch = master
+[submodule "upstream/lukalabs/unity-urp-package"]
+	path = upstream/lukalabs/unity-urp-package
+	url = https://github.com/lukalabs/unity-urp-package.git
+	branch = main
+[submodule "upstream/lukalabs/prompt-management-prototype"]
+	path = upstream/lukalabs/prompt-management-prototype
+	url = https://github.com/lukalabs/prompt-management-prototype.git
+	branch = main
+[submodule "upstream/lukalabs/AFNetworking"]
+	path = upstream/lukalabs/AFNetworking
+	url = https://github.com/lukalabs/AFNetworking.git
+	branch = master
+[submodule "upstream/meta-llama/llama"]
+	path = upstream/meta-llama/llama
+	url = https://github.com/meta-llama/llama.git
+	branch = main
+[submodule "upstream/meta-llama/llama-cookbook"]
+	path = upstream/meta-llama/llama-cookbook
+	url = https://github.com/meta-llama/llama-cookbook.git
+	branch = main
+[submodule "upstream/meta-llama/codellama"]
+	path = upstream/meta-llama/codellama
+	url = https://github.com/meta-llama/codellama.git
+	branch = main
+[submodule "upstream/meta-llama/PurpleLlama"]
+	path = upstream/meta-llama/PurpleLlama
+	url = https://github.com/meta-llama/PurpleLlama.git
+	branch = main
+[submodule "upstream/meta-llama/llama3"]
+	path = upstream/meta-llama/llama3
+	url = https://github.com/meta-llama/llama3.git
+	branch = main
+[submodule "upstream/meta-llama/llama-models"]
+	path = upstream/meta-llama/llama-models
+	url = https://github.com/meta-llama/llama-models.git
+	branch = main
