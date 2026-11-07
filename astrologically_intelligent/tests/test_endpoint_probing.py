@@ -95,6 +95,9 @@ class TestModelListHelpers:
         ({"models": [{"name": "llama3:8b"}, {"model": "qwen3:4b"}]}, ["llama3:8b", "qwen3:4b"]),
         ({"models": [{"name": "a", "model": "b"}]}, ["a"]),                      # name precedence over model
         ({"models": [{"name": 123}, {"model": None}, {"name": "ok"}]}, ["ok"]),  # non-string values dropped
+        ({"models": [{"name": 123, "model": "qwen3:4b"}]}, ["qwen3:4b"]),         # valid model fallback
+        ({"models": [{}, {"name": None}, {"model": ""}, {"name": "  "}]}, []), # missing/blank identifiers dropped
+        ({"models": [{"name": "", "model": "llama3:latest"}]}, ["llama3:latest"]),
         ({"models": ["x", {"name": "ok"}]}, ["ok"]),                            # non-dict entries dropped
         ({"models": []}, []),
         ({"models": "oops"}, []),
