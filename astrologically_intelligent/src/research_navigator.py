@@ -132,6 +132,17 @@ def assess_source(url: str, *, title: str = "", retrieval: str = "", summary: st
     return ResearchSourceAssessment(kind=kind, score=score, reason=reason)
 
 
+def _bounded_peanut_query(query: str) -> str:
+    """Keep generated research queries within Peanut Browsing's 200-char contract."""
+    normalized = " ".join(str(query or "").split())
+    if len(normalized) <= 200:
+        return normalized
+    shortened = normalized[:200]
+    if " " in shortened:
+        shortened = shortened.rsplit(" ", 1)[0]
+    return shortened or normalized[:200]
+
+
 class ResearchNavigator:
     """Small web-navigation facade used by Deep Research.
 
@@ -175,7 +186,8 @@ class ResearchNavigator:
                 from src.peanut_browsing import PeanutBrowsingClient
 
                 result = await PeanutBrowsingClient().search(
-                    query, limit=max(1, min(int(count), 50))
+                    _bounded_peanut_query(query),
+                    limit=max(1, min(int(count), 50)),
                 )
                 if "peanut_browsing" not in self.providers_used:
                     self.providers_used.append("peanut_browsing")

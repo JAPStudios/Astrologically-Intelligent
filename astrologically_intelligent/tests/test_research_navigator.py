@@ -128,3 +128,24 @@ def test_research_navigator_defaults_to_configured_peanut_index(monkeypatch):
     assert calls == ["configured index"]
     assert results[0]["title"] == "Indexed"
     assert nav.providers_used == ["peanut_browsing"]
+
+
+def test_research_navigator_bounds_long_peanut_queries(monkeypatch):
+    from src.peanut_browsing import PeanutBrowsingClient
+
+    calls = []
+
+    async def fake_search(self, query, *, limit=20, offset=0):
+        calls.append(query)
+        return {"results": [], "totalResults": 0}
+
+    monkeypatch.setattr(PeanutBrowsingClient, "search", fake_search)
+    nav = ResearchNavigator(search_provider="peanut_browsing")
+    results = asyncio.run(nav.search("important research phrase " * 20))
+
+    assert results == []
+    assert len(calls) == 1
+    assert 1 <= len(calls[0]) <= 200
+    assert not calls[0].endswith(" ")
+    assert calls[0].startswith("important research phrase")
+    assert nav.last_search_error == "Peanut Browsing returned no indexed results."
