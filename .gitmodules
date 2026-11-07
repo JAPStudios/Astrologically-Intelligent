@@ -3785,3 +3785,103 @@
 	path = upstream/microsoft/aitour26-WRK540-unlock-your-agents-potential-with-model-context-protocol
 	url = https://github.com/microsoft/aitour26-WRK540-unlock-your-agents-potential-with-model-context-protocol.git
 	branch = main
+[submodule "upstream/microsoft/AirSim-Drone-Racing-Lab"]
+	path = upstream/microsoft/AirSim-Drone-Racing-Lab
+	url = https://github.com/microsoft/AirSim-Drone-Racing-Lab.git
+	branch = master
+[submodule "upstream/microsoft/AI_Agents_Hackathon"]
+	path = upstream/microsoft/AI_Agents_Hackathon
+	url = https://github.com/microsoft/AI_Agents_Hackathon.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-WRK541-real-world-code-migration-with-github-copilot-agent-mode"]
+	path = upstream/microsoft/aitour26-WRK541-real-world-code-migration-with-github-copilot-agent-mode
+	url = https://github.com/microsoft/aitour26-WRK541-real-world-code-migration-with-github-copilot-agent-mode.git
+	branch = main
+[submodule "upstream/microsoft/ai-developer"]
+	path = upstream/microsoft/ai-developer
+	url = https://github.com/microsoft/ai-developer.git
+	branch = main
+[submodule "upstream/microsoft/ignite-learning-paths-training-aiml"]
+	path = upstream/microsoft/ignite-learning-paths-training-aiml
+	url = https://github.com/microsoft/ignite-learning-paths-training-aiml.git
+	branch = main
+[submodule "upstream/microsoft/RD-Agent"]
+	path = upstream/microsoft/RD-Agent
+	url = https://github.com/microsoft/RD-Agent.git
+	branch = main
+[submodule "upstream/microsoft/AISchoolTutorials"]
+	path = upstream/microsoft/AISchoolTutorials
+	url = https://github.com/microsoft/AISchoolTutorials.git
+	branch = master
+[submodule "upstream/microsoft/LMOps"]
+	path = upstream/microsoft/LMOps
+	url = https://github.com/microsoft/LMOps.git
+	branch = main
+[submodule "upstream/microsoft/azurechat"]
+	path = upstream/microsoft/azurechat
+	url = https://github.com/microsoft/azurechat.git
+	branch = main
+[submodule "upstream/microsoft/vscode-tools-for-ai"]
+	path = upstream/microsoft/vscode-tools-for-ai
+	url = https://github.com/microsoft/vscode-tools-for-ai.git
+	branch = master
+[submodule "upstream/microsoft/build-your-first-agent-with-azure-ai-agent-service-workshop"]
+	path = upstream/microsoft/build-your-first-agent-with-azure-ai-agent-service-workshop
+	url = https://github.com/microsoft/build-your-first-agent-with-azure-ai-agent-service-workshop.git
+	branch = main
+[submodule "upstream/microsoft/AIAgentsforITOps"]
+	path = upstream/microsoft/AIAgentsforITOps
+	url = https://github.com/microsoft/AIAgentsforITOps.git
+	branch = main
+[submodule "upstream/microsoft/Azure-Analytics-and-AI-Engagement"]
+	path = upstream/microsoft/Azure-Analytics-and-AI-Engagement
+	url = https://github.com/microsoft/Azure-Analytics-and-AI-Engagement.git
+	branch = main
+[submodule "upstream/microsoft/AIforEarth-API-Development"]
+	path = upstream/microsoft/AIforEarth-API-Development
+	url = https://github.com/microsoft/AIforEarth-API-Development.git
+	branch = master
+[submodule "upstream/microsoft/vs-tools-for-ai"]
+	path = upstream/microsoft/vs-tools-for-ai
+	url = https://github.com/microsoft/vs-tools-for-ai.git
+	branch = master
+[submodule "upstream/microsoft/Deploy-Your-AI-Application-In-Production"]
+	path = upstream/microsoft/Deploy-Your-AI-Application-In-Production
+	url = https://github.com/microsoft/Deploy-Your-AI-Application-In-Production.git
+	branch = main
+[submodule "upstream/microsoft/aitour-concept-to-creation-ai-studio"]
+	path = upstream/microsoft/aitour-concept-to-creation-ai-studio
+	url = https://github.com/microsoft/aitour-concept-to-creation-ai-studio.git
+	branch = main
+[submodule "upstream/microsoft/PythonProgrammingPuzzles"]
+	path = upstream/microsoft/PythonProgrammingPuzzles
+	url = https://github.com/microsoft/PythonProgrammingPuzzles.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-WRK570-improving-ops-with-azure-copilot-and-github-copilot"]
+	path = upstream/microsoft/aitour26-WRK570-improving-ops-with-azure-copilot-and-github-copilot
+	url = https://github.com/microsoft/aitour26-WRK570-improving-ops-with-azure-copilot-and-github-copilot.git
+	branch = main
+[submodule "upstream/microsoft/agentrc"]
+	path = upstream/microsoft/agentrc
+	url = https://github.com/microsoft/agentrc.git
+	branch = main
+[submodule "upstream/microsoft/promptflow"]
+	path = upstream/microsoft/promptflow
+	url = https://github.com/microsoft/promptflow.git
+	branch = main
+[submodule "upstream/microsoft/sql-ai-promptathon"]
+	path = upstream/microsoft/sql-ai-promptathon
+	url = https://github.com/microsoft/sql-ai-promptathon.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-BRK441-Build-and-launch-AI-agents-fast-with-Foundry-Toolkit-for-VS-Code"]
+	path = upstream/microsoft/aitour26-BRK441-Build-and-launch-AI-agents-fast-with-Foundry-Toolkit-for-VS-Code
+	url = https://github.com/microsoft/aitour26-BRK441-Build-and-launch-AI-agents-fast-with-Foundry-Toolkit-for-VS-Code.git
+	branch = main
+[submodule "upstream/microsoft/aitour-repo-principal-list"]
+	path = upstream/microsoft/aitour-repo-principal-list
+	url = https://github.com/microsoft/aitour-repo-principal-list.git
+	branch = main
+[submodule "upstream/microsoft/physical-ai-toolchain"]
+	path = upstream/microsoft/physical-ai-toolchain
+	url = https://github.com/microsoft/physical-ai-toolchain.git
+	branch = main
