@@ -909,6 +909,16 @@ VARIABLE_NOTES: dict[str, tuple[str, str, str]] = {
         "Testing, capture and development tooling", INTERNAL,
         "Binary name or path to llama-server used by the related-flow audit script.",
     ),
+    "ODYSSEUS_PEANUT_SMOKE_STUB_ENABLED": (
+        "Testing, capture and development tooling", INTERNAL,
+        "Internal smoke-test switch set by the release smoke runner when its local "
+        "Peanut Browsing gateway fixture is active; do not set on a deployed service.",
+    ),
+    "ODYSSEUS_REQUIRE_CHROMA": (
+        "Testing, capture and development tooling", INTERNAL,
+        "Makes release smoke fail when the ChromaDB server is unavailable instead of "
+        "skipping vector-indexing coverage; set only in the required CI job.",
+    ),
     "ODYSSEUS_QA_PASSWORD": (
         "Testing, capture and development tooling", INTERNAL,
         "Account password passed to the related-flow audit script when authenticating.",
