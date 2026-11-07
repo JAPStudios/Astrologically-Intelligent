@@ -266,3 +266,10 @@ def test_validation_options_require_valid_validation_data():
     with pytest.raises(ValueError, match="patience"):
         model.fit(features, labels, epochs=2, validation_data=(features, labels), patience=0)
 
+
+@pytest.mark.parametrize("shuffle", [1, 0, "false", None])
+def test_fit_rejects_non_boolean_shuffle(shuffle):
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, 4, 3, seed=67)
+    with pytest.raises(ValueError, match="shuffle"):
+        model.fit(features, labels, epochs=1, shuffle=shuffle)
