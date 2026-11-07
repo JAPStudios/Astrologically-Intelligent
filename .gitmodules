@@ -3185,3 +3185,103 @@
 	path = upstream/deepseek-ai/DualPipe
 	url = https://github.com/deepseek-ai/DualPipe.git
 	branch = main
+[submodule "upstream/deepseek-ai/3FS"]
+	path = upstream/deepseek-ai/3FS
+	url = https://github.com/deepseek-ai/3FS.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-Prover-V2"]
+	path = upstream/deepseek-ai/DeepSeek-Prover-V2
+	url = https://github.com/deepseek-ai/DeepSeek-Prover-V2.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-V3.2-Exp"]
+	path = upstream/deepseek-ai/DeepSeek-V3.2-Exp
+	url = https://github.com/deepseek-ai/DeepSeek-V3.2-Exp.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-OCR"]
+	path = upstream/deepseek-ai/DeepSeek-OCR
+	url = https://github.com/deepseek-ai/DeepSeek-OCR.git
+	branch = main
+[submodule "upstream/deepseek-ai/LPLB"]
+	path = upstream/deepseek-ai/LPLB
+	url = https://github.com/deepseek-ai/LPLB.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-Math-V2"]
+	path = upstream/deepseek-ai/DeepSeek-Math-V2
+	url = https://github.com/deepseek-ai/DeepSeek-Math-V2.git
+	branch = main
+[submodule "upstream/deepseek-ai/Engram"]
+	path = upstream/deepseek-ai/Engram
+	url = https://github.com/deepseek-ai/Engram.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-OCR-2"]
+	path = upstream/deepseek-ai/DeepSeek-OCR-2
+	url = https://github.com/deepseek-ai/DeepSeek-OCR-2.git
+	branch = main
+[submodule "upstream/deepseek-ai/TileKernels"]
+	path = upstream/deepseek-ai/TileKernels
+	url = https://github.com/deepseek-ai/TileKernels.git
+	branch = main
+[submodule "upstream/deepseek-ai/awesome-deepseek-agent"]
+	path = upstream/deepseek-ai/awesome-deepseek-agent
+	url = https://github.com/deepseek-ai/awesome-deepseek-agent.git
+	branch = main
+[submodule "upstream/deepseek-ai/clangd-ascend"]
+	path = upstream/deepseek-ai/clangd-ascend
+	url = https://github.com/deepseek-ai/clangd-ascend.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSpec"]
+	path = upstream/deepseek-ai/DeepSpec
+	url = https://github.com/deepseek-ai/DeepSpec.git
+	branch = main
+[submodule "upstream/deepseek-ai/deepseek-harness"]
+	path = upstream/deepseek-ai/deepseek-harness
+	url = https://github.com/deepseek-ai/deepseek-harness.git
+	branch = master
+[submodule "upstream/deepseek-ai/DeepJIT"]
+	path = upstream/deepseek-ai/DeepJIT
+	url = https://github.com/deepseek-ai/DeepJIT.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSelect"]
+	path = upstream/deepseek-ai/DeepSelect
+	url = https://github.com/deepseek-ai/DeepSelect.git
+	branch = main
+[submodule "upstream/deepseek-ai/deepseek-recipe"]
+	path = upstream/deepseek-ai/deepseek-recipe
+	url = https://github.com/deepseek-ai/deepseek-recipe.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepGEMM-Ascend"]
+	path = upstream/deepseek-ai/DeepGEMM-Ascend
+	url = https://github.com/deepseek-ai/DeepGEMM-Ascend.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepEP-Ascend"]
+	path = upstream/deepseek-ai/DeepEP-Ascend
+	url = https://github.com/deepseek-ai/DeepEP-Ascend.git
+	branch = main
+[submodule "upstream/deepseek-ai/dsh-node-addon-require-builtin"]
+	path = upstream/deepseek-ai/dsh-node-addon-require-builtin
+	url = https://github.com/deepseek-ai/dsh-node-addon-require-builtin.git
+	branch = master
+[submodule "upstream/deepseek-ai/dsh-libreoffice-kit"]
+	path = upstream/deepseek-ai/dsh-libreoffice-kit
+	url = https://github.com/deepseek-ai/dsh-libreoffice-kit.git
+	branch = master
+[submodule "upstream/deepseek-ai/DeepInfer"]
+	path = upstream/deepseek-ai/DeepInfer
+	url = https://github.com/deepseek-ai/DeepInfer.git
+	branch = main
+[submodule "upstream/deepseek-ai/dsh-superagent-prototype"]
+	path = upstream/deepseek-ai/dsh-superagent-prototype
+	url = https://github.com/deepseek-ai/dsh-superagent-prototype.git
+	branch = main
+[submodule "upstream/google/aiyprojects-raspbian"]
+	path = upstream/google/aiyprojects-raspbian
+	url = https://github.com/google/aiyprojects-raspbian.git
+	branch = aiyprojects
+[submodule "upstream/google/generative-ai-docs"]
+	path = upstream/google/generative-ai-docs
+	url = https://github.com/google/generative-ai-docs.git
+	branch = main
+[submodule "upstream/google/dopamine"]
+	path = upstream/google/dopamine
+	url = https://github.com/google/dopamine.git
+	branch = master
