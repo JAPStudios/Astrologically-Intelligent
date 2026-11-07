@@ -4185,3 +4185,103 @@
 	path = upstream/microsoft/malmo-challenge
 	url = https://github.com/microsoft/malmo-challenge.git
 	branch = master
+[submodule "upstream/microsoft/content-generation-solution-accelerator"]
+	path = upstream/microsoft/content-generation-solution-accelerator
+	url = https://github.com/microsoft/content-generation-solution-accelerator.git
+	branch = main
+[submodule "upstream/microsoft/aitour-cloud-native-apps-with-azure-ai-and-aks"]
+	path = upstream/microsoft/aitour-cloud-native-apps-with-azure-ai-and-aks
+	url = https://github.com/microsoft/aitour-cloud-native-apps-with-azure-ai-and-aks.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-BRK444-advanced-retrieval-for-your-ai-apps-and-agents-on-azure"]
+	path = upstream/microsoft/aitour26-BRK444-advanced-retrieval-for-your-ai-apps-and-agents-on-azure
+	url = https://github.com/microsoft/aitour26-BRK444-advanced-retrieval-for-your-ai-apps-and-agents-on-azure.git
+	branch = main
+[submodule "upstream/microsoft/teams-sdk"]
+	path = upstream/microsoft/teams-sdk
+	url = https://github.com/microsoft/teams-sdk.git
+	branch = main
+[submodule "upstream/microsoft/claims-processing-hack"]
+	path = upstream/microsoft/claims-processing-hack
+	url = https://github.com/microsoft/claims-processing-hack.git
+	branch = main
+[submodule "upstream/microsoft/reliableAI"]
+	path = upstream/microsoft/reliableAI
+	url = https://github.com/microsoft/reliableAI.git
+	branch = main
+[submodule "upstream/microsoft/app-innovation-workshop"]
+	path = upstream/microsoft/app-innovation-workshop
+	url = https://github.com/microsoft/app-innovation-workshop.git
+	branch = master
+[submodule "upstream/microsoft/Tokenizer"]
+	path = upstream/microsoft/Tokenizer
+	url = https://github.com/microsoft/Tokenizer.git
+	branch = main
+[submodule "upstream/microsoft/aihlsIgnited"]
+	path = upstream/microsoft/aihlsIgnited
+	url = https://github.com/microsoft/aihlsIgnited.git
+	branch = main
+[submodule "upstream/microsoft/aitour-ecommerce-app-with-ai"]
+	path = upstream/microsoft/aitour-ecommerce-app-with-ai
+	url = https://github.com/microsoft/aitour-ecommerce-app-with-ai.git
+	branch = main
+[submodule "upstream/microsoft/ai-audio-descriptions"]
+	path = upstream/microsoft/ai-audio-descriptions
+	url = https://github.com/microsoft/ai-audio-descriptions.git
+	branch = main
+[submodule "upstream/microsoft/typechat.net"]
+	path = upstream/microsoft/typechat.net
+	url = https://github.com/microsoft/typechat.net.git
+	branch = main
+[submodule "upstream/microsoft/ai-powered-notes-winui3-sample"]
+	path = upstream/microsoft/ai-powered-notes-winui3-sample
+	url = https://github.com/microsoft/ai-powered-notes-winui3-sample.git
+	branch = main
+[submodule "upstream/microsoft/AirSim-Drone-Racing-Lab-Source"]
+	path = upstream/microsoft/AirSim-Drone-Racing-Lab-Source
+	url = https://github.com/microsoft/AirSim-Drone-Racing-Lab-Source.git
+	branch = main
+[submodule "upstream/microsoft/responsible-ai-workshop"]
+	path = upstream/microsoft/responsible-ai-workshop
+	url = https://github.com/microsoft/responsible-ai-workshop.git
+	branch = main
+[submodule "upstream/microsoft/aspire-samples"]
+	path = upstream/microsoft/aspire-samples
+	url = https://github.com/microsoft/aspire-samples.git
+	branch = main
+[submodule "upstream/microsoft/Cortana-Skills-Samples-Build-2017"]
+	path = upstream/microsoft/Cortana-Skills-Samples-Build-2017
+	url = https://github.com/microsoft/Cortana-Skills-Samples-Build-2017.git
+	branch = master
+[submodule "upstream/microsoft/multimodal-ai"]
+	path = upstream/microsoft/multimodal-ai
+	url = https://github.com/microsoft/multimodal-ai.git
+	branch = main
+[submodule "upstream/microsoft/RAMPART"]
+	path = upstream/microsoft/RAMPART
+	url = https://github.com/microsoft/RAMPART.git
+	branch = main
+[submodule "upstream/microsoft/skills-for-copilot-studio"]
+	path = upstream/microsoft/skills-for-copilot-studio
+	url = https://github.com/microsoft/skills-for-copilot-studio.git
+	branch = main
+[submodule "upstream/microsoft/Data-and-AI-Platform"]
+	path = upstream/microsoft/Data-and-AI-Platform
+	url = https://github.com/microsoft/Data-and-AI-Platform.git
+	branch = main
+[submodule "upstream/microsoft/flint-chart"]
+	path = upstream/microsoft/flint-chart
+	url = https://github.com/microsoft/flint-chart.git
+	branch = main
+[submodule "upstream/microsoft/healthcare-ai-model-evaluator"]
+	path = upstream/microsoft/healthcare-ai-model-evaluator
+	url = https://github.com/microsoft/healthcare-ai-model-evaluator.git
+	branch = main
+[submodule "upstream/microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator"]
+	path = upstream/microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator
+	url = https://github.com/microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-BRK443-efficient-model-customization-with-microsoft-foundry"]
+	path = upstream/microsoft/aitour26-BRK443-efficient-model-customization-with-microsoft-foundry
+	url = https://github.com/microsoft/aitour26-BRK443-efficient-model-customization-with-microsoft-foundry.git
+	branch = main
