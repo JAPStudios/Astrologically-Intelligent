@@ -189,10 +189,11 @@ class ResearchNavigator:
                     _bounded_peanut_query(query),
                     limit=max(1, min(int(count), 50)),
                 )
-                if "peanut_browsing" not in self.providers_used:
-                    self.providers_used.append("peanut_browsing")
                 rows = result.get("results") or []
-                if not rows:
+                if rows:
+                    if "peanut_browsing" not in self.providers_used:
+                        self.providers_used.append("peanut_browsing")
+                else:
                     self.last_search_error = "Peanut Browsing returned no indexed results."
                 return rows
             if provider == "disabled":
