@@ -273,3 +273,27 @@ def test_fit_rejects_non_boolean_shuffle(shuffle):
     model = NeuralNetworkClassifier(2, 4, 3, seed=67)
     with pytest.raises(ValueError, match="shuffle"):
         model.fit(features, labels, epochs=1, shuffle=shuffle)
+
+@pytest.mark.parametrize("max_grad_norm", [True, "1.0", 0.0, -1.0, float("nan"), float("inf")])
+def test_fit_rejects_invalid_gradient_norm_limit(max_grad_norm):
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, 4, 3, seed=71)
+    with pytest.raises(ValueError, match="max_grad_norm"):
+        model.fit(features, labels, epochs=1, max_grad_norm=max_grad_norm)
+
+
+def test_gradient_norm_clipping_bounds_each_update():
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, 4, 3, learning_rate=0.01, seed=73)
+    observed_norms = []
+    original_update = model._adam_update
+
+    def capture_update(gradients):
+        norm = float(np.sqrt(sum(np.sum(np.square(value)) for value in gradients.values())))
+        observed_norms.append(norm)
+        original_update(gradients)
+
+    model._adam_update = capture_update
+    model.fit(features * 1000.0, labels, epochs=2, batch_size=16, max_grad_norm=0.25)
+    assert observed_norms
+    assert all(np.isfinite(norm) and norm <= 0.2500001 for norm in observed_norms)
