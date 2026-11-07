@@ -3985,3 +3985,103 @@
 	path = upstream/microsoft/aifundamentalbootcamp
 	url = https://github.com/microsoft/aifundamentalbootcamp.git
 	branch = main
+[submodule "upstream/microsoft/CAIRA"]
+	path = upstream/microsoft/CAIRA
+	url = https://github.com/microsoft/CAIRA.git
+	branch = main
+[submodule "upstream/microsoft/RAG_Hack"]
+	path = upstream/microsoft/RAG_Hack
+	url = https://github.com/microsoft/RAG_Hack.git
+	branch = main
+[submodule "upstream/microsoft/Mastering-GitHub-Copilot-for-Paired-Programming"]
+	path = upstream/microsoft/Mastering-GitHub-Copilot-for-Paired-Programming
+	url = https://github.com/microsoft/Mastering-GitHub-Copilot-for-Paired-Programming.git
+	branch = main
+[submodule "upstream/microsoft/aitour-azure-openai-assistants"]
+	path = upstream/microsoft/aitour-azure-openai-assistants
+	url = https://github.com/microsoft/aitour-azure-openai-assistants.git
+	branch = main
+[submodule "upstream/microsoft/ai4g-flood"]
+	path = upstream/microsoft/ai4g-flood
+	url = https://github.com/microsoft/ai4g-flood.git
+	branch = main
+[submodule "upstream/microsoft/aitour-llmops-with-gen-ai-tools"]
+	path = upstream/microsoft/aitour-llmops-with-gen-ai-tools
+	url = https://github.com/microsoft/aitour-llmops-with-gen-ai-tools.git
+	branch = main
+[submodule "upstream/microsoft/aitour-interact-with-llms"]
+	path = upstream/microsoft/aitour-interact-with-llms
+	url = https://github.com/microsoft/aitour-interact-with-llms.git
+	branch = main
+[submodule "upstream/microsoft/quicksand"]
+	path = upstream/microsoft/quicksand
+	url = https://github.com/microsoft/quicksand.git
+	branch = main
+[submodule "upstream/microsoft/Building-AI-Agents-From-Zero-To-Production"]
+	path = upstream/microsoft/Building-AI-Agents-From-Zero-To-Production
+	url = https://github.com/microsoft/Building-AI-Agents-From-Zero-To-Production.git
+	branch = main
+[submodule "upstream/microsoft/aitour-getting-started-with-ai-agents"]
+	path = upstream/microsoft/aitour-getting-started-with-ai-agents
+	url = https://github.com/microsoft/aitour-getting-started-with-ai-agents.git
+	branch = main
+[submodule "upstream/microsoft/AIFluency"]
+	path = upstream/microsoft/AIFluency
+	url = https://github.com/microsoft/AIFluency.git
+	branch = main
+[submodule "upstream/microsoft/AzureOpenAI-with-APIM"]
+	path = upstream/microsoft/AzureOpenAI-with-APIM
+	url = https://github.com/microsoft/AzureOpenAI-with-APIM.git
+	branch = main
+[submodule "upstream/microsoft/ai-chat-protocol"]
+	path = upstream/microsoft/ai-chat-protocol
+	url = https://github.com/microsoft/ai-chat-protocol.git
+	branch = main
+[submodule "upstream/microsoft/AI-Robot-Challenge-Lab"]
+	path = upstream/microsoft/AI-Robot-Challenge-Lab
+	url = https://github.com/microsoft/AI-Robot-Challenge-Lab.git
+	branch = master
+[submodule "upstream/microsoft/superbenchmark"]
+	path = upstream/microsoft/superbenchmark
+	url = https://github.com/microsoft/superbenchmark.git
+	branch = main
+[submodule "upstream/microsoft/Biodiversity"]
+	path = upstream/microsoft/Biodiversity
+	url = https://github.com/microsoft/Biodiversity.git
+	branch = main
+[submodule "upstream/microsoft/Trace"]
+	path = upstream/microsoft/Trace
+	url = https://github.com/microsoft/Trace.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-WRK542-prototype-agents-with-Foundry-toolkit-and-model-context-protocol"]
+	path = upstream/microsoft/aitour26-WRK542-prototype-agents-with-Foundry-toolkit-and-model-context-protocol
+	url = https://github.com/microsoft/aitour26-WRK542-prototype-agents-with-Foundry-toolkit-and-model-context-protocol.git
+	branch = main
+[submodule "upstream/microsoft/edgeai-for-beginners"]
+	path = upstream/microsoft/edgeai-for-beginners
+	url = https://github.com/microsoft/edgeai-for-beginners.git
+	branch = main
+[submodule "upstream/microsoft/PowerApps-Samples"]
+	path = upstream/microsoft/PowerApps-Samples
+	url = https://github.com/microsoft/PowerApps-Samples.git
+	branch = master
+[submodule "upstream/microsoft/aitour26-BRK442-github-copilot-as-an-ai-agent-in-the-developer-workflow"]
+	path = upstream/microsoft/aitour26-BRK442-github-copilot-as-an-ai-agent-in-the-developer-workflow
+	url = https://github.com/microsoft/aitour26-BRK442-github-copilot-as-an-ai-agent-in-the-developer-workflow.git
+	branch = main
+[submodule "upstream/microsoft/Frigatebird"]
+	path = upstream/microsoft/Frigatebird
+	url = https://github.com/microsoft/Frigatebird.git
+	branch = master
+[submodule "upstream/microsoft/mcp"]
+	path = upstream/microsoft/mcp
+	url = https://github.com/microsoft/mcp.git
+	branch = main
+[submodule "upstream/microsoft/ai-agent-evals"]
+	path = upstream/microsoft/ai-agent-evals
+	url = https://github.com/microsoft/ai-agent-evals.git
+	branch = main
+[submodule "upstream/microsoft/mscclpp"]
+	path = upstream/microsoft/mscclpp
+	url = https://github.com/microsoft/mscclpp.git
+	branch = main
