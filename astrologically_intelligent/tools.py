@@ -545,16 +545,21 @@ class ToolRegistry:
                 or any(part in {"", ".", ".."} for part in name.split("/"))):
             raise ValueError("Invalid skill name")
         repo_root = Path(repo_root)
+        roots = []
         if name.startswith("upstream/"):
-            root = (repo_root / "upstream").resolve()
-            relative_name = name[len("upstream/"):]
-        else:
-            root = (repo_root / "skills").resolve()
+            roots.extend([
+                (repo_root / "skills").resolve(),
+                (repo_root / "upstream").resolve(),
+            ])
             relative_name = name
-        path = (root / relative_name / "SKILL.md").resolve()
-        if not path.is_relative_to(root) or not path.is_file():
-            raise ValueError("Skill not found")
-        return path
+        else:
+            roots.append((repo_root / "skills").resolve())
+            relative_name = name
+        for root in roots:
+            path = (root / relative_name / "SKILL.md").resolve()
+            if path.is_relative_to(root) and path.is_file():
+                return path
+        raise ValueError("Skill not found")
 
     def _read_skill(self, name: str) -> dict[str, str]:
         from pathlib import Path
