@@ -95,9 +95,9 @@ DECLARED_GAPS = (
         "already the one area with Playwright specs under tests/e2e/photo-editor/",
     ),
     Gap(
-        "Agent tool loop",
-        "measured by the checkpoint benchmark, which is the safety net that does "
-        "cover the agent runtime",
+        "Multi-agent orchestration",
+        "the core runtime has a separate Agent Runtime workflow; the full web app "
+        "smoke does not yet exercise multi-agent handoff and approval end to end",
     ),
     Gap(
         "MCP servers",
