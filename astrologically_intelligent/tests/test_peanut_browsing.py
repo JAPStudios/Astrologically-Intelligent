@@ -3,6 +3,7 @@ import pytest
 import httpx
 
 from src.peanut_browsing import PeanutBrowsingClient, PeanutBrowsingError
+from src.tool_security import NON_ADMIN_BLOCKED_TOOLS
 
 
 def make_client(handler):
@@ -102,3 +103,7 @@ async def test_search_rejects_http_gateway_outside_loopback():
     client = PeanutBrowsingClient(base_url="http://peanut.example", api_key="test-key")
     with pytest.raises(PeanutBrowsingError, match="HTTPS"):
         await client.search("query")
+
+
+def test_peanut_browsing_crawl_is_privileged():
+    assert "peanut_browsing_crawl" in NON_ADMIN_BLOCKED_TOOLS
