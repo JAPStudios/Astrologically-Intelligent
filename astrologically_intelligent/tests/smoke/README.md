@@ -60,11 +60,15 @@ because the scenarios create and delete real records.
 
 `stub_provider.py` is an OpenAI-compatible server on an ephemeral
 loopback port: `GET /v1/models` and `POST /v1/chat/completions`, both
-buffered and streamed. No scenario touches a live model endpoint or the
-network. It serves two model ids so the Compare area has something to
-reveal, and it records every request so a scenario can assert the user's
-message actually reached the provider rather than only that some text
-came back.
+buffered and streamed. It serves two model ids for Compare. It also
+returns deterministic native tool calls for Peanut Browsing search and
+crawl scenarios. No scenario contacts a live model endpoint.
+
+Peanut Browsing uses a loopback index gateway fixture started by the
+smoke launcher before the app boots. The app receives the fixture URL
+and API key through its normal environment configuration. The fixture
+records search queries plus crawl submissions, so the tests verify the
+real tool-to-client-to-gateway path without external egress.
 
 Email uses the repo's own deterministic path rather than a second
 mechanism: `routes/email_routes.py` serves a fixture inbox when
@@ -79,14 +83,14 @@ a status code. `scripts/odysseus-smoke --areas` prints the current list.
 
 | Area | What it asserts |
 |---|---|
-| Chat | a turn against the stub comes back rendered, on both the buffered and the streamed path, and is in the session history |
-| Compare | a blind comparison streams both sides and the vote reveals which model produced which reply |
+| Chat | a turn against the stub comes back rendered on both the buffered and streamed paths, then appears in session history |
+| Compare | a blind comparison streams both sides; the vote reveals which model produced each reply |
 | Notes | a note is listed, read back, edited, and 404s after delete |
 | Calendar | an event appears in the window the UI queries and is gone after delete |
 | Tasks | a daily task is accepted with a computed next run, is listed, and pauses |
 | Documents (editor) | an edit adds a version, both versions read back, and a restore returns the first |
 | Documents (RAG) | an uploaded file is chunked, indexed and listed |
-| Email | the fixture inbox lists, opens with its body, and the unread count drops on mark-read |
+| Peanut Browsing | a native search tool cycle retrieves an indexed result; the crawl handler submits a public URL to the first-party gateway |\n| Email | the fixture inbox lists, opens with its body, then the unread count drops on mark-read |
 | Memory | a fact is listed, found by search, and gone after delete |
 | Uploads | an attachment reads back byte for byte |
 | Cookbook | CPU/RAM hardware is detected; GPU probing either returns device data or an explicit no-NVIDIA-utility status; a fresh install's recommendation request returns the empty-catalog Rescan guidance; state persists |
