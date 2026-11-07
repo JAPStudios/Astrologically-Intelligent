@@ -112,7 +112,8 @@ def test_compare_model_swap_creates_replacement_before_mutating_current_pane():
     root = Path(__file__).resolve().parents[1]
     panes = (root / "static/js/compare/panes.js").read_text(encoding="utf-8")
 
-    swap_start = panes.index("item.addEventListener('click', async (e) => {")
+    swap_function_start = panes.index("function _showModelSwapDropdown(")
+    swap_start = panes.index("item.addEventListener('click', async (e) => {", swap_function_start)
     swap_end = panes.index("    });\n    dropdown.appendChild(item);", swap_start)
     swap = panes[swap_start:swap_end]
 
