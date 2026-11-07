@@ -9,7 +9,7 @@ probe surface that drives endpoint setup and degraded-state reporting:
     /api/tags fallback for Ollama builds without /v1/models, and the
     no-models-found result.
   * `_ping_endpoint`      — reachability classification: 2xx, auth failures,
-    the "this is Odysseus, not a model server" /login-redirect trap, generic
+    the "this is Astrologically Intelligent, not a model server" /login-redirect trap, generic
     redirects, transport errors, and the native-Ollama /api/version fallback.
   * `_probe_single_model` — ok/fail/timeout status mapping, upstream error-body
     extraction, and per-provider (OpenAI / Anthropic) request routing.
@@ -95,6 +95,9 @@ class TestModelListHelpers:
         ({"models": [{"name": "llama3:8b"}, {"model": "qwen3:4b"}]}, ["llama3:8b", "qwen3:4b"]),
         ({"models": [{"name": "a", "model": "b"}]}, ["a"]),                      # name precedence over model
         ({"models": [{"name": 123}, {"model": None}, {"name": "ok"}]}, ["ok"]),  # non-string values dropped
+        ({"models": [{"name": 123, "model": "qwen3:4b"}]}, ["qwen3:4b"]),         # valid model fallback
+        ({"models": [{}, {"name": None}, {"model": ""}, {"name": "  "}]}, []), # missing/blank identifiers dropped
+        ({"models": [{"name": "", "model": "llama3:latest"}]}, ["llama3:latest"]),
         ({"models": ["x", {"name": "ok"}]}, ["ok"]),                            # non-dict entries dropped
         ({"models": []}, []),
         ({"models": "oops"}, []),

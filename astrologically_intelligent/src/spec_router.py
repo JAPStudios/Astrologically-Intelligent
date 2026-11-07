@@ -326,7 +326,7 @@ async def spec_route_tools_async(
     return (added, decided) if return_decision else added
 
 
-# ---- Ajax Spec: system prompt trimmed to the tools actually offered ----------
+# ---- Spec router: system prompt trimmed to the tools actually offered ----------
 _CORE_PROMPT = (
     "You are Astrologically Intelligent, a software agent, not a human. Do not imitate human identity or claim personal experiences or emotions. "
     "Emit one native tool call, then stop. After a successful tool result, answer from it; never repeat the same tool with the same arguments."
@@ -374,7 +374,10 @@ _EMAIL_NOTES = (
     "reply draft -> mcp__email__draft_email_reply {uid,account,body}; only explicit send-now -> mcp__email__reply_to_email {uid,account,body}; "
     "archive/delete/mark -> mcp__email__archive_email/mcp__email__delete_email/mcp__email__mark_email_read. Never emit manage_email."
 )
-_AJAX_PROMPT_START = "You are Ajax, the assistant in Odysseus."
+_AGENT_PROMPT_STARTS = (
+    "You are Astrologically Intelligent, a non-human software agent with tool access.",
+    "You are Ajax, the assistant in Odysseus.",  # accepted only for legacy stored sessions
+)
 
 
 def trimmed_system_prompt(offered: Iterable[str]) -> str:
@@ -389,14 +392,14 @@ def trimmed_system_prompt(offered: Iterable[str]) -> str:
 
 
 def trim_system_prompt(messages: List[Dict[str, Any]], offered: Iterable[str]) -> List[Dict[str, Any]]:
-    """Swap the generic Ajax tool manual for one covering only the offered tools."""
+    """Replace the legacy generic tool manual with one covering only the offered tools."""
     out: List[Dict[str, Any]] = []
     for m in messages:
         if (
             isinstance(m, dict)
             and m.get("role") == "system"
             and isinstance(m.get("content"), str)
-            and m["content"].startswith(_AJAX_PROMPT_START)
+            and any(m["content"].startswith(prefix) for prefix in _AGENT_PROMPT_STARTS)
         ):
             new = dict(m)
             new["content"] = trimmed_system_prompt(offered)
@@ -408,7 +411,7 @@ def trim_system_prompt(messages: List[Dict[str, Any]], offered: Iterable[str]) -
 
 
 def drop_skills_index(messages: List[Dict[str, Any]], offered: Iterable[str]) -> List[Dict[str, Any]]:
-    """Ajax Spec: omit the ~1000-token skills index unless the skills tool is offered."""
+    """Omit the skills index unless the skills tool is offered."""
     if "manage_skills" in set(offered or ()):
         return messages
     out = [

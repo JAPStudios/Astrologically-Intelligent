@@ -58,6 +58,17 @@ class AgentRuntimeToolLimitTests(unittest.TestCase):
             self.store.history(result["session_id"]),
             [
                 {"role": "user", "content": "Run the tool."},
+                {
+                    "role": "assistant",
+                    "content": "",
+                    "tool_calls": tool_call()["tool_calls"],
+                },
+                {
+                    "role": "tool",
+                    "content": '{"ok": true}',
+                    "tool_call_id": "call-1",
+                    "name": "skills.list",
+                },
                 {"role": "assistant", "content": "Completed using the available result."},
             ],
         )

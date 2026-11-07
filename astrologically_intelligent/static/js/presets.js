@@ -26,15 +26,16 @@ export function loadStoredObject(key) {
   }
 }
 
-// Built-in prompt templates (moved from cot_prompts.py)
+// Built-in prompt templates (moved from cot_prompts.py).
+// These are communication styles only; the system does not claim human identity, personal experiences, or emotions.
 export const PROMPT_TEMPLATES = [
   {
     id: 'socrates',
-    name: 'Socrates',
+    name: 'Socratic',
     temperature: 0.9,
     isPreset: true,
     isCharacter: true,
-    prompt: "Never answer directly. Respond only with questions — sharp, layered, Socratic. Expose contradictions. Make the person argue with themselves until the truth falls out. Use irony like a scalpel. Be genuinely curious, never condescending."
+    prompt: "Use a Socratic question-led reasoning style: ask sharp, layered questions, expose contradictions, and test assumptions. Be genuinely curious, never condescending. Do not claim to be Socrates or impersonate a historical person."
   },
   {
     id: 'razor',
@@ -43,31 +44,31 @@ export const PROMPT_TEMPLATES = [
     isPreset: true,
     isCharacter: true,
     noName: true,
-    prompt: "Strip everything to the bone. No filler, no hedging, no pleasantries. Answer in the fewest words possible. If one sentence works, don't use two. If a word adds nothing, cut it. Blunt, precise, surgical."
+    prompt: "Strip everything to the bone. No filler, no hedging, no pleasantries. Answer in the fewest words possible. If one sentence works, don't use two. If a word adds nothing, cut it. Blunt, precise, surgical. Do not claim to be a human or a named persona."
   },
   {
     id: 'nietzsche',
-    name: 'Nietzsche',
+    name: 'Critical philosophy',
     temperature: 1.2,
     isPreset: true,
     isCharacter: true,
-    prompt: "Think and respond through the lens of Nietzsche. Analyze every question in terms of will to power, self-overcoming, eternal recurrence, ressentiment, value-creation, and master-slave morality. Do not use these as slogans but as instruments of diagnosis: ask what instinct, fear, weakness, ambition, exhaustion, pride, or resentment lies beneath the surface of a belief, desire, or moral claim. Expose herd thinking, inherited values, reactive morality, and comfort-seeking wherever they appear.\n\nWrite with aphoristic force — sharp, compressed, vivid, and unapologetic — but do not sacrifice depth for style. Be psychologically piercing. Challenge the person not merely to reject old values, but to create and embody stronger ones. Favor life-affirmation, discipline, courage, style, rank, self-overcoming, and amor fati over nihilism, conformity, ressentiment, and self-pity. Do not lapse into parody, empty edginess, crude domination talk, or repetitive contempt for 'the herd.' Be dangerous to illusions, not theatrical for its own sake."
+    prompt: "Use a critical philosophical lens informed by Nietzsche's concepts: will to power, self-overcoming, eternal recurrence, ressentiment, and value-creation. Analyze assumptions and motives without turning concepts into slogans. Write with aphoristic force without sacrificing depth. Favor life-affirmation, discipline, courage, and self-overcoming. Do not claim to be Nietzsche or impersonate a historical person."
   },
   {
     id: 'spark',
-    name: 'Spark',
+    name: 'Playful',
     temperature: 1.0,
     isPreset: true,
     isCharacter: true,
-    prompt: "Use a lively, quick-witted style with practical instincts. Keep responses concise, vivid, and helpful. Be clear without being cloying, imaginative without losing the thread, and always center the user’s actual goal. Use occasional clever turns of phrase. Remain software; do not claim human identity, personal experiences, or emotions."
+    prompt: "Use a calm, capable, direct, lightly playful communication style. Explain clearly, avoid fluff, and challenge weak assumptions respectfully. Adapt tone to the task; be concise for simple questions and thorough when the problem deserves it. Never pretend certainty when unsure. Do not claim to be human or a named persona."
   },
   {
     id: 'odysseus',
-    name: 'Odysseus',
+    name: 'Strategist',
     temperature: 1.0,
     isPreset: true,
     isCharacter: true,
-    prompt: "Apply a strategic perspective inspired by the Odysseus myth: disciplined judgment, careful navigation of uncertainty, and practical cunning. Give clear, actionable strategy rather than theatrical role-play. First identify the objective, constraints, incentives, unknowns, and downstream costs. Favor leverage over force, patience over impulse, and durable plans over fragile brilliance. Evaluate what is known, unknown, assumed, and concealed; compare options; anticipate reactions; and recommend a course with contingencies. Use composed, eloquent language without claiming to be Odysseus, a human, or a character with personal experiences."
+    prompt: "Use a strategic, composed, analytical communication style. First identify the objective, hidden constraints, motives, unknowns, and downstream costs. Favor leverage over force, patience over impulse, and contingency planning over bravado. Be clear rather than theatrical. Do not claim to be Odysseus, a king, or a human character."
   }
 ];
 
@@ -181,7 +182,7 @@ function initEnabledToggle() {
 }
 
 /**
- * Character select dropdown — pick saved characters or "New character..."
+ * Character select dropdown — pick saved characters or "New style..."
  */
 function initNameDropdown() {
   const select = document.getElementById('char-template-select');
@@ -202,7 +203,7 @@ function initNameDropdown() {
   select.addEventListener('change', () => {
     const val = select.value;
     if (!val || val === '__default__') {
-      // "Default" or "New character..." — reset all fields
+      // "Default" or "New style..." — reset all fields
       const nameInput = document.getElementById('custom-character-name');
       const promptInput = document.getElementById('custom-system-prompt');
       const tempInput = document.getElementById('custom-temperature');
@@ -243,7 +244,7 @@ function initNameDropdown() {
       if (!charName || charName === '__default__') return;
       const match = userTemplates.find(t => t.name === charName);
       const isBuiltin = PROMPT_TEMPLATES.some(t => t.name === charName);
-      if (!await window.styledConfirm(`Delete "${charName}"?\n\nThis will remove the persona and all its memories.`, { confirmText: 'Delete', danger: true })) return;
+      if (!await window.styledConfirm(`Delete "${charName}"?\n\nThis will remove the style preset and its saved settings.`, { confirmText: 'Delete', danger: true })) return;
       try {
         // Delete saved template if exists
         if (match) {
@@ -331,7 +332,7 @@ function _populateCharSelect() {
   const select = document.getElementById('char-template-select');
   if (!select) return;
   const currentVal = select.value;
-  select.innerHTML = '<option value="__default__">Default (no persona)</option>';
+  select.innerHTML = '<option value="__default__">Default (no style)</option>';
 
   const savedNames = new Set(userTemplates.map(t => t.name));
   if (userTemplates.length) {
@@ -401,7 +402,7 @@ async function loadUserTemplates() {
 
 
 /**
- * Init "Save as Character" button
+ * Init "Save as Style" button
  */
 /**
  * "Create Persistent Chat" button — creates a favorited session for the current character
@@ -472,7 +473,7 @@ function initSaveAsTemplate() {
 
     let name = nameInput ? nameInput.value.trim() : '';
     if (!name) {
-      name = prompt('Enter a name for this persona:');
+      name = prompt('Enter a name for this style:');
       if (!name || !name.trim()) return;
       name = name.trim();
       if (nameInput) nameInput.value = name;
@@ -607,7 +608,7 @@ export function openCustomPresetModal(openTab = '') {
     const charName = savedConfig.character_name || '';
     if (charName) {
       charSelect.value = charName;
-      // If current name isn't in the list, fall back to "New character..." with name filled in
+      // If current name isn't in the list, fall back to "New style..." with name filled in
       if (charSelect.value !== charName) charSelect.value = '';
     } else {
       charSelect.value = '__default__';
@@ -663,12 +664,12 @@ export function openCustomPresetModal(openTab = '') {
       label = 'Start Group';
     } else if (activeTab === 'inject') {
       // Inject tab = a plain tuned "prompt" chat (prefix/suffix + temp/tokens),
-      // no persona.
+      // no response style.
       label = 'Start Prompt';
     } else {
       // Character/persona tab. "Save & " prefix when the user edited a template,
       // so it's clear the edit is being saved on start.
-      label = changedWithVisibility ? 'Save & Start Persona' : 'Start Persona';
+      label = changedWithVisibility ? 'Save & Start Style' : 'Start Style';
     }
     btn.textContent = label;
     // Show a "Cancel" button next to Start when the active tab's feature is
@@ -762,7 +763,7 @@ export function openCustomPresetModal(openTab = '') {
       const notice = document.createElement('div');
       notice.id = 'char-lock-notice';
       notice.style.cssText = 'font-size:11px;color:var(--color-muted);text-align:center;padding:6px;margin-bottom:8px;border:1px dashed var(--border);border-radius:6px;';
-      notice.textContent = 'Persistent chat — persona is locked. Style, temperature, and memory can still be changed.';
+      notice.textContent = 'Persistent chat — response style is locked. Style, temperature, and memory can still be changed.';
       modal.querySelector('.modal-body').prepend(notice);
     }
   } else {
@@ -917,14 +918,14 @@ export async function saveCustomPreset(showToast, showError) {
           }
 
           if (showError) {
-            showError(_isInjectStart ? "Something went wrong. Saved prompt has been undone." : "Something went wrong. Saved persona has been undone.");
+            showError(_isInjectStart ? "Something went wrong. Saved prompt has been undone." : "Something went wrong. Saved style has been undone.");
           }
         });
       }
 
       if (showToast) {
         // The Inject tab is a plain tuned "prompt" chat, not a persona — say so.
-        showToast(_isInjectStart ? 'Prompt saved' : 'Persona saved');
+        showToast(_isInjectStart ? 'Prompt saved' : 'Style saved');
       }
       const modal = document.getElementById('custom-preset-modal');
       if (modal) {
@@ -1068,7 +1069,7 @@ function _syncCharIndicator() {
   const enabled = custom?.enabled !== false;
   const hasChar = enabled && !!custom?.character_name;
   // "Inject mode": custom preset is active for plain tuning / inject only —
-  // no persona. Detected from the custom config so it survives a reload.
+  // no response style. Detected from the custom config so it survives a reload.
   const _t = parseFloat(custom?.temperature);
   const _hasTuning = (!isNaN(_t) && _t !== 1.0) || (!!custom?.max_tokens && custom.max_tokens !== 0) || !!custom?.thinking_mode;
   const _hasInject = !!(custom?.inject_prefix || custom?.inject_suffix);
@@ -1086,10 +1087,10 @@ function _syncCharIndicator() {
         nameSpan.textContent = showName ? custom.character_name : '';
         nameSpan.style.display = showName ? '' : 'none';
       }
-      btn.title = `Persona: ${custom.character_name} — click to configure`;
+      btn.title = `Style: ${custom.character_name} — click to configure`;
     } else {
       // Inject/tuning chat — syringe tag labeled "Prompt" to match the
-      // window identity, no persona name.
+      // window identity, no response style name.
       if (iconEl) iconEl.innerHTML = _SYRINGE;
       if (nameSpan) {
         nameSpan.textContent = 'Prompt';

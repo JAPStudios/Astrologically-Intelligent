@@ -288,7 +288,7 @@ def _truncate_text_to_token_budget(text: str, token_budget: int) -> str:
 
     notice = (
         "\n\n[Notice: the pasted message was too large for this model's context "
-        "window, so Odysseus kept the beginning and end.]"
+        "window, so Astrologically Intelligent retained the beginning and end.]"
     )
     # Binary replacement characters and dense scripts can approach one token
     # per character, while ASCII prose is closer to the historical 0.3 ratio.

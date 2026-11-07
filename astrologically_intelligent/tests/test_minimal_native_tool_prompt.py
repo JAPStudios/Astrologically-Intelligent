@@ -481,7 +481,7 @@ def test_qwen35_tui_workspace_uses_coding_only_prompt() -> None:
     )
 
     content = prompt[0]["content"]
-    assert "Odysseus TUI workspace tools" in content
+    assert "Astrologically Intelligent TUI workspace tools" in content
     assert "old_string" in content
     assert "mcp__email__search_emails" not in content
 
@@ -533,8 +533,8 @@ def test_qwen35_router_repairs_known_dropped_final_letter_artifacts() -> None:
     from src.agent_loop import _normalize_ody_qwen_text_artifacts
 
     assert _normalize_ody_qwen_text_artifacts(
-        "I am Odysseus, an AI assistan."
-    ) == "I am Odysseus, an AI assistant."
+        "I am an AI assistan."
+    ) == "I am an AI assistant."
 
 
 def test_qwen_tool_router_does_not_get_notes_prompt_override() -> None:

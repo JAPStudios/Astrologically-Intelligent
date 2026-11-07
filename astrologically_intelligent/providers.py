@@ -439,9 +439,14 @@ def _post_json(url: str, payload: dict[str, Any], headers: dict[str, str], timeo
 
 def provider_from_env():
     """Select the configured model transport using ASTRO_AI_PROVIDER."""
-    # Prefer a locally served model. Cloud competitors are opt-in providers,
-    # never an implicit dependency of a fresh installation.
-    name = os.getenv("ASTRO_AI_PROVIDER", "local").strip().lower()
+    # The headless entry point never silently chooses a model provider.
+    # The full web system uses its configured default endpoint.
+    name = os.getenv("ASTRO_AI_PROVIDER", "").strip().lower()
+    if not name:
+        raise RuntimeError(
+            "Set ASTRO_AI_PROVIDER for the standalone runtime; "
+            "the full web system uses its configured default endpoint."
+        )
     if name in {"anthropic", "claude"}:
         return AnthropicMessagesProvider.from_env()
     if name in {"gemini", "google", "google-gemini"}:

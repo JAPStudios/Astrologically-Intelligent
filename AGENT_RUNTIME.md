@@ -6,28 +6,18 @@ Astrologically Intelligent provides persistent conversations, model tool calling
 
 Python 3.10+; the core runtime uses the standard library.
 
-```sh
-# Start Ollama locally and install a model before launching the runtime.
-# Set ASTRO_AI_MODEL to the exact identifier shown by: ollama list
-export ASTRO_AI_PROVIDER=local
-export ASTRO_AI_BASE_URL="http://127.0.0.1:11434/v1"
-export ASTRO_AI_MODEL="YOUR_INSTALLED_MODEL"
-python -m astrologically_intelligent
-```
-
-Provider selection is controlled by `ASTRO_AI_PROVIDER`. A fresh installation defaults to a local Ollama-compatible endpoint; it does not silently send prompts to a competing cloud provider.
+The full FastAPI system is the primary interface and resolves models through its configured endpoint registry. The optional headless runtime exposes the same chat/session API without the web interface. It requires an explicit `ASTRO_AI_PROVIDER` value and provider-specific configuration; it does not silently default to Ollama or another provider.
 
 | Provider value | Transport | Configuration |
 | --- | --- | --- |
-| `local` (default) | Local OpenAI-compatible endpoint; defaults to Ollama at `http://127.0.0.1:11434/v1` | Install a local model and set `ASTRO_AI_MODEL` to its exact identifier; no API key is required for loopback |
-| `openai` / `chat-completions` | OpenAI Chat Completions | Explicit opt-in; `ASTRO_AI_API_KEY`, `ASTRO_AI_BASE_URL`, `ASTRO_AI_MODEL` |
-| `xai` / `grok` | Chat Completions request format | Explicit opt-in; `XAI_API_KEY`, default endpoint `https://api.x.ai/v1`, default model `grok-4.20-non-reasoning` |
-| `perplexity` | Perplexity Chat Completions endpoint | Explicit opt-in; `PERPLEXITY_API_KEY`, default endpoint `https://api.perplexity.ai`, default model `sonar` |
-| `anthropic` / `claude` | Native Anthropic Messages API | Explicit opt-in; `ANTHROPIC_API_KEY` (or `ASTRO_AI_API_KEY`), optional `ANTHROPIC_BASE_URL`, `ASTRO_AI_MODEL` |
-| `gemini` / `google` | Native Gemini `generateContent` API with function calling | Explicit opt-in; `GEMINI_API_KEY` (or `ASTRO_AI_API_KEY`), optional `GEMINI_BASE_URL`, `ASTRO_AI_MODEL` |
+| `openai` / `chat-completions` | OpenAI Chat Completions | `ASTRO_AI_API_KEY`, optional `ASTRO_AI_BASE_URL`, `ASTRO_AI_MODEL` |
+| `anthropic` / `claude` | Native Anthropic Messages API | `ANTHROPIC_API_KEY` (or `ASTRO_AI_API_KEY`), optional `ANTHROPIC_BASE_URL`, `ASTRO_AI_MODEL` |
+| `gemini` / `google` | Native Gemini `generateContent` API with function calling | `GEMINI_API_KEY` (or `ASTRO_AI_API_KEY`), optional `GEMINI_BASE_URL`, `ASTRO_AI_MODEL` |
+| `xai` / `grok` | xAI Chat Completions transport | `XAI_API_KEY` (or `ASTRO_AI_API_KEY`), default endpoint `https://api.x.ai/v1`, default model `grok-4.20-non-reasoning` |
+| `perplexity` | Perplexity Chat Completions transport | `PERPLEXITY_API_KEY` (or `ASTRO_AI_API_KEY`), default endpoint `https://api.perplexity.ai`, default model `sonar` |
+| `local` | Local OpenAI-compatible endpoint | Explicitly set `ASTRO_AI_BASE_URL` and `ASTRO_AI_MODEL`; no API key is required for loopback |
 
-The local runtime uses an OpenAI-compatible local inference endpoint. The local model is still a separately installed model; this configuration does not claim that Astrologically Intelligent already contains a trained proprietary foundation model. Cloud provider transports are optional compatibility routes, not the product's required intelligence engine. Anthropic maps system messages, assistant tool-use blocks, tool schemas, and tool results to the runtime's function-tool interface. Gemini uses its native `generateContent` endpoint and preserves model-returned content, function-call IDs, and thought signatures across tool turns. xAI and Perplexity use the Chat Completions request format.
-
+The full web system's default endpoint is managed in its endpoint registry. The headless provider variable is an override for the standalone entry point and is not the default-selection mechanism for the full web system. Anthropic maps Messages API system messages, assistant tool-use blocks, tool schemas and tool results to the runtime's function-tool interface. Gemini uses its native `generateContent` endpoint and preserves model-returned content, function-call IDs and thought signatures across tool turns. xAI and Perplexity use the Chat Completions request format.
 
 ## HTTP service
 
@@ -58,4 +48,4 @@ Installed Python distributions may register entry points under `astrologically_i
 python -m unittest discover -s tests -v
 ```
 
-The current `.gitmodules` inventory contains 742 pinned public repositories across all ten requested GitHub organizations, including five repositories from `herdrdev`. Retrieve pinned source trees with `git submodule update --init --recursive`. The inventory records upstream source references; it does not establish that every source tree has been retrieved, reviewed, built, or integrated into the application. Each candidate project still requires relevance, license, dependency, compatibility, implementation, and test review.
+Upstream implementation coverage and outstanding service interfaces are documented in `UPSTREAM_IMPORT.md`. Source references are not counted as completed runtime features.

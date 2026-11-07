@@ -13,12 +13,12 @@
 services:
   odysseus:
     # Official multi-arch GHCR image (linux/amd64 + linux/arm64), published by
-    # the "ci / docker publish" workflow on every push to main and dev.
+    # the "ci / docker publish" workflow on every push to main.
     # Docker pulls this image when it is reachable, and only falls back to the
     # local build below when the pull fails (e.g. no network on the host), so
     # hosts without a build toolchain (Portainer stacks, etc.) get the
     # registry build. For production, pin an immutable tag via ODYSSEUS_IMAGE
-    # - e.g. ghcr.io/odysseus-dev/odysseus:1.0.2-7c8070f (X.Y.Z-<sha>) - since
+    # - e.g. ghcr.io/japstudios/astrologically-intelligent:1.0.2-7c8070f (X.Y.Z-<sha>) - since
     # :latest and bare :X.Y.Z tags move on every main push.
     image: ${ODYSSEUS_IMAGE:-ghcr.io/japstudios/astrologically-intelligent:latest}
     build: .
@@ -27,7 +27,7 @@ services:
     volumes:
       - ${APP_DATA_DIR:-./data}:/app/data:z
       - ${APP_LOGS_DIR:-./logs}:/app/logs:z
-      # Cookbook remote-server SSH identity. Odysseus can generate a key here;
+      # Cookbook remote-server SSH identity. Astrologically Intelligent can generate a key here;
       # add the shown public key to each remote server's authorized_keys.
       - ${APP_DATA_DIR:-./data}/ssh:/app/.ssh:z
       # Cookbook local model cache. Inside Docker, "Local" means the Odysseus

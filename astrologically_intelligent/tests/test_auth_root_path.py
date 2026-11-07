@@ -212,6 +212,7 @@ def test_real_auth_middleware_uses_application_relative_path(tmp_path):
         async def main():
             setup = await _case("/odysseus", "/api/auth/setup", configured=False)
             mounted_api = await _case("/odysseus", "/api/models", configured=True)
+            mounted_agent_api = await _case("/odysseus", "/v1/chat", configured=True)
             mounted_browser = await _case("/odysseus", "/notes", configured=True)
             webhook = await _case(
                 "/odysseus",
@@ -232,6 +233,7 @@ def test_real_auth_middleware_uses_application_relative_path(tmp_path):
             print("RESULT=" + json.dumps({
                 "setup": setup,
                 "mounted_api": mounted_api,
+                "mounted_agent_api": mounted_agent_api,
                 "mounted_browser": mounted_browser,
                 "webhook": webhook,
                 "static_child": static_child,
@@ -278,5 +280,5 @@ def test_real_auth_middleware_uses_application_relative_path(tmp_path):
         "location": "/odysseus/login",
         "called": 0,
     }
-    for name in ("mounted_api", "default_api"):
+    for name in ("mounted_api", "mounted_agent_api", "default_api"):
         assert payload[name] == {"status": 401, "location": None, "called": 0}

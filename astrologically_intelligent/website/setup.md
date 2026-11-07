@@ -8,7 +8,10 @@ This page keeps the detailed install, deployment, troubleshooting, and configura
 
 ## Quick Start
 
-> **Branch note:** `main` is the repository's primary branch. Use it for the current application source and deployment instructions.
+> **Service layout:** Running `python -m astrologically_intelligent` from the repository root starts the Python agent API on port 8765. The full web application in `astrologically_intelligent/` starts separately on port 7000. The Android client currently connects to the root agent API; the two services are not yet one process.
+
+
+> **Branch note:** `main` is the primary release branch. Development and release checks run against the repository's configured branches.
 
 Defaults work out of the box: clone, run, then configure models/search/email
 inside **Settings**. Only edit `.env` for deployment-level overrides like
@@ -19,12 +22,12 @@ On first setup, Astrologically Intelligent creates an admin account (`admin` unl
 For Docker installs, the same line is in `docker compose logs odysseus`.
 Use that for the first login, then change it in **Settings**.
 
-Contributing? See [CONTRIBUTING.md](https://github.com/JAPStudios/Astrologically-Intelligent/blob/dev/CONTRIBUTING.md) for setup, testing, and pull request guidelines.
+Contributing? See [CONTRIBUTING.md](https://github.com/JAPStudios/Astrologically-Intelligent/blob/main/CONTRIBUTING.md) for setup, testing, and pull request guidelines.
 
 ### Docker (recommended)
 ```bash
 git clone https://github.com/JAPStudios/Astrologically-Intelligent.git
-cd Astrologically-Intelligent
+cd Astrologically-Intelligent/astrologically_intelligent
 cp .env.example .env       # optional, but recommended for explicit defaults
 docker compose up -d --build
 ```
@@ -37,16 +40,16 @@ Tag scheme:
 | Tag | Meaning |
 | --- | --- |
 | `:latest`, `:X.Y.Z` | Latest curated build from `main`. **Mutable** — re-pushed on every push to `main`, even without a version bump. |
-| `:X.Y.Z-<sha>` | Immutable build pin (e.g. `1.0.2-7c8070f`). One tag, one build, forever. **Use this in production.** |
+| `:X.Y.Z-<sha>` | Immutable build pin (e.g. `1.0.3-<short-sha>`). One tag, one build, forever. **Use this in production.** |
 | `:dev`, `:X.Y.Z-dev.<sha>` | Rolling `dev` branch builds; the `<sha>` form is also immutable. |
 
 For production, pin the immutable tag by overriding the image in `.env` (or the stack's environment variables):
 
 ```bash
-ODYSSEUS_IMAGE=ghcr.io/japstudios/astrologically-intelligent:1.0.2-7c8070f
+ODYSSEUS_IMAGE=ghcr.io/japstudios/astrologically-intelligent:1.0.3-<short-sha>
 ```
 
-Browse current tags at <https://github.com/JAPStudios/Astrologically-Intelligent/pkgs/container/odysseus>. (Until this package is made public and linked to the repo by an org owner, pulls fall back to the local build automatically — that fallback is intentional.)
+Browse current tags at <https://github.com/JAPStudios/Astrologically-Intelligent/pkgs/container/astrologically-intelligent>. (Until this package is made public and linked to the repo by an org owner, pulls fall back to the local build automatically — that fallback is intentional.)
 
 Open `http://localhost:7000` when the containers are healthy. Docker Compose
 binds the web UI to `127.0.0.1` by default. If the port is taken, set
@@ -60,7 +63,7 @@ only when you intentionally want LAN/reverse-proxy access.
 ### Native Linux / macOS
 ```bash
 git clone https://github.com/JAPStudios/Astrologically-Intelligent.git
-cd Astrologically-Intelligent
+cd Astrologically-Intelligent/astrologically_intelligent
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -78,7 +81,7 @@ M-series Mac, run Astrologically Intelligent natively:
 
 ```bash
 git clone https://github.com/JAPStudios/Astrologically-Intelligent.git
-cd Astrologically-Intelligent
+cd Astrologically-Intelligent/astrologically_intelligent
 ./start-macos.sh
 ```
 
@@ -380,7 +383,7 @@ server; safe to re-run):
 
 ```powershell
 git clone https://github.com/JAPStudios/Astrologically-Intelligent.git
-cd Astrologically-Intelligent
+cd Astrologically-Intelligent/astrologically_intelligent
 powershell -ExecutionPolicy Bypass -File .\launch-windows.ps1
 ```
 
@@ -388,7 +391,7 @@ Or do it by hand:
 
 ```powershell
 git clone https://github.com/JAPStudios/Astrologically-Intelligent.git
-cd Astrologically-Intelligent
+cd Astrologically-Intelligent/astrologically_intelligent
 py -3.11 -m venv venv
 venv\Scripts\Activate.ps1
 pip install -r requirements.txt

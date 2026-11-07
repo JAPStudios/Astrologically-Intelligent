@@ -19,11 +19,11 @@ def _indented_block(text: str, heading: str, indent: int) -> str:
     return match.group(0)
 
 
-def test_ci_runs_on_integrated_dev_pushes():
+def test_ci_runs_on_main_pushes():
     workflow = _WORKFLOW.read_text()
     push = _indented_block(workflow, "push", 2)
 
-    assert re.search(r"(?m)^    branches:\s*\[main,\s*dev\]\s*$", push)
+    assert re.search(r"(?m)^    branches:\s*\[main\]\s*$", push)
     assert "paths-ignore:" not in push
 
 

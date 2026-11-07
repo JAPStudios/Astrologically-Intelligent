@@ -1,13 +1,13 @@
 #Requires -Version 5.1
 <#
-  Build a portable Windows distribution for Odysseus.
+  Build a portable Windows distribution for Astrologically Intelligent.
 
   Output layout:
-    dist\Odysseus\Odysseus.exe
-    dist\Odysseus\static\...
-    dist\Odysseus\scripts\...
-    dist\Odysseus\mcp_servers\...
-    dist\Odysseus\services\hwfit\data\...
+    dist\AstrologicallyIntelligent\AstrologicallyIntelligent.exe
+    dist\AstrologicallyIntelligent\static\...
+    dist\AstrologicallyIntelligent\scripts\...
+    dist\AstrologicallyIntelligent\mcp_servers\...
+    dist\AstrologicallyIntelligent\services\hwfit\data\...
 
   The app then keeps using its normal filesystem layout when frozen.
 
@@ -55,22 +55,11 @@ if ($LASTEXITCODE -ne 0) { Fail "Dependency install failed." }
 Write-Step "Building portable exe bundle"
 Remove-Item -Recurse -Force build, dist -ErrorAction SilentlyContinue
 
-$dataArgs = @(
-    "--add-data", "licenses;licenses",
-    "--add-data", "THIRD_PARTY_PROVENANCE.json;.",
-    "--add-data", "ACKNOWLEDGMENTS.md;.",
-    "--add-data", "static;static",
-    "--add-data", "scripts;scripts",
-    "--add-data", "mcp_servers;mcp_servers",
-    "--add-data", "services/hwfit/data;services/hwfit/data",
-    "--add-data", "config;config",
-    "--add-data", ".env.example;.env.example"
-)
 
-& $pyExe -m PyInstaller --noconfirm --clean --onedir --noconsole --icon=static/icon.ico --name Odysseus @dataArgs launcher.py
+& $pyExe -m PyInstaller --noconfirm --clean .\Odysseus.spec
 if ($LASTEXITCODE -ne 0) { Fail "PyInstaller build failed." }
 
 Write-Host ""
 Write-Host "Build complete." -ForegroundColor Green
-Write-Host "Portable app folder: $PSScriptRoot\dist\Odysseus" -ForegroundColor Green
+Write-Host "Portable app folder: $PSScriptRoot\dist\AstrologicallyIntelligent" -ForegroundColor Green
 Write-Host "Distribute the whole folder (or zip it) so static assets and scripts stay with the exe." -ForegroundColor Green

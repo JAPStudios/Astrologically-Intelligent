@@ -446,7 +446,7 @@ if AUTH_ENABLED:
                 return await call_next(request)
             if not auth_manager.is_configured:
                 # No users yet — redirect to login for first-time setup
-                if not path.startswith("/api/"):
+                if not path.startswith(("/api/", "/v1/")):
                     return RedirectResponse(
                         url=with_asgi_root_path(request.scope, "/login"),
                         status_code=302,
@@ -510,7 +510,7 @@ if AUTH_ENABLED:
             # --- Cookie-based session auth ---
             token = request.cookies.get(SESSION_COOKIE)
             if not auth_manager.validate_token(token):
-                if path.startswith("/api/"):
+                if path.startswith(("/api/", "/v1/")):
                     return JSONResponse(status_code=401, content={"error": "Not authenticated"})
                 return RedirectResponse(
                     url=with_asgi_root_path(request.scope, "/login"),
@@ -526,6 +526,15 @@ if AUTH_ENABLED:
     logger.info("Auth middleware enabled (AUTH_ENABLED=true)")
 else:
     logger.info("Auth middleware disabled (set AUTH_ENABLED=true to enable)")
+
+# The Android client and headless agent API use the same runtime implementation.
+# The full web application mounts these routes in this FastAPI process; the
+# standalone stdlib server remains available for headless deployments.
+from src.agent_api import AgentRuntimeRegistry, create_agent_api_router
+
+agent_runtime_registry = AgentRuntimeRegistry(DATA_DIR)
+app.state.agent_runtime_registry = agent_runtime_registry
+app.include_router(create_agent_api_router(agent_runtime_registry, auth_enabled=AUTH_ENABLED))
 
 # ========= STATIC FILES =========
 os.makedirs(STATIC_DIR, exist_ok=True)
@@ -1447,6 +1456,10 @@ async def _startup_event():
 
 async def _shutdown_event():
     logger.info("Application shutting down...")
+    try:
+        agent_runtime_registry.close()
+    except Exception as e:
+        logger.warning(f"Agent runtime shutdown error: {e}")
     background_delivery = getattr(app.state, 'background_tool_delivery_task', None)
     if background_delivery:
         background_delivery.cancel()

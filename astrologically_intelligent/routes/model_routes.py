@@ -929,9 +929,14 @@ def _ollama_model_names(data: Any) -> List[str]:
     for m in (items or []):
         if not isinstance(m, dict):
             continue
-        v = m.get("name") or m.get("model")
-        if isinstance(v, str) and v:
-            out.append(v)
+        # Ollama's native identifier is normally `name`; some compatible
+        # servers return `model`. Accept only non-empty string identifiers.
+        # If `name` is malformed, still allow a valid `model` fallback.
+        for key in ("name", "model"):
+            value = m.get(key)
+            if isinstance(value, str) and value.strip():
+                out.append(value.strip())
+                break
     return out
 
 
@@ -1235,7 +1240,7 @@ def _ping_endpoint(base_url: str, api_key: str = None, timeout: float = 1.5) -> 
                 return {
                     "reachable": False,
                     "status_code": r.status_code,
-                    "error": "That is Odysseus, not a model server. Use the Ollama URL, usually http://host.docker.internal:11434/v1 in Docker.",
+                    "error": "That is Astrologically Intelligent, not a model server. Use the Ollama URL, usually http://host.docker.internal:11434/v1 in Docker.",
                 }
             return {"reachable": False, "status_code": r.status_code, "error": f"HTTP {r.status_code} redirect"}
         if 200 <= r.status_code < 300:
