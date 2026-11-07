@@ -3285,3 +3285,103 @@
 	path = upstream/google/dopamine
 	url = https://github.com/google/dopamine.git
 	branch = master
+[submodule "upstream/google/magika"]
+	path = upstream/google/magika
+	url = https://github.com/google/magika.git
+	branch = main
+[submodule "upstream/google/generative-ai-go"]
+	path = upstream/google/generative-ai-go
+	url = https://github.com/google/generative-ai-go.git
+	branch = main
+[submodule "upstream/google/oss-fuzz-gen"]
+	path = upstream/google/oss-fuzz-gen
+	url = https://github.com/google/oss-fuzz-gen.git
+	branch = main
+[submodule "upstream/google/sec-gemini"]
+	path = upstream/google/sec-gemini
+	url = https://github.com/google/sec-gemini.git
+	branch = main
+[submodule "upstream/google/VoltAir"]
+	path = upstream/google/VoltAir
+	url = https://github.com/google/VoltAir.git
+	branch = master
+[submodule "upstream/google/aistplusplus_api"]
+	path = upstream/google/aistplusplus_api
+	url = https://github.com/google/aistplusplus_api.git
+	branch = main
+[submodule "upstream/google/aistreamer"]
+	path = upstream/google/aistreamer
+	url = https://github.com/google/aistreamer.git
+	branch = master
+[submodule "upstream/google/adk-python"]
+	path = upstream/google/adk-python
+	url = https://github.com/google/adk-python.git
+	branch = main
+[submodule "upstream/google/xrblocks"]
+	path = upstream/google/xrblocks
+	url = https://github.com/google/xrblocks.git
+	branch = main
+[submodule "upstream/google/adk-go"]
+	path = upstream/google/adk-go
+	url = https://github.com/google/adk-go.git
+	branch = main
+[submodule "upstream/google/adk-docs"]
+	path = upstream/google/adk-docs
+	url = https://github.com/google/adk-docs.git
+	branch = main
+[submodule "upstream/google/mantis"]
+	path = upstream/google/mantis
+	url = https://github.com/google/mantis.git
+	branch = main
+[submodule "upstream/google/agents-cli"]
+	path = upstream/google/agents-cli
+	url = https://github.com/google/agents-cli.git
+	branch = main
+[submodule "upstream/google/adk-java"]
+	path = upstream/google/adk-java
+	url = https://github.com/google/adk-java.git
+	branch = main
+[submodule "upstream/google/airdialogue"]
+	path = upstream/google/airdialogue
+	url = https://github.com/google/airdialogue.git
+	branch = master
+[submodule "upstream/google/ai-abap-assistant-sample"]
+	path = upstream/google/ai-abap-assistant-sample
+	url = https://github.com/google/ai-abap-assistant-sample.git
+	branch = main
+[submodule "upstream/google/adk-js"]
+	path = upstream/google/adk-js
+	url = https://github.com/google/adk-js.git
+	branch = main
+[submodule "upstream/google/torchax"]
+	path = upstream/google/torchax
+	url = https://github.com/google/torchax.git
+	branch = main
+[submodule "upstream/google/airio"]
+	path = upstream/google/airio
+	url = https://github.com/google/airio.git
+	branch = main
+[submodule "upstream/google/dranet"]
+	path = upstream/google/dranet
+	url = https://github.com/google/dranet.git
+	branch = main
+[submodule "upstream/google/cameratrapai"]
+	path = upstream/google/cameratrapai
+	url = https://github.com/google/cameratrapai.git
+	branch = main
+[submodule "upstream/google/airdialogue_model"]
+	path = upstream/google/airdialogue_model
+	url = https://github.com/google/airdialogue_model.git
+	branch = master
+[submodule "upstream/google/ai_video_dubbing"]
+	path = upstream/google/ai_video_dubbing
+	url = https://github.com/google/ai_video_dubbing.git
+	branch = main
+[submodule "upstream/google/aiyprojects-deeplearn-tensorflow"]
+	path = upstream/google/aiyprojects-deeplearn-tensorflow
+	url = https://github.com/google/aiyprojects-deeplearn-tensorflow.git
+	branch = master
+[submodule "upstream/google/aidl-language"]
+	path = upstream/google/aidl-language
+	url = https://github.com/google/aidl-language.git
+	branch = main
