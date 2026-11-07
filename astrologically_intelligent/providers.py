@@ -467,6 +467,27 @@ def provider_from_env():
         if not key:
             raise RuntimeError("Set DEEPSEEK_API_KEY or ASTRO_AI_API_KEY for DeepSeek")
         return ChatCompletionsProvider(ProviderConfig(base, key, model))
+    if name in {"azure", "azure-openai", "microsoft-foundry"}:
+        key = (
+            os.getenv("AZURE_OPENAI_API_KEY")
+            or os.getenv("AZURE_INFERENCE_CREDENTIAL")
+            or os.getenv("ASTRO_AI_API_KEY", "")
+        )
+        endpoint = (
+            os.getenv("ASTRO_AI_BASE_URL")
+            or os.getenv("AZURE_OPENAI_ENDPOINT")
+            or os.getenv("AZURE_AI_ENDPOINT", "")
+        ).rstrip("/")
+        deployment = os.getenv("AZURE_OPENAI_DEPLOYMENT") or os.getenv("ASTRO_AI_MODEL", "")
+        if not key:
+            raise RuntimeError("Set AZURE_OPENAI_API_KEY or AZURE_INFERENCE_CREDENTIAL for Azure AI")
+        if not endpoint:
+            raise RuntimeError("Set AZURE_OPENAI_ENDPOINT or AZURE_AI_ENDPOINT for Azure AI")
+        if not deployment:
+            raise RuntimeError("Set AZURE_OPENAI_DEPLOYMENT or ASTRO_AI_MODEL to the Azure deployment name")
+        if not endpoint.endswith("/openai/v1"):
+            endpoint += "/openai/v1"
+        return ChatCompletionsProvider(ProviderConfig(endpoint, key, deployment))
     if name == "perplexity":
         key = os.getenv("PERPLEXITY_API_KEY") or os.getenv("ASTRO_AI_API_KEY", "")
         base = os.getenv("ASTRO_AI_BASE_URL", os.getenv("PERPLEXITY_BASE_URL", "https://api.perplexity.ai")).rstrip("/")

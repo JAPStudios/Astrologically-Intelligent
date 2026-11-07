@@ -191,6 +191,48 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(post.call_args.args[0], "https://api.deepseek.com/chat/completions")
         self.assertEqual(post.call_args.args[1]["tool_choice"], "auto")
         self.assertEqual(post.call_args.args[1]["tools"], [tool])
+    def test_azure_openai_provider_uses_v1_endpoint_and_deployment_name(self):
+        with patch.dict("os.environ", {
+            "ASTRO_AI_PROVIDER": "azure-openai",
+            "AZURE_OPENAI_API_KEY": "azure-test",
+            "AZURE_OPENAI_ENDPOINT": "https://example.openai.azure.com/",
+            "AZURE_OPENAI_DEPLOYMENT": "gpt-4o-production",
+        }, clear=True):
+            provider = provider_from_env()
+        self.assertIsInstance(provider, ChatCompletionsProvider)
+        self.assertEqual(provider.config.base_url, "https://example.openai.azure.com/openai/v1")
+        self.assertEqual(provider.config.api_key, "azure-test")
+        self.assertEqual(provider.config.model, "gpt-4o-production")
+
+    def test_azure_foundry_provider_preserves_native_tool_calls(self):
+        with patch.dict("os.environ", {
+            "ASTRO_AI_PROVIDER": "microsoft-foundry",
+            "AZURE_INFERENCE_CREDENTIAL": "foundry-test-token",
+            "AZURE_AI_ENDPOINT": "https://example.services.ai.azure.com/openai/v1/",
+            "AZURE_OPENAI_DEPLOYMENT": "deepseek-v3-deployment",
+        }, clear=True):
+            provider = provider_from_env()
+        tool = {"type": "function", "function": {
+            "name": "memory.recall",
+            "description": "Read an exact memory key.",
+            "parameters": {"type": "object", "properties": {"namespace": {"type": "string"}}},
+        }}
+        expected_call = {
+            "id": "azure-call-1",
+            "type": "function",
+            "function": {"name": "memory.recall", "arguments": json.dumps({"namespace": "profile"})},
+        }
+        response_payload = {"choices": [{"message": {
+            "role": "assistant", "content": None, "tool_calls": [expected_call],
+        }}]}
+        with patch("astrologically_intelligent.providers._post_json", return_value=response_payload) as post:
+            response = provider.chat([{"role": "user", "content": "Read my profile memory."}], [tool])
+        self.assertEqual(response["tool_calls"], [expected_call])
+        self.assertEqual(post.call_args.args[0], "https://example.services.ai.azure.com/openai/v1/chat/completions")
+        self.assertEqual(post.call_args.args[1]["model"], "deepseek-v3-deployment")
+        self.assertEqual(post.call_args.args[1]["tool_choice"], "auto")
+        self.assertEqual(post.call_args.args[1]["tools"], [tool])
+        self.assertEqual(post.call_args.args[2]["Authorization"], "Bearer foundry-test-token")
     def test_openai_is_available_only_when_explicitly_selected(self):
         with patch.dict("os.environ", {
             "ASTRO_AI_PROVIDER": "openai",
