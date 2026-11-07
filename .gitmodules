@@ -3385,3 +3385,103 @@
 	path = upstream/google/aidl-language
 	url = https://github.com/google/aidl-language.git
 	branch = main
+[submodule "upstream/google/artemis"]
+	path = upstream/google/artemis
+	url = https://github.com/google/artemis.git
+	branch = main
+[submodule "upstream/google/vertex-ai-nas"]
+	path = upstream/google/vertex-ai-nas
+	url = https://github.com/google/vertex-ai-nas.git
+	branch = main
+[submodule "upstream/google/chrome-enterprise-premium-mcp"]
+	path = upstream/google/chrome-enterprise-premium-mcp
+	url = https://github.com/google/chrome-enterprise-premium-mcp.git
+	branch = main
+[submodule "upstream/google/filonov"]
+	path = upstream/google/filonov
+	url = https://github.com/google/filonov.git
+	branch = main
+[submodule "upstream/google/humanio"]
+	path = upstream/google/humanio
+	url = https://github.com/google/humanio.git
+	branch = main
+[submodule "upstream/google/aistplusplus_dataset"]
+	path = upstream/google/aistplusplus_dataset
+	url = https://github.com/google/aistplusplus_dataset.git
+	branch = main
+[submodule "upstream/google/aichoreographer"]
+	path = upstream/google/aichoreographer
+	url = https://github.com/google/aichoreographer.git
+	branch = main
+[submodule "upstream/google/aiyprojects-raspbian-tools"]
+	path = upstream/google/aiyprojects-raspbian-tools
+	url = https://github.com/google/aiyprojects-raspbian-tools.git
+	branch = main
+[submodule "upstream/google/ai-weather-climate"]
+	path = upstream/google/ai-weather-climate
+	url = https://github.com/google/ai-weather-climate.git
+	branch = main
+[submodule "upstream/google/vertex-ai-benchmarker"]
+	path = upstream/google/vertex-ai-benchmarker
+	url = https://github.com/google/vertex-ai-benchmarker.git
+	branch = main
+[submodule "upstream/google/three-live"]
+	path = upstream/google/three-live
+	url = https://github.com/google/three-live.git
+	branch = main
+[submodule "upstream/google/aistreams"]
+	path = upstream/google/aistreams
+	url = https://github.com/google/aistreams.git
+	branch = master
+[submodule "upstream/google/skill-reach"]
+	path = upstream/google/skill-reach
+	url = https://github.com/google/skill-reach.git
+	branch = main
+[submodule "upstream/google/embardiment"]
+	path = upstream/google/embardiment
+	url = https://github.com/google/embardiment.git
+	branch = main
+[submodule "upstream/google/esmeralda"]
+	path = upstream/google/esmeralda
+	url = https://github.com/google/esmeralda.git
+	branch = main
+[submodule "upstream/google/ai-abap-assistant-eclipse-plugin-sample"]
+	path = upstream/google/ai-abap-assistant-eclipse-plugin-sample
+	url = https://github.com/google/ai-abap-assistant-eclipse-plugin-sample.git
+	branch = main
+[submodule "upstream/google/viai-sdk"]
+	path = upstream/google/viai-sdk
+	url = https://github.com/google/viai-sdk.git
+	branch = main
+[submodule "upstream/google/ai_assisted_display_creative"]
+	path = upstream/google/ai_assisted_display_creative
+	url = https://github.com/google/ai_assisted_display_creative.git
+	branch = main
+[submodule "upstream/google/feabench"]
+	path = upstream/google/feabench
+	url = https://github.com/google/feabench.git
+	branch = main
+[submodule "upstream/google/vertex-pipelines-boilerplate"]
+	path = upstream/google/vertex-pipelines-boilerplate
+	url = https://github.com/google/vertex-pipelines-boilerplate.git
+	branch = main
+[submodule "upstream/google/lightflow"]
+	path = upstream/google/lightflow
+	url = https://github.com/google/lightflow.git
+	branch = main
+[submodule "upstream/google/evt-air-risk-aiaa-scitech-2026"]
+	path = upstream/google/evt-air-risk-aiaa-scitech-2026
+	url = https://github.com/google/evt-air-risk-aiaa-scitech-2026.git
+	branch = main
+[submodule "upstream/kagisearch/vectordb"]
+	path = upstream/kagisearch/vectordb
+	url = https://github.com/kagisearch/vectordb.git
+	branch = main
+[submodule "upstream/kagisearch/ask"]
+	path = upstream/kagisearch/ask
+	url = https://github.com/kagisearch/ask.git
+	branch = main
+[submodule "upstream/lukalabs/replika-research"]
+	path = upstream/lukalabs/replika-research
+	url = https://github.com/lukalabs/replika-research.git
+	branch = master
