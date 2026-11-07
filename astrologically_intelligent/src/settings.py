@@ -75,6 +75,8 @@ DEFAULT_SETTINGS = {
     # fall back to competing search engines when the index is empty or unavailable.
     "search_fallback_chain": [],
     "search_url": "",
+    "peanut_search_api_url": "",
+    "peanut_search_api_key": "",
     "search_result_count": 5,
     # SafeSearch level applied to every provider that exposes one.
     # "strict"   — apply the provider's strongest filtering level (default;
