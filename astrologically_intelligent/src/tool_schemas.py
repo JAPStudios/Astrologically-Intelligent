@@ -30,6 +30,7 @@ _BINARY_VISUAL_MEDIA_SUFFIXES = {
 
 _REQUIRED_NATIVE_TOOL_ARGS = {
     "web_search": ("query", "queries"),
+    "peanut_browsing_crawl": ("url",),
     "get_weather": ("location",),
     "web_fetch": ("url", "urls"),
     "pdf_extract": ("url", "path"),
@@ -343,7 +344,7 @@ FUNCTION_TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "web_search",
-            "description": "Private quick web lookup through Odysseus' configured search backend, normally SearXNG. Use for open-ended web/search/lookup/latest/current questions. Do NOT navigate to Google/DuckDuckGo/Bing with the browser for search results. NOT for 'research X' / 'do research on X' — those are deep-research jobs; use trigger_research instead.",
+            "description": "Search Peanut Browsing's first-party indexed websites for open-ended lookups. The index contains websites that have been submitted and crawled; it is not a complete index of the public web. Use peanut_browsing_crawl to submit a public website for indexing. For multi-step research, use trigger_research.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -352,6 +353,21 @@ FUNCTION_TOOL_SCHEMAS = [
                     "time_filter": {"type": "string", "enum": ["day", "week", "month", "year"], "description": "Optional publication-date window for recent articles/news. Omit for current weather, prices, documentation, manuals, or features unless the user specifies a publication window."}
                 },
                 "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "peanut_browsing_crawl",
+            "description": "Submit a public website to Peanut Browsing's first-party crawler and index. The crawler checks robots.txt, rejects private network targets and follows bounded public links. Use only when the user requests indexing or when indexing a relevant public website is necessary for the search.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "Public HTTP or HTTPS website URL to submit."},
+                    "max_pages": {"type": "integer", "minimum": 1, "maximum": 25, "description": "Maximum number of pages to visit, from 1 to 25."}
+                },
+                "required": ["url"]
             }
         }
     },
