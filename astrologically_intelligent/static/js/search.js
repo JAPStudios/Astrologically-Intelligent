@@ -6,7 +6,7 @@
 
 import { getSettings, invalidateSettings } from './appConfig.js';
 
-let _provider = 'searxng';
+let _provider = 'peanut_browsing';
 let _loaded = false;
 
 // No API base parameter any more: the settings request lives in appConfig.js and
@@ -19,7 +19,7 @@ export function init() {
 async function _fetchProvider() {
   try {
     const s = await getSettings();
-    _provider = s.search_provider || 'searxng';
+    _provider = s.search_provider || 'peanut_browsing';
     _loaded = true;
   } catch (e) { /* keep default */ }
 }
@@ -29,7 +29,7 @@ export function getCurrentProvider() {
 }
 
 const _labels = {
-  searxng: 'SearXNG', brave: 'Brave', duckduckgo: 'DuckDuckGo',
+  peanut_browsing: 'Peanut Browsing', searxng: 'SearXNG', brave: 'Brave', duckduckgo: 'DuckDuckGo',
   google_pse: 'Google', tavily: 'Tavily', serper: 'Serper',
   disabled: 'search (disabled)',
 };
