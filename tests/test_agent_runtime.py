@@ -12,9 +12,10 @@ from astrologically_intelligent.storage import Store
 
 
 class FakeProvider:
-    def __init__(self): self.calls=0
+    def __init__(self): self.calls=0; self.messages=[]
     def chat(self,messages,tools):
         self.calls+=1
+        self.messages.append(json.loads(json.dumps(messages)))
         if self.calls==1:
             return {"role":"assistant","content":None,"tool_calls":[{"id":"call-1","type":"function",
                 "function":{"name":"memory.remember","arguments":json.dumps({"namespace":"profile","key":"preferred_name","value":"Ada"})}}]}
@@ -82,7 +83,19 @@ class RuntimeTests(unittest.TestCase):
         result=self.runtime.chat("Remember my preferred name is Ada.","session-a")
         self.assertEqual(result["response"],"Memory saved.")
         self.assertEqual(self.store.recall("profile","preferred_name")[0]["value"],"Ada")
-        self.assertEqual([m["role"] for m in self.store.history("session-a")],["user","assistant"])
+        history = self.store.history("session-a")
+        self.assertEqual([m["role"] for m in history],["user","assistant","tool","assistant"])
+        self.assertEqual(history[1]["tool_calls"][0]["id"], "call-1")
+        self.assertEqual(history[2]["tool_call_id"], "call-1")
+        self.assertEqual(history[2]["name"], "memory.remember")
+        self.runtime.chat("What was saved?", "session-a")
+        replay = self.runtime.provider.messages[2]
+        self.assertEqual([m["role"] for m in replay[-5:]], ["user","assistant","tool","assistant","user"])
+        display_history = self.runtime.history("session-a")
+        self.assertEqual([m["role"] for m in display_history], ["user", "assistant", "user", "assistant"])
+        self.assertEqual(display_history[-1]["content"], "Memory saved.")
+        with self.assertRaises(ValueError):
+            self.runtime.history("../other-session")
     def test_tool_handler_exceptions_are_contained_and_redacted(self):
         def fail():
             raise RuntimeError("sensitive connector response")
