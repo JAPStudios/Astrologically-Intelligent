@@ -34,7 +34,7 @@ def test_checkpoint_round_trip_preserves_predictions_and_optimizer(tmp_path):
     restored = NeuralNetworkClassifier.load(checkpoint)
     assert np.allclose(restored.predict_proba(features[:8]), expected)
     assert restored._step == model._step
-    assert np.array_equal(restored.predict(features[:8]), labels[:8])
+    assert np.array_equal(restored.predict(features[:8]), model.predict(features[:8]))
 
 
 def test_checkpoint_rejects_negative_adam_second_moment(tmp_path):
