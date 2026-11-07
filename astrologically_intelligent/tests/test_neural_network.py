@@ -110,6 +110,26 @@ def test_rejects_invalid_dimensions_and_training_data():
         model.fit([[0.0, 1.0]], [3], epochs=1)
 
 
+@pytest.mark.parametrize("learning_rate", [True, "0.1", float("nan"), float("inf"), 0.0])
+def test_constructor_rejects_invalid_learning_rate_types_and_values(learning_rate):
+    with pytest.raises(ValueError, match="learning_rate"):
+        NeuralNetworkClassifier(2, 4, 3, learning_rate=learning_rate)
+
+
+@pytest.mark.parametrize("min_delta", [True, "0.1", float("nan"), float("inf"), -0.1])
+def test_fit_rejects_invalid_min_delta_types_and_values(min_delta):
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, 4, 3, seed=61)
+    with pytest.raises(ValueError, match="min_delta"):
+        model.fit(
+            features,
+            labels,
+            epochs=1,
+            validation_data=(features, labels),
+            min_delta=min_delta,
+        )
+
+
 def test_rejects_non_finite_input():
     model = NeuralNetworkClassifier(2, 4, 2)
     with pytest.raises(ValueError, match="finite"):
