@@ -3085,3 +3085,103 @@
 	path = upstream/cursor/sdk-bridge
 	url = https://github.com/cursor/sdk-bridge.git
 	branch = main
+[submodule "upstream/cursor/mixture-of-kittens"]
+	path = upstream/cursor/mixture-of-kittens
+	url = https://github.com/cursor/mixture-of-kittens.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-Coder"]
+	path = upstream/deepseek-ai/DeepSeek-Coder
+	url = https://github.com/deepseek-ai/DeepSeek-Coder.git
+	branch = main
+[submodule "upstream/deepseek-ai/DreamCraft3D"]
+	path = upstream/deepseek-ai/DreamCraft3D
+	url = https://github.com/deepseek-ai/DreamCraft3D.git
+	branch = main
+[submodule "upstream/deepseek-ai/awesome-deepseek-coder"]
+	path = upstream/deepseek-ai/awesome-deepseek-coder
+	url = https://github.com/deepseek-ai/awesome-deepseek-coder.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-LLM"]
+	path = upstream/deepseek-ai/DeepSeek-LLM
+	url = https://github.com/deepseek-ai/DeepSeek-LLM.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-MoE"]
+	path = upstream/deepseek-ai/DeepSeek-MoE
+	url = https://github.com/deepseek-ai/DeepSeek-MoE.git
+	branch = main
+[submodule "upstream/deepseek-ai/awesome-deepseek-integration"]
+	path = upstream/deepseek-ai/awesome-deepseek-integration
+	url = https://github.com/deepseek-ai/awesome-deepseek-integration.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-Math"]
+	path = upstream/deepseek-ai/DeepSeek-Math
+	url = https://github.com/deepseek-ai/DeepSeek-Math.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-VL"]
+	path = upstream/deepseek-ai/DeepSeek-VL
+	url = https://github.com/deepseek-ai/DeepSeek-VL.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-V2"]
+	path = upstream/deepseek-ai/DeepSeek-V2
+	url = https://github.com/deepseek-ai/DeepSeek-V2.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-Coder-V2"]
+	path = upstream/deepseek-ai/DeepSeek-Coder-V2
+	url = https://github.com/deepseek-ai/DeepSeek-Coder-V2.git
+	branch = main
+[submodule "upstream/deepseek-ai/ESFT"]
+	path = upstream/deepseek-ai/ESFT
+	url = https://github.com/deepseek-ai/ESFT.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-Prover-V1.5"]
+	path = upstream/deepseek-ai/DeepSeek-Prover-V1.5
+	url = https://github.com/deepseek-ai/DeepSeek-Prover-V1.5.git
+	branch = main
+[submodule "upstream/deepseek-ai/Janus"]
+	path = upstream/deepseek-ai/Janus
+	url = https://github.com/deepseek-ai/Janus.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-VL2"]
+	path = upstream/deepseek-ai/DeepSeek-VL2
+	url = https://github.com/deepseek-ai/DeepSeek-VL2.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-V3"]
+	path = upstream/deepseek-ai/DeepSeek-V3
+	url = https://github.com/deepseek-ai/DeepSeek-V3.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepSeek-R1"]
+	path = upstream/deepseek-ai/DeepSeek-R1
+	url = https://github.com/deepseek-ai/DeepSeek-R1.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepGEMM"]
+	path = upstream/deepseek-ai/DeepGEMM
+	url = https://github.com/deepseek-ai/DeepGEMM.git
+	branch = main
+[submodule "upstream/deepseek-ai/DeepEP"]
+	path = upstream/deepseek-ai/DeepEP
+	url = https://github.com/deepseek-ai/DeepEP.git
+	branch = main
+[submodule "upstream/deepseek-ai/open-infra-index"]
+	path = upstream/deepseek-ai/open-infra-index
+	url = https://github.com/deepseek-ai/open-infra-index.git
+	branch = main
+[submodule "upstream/deepseek-ai/FlashMLA"]
+	path = upstream/deepseek-ai/FlashMLA
+	url = https://github.com/deepseek-ai/FlashMLA.git
+	branch = main
+[submodule "upstream/deepseek-ai/smallpond"]
+	path = upstream/deepseek-ai/smallpond
+	url = https://github.com/deepseek-ai/smallpond.git
+	branch = main
+[submodule "upstream/deepseek-ai/profile-data"]
+	path = upstream/deepseek-ai/profile-data
+	url = https://github.com/deepseek-ai/profile-data.git
+	branch = main
+[submodule "upstream/deepseek-ai/EPLB"]
+	path = upstream/deepseek-ai/EPLB
+	url = https://github.com/deepseek-ai/EPLB.git
+	branch = main
+[submodule "upstream/deepseek-ai/DualPipe"]
+	path = upstream/deepseek-ai/DualPipe
+	url = https://github.com/deepseek-ai/DualPipe.git
+	branch = main
