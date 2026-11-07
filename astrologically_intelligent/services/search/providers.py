@@ -50,17 +50,31 @@ def _get_search_settings() -> dict:
 def _get_search_instance(provider: str = "searxng") -> str:
     """Return the configured search gateway URL for the active provider."""
     settings = _get_search_settings()
+    if provider == "peanut_browsing":
+        url = (
+            os.environ.get("PEANUT_SEARCH_API_URL")
+            or settings.get("peanut_search_api_url")
+            or settings.get("search_url")
+            or ""
+        )
+        return str(url).strip().rstrip("/")
     url = (settings.get("search_url") or "").strip()
     if url:
         return url.rstrip("/")
-    if provider == "peanut_browsing":
-        return (os.environ.get("PEANUT_SEARCH_API_URL") or "").strip().rstrip("/")
     return SEARXNG_INSTANCE
 
 
 def _get_provider_key(provider: str) -> str:
     """Return the API key for a specific provider, with legacy fallback."""
     settings = _get_search_settings()
+    if provider == "peanut_browsing":
+        specific = (settings.get("peanut_search_api_key") or "").strip()
+        if specific:
+            return specific
+        env_key = (os.environ.get("PEANUT_SEARCH_API_KEY") or "").strip()
+        if env_key:
+            return env_key
+        return (settings.get("search_api_key") or "").strip()
     key_map = {
         "peanut_browsing": "peanut_search_api_key",
         "brave": "brave_api_key",
