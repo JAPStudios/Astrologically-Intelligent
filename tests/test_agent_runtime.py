@@ -155,6 +155,42 @@ class RuntimeTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "ASTRO_AI_MODEL"):
                 provider_from_env()
 
+    def test_deepseek_provider_defaults_to_its_native_chat_completions_endpoint(self):
+        with patch.dict("os.environ", {
+            "ASTRO_AI_PROVIDER": "deepseek",
+            "DEEPSEEK_API_KEY": "deepseek-test",
+        }, clear=True):
+            provider = provider_from_env()
+        self.assertIsInstance(provider, ChatCompletionsProvider)
+        self.assertEqual(provider.config.base_url, "https://api.deepseek.com")
+        self.assertEqual(provider.config.api_key, "deepseek-test")
+        self.assertEqual(provider.config.model, "deepseek-chat")
+
+    def test_deepseek_preserves_native_chat_completions_tool_calls(self):
+        with patch.dict("os.environ", {
+            "ASTRO_AI_PROVIDER": "deepseek-ai",
+            "DEEPSEEK_API_KEY": "deepseek-test",
+        }, clear=True):
+            provider = provider_from_env()
+        tool = {"type": "function", "function": {
+            "name": "memory.recall",
+            "description": "Read an exact memory key.",
+            "parameters": {"type": "object", "properties": {"namespace": {"type": "string"}}},
+        }}
+        expected_call = {
+            "id": "deepseek-call-1",
+            "type": "function",
+            "function": {"name": "memory.recall", "arguments": json.dumps({"namespace": "profile"})},
+        }
+        response_payload = {"choices": [{"message": {
+            "role": "assistant", "content": None, "tool_calls": [expected_call],
+        }}]}
+        with patch("astrologically_intelligent.providers._post_json", return_value=response_payload) as post:
+            response = provider.chat([{"role": "user", "content": "Read my profile memory."}], [tool])
+        self.assertEqual(response["tool_calls"], [expected_call])
+        self.assertEqual(post.call_args.args[0], "https://api.deepseek.com/chat/completions")
+        self.assertEqual(post.call_args.args[1]["tool_choice"], "auto")
+        self.assertEqual(post.call_args.args[1]["tools"], [tool])
     def test_openai_is_available_only_when_explicitly_selected(self):
         with patch.dict("os.environ", {
             "ASTRO_AI_PROVIDER": "openai",

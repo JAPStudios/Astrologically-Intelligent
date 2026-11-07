@@ -460,6 +460,13 @@ def provider_from_env():
         if not key:
             raise RuntimeError("Set XAI_API_KEY or ASTRO_AI_API_KEY for xAI")
         return ChatCompletionsProvider(ProviderConfig(base, key, model))
+    if name in {"deepseek", "deepseek-ai"}:
+        key = os.getenv("DEEPSEEK_API_KEY") or os.getenv("ASTRO_AI_API_KEY", "")
+        base = os.getenv("ASTRO_AI_BASE_URL", os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")).rstrip("/")
+        model = os.getenv("ASTRO_AI_MODEL", "deepseek-chat")
+        if not key:
+            raise RuntimeError("Set DEEPSEEK_API_KEY or ASTRO_AI_API_KEY for DeepSeek")
+        return ChatCompletionsProvider(ProviderConfig(base, key, model))
     if name == "perplexity":
         key = os.getenv("PERPLEXITY_API_KEY") or os.getenv("ASTRO_AI_API_KEY", "")
         base = os.getenv("ASTRO_AI_BASE_URL", os.getenv("PERPLEXITY_BASE_URL", "https://api.perplexity.ai")).rstrip("/")
