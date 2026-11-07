@@ -1,12 +1,12 @@
 name: CodeQL
 
 # Advanced setup so CodeQL also runs on pull requests (including from forks),
-# surfacing findings before merge instead of only after a change lands on dev.
+# surfacing findings before merge instead of before a change lands on main.
 on:
   push:
-    branches: [dev, main]
+    branches: [main]
   pull_request:
-    branches: [dev]
+    branches: [main]
   schedule:
     - cron: "17 3 * * 1"
 
