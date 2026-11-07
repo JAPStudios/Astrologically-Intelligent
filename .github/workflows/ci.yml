@@ -285,3 +285,34 @@ jobs:
           ODYSSEUS_TEST_PYTHON=python ODYSSEUS_LAYOUT_BROWSER=chromium npx --no-install playwright test \
             --config tests/e2e/ios-layout.config.cjs \
             --reporter=line
+
+  release-smoke:
+    name: Full web application release smoke
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
+        with:
+          version: "0.13.5"
+          enable-cache: true
+          cache-dependency-glob: astrologically_intelligent/requirements.txt
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+      - name: Install application dependencies
+        run: |
+          uv venv venv --python 3.11
+          uv pip install --python venv/bin/python -r requirements.txt
+      - name: Exercise the full web application
+        run: scripts/odysseus-smoke --venv ./venv --no-chroma
+      - name: Stop the isolated smoke instance
+        if: always()
+        continue-on-error: true
+        run: scripts/odysseus-dev down

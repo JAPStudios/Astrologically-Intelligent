@@ -29,7 +29,7 @@ STATE_MARKER = "odysseusSmokeMarker"
 CATALOG_FILES = ("hf_models.json", "hf_collection_models.json", "mlx_community_models.json")
 
 
-def test_hardware_is_detected(client):
+def test_cpu_hardware_is_detected_and_gpu_probe_is_reported(client):
     response = client.get(SYSTEM_PATH)
     assert response.status_code == 200, response.text
     system = response.json()
@@ -39,7 +39,16 @@ def test_hardware_is_detected(client):
 
     gpus = client.get(GPUS_PATH)
     assert gpus.status_code == 200, gpus.text
-    assert gpus.json().get("ok") is True, gpus.text
+    gpu_report = gpus.json()
+    assert isinstance(gpu_report.get("gpus"), list), gpu_report
+    if gpu_report.get("ok") is False:
+        # CPU-only runners legitimately have no NVIDIA utility. The endpoint
+        # must report that capability gap explicitly instead of breaking the
+        # rest of hardware discovery.
+        assert gpu_report.get("error") == "nvidia-smi not found", gpu_report
+        assert gpu_report["gpus"] == []
+    else:
+        assert gpu_report.get("ok") is True, gpu_report
 
 
 def test_fresh_install_explains_how_to_populate_the_catalog(client):

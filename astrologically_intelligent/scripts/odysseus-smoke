@@ -17,6 +17,7 @@ the details to pytest in the environment, and stops what it started.
     odysseus smoke --keep-up         # leave the instance running afterwards
     odysseus smoke --no-boot         # drive whatever is already up here
     odysseus smoke --restart         # stop a running instance and boot fresh
+    odysseus smoke --no-chroma       # use keyword mode without a ChromaDB server
     odysseus smoke --areas           # print the coverage table without running
     odysseus smoke -- -k notes       # everything after -- goes to pytest
 
@@ -122,6 +123,8 @@ def boot(dev, root, args):
     command = [sys.executable, str(SCRIPTS_DIR / DEV_SCRIPT), "up"]
     if args.venv:
         command += ["--venv", args.venv]
+    if args.no_chroma:
+        command.append("--no-chroma")
     env = dict(os.environ)
     env[EMAIL_FIXTURE_ENV] = "1"
     result = subprocess.run(command, cwd=str(root), env=env, check=False)
@@ -197,6 +200,8 @@ def build_parser():
     parser.add_argument("--restart", action="store_true",
                         help="stop a running instance and boot a fresh one")
     parser.add_argument("--venv", help="use this venv instead of ./venv")
+    parser.add_argument("--no-chroma", action="store_true",
+                        help="run in keyword mode without starting a ChromaDB server")
     parser.add_argument("--areas", action="store_true",
                         help="print the coverage table and exit without booting")
     parser.add_argument("pytest_args", nargs="*", metavar="-- PYTEST ARGS",
