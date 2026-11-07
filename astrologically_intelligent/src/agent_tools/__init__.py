@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 from .subprocess_tools import BashTool, HostShellTool, PythonTool
 from .web_tools import WebSearchTool, WebFetchTool, PdfExtractTool, PrivateBrowserTool, YouTubeTool
 from .peanut_tools import PeanutWebSearchTool, PeanutCrawlTool
+from .herdr_tools import HerdrAgentListTool, HerdrAgentGetTool, HerdrAgentReadTool, HerdrAgentExplainTool
 from .weather_tools import WeatherTool
 from .media_tools import ExtractTextTool, InspectMediaTool, TranscribeMediaTool
 from .filesystem_tools import ReadFileTool, WriteFileTool, EditFileTool, ApplyPatchTool, LsTool, GlobTool, GrepTool, GetWorkspaceTool
@@ -43,6 +44,10 @@ TOOL_HANDLERS = {
     "python": PythonTool().execute,
     "web_search": PeanutWebSearchTool().execute,
     "peanut_browsing_crawl": PeanutCrawlTool().execute,
+    "herdr_agent_list": HerdrAgentListTool().execute,
+    "herdr_agent_get": HerdrAgentGetTool().execute,
+    "herdr_agent_read": HerdrAgentReadTool().execute,
+    "herdr_agent_explain": HerdrAgentExplainTool().execute,
     "get_weather": WeatherTool().execute,
     "web_fetch": WebFetchTool().execute,
     "pdf_extract": PdfExtractTool().execute,
