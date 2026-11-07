@@ -102,9 +102,9 @@ Printed next to the results on every run, so a reader cannot mistake the
 table for coverage of everything it does not mention. `DECLARED_GAPS` in
 `areas.py` is the list; the short version:
 
-- **Deep Research** and **Web Search** need live egress. A deterministic
-  stub for the crawler would be an application change, which this is
-  not.
+- **Deep Research** still needs live indexed evidence for multi-source
+  synthesis. The Peanut Browsing fixture validates search and crawl
+  transport only; it does not prove broad public-web coverage.
 - **Email over IMAP/SMTP** is covered only as far as the fixture path
   goes. There is no local mail server, so real account sync and send are
   untested.
@@ -112,17 +112,17 @@ table for coverage of everything it does not mention. `DECLARED_GAPS` in
   multi-gigabyte download.
 - **Gallery and the photo editor** already have the repo's only
   Playwright specs.
-- **The agent tool loop** is what the checkpoint benchmark measures.
+- **Multi-agent orchestration** is covered by the core runtime workflow;
+  web-app handoff plus approval still need a dedicated end-to-end scenario.
 - **MCP servers** are stdio subprocesses outside the app's readiness
   contract.
 - **Rendering and layout** are pinned by the computed-style snapshot.
 
-`Documents (RAG)` is the one covered area that can report `SKIP` on a
-clean checkout: `requirements.txt` pins `chromadb-client`, the HTTP
-client, and the ChromaDB *server* is a separate install. Without one
-reachable, the upload route returns a deliberate 503 and the row reads
-`SKIP` with that reason. Install `chromadb` in the venv and it goes
-green.
+`Documents (RAG)` uses the ChromaDB HTTP server. Release CI installs the
+pinned server, validates the Compose configuration, waits for its
+heartbeat, then runs with `ODYSSEUS_REQUIRE_CHROMA=1`; a missing server
+fails that required path. Local runs without a server retain the
+explanatory skip.
 
 ## Reading the report
 
