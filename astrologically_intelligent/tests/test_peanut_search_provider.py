@@ -44,6 +44,8 @@ def test_peanut_browsing_is_the_default_search_provider():
 
 
 def test_peanut_provider_requires_its_gateway_and_key(monkeypatch):
+    monkeypatch.delenv("PEANUT_SEARCH_API_URL", raising=False)
+    monkeypatch.delenv("PEANUT_SEARCH_API_KEY", raising=False)
     monkeypatch.setattr(providers, "_get_search_settings", lambda: {
         "search_url": "https://peanut.example",
         "search_api_key": "test-key",
