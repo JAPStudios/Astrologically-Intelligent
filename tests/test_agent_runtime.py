@@ -506,6 +506,48 @@ class RuntimeTests(unittest.TestCase):
         run = self.runtime.tools.orchestration.get_run(result["run_id"])
         self.assertEqual(run["output"]["tool_trace"][0]["tool"], "memory.remember")
 
+    def test_model_agent_tool_trace_redacts_nested_agent_credentials(self):
+        class ListingProvider:
+            def __init__(self):
+                self.calls = 0
+
+            def chat(self, messages, tools):
+                self.calls += 1
+                if self.calls == 1:
+                    return {"role": "assistant", "content": None, "tool_calls": [{
+                        "id": "agent-list-1",
+                        "type": "function",
+                        "function": {"name": "agents.list", "arguments": "{}"},
+                    }]}
+                return {"role": "assistant", "content": "Agent inventory checked."}
+
+        provider = ListingProvider()
+        self.runtime.tools.provider = provider
+        secret_agent = json.loads(self.runtime.tools.execute("agents.register", {
+            "name": "Credentialed agent",
+            "adapter": "llm",
+            "config": {"api_key": "must-not-persist", "nested": {"refresh_token": "also-secret"}},
+        }))
+        caller = json.loads(self.runtime.tools.execute("agents.register", {
+            "name": "Inventory agent",
+            "adapter": "llm",
+            "config": {"allowed_tools": ["agents.list"], "max_tool_rounds": 2},
+        }))
+
+        result = json.loads(self.runtime.tools.execute("agents.execute", {
+            "agent_id": caller["id"], "prompt": "List registered agents."
+        }))
+        persisted = self.runtime.tools.orchestration.get_run(result["run_id"])
+        trace = result["tool_trace"][0]["result"]
+        persisted_trace = persisted["output"]["tool_trace"][0]["result"]
+        for rows in (trace, persisted_trace):
+            listed = next(item for item in rows if item["id"] == secret_agent["id"])
+            config = json.loads(listed["config"])
+            self.assertEqual(config["api_key"], "[REDACTED]")
+            self.assertEqual(config["nested"]["refresh_token"], "[REDACTED]")
+            self.assertNotIn("must-not-persist", json.dumps(rows))
+            self.assertNotIn("also-secret", json.dumps(rows))
+
     def test_model_agent_cannot_call_unconfigured_tools(self):
         class UnapprovedToolProvider:
             def chat(self, messages, tools):
