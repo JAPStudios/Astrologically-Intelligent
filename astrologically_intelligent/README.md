@@ -27,7 +27,7 @@ See [the setup guide](website/setup.md) for Docker deployment, native installati
 
 ## Peanut Browsing search
 
-The agent's `web_search` tool uses Peanut Browsing's first-party website index. Configure `PEANUT_SEARCH_API_URL` with the HTTPS base address of Peanut Browsing's authenticated index gateway and `PEANUT_SEARCH_API_KEY` with its gateway key. The agent can submit a public website for indexing through `peanut_browsing_crawl`. The crawler checks each origin's `robots.txt`, rejects private and reserved network targets and applies bounded crawl limits. Search results cover indexed websites only; this is not a claim of complete public-web coverage.
+The default search provider for agent tools, the search interface and deep research is Peanut Browsing's first-party website index. Comprehensive search does not fall back to competing search engines when the Peanut index is unavailable. Configure `PEANUT_SEARCH_API_URL` with the HTTPS base address of Peanut Browsing's authenticated index gateway and `PEANUT_SEARCH_API_KEY` with its gateway key. The agent can submit a public website for indexing through `peanut_browsing_crawl`. The crawler checks each origin's `robots.txt`, rejects private and reserved network targets and applies bounded crawl limits. Search results cover indexed websites only; this is not a claim of complete public-web coverage.
 
 ## Development
 
