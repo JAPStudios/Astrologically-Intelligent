@@ -5585,3 +5585,103 @@
 	path = upstream/microsoft/aiida-autocas
 	url = https://github.com/microsoft/aiida-autocas.git
 	branch = main
+[submodule "upstream/microsoft/TWL400-Using-AI-to-Secure-the-Modern-SOC"]
+	path = upstream/microsoft/TWL400-Using-AI-to-Secure-the-Modern-SOC
+	url = https://github.com/microsoft/TWL400-Using-AI-to-Secure-the-Modern-SOC.git
+	branch = main
+[submodule "upstream/microsoft/apim-foundry-governance"]
+	path = upstream/microsoft/apim-foundry-governance
+	url = https://github.com/microsoft/apim-foundry-governance.git
+	branch = english
+[submodule "upstream/microsoft/ignite25-LAB587-windows-365-ai-lab-improved-windows-search-and-click-to-do-in-action"]
+	path = upstream/microsoft/ignite25-LAB587-windows-365-ai-lab-improved-windows-search-and-click-to-do-in-action
+	url = https://github.com/microsoft/ignite25-LAB587-windows-365-ai-lab-improved-windows-search-and-click-to-do-in-action.git
+	branch = main
+[submodule "upstream/microsoft/Build26-OD836-from-test-kitchen-to-table-a-demo-driven-tour-of-foundry-portal-for-ai-developers"]
+	path = upstream/microsoft/Build26-OD836-from-test-kitchen-to-table-a-demo-driven-tour-of-foundry-portal-for-ai-developers
+	url = https://github.com/microsoft/Build26-OD836-from-test-kitchen-to-table-a-demo-driven-tour-of-foundry-portal-for-ai-developers.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK224-pepsicos-blueprint-for-agentic-ai"]
+	path = upstream/microsoft/Build26-BRK224-pepsicos-blueprint-for-agentic-ai
+	url = https://github.com/microsoft/Build26-BRK224-pepsicos-blueprint-for-agentic-ai.git
+	branch = main
+[submodule "upstream/microsoft/MegaDetector-Classifier"]
+	path = upstream/microsoft/MegaDetector-Classifier
+	url = https://github.com/microsoft/MegaDetector-Classifier.git
+	branch = main
+[submodule "upstream/microsoft/Exp-HAIC"]
+	path = upstream/microsoft/Exp-HAIC
+	url = https://github.com/microsoft/Exp-HAIC.git
+	branch = main
+[submodule "upstream/microsoft/AgentEvaluator-for-Copilot-Studio"]
+	path = upstream/microsoft/AgentEvaluator-for-Copilot-Studio
+	url = https://github.com/microsoft/AgentEvaluator-for-Copilot-Studio.git
+	branch = main
+[submodule "upstream/microsoft/github-copilot-java-mcp-demo"]
+	path = upstream/microsoft/github-copilot-java-mcp-demo
+	url = https://github.com/microsoft/github-copilot-java-mcp-demo.git
+	branch = main
+[submodule "upstream/microsoft/TaskTracker"]
+	path = upstream/microsoft/TaskTracker
+	url = https://github.com/microsoft/TaskTracker.git
+	branch = main
+[submodule "upstream/microsoft/copilot-app-flows"]
+	path = upstream/microsoft/copilot-app-flows
+	url = https://github.com/microsoft/copilot-app-flows.git
+	branch = main
+[submodule "upstream/microsoft/plugins"]
+	path = upstream/microsoft/plugins
+	url = https://github.com/microsoft/plugins.git
+	branch = main
+[submodule "upstream/microsoft/ExtractTextFromObjects"]
+	path = upstream/microsoft/ExtractTextFromObjects
+	url = https://github.com/microsoft/ExtractTextFromObjects.git
+	branch = main
+[submodule "upstream/microsoft/aiida-nwchemex"]
+	path = upstream/microsoft/aiida-nwchemex
+	url = https://github.com/microsoft/aiida-nwchemex.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK228-modern-resiliency-from-build-to-recovery-through-agentic-ai"]
+	path = upstream/microsoft/Build26-BRK228-modern-resiliency-from-build-to-recovery-through-agentic-ai
+	url = https://github.com/microsoft/Build26-BRK228-modern-resiliency-from-build-to-recovery-through-agentic-ai.git
+	branch = main
+[submodule "upstream/microsoft/agentsleague-techconnect"]
+	path = upstream/microsoft/agentsleague-techconnect
+	url = https://github.com/microsoft/agentsleague-techconnect.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM341-any-agent-any-cloud-standardized-tracing-with-foundry-and-opentelemetry"]
+	path = upstream/microsoft/Build26-DEM341-any-agent-any-cloud-standardized-tracing-with-foundry-and-opentelemetry
+	url = https://github.com/microsoft/Build26-DEM341-any-agent-any-cloud-standardized-tracing-with-foundry-and-opentelemetry.git
+	branch = main
+[submodule "upstream/microsoft/ValueLens-for-Microsoft-Copilot"]
+	path = upstream/microsoft/ValueLens-for-Microsoft-Copilot
+	url = https://github.com/microsoft/ValueLens-for-Microsoft-Copilot.git
+	branch = main
+[submodule "upstream/microsoft/AImagery"]
+	path = upstream/microsoft/AImagery
+	url = https://github.com/microsoft/AImagery.git
+	branch = main
+[submodule "upstream/microsoft/dstoolkit-integratedHybridSearchSQLDB"]
+	path = upstream/microsoft/dstoolkit-integratedHybridSearchSQLDB
+	url = https://github.com/microsoft/dstoolkit-integratedHybridSearchSQLDB.git
+	branch = main
+[submodule "upstream/microsoft/GenAI-Gateway-Resilience-Service-Example"]
+	path = upstream/microsoft/GenAI-Gateway-Resilience-Service-Example
+	url = https://github.com/microsoft/GenAI-Gateway-Resilience-Service-Example.git
+	branch = main
+[submodule "upstream/microsoft/ai-in-fabric-ai-tour-demos-fy26"]
+	path = upstream/microsoft/ai-in-fabric-ai-tour-demos-fy26
+	url = https://github.com/microsoft/ai-in-fabric-ai-tour-demos-fy26.git
+	branch = main
+[submodule "upstream/microsoft/augmented-interpretable-models"]
+	path = upstream/microsoft/augmented-interpretable-models
+	url = https://github.com/microsoft/augmented-interpretable-models.git
+	branch = main
+[submodule "upstream/microsoft/copilot-chat-m365-copilot-pitch-maker-agent"]
+	path = upstream/microsoft/copilot-chat-m365-copilot-pitch-maker-agent
+	url = https://github.com/microsoft/copilot-chat-m365-copilot-pitch-maker-agent.git
+	branch = main
+[submodule "upstream/microsoft/Pytorch-Wildlife"]
+	path = upstream/microsoft/Pytorch-Wildlife
+	url = https://github.com/microsoft/Pytorch-Wildlife.git
+	branch = main
