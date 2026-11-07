@@ -79,7 +79,7 @@ const PRECACHE = [
   '/static/js/modelSort.js',
   '/static/js/models.js',
   '/static/js/rag.js',
-  '/static/js/presets.js?v=20260908personaname1',
+  '/static/js/presets.js?v=20261103nonhumanstyles1',
   '/static/js/search.js',
   '/static/js/spinner.js',
   '/static/js/tts-ai.js',

@@ -5,7 +5,7 @@ import hmac
 import json
 import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
 from .runtime import AgentRuntime, _valid_session_id
 
@@ -30,6 +30,17 @@ def make_handler(runtime: AgentRuntime, token: str):
             parsed = urlsplit(self.path)
             if parsed.path == "/health":
                 return self._send(200,{"status":"ok","service":"astrologically-intelligent"})
+            session_prefix = "/v1/sessions/"
+            if parsed.path.startswith(session_prefix):
+                if not self._authorized():
+                    return self._send(401,{"error":"unauthorized"})
+                session_id = unquote(parsed.path[len(session_prefix):])
+                if not _valid_session_id(session_id):
+                    return self._send(400,{"error":"invalid_session_id"})
+                return self._send(200, {
+                    "session_id": session_id,
+                    "messages": runtime.history(session_id),
+                })
             if parsed.path not in {"/v1/history", "/v1/sessions"}:
                 return self._send(404,{"error":"not_found"})
             if not self._authorized():

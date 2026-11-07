@@ -1,9 +1,9 @@
 {
-  "name": "odysseus",
+  "name": "astrologically-intelligent",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/odysseus-dev/odysseus.git"
+    "url": "https://github.com/JAPStudios/Astrologically-Intelligent.git"
   },
   "scripts": {
     "test:photo-editor": "playwright test --config tests/e2e/playwright.config.js",
