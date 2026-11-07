@@ -1,0 +1,24 @@
+{
+    "recommendations": [
+        "ms-azuretools.vscode-docker",
+        "ms-vscode-remote.remote-wsl",
+        "ms-vsliveshare.vsliveshare",
+        "github.github-vscode-theme",
+        "ms-vscode-remote.vscode-remote-extensionpack",
+        "github.vscode-github-actions",
+        "ms-vscode.hexeditor",
+        "ms-vscode.vscode-typescript-next",
+        "wix.vscode-import-cost",
+        "ms-toolsai.vscode-ai-remote",
+        "ms-toolsai.datawrangler",
+        "ibm.output-colorizer",
+        "ms-vscode.cpptools-themes",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.vscode-jupyter-slideshow",
+        "ms-toolsai.jupyter-renderers",
+        "ms-toolsai.jupyter-keymap",
+        "ms-toolsai.vscode-jupyter-cell-tags",
+        "ms-python.vscode-pylance",
+        "ms-vscode.vscode-github-issue-notebooks"
+    ]
+}
