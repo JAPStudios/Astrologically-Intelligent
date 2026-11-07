@@ -2985,3 +2985,103 @@
 	path = upstream/perplexityai/RATION
 	url = https://github.com/perplexityai/RATION.git
 	branch = main
+[submodule "upstream/apple/coreai-models"]
+	path = upstream/apple/coreai-models
+	url = https://github.com/apple/coreai-models.git
+	branch = main
+[submodule "upstream/apple/coreai-torch"]
+	path = upstream/apple/coreai-torch
+	url = https://github.com/apple/coreai-torch.git
+	branch = main
+[submodule "upstream/apple/coreai-optimization"]
+	path = upstream/apple/coreai-optimization
+	url = https://github.com/apple/coreai-optimization.git
+	branch = main
+[submodule "upstream/apple/dnikit"]
+	path = upstream/apple/dnikit
+	url = https://github.com/apple/dnikit.git
+	branch = main
+[submodule "upstream/aws/deep-learning-containers"]
+	path = upstream/aws/deep-learning-containers
+	url = https://github.com/aws/deep-learning-containers.git
+	branch = main
+[submodule "upstream/aws/agent-toolkit-for-aws"]
+	path = upstream/aws/agent-toolkit-for-aws
+	url = https://github.com/aws/agent-toolkit-for-aws.git
+	branch = main
+[submodule "upstream/aws/context-ontology-accelerator"]
+	path = upstream/aws/context-ontology-accelerator
+	url = https://github.com/aws/context-ontology-accelerator.git
+	branch = main
+[submodule "upstream/aws/nova-act"]
+	path = upstream/aws/nova-act
+	url = https://github.com/aws/nova-act.git
+	branch = main
+[submodule "upstream/aws/amazon-q-developer-cli"]
+	path = upstream/aws/amazon-q-developer-cli
+	url = https://github.com/aws/amazon-q-developer-cli.git
+	branch = main
+[submodule "upstream/aws/bedrock-agentcore-sdk-python"]
+	path = upstream/aws/bedrock-agentcore-sdk-python
+	url = https://github.com/aws/bedrock-agentcore-sdk-python.git
+	branch = main
+[submodule "upstream/aws/aws-dotnet-ai"]
+	path = upstream/aws/aws-dotnet-ai
+	url = https://github.com/aws/aws-dotnet-ai.git
+	branch = main
+[submodule "upstream/aws/nova-act-extension"]
+	path = upstream/aws/nova-act-extension
+	url = https://github.com/aws/nova-act-extension.git
+	branch = main
+[submodule "upstream/aws/sagemaker-hyperpod-cluster-setup"]
+	path = upstream/aws/sagemaker-hyperpod-cluster-setup
+	url = https://github.com/aws/sagemaker-hyperpod-cluster-setup.git
+	branch = main
+[submodule "upstream/brave/brave-search-skills"]
+	path = upstream/brave/brave-search-skills
+	url = https://github.com/brave/brave-search-skills.git
+	branch = main
+[submodule "upstream/brave/ai-gateway"]
+	path = upstream/brave/ai-gateway
+	url = https://github.com/brave/ai-gateway.git
+	branch = main
+[submodule "upstream/brave/brave-search-cursor-plugin"]
+	path = upstream/brave/brave-search-cursor-plugin
+	url = https://github.com/brave/brave-search-cursor-plugin.git
+	branch = main
+[submodule "upstream/cursor/cursor"]
+	path = upstream/cursor/cursor
+	url = https://github.com/cursor/cursor.git
+	branch = main
+[submodule "upstream/cursor/community-plugins"]
+	path = upstream/cursor/community-plugins
+	url = https://github.com/cursor/community-plugins.git
+	branch = main
+[submodule "upstream/cursor/mcp-servers"]
+	path = upstream/cursor/mcp-servers
+	url = https://github.com/cursor/mcp-servers.git
+	branch = main
+[submodule "upstream/cursor/plugins"]
+	path = upstream/cursor/plugins
+	url = https://github.com/cursor/plugins.git
+	branch = main
+[submodule "upstream/cursor/plugin-template"]
+	path = upstream/cursor/plugin-template
+	url = https://github.com/cursor/plugin-template.git
+	branch = main
+[submodule "upstream/cursor/cookbook"]
+	path = upstream/cursor/cookbook
+	url = https://github.com/cursor/cookbook.git
+	branch = main
+[submodule "upstream/cursor/terraform-provider-cursor"]
+	path = upstream/cursor/terraform-provider-cursor
+	url = https://github.com/cursor/terraform-provider-cursor.git
+	branch = main
+[submodule "upstream/cursor/minisqlite"]
+	path = upstream/cursor/minisqlite
+	url = https://github.com/cursor/minisqlite.git
+	branch = main
+[submodule "upstream/cursor/sdk-bridge"]
+	path = upstream/cursor/sdk-bridge
+	url = https://github.com/cursor/sdk-bridge.git
+	branch = main
