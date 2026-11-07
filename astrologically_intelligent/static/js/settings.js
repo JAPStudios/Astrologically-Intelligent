@@ -886,16 +886,18 @@ async function initSearchSettings() {
       var extra = '';
       var kf = keyFieldFor(active);
       var hasKey = kf ? ((s[kf] || '').trim() || (active === 'peanut_browsing' ? '' : (s.search_api_key || '').trim())) : false;
+      var hasPeanutUrl = active === 'peanut_browsing' && (s.peanut_search_api_url || '').trim();
       if (_searchNeedsKey[active]) {
         extra = hasKey ? ' (key set)' : ' (no key)';
-      } else if (active === 'searxng' && (s.search_url || '').trim()) {
-        extra = ' (' + s.search_url + ')';
-      } else if (active === 'peanut_browsing' && (s.peanut_search_api_url || '').trim()) {
-        extra = ' (' + s.peanut_search_api_url + ')';
+      }
+      if (active === 'searxng' && (s.search_url || '').trim()) {
+        extra += ' (' + s.search_url + ')';
+      } else if (active === 'peanut_browsing') {
+        extra += hasPeanutUrl ? ' (' + s.peanut_search_api_url + ')' : ' (no gateway URL)';
       }
       var count = s.search_result_count || 5;
       msg.textContent = 'Active: ' + label + extra + ' \u00b7 ' + count + ' results';
-      msg.style.color = active === 'disabled' ? 'var(--red)' : (_searchNeedsKey[active] && !hasKey) ? 'var(--red)' : 'var(--fg)';
+      msg.style.color = active === 'disabled' || (_searchNeedsKey[active] && !hasKey) || (active === 'peanut_browsing' && !hasPeanutUrl) ? 'var(--red)' : 'var(--fg)';
     } catch (e) { /* ignore */ }
   }
   refreshStatus();
