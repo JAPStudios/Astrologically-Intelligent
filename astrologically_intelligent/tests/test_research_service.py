@@ -54,7 +54,8 @@ class _StubHandler:
         self.called_with = None
 
     async def call_research_service(self, topic, llm_endpoint, llm_model,
-                                    max_time=300, progress_callback=None):
+                                    max_time=300, progress_callback=None,
+                                    llm_headers=None, provider_client=None):
         self.called_with = (topic, llm_endpoint, llm_model, max_time)
         return self._report
 
