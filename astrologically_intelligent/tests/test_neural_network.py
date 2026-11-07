@@ -135,6 +135,19 @@ def test_rejects_non_finite_input():
     with pytest.raises(ValueError, match="finite"):
         model.predict([[float("nan"), 0.0]])
 
+
+def test_forward_pass_rejects_overflowing_hidden_activations():
+    model = NeuralNetworkClassifier(2, 4, 3, seed=79)
+    with pytest.raises(FloatingPointError, match="hidden-layer activation"):
+        model.predict([[1e308, 1e308]])
+
+
+def test_forward_pass_rejects_non_finite_output_logits():
+    model = NeuralNetworkClassifier(2, 4, 3, seed=83)
+    model._weights[-1].fill(1e308)
+    with pytest.raises(FloatingPointError, match="output logits"):
+        model.predict([[1.0, 1.0, 1.0, 1.0]])
+
 def test_seed_reproduces_initialization_and_training_shuffle():
     features, labels = _dataset()
     first = NeuralNetworkClassifier(2, 10, 3, learning_rate=0.01, seed=41)
