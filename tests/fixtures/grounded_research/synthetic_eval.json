@@ -1,0 +1,18 @@
+{
+  "_notice": "SYNTHETIC FIXTURE. Invented text about a fictional place, written only to test grounding and citation checks. Not real facts and not training data.",
+  "documents": [
+    {"id": "harbor-guide", "title": "Fictional Harbor Guide", "text": "The fictional town of Lumen Bay has one lighthouse, built in 1902.\n\nThe Lumen Bay ferry departs every 40 minutes between 6am and 10pm."},
+    {"id": "council-notes", "title": "Fictional Council Notes", "text": "Council notes state the Lumen Bay lighthouse was built in 1911, after a storm destroyed an earlier tower."},
+    {"id": "market-flyer", "title": "Fictional Market Flyer", "text": "The Lumen Bay night market opens on Fridays and sells smoked fish and lanterns."}
+  ],
+  "cases": [
+    {"name": "supported", "question": "How often does the Lumen Bay ferry depart?", "expect": "supported", "must_cite": ["harbor-guide#p2"],
+     "fake_answer": "The ferry departs every 40 minutes between 6am and 10pm [harbor-guide#p2]."},
+    {"name": "insufficient_evidence", "question": "What is the population of Lumen Bay?", "expect": "insufficient",
+     "fake_answer": "INSUFFICIENT_EVIDENCE: the supplied passages do not state the population of Lumen Bay."},
+    {"name": "conflicting_sources", "question": "When was the Lumen Bay lighthouse built?", "expect": "conflict", "must_cite": ["harbor-guide#p1", "council-notes#p1"],
+     "fake_answer": "The sources conflict. The harbor guide says the lighthouse was built in 1902 [harbor-guide#p1]. The council notes say it was built in 1911 [council-notes#p1]."},
+    {"name": "fabricated_citation_is_caught", "question": "What does the Lumen Bay night market sell?", "expect": "invalid",
+     "fake_answer": "The night market sells smoked fish and lanterns [market-flyer#p1]. It also sells antique maps [market-flyer#p7]."}
+  ]
+}
