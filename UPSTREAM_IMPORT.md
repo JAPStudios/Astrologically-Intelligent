@@ -6,13 +6,13 @@ Astrologically Intelligent uses upstream work through runtime adapters, native t
 | --- | --- |
 | [Anthropic](https://github.com/orgs/anthropics/repositories) | Native Messages API transport, tool-use blocks and tool-result conversion |
 | [Herdr](https://github.com/orgs/herdrdev/repositories) | Guarded read-only agent listing, status inspection and terminal-output tools |
-| [n8n](https://github.com/orgs/n8n-io/repositories) | Workflow management operations |
+| [n8n](https://github.com/orgs/n8n-io/repositories) | Upstream n8n skill source; native workflow API tools remain to be implemented |
 | [NousResearch](https://github.com/orgs/NousResearch/repositories) | Hermes progressive skill-disclosure patterns and NousResearch model discovery |
 | [Odysseus](https://github.com/orgs/odysseus-dev/repositories) | Upstream codebase lineage and inherited runtime components |
 | [OpenAI](https://github.com/orgs/openai/repositories) | Chat Completions and Responses transports plus model-capability discovery |
-| [OpenClaw](https://github.com/orgs/openclaw/repositories) | Read-only session inspection |
-| [PaperclipAI](https://github.com/orgs/paperclipai/repositories) | Company and issue management operations |
-| [Perplexity](https://github.com/orgs/perplexityai/repositories) | Provider transport |
+| [OpenClaw](https://github.com/orgs/openclaw/repositories) | Agent-skill source and legacy session-migration support; live Gateway tool calls remain to be implemented |
+| [PaperclipAI](https://github.com/orgs/paperclipai/repositories) | Upstream source retained for native company and issue functionality; its API adapter remains to be implemented |
+| [Perplexity](https://github.com/orgs/perplexityai/repositories) | Provider transport; Peanut Browsing remains the first-party search engine |
 | [xAI](https://github.com/orgs/xai-org/repositories) | Grok provider transport |
 
 ## JAPStudios service roles

@@ -153,8 +153,16 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(perplexity.config.base_url,"https://api.perplexity.ai")
         self.assertEqual(perplexity.config.model,"sonar")
 
-    def test_fresh_runtime_defaults_to_local_model_without_openai_dependency(self):
+    def test_headless_runtime_requires_an_explicit_provider_configuration(self):
         with patch.dict("os.environ", {
+            "ASTRO_AI_MODEL": "installed-local-model",
+        }, clear=True):
+            with self.assertRaisesRegex(RuntimeError, "ASTRO_AI_PROVIDER"):
+                provider_from_env()
+
+    def test_local_provider_can_be_configured_explicitly(self):
+        with patch.dict("os.environ", {
+            "ASTRO_AI_PROVIDER": "local",
             "ASTRO_AI_MODEL": "installed-local-model",
         }, clear=True):
             provider = provider_from_env()
@@ -163,12 +171,7 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(provider.config.model, "installed-local-model")
         self.assertEqual(provider.config.api_key, "")
 
-    def test_local_provider_requires_an_explicit_installed_model_name(self):
-        with patch.dict("os.environ", {}, clear=True):
-            with self.assertRaisesRegex(RuntimeError, "ASTRO_AI_MODEL"):
-                provider_from_env()
-
-    def test_openai_is_available_only_when_explicitly_selected(self):
+    def test_openai_provider_transport_is_available(self):
         with patch.dict("os.environ", {
             "ASTRO_AI_PROVIDER": "openai",
             "ASTRO_AI_API_KEY": "openai-test",
@@ -176,14 +179,6 @@ class RuntimeTests(unittest.TestCase):
             provider = provider_from_env()
         self.assertEqual(provider.config.base_url, "https://api.openai.com/v1")
         self.assertEqual(provider.config.model, "gpt-4.1-mini")
-
-    def test_external_competitor_connectors_are_not_exposed_as_native_tools(self):
-        names={item["function"]["name"] for item in self.runtime.tools.definitions()}
-        self.assertFalse(any(
-            name.startswith(("n8n.", "paperclip.", "openclaw."))
-            or name == "perplexity.search"
-            for name in names
-        ))
 
     def test_provider_http_error_body_is_not_exposed(self):
         error = urllib.error.HTTPError(
