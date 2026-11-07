@@ -4285,3 +4285,103 @@
 	path = upstream/microsoft/aitour26-BRK443-efficient-model-customization-with-microsoft-foundry
 	url = https://github.com/microsoft/aitour26-BRK443-efficient-model-customization-with-microsoft-foundry.git
 	branch = main
+[submodule "upstream/microsoft/aitour26-BRK462-enable-agentic-ai-apps-with-a-unified-data-estate-in-microsoft-fabric"]
+	path = upstream/microsoft/aitour26-BRK462-enable-agentic-ai-apps-with-a-unified-data-estate-in-microsoft-fabric
+	url = https://github.com/microsoft/aitour26-BRK462-enable-agentic-ai-apps-with-a-unified-data-estate-in-microsoft-fabric.git
+	branch = main
+[submodule "upstream/microsoft/aitour-rag-with-ai-search"]
+	path = upstream/microsoft/aitour-rag-with-ai-search
+	url = https://github.com/microsoft/aitour-rag-with-ai-search.git
+	branch = main
+[submodule "upstream/microsoft/eureka-ml-insights"]
+	path = upstream/microsoft/eureka-ml-insights
+	url = https://github.com/microsoft/eureka-ml-insights.git
+	branch = main
+[submodule "upstream/microsoft/aitour-preparing-for-ai-workloads"]
+	path = upstream/microsoft/aitour-preparing-for-ai-workloads
+	url = https://github.com/microsoft/aitour-preparing-for-ai-workloads.git
+	branch = main
+[submodule "upstream/microsoft/responsible-ai-toolbox-genbit"]
+	path = upstream/microsoft/responsible-ai-toolbox-genbit
+	url = https://github.com/microsoft/responsible-ai-toolbox-genbit.git
+	branch = main
+[submodule "upstream/microsoft/Build2022-AI-examples"]
+	path = upstream/microsoft/Build2022-AI-examples
+	url = https://github.com/microsoft/Build2022-AI-examples.git
+	branch = main
+[submodule "upstream/microsoft/LightAIMD"]
+	path = upstream/microsoft/LightAIMD
+	url = https://github.com/microsoft/LightAIMD.git
+	branch = main
+[submodule "upstream/microsoft/scope"]
+	path = upstream/microsoft/scope
+	url = https://github.com/microsoft/scope.git
+	branch = main
+[submodule "upstream/microsoft/aitour-ai-apps-with-scalable-database"]
+	path = upstream/microsoft/aitour-ai-apps-with-scalable-database
+	url = https://github.com/microsoft/aitour-ai-apps-with-scalable-database.git
+	branch = main
+[submodule "upstream/microsoft/Connect-keynote_AI_demos"]
+	path = upstream/microsoft/Connect-keynote_AI_demos
+	url = https://github.com/microsoft/Connect-keynote_AI_demos.git
+	branch = master
+[submodule "upstream/microsoft/STATE-Bench"]
+	path = upstream/microsoft/STATE-Bench
+	url = https://github.com/microsoft/STATE-Bench.git
+	branch = main
+[submodule "upstream/microsoft/WindowsAgentArena"]
+	path = upstream/microsoft/WindowsAgentArena
+	url = https://github.com/microsoft/WindowsAgentArena.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB516-safeguard-your-agents-with-ai-red-teaming-agent-in-microsoft-foundry"]
+	path = upstream/microsoft/ignite25-LAB516-safeguard-your-agents-with-ai-red-teaming-agent-in-microsoft-foundry
+	url = https://github.com/microsoft/ignite25-LAB516-safeguard-your-agents-with-ai-red-teaming-agent-in-microsoft-foundry.git
+	branch = main
+[submodule "upstream/microsoft/Data-and-Agent-Governance-and-Security-Accelerator"]
+	path = upstream/microsoft/Data-and-Agent-Governance-and-Security-Accelerator
+	url = https://github.com/microsoft/Data-and-Agent-Governance-and-Security-Accelerator.git
+	branch = main
+[submodule "upstream/microsoft/ResponsibleAIAccelerator"]
+	path = upstream/microsoft/ResponsibleAIAccelerator
+	url = https://github.com/microsoft/ResponsibleAIAccelerator.git
+	branch = main
+[submodule "upstream/microsoft/azure-health-AI-services-samples"]
+	path = upstream/microsoft/azure-health-AI-services-samples
+	url = https://github.com/microsoft/azure-health-AI-services-samples.git
+	branch = main
+[submodule "upstream/microsoft/responsible-ai-toolbox-mitigations"]
+	path = upstream/microsoft/responsible-ai-toolbox-mitigations
+	url = https://github.com/microsoft/responsible-ai-toolbox-mitigations.git
+	branch = main
+[submodule "upstream/microsoft/ai-school-custom-vision-service-intro"]
+	path = upstream/microsoft/ai-school-custom-vision-service-intro
+	url = https://github.com/microsoft/ai-school-custom-vision-service-intro.git
+	branch = master
+[submodule "upstream/microsoft/java-on-aca-with-ai"]
+	path = upstream/microsoft/java-on-aca-with-ai
+	url = https://github.com/microsoft/java-on-aca-with-ai.git
+	branch = main
+[submodule "upstream/microsoft/aitour-e2e-dev-with-prompty-and-ai-studio"]
+	path = upstream/microsoft/aitour-e2e-dev-with-prompty-and-ai-studio
+	url = https://github.com/microsoft/aitour-e2e-dev-with-prompty-and-ai-studio.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-WRK560-modernize-your-data-estate-ms-fabric-azure-databricks-and-microsoft-foundry"]
+	path = upstream/microsoft/aitour26-WRK560-modernize-your-data-estate-ms-fabric-azure-databricks-and-microsoft-foundry
+	url = https://github.com/microsoft/aitour26-WRK560-modernize-your-data-estate-ms-fabric-azure-databricks-and-microsoft-foundry.git
+	branch = main
+[submodule "upstream/microsoft/ai-sentry"]
+	path = upstream/microsoft/ai-sentry
+	url = https://github.com/microsoft/ai-sentry.git
+	branch = main
+[submodule "upstream/microsoft/ai-utilities"]
+	path = upstream/microsoft/ai-utilities
+	url = https://github.com/microsoft/ai-utilities.git
+	branch = master
+[submodule "upstream/microsoft/aitour26-BRK431-advanced-agent-development-with-copilot-studio"]
+	path = upstream/microsoft/aitour26-BRK431-advanced-agent-development-with-copilot-studio
+	url = https://github.com/microsoft/aitour26-BRK431-advanced-agent-development-with-copilot-studio.git
+	branch = main
+[submodule "upstream/microsoft/AI4FluidSimulations"]
+	path = upstream/microsoft/AI4FluidSimulations
+	url = https://github.com/microsoft/AI4FluidSimulations.git
+	branch = main
