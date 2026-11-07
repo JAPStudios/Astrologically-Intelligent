@@ -5785,3 +5785,103 @@
 	path = upstream/microsoft/Build26-BRK205-aspire-for-agents-transform-how-you-build-and-deploy-distributed-apps
 	url = https://github.com/microsoft/Build26-BRK205-aspire-for-agents-transform-how-you-build-and-deploy-distributed-apps.git
 	branch = main
+[submodule "upstream/microsoft/Azure-AI-Apps"]
+	path = upstream/microsoft/Azure-AI-Apps
+	url = https://github.com/microsoft/Azure-AI-Apps.git
+	branch = main
+[submodule "upstream/microsoft/trainerhub"]
+	path = upstream/microsoft/trainerhub
+	url = https://github.com/microsoft/trainerhub.git
+	branch = main
+[submodule "upstream/microsoft/dialop"]
+	path = upstream/microsoft/dialop
+	url = https://github.com/microsoft/dialop.git
+	branch = main
+[submodule "upstream/microsoft/TWL400-Innovate-with-low-code-and-AI-agents"]
+	path = upstream/microsoft/TWL400-Innovate-with-low-code-and-AI-agents
+	url = https://github.com/microsoft/TWL400-Innovate-with-low-code-and-AI-agents.git
+	branch = main
+[submodule "upstream/microsoft/ai_with_pgsqldb"]
+	path = upstream/microsoft/ai_with_pgsqldb
+	url = https://github.com/microsoft/ai_with_pgsqldb.git
+	branch = main
+[submodule "upstream/microsoft/AI-Solution-Review"]
+	path = upstream/microsoft/AI-Solution-Review
+	url = https://github.com/microsoft/AI-Solution-Review.git
+	branch = main
+[submodule "upstream/microsoft/un-knowledge-extraction"]
+	path = upstream/microsoft/un-knowledge-extraction
+	url = https://github.com/microsoft/un-knowledge-extraction.git
+	branch = main
+[submodule "upstream/microsoft/frontiertour27-LTG242-knowledge-retrieval-for-ai-agents-with-foundry-iq"]
+	path = upstream/microsoft/frontiertour27-LTG242-knowledge-retrieval-for-ai-agents-with-foundry-iq
+	url = https://github.com/microsoft/frontiertour27-LTG242-knowledge-retrieval-for-ai-agents-with-foundry-iq.git
+	branch = main
+[submodule "upstream/microsoft/global-copilot-summit"]
+	path = upstream/microsoft/global-copilot-summit
+	url = https://github.com/microsoft/global-copilot-summit.git
+	branch = main
+[submodule "upstream/microsoft/solution-accelerator-containerized-store"]
+	path = upstream/microsoft/solution-accelerator-containerized-store
+	url = https://github.com/microsoft/solution-accelerator-containerized-store.git
+	branch = master
+[submodule "upstream/microsoft/cai-advanced-processing-service"]
+	path = upstream/microsoft/cai-advanced-processing-service
+	url = https://github.com/microsoft/cai-advanced-processing-service.git
+	branch = main
+[submodule "upstream/microsoft/AI-Solutions-Intelligence-Dashboard"]
+	path = upstream/microsoft/AI-Solutions-Intelligence-Dashboard
+	url = https://github.com/microsoft/AI-Solutions-Intelligence-Dashboard.git
+	branch = main
+[submodule "upstream/microsoft/experiment-catalog"]
+	path = upstream/microsoft/experiment-catalog
+	url = https://github.com/microsoft/experiment-catalog.git
+	branch = main
+[submodule "upstream/microsoft/SuiGeneris"]
+	path = upstream/microsoft/SuiGeneris
+	url = https://github.com/microsoft/SuiGeneris.git
+	branch = main
+[submodule "upstream/microsoft/sk-playground-sample"]
+	path = upstream/microsoft/sk-playground-sample
+	url = https://github.com/microsoft/sk-playground-sample.git
+	branch = main
+[submodule "upstream/microsoft/prototypical-hai-collaborations"]
+	path = upstream/microsoft/prototypical-hai-collaborations
+	url = https://github.com/microsoft/prototypical-hai-collaborations.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK227-distributed-systems-to-ai-platforms-with-mark-russinovich-ion-stoica"]
+	path = upstream/microsoft/Build26-BRK227-distributed-systems-to-ai-platforms-with-mark-russinovich-ion-stoica
+	url = https://github.com/microsoft/Build26-BRK227-distributed-systems-to-ai-platforms-with-mark-russinovich-ion-stoica.git
+	branch = main
+[submodule "upstream/microsoft/Build26-OD852-powering-enterprise-grade-ai-agents-with-windows-365-for-agents"]
+	path = upstream/microsoft/Build26-OD852-powering-enterprise-grade-ai-agents-with-windows-365-for-agents
+	url = https://github.com/microsoft/Build26-OD852-powering-enterprise-grade-ai-agents-with-windows-365-for-agents.git
+	branch = main
+[submodule "upstream/microsoft/business-value-advisory"]
+	path = upstream/microsoft/business-value-advisory
+	url = https://github.com/microsoft/business-value-advisory.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM320-hugging-face-open-source-models-to-production-on-microsoft-foundry"]
+	path = upstream/microsoft/Build26-DEM320-hugging-face-open-source-models-to-production-on-microsoft-foundry
+	url = https://github.com/microsoft/Build26-DEM320-hugging-face-open-source-models-to-production-on-microsoft-foundry.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM303-late-to-agentic-coding-dont-panic-build"]
+	path = upstream/microsoft/Build26-DEM303-late-to-agentic-coding-dont-panic-build
+	url = https://github.com/microsoft/Build26-DEM303-late-to-agentic-coding-dont-panic-build.git
+	branch = main
+[submodule "upstream/microsoft/CopilotAnalyticsLabs"]
+	path = upstream/microsoft/CopilotAnalyticsLabs
+	url = https://github.com/microsoft/CopilotAnalyticsLabs.git
+	branch = main
+[submodule "upstream/microsoft/logassist"]
+	path = upstream/microsoft/logassist
+	url = https://github.com/microsoft/logassist.git
+	branch = main
+[submodule "upstream/microsoft/unity-aoai"]
+	path = upstream/microsoft/unity-aoai
+	url = https://github.com/microsoft/unity-aoai.git
+	branch = main
+[submodule "upstream/microsoft/HC-Lotus-Modernization-Hackathon"]
+	path = upstream/microsoft/HC-Lotus-Modernization-Hackathon
+	url = https://github.com/microsoft/HC-Lotus-Modernization-Hackathon.git
+	branch = main
