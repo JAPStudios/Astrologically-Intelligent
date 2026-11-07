@@ -9,9 +9,11 @@ See [AGENT_RUNTIME.md](AGENT_RUNTIME.md) for setup, provider configuration, API 
 Run with Python 3.10+:
 
 ```sh
-export ASTRO_AI_API_KEY="..."
-export ASTRO_AI_MODEL="gpt-4.1-mini"
-export ASTRO_AI_BASE_URL="https://api.openai.com/v1"
+# Start Ollama locally and install a model before launching the runtime.
+# Set ASTRO_AI_MODEL to the exact identifier shown by: ollama list
+export ASTRO_AI_PROVIDER="local"
+export ASTRO_AI_BASE_URL="http://127.0.0.1:11434/v1"
+export ASTRO_AI_MODEL="YOUR_INSTALLED_MODEL"
 python -m astrologically_intelligent
 ```
 
