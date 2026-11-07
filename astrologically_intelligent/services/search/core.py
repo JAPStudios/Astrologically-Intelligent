@@ -76,7 +76,7 @@ def get_search_config() -> Dict[str, Any]:
     """
     config = SEARCH_CONFIG.copy()
     settings = _get_search_settings()
-    provider = settings.get("search_provider", "searxng")
+    provider = settings.get("search_provider", "peanut_browsing")
     config["active_provider"] = provider
     config["has_api_key"] = bool(_get_provider_key(provider))
     config["result_count"] = _get_result_count()
@@ -1027,7 +1027,7 @@ def comprehensive_web_search(
         logger.info(f"Applying time filter: {time_filter}")
 
     settings = _get_search_settings()
-    search_provider = settings.get("search_provider", "searxng")
+    search_provider = settings.get("search_provider", "peanut_browsing")
     result_count = _get_result_count()
 
     if search_provider == "disabled":
