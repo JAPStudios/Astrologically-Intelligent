@@ -1128,6 +1128,7 @@ function _showModelSwapDropdown(paneIdx, titleBtn) {
           console.error('Failed to swap compare model:', err);
           if (uiModule?.showError) uiModule.showError('Failed to swap compare model: ' + (err?.message || 'unknown'));
         }
+        return;
       } finally {
         state._paneCreationPending = false;
         try {

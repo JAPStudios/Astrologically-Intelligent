@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 from .subprocess_tools import BashTool, HostShellTool, PythonTool
 from .web_tools import WebSearchTool, WebFetchTool, PdfExtractTool, PrivateBrowserTool, YouTubeTool
+from .peanut_tools import PeanutWebSearchTool, PeanutCrawlTool
 from .weather_tools import WeatherTool
 from .media_tools import ExtractTextTool, InspectMediaTool, TranscribeMediaTool
 from .filesystem_tools import ReadFileTool, WriteFileTool, EditFileTool, ApplyPatchTool, LsTool, GlobTool, GrepTool, GetWorkspaceTool
@@ -40,7 +41,8 @@ TOOL_HANDLERS = {
     "bash": BashTool().execute,
     "host_shell": HostShellTool().execute,
     "python": PythonTool().execute,
-    "web_search": WebSearchTool().execute,
+    "web_search": PeanutWebSearchTool().execute,
+    "peanut_browsing_crawl": PeanutCrawlTool().execute,
     "get_weather": WeatherTool().execute,
     "web_fetch": WebFetchTool().execute,
     "pdf_extract": PdfExtractTool().execute,

@@ -25,6 +25,10 @@ Use `--host 0.0.0.0` only when intentionally exposing the service to a trusted L
 
 See [the setup guide](website/setup.md) for Docker deployment, native installation, configuration, security controls, model providers, and troubleshooting. The [runtime specification](specs/runtime.md) documents the application architecture.
 
+## Peanut Browsing search
+
+The agent's `web_search` tool uses Peanut Browsing's first-party website index. Configure `PEANUT_SEARCH_API_URL` with the HTTPS base address of Peanut Browsing's authenticated index gateway and `PEANUT_SEARCH_API_KEY` with its gateway key. The agent can submit a public website for indexing through `peanut_browsing_crawl`. The crawler checks each origin's `robots.txt`, rejects private and reserved network targets and applies bounded crawl limits. Search results cover indexed websites only; this is not a claim of complete public-web coverage.
+
 ## Development
 
 Run the test suite with `python -m pytest`. The CI workflows additionally validate Python and JavaScript syntax, dependency security, container images, secret exposure, and the agent runtime.
