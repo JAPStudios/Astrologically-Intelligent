@@ -90,7 +90,8 @@ a status code. `scripts/odysseus-smoke --areas` prints the current list.
 | Tasks | a daily task is accepted with a computed next run, is listed, and pauses |
 | Documents (editor) | an edit adds a version, both versions read back, and a restore returns the first |
 | Documents (RAG) | an uploaded file is chunked, indexed and listed |
-| Peanut Browsing | a native search tool cycle retrieves an indexed result; the crawl handler submits a public URL to the first-party gateway |\n| Email | the fixture inbox lists, opens with its body, then the unread count drops on mark-read |
+| Peanut Browsing | a native search tool cycle retrieves an indexed result; the crawl handler submits a public URL to the first-party gateway |
+| Email | the fixture inbox lists, opens with its body, then the unread count drops on mark-read |
 | Memory | a fact is listed, found by search, and gone after delete |
 | Uploads | an attachment reads back byte for byte |
 | Cookbook | CPU/RAM hardware is detected; GPU probing either returns device data or an explicit no-NVIDIA-utility status; a fresh install's recommendation request returns the empty-catalog Rescan guidance; state persists |
