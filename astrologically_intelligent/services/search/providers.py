@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Provider registry — maps setting value to (label, needs_key, needs_url)
 PROVIDER_INFO = {
+    "peanut_browsing": ("Peanut Browsing", True, True),
     "searxng":  ("SearXNG",           False, True),
     "brave":    ("Brave Search",      True,  False),
     "duckduckgo": ("DuckDuckGo",      False, False),
@@ -40,18 +41,20 @@ def _get_search_settings() -> dict:
     # Headless/native deployments do not necessarily have an admin settings
     # database.  Require an explicit Odysseus-prefixed override so ordinary UI
     # configuration remains authoritative by default.
-    env_provider = os.environ.get("ODYSSEUS_SEARCH_PROVIDER", "").strip().lower()
+    env_provider = (os.environ.get("ASTRO_SEARCH_PROVIDER") or os.environ.get("PEANUT_SEARCH_PROVIDER") or os.environ.get("ODYSSEUS_SEARCH_PROVIDER") or "").strip().lower()
     if env_provider:
         settings["search_provider"] = env_provider
     return settings
 
 
-def _get_search_instance() -> str:
-    """Return the active search API URL from admin settings, falling back to env var."""
+def _get_search_instance(provider: str = "searxng") -> str:
+    """Return the configured search gateway URL for the active provider."""
     settings = _get_search_settings()
     url = (settings.get("search_url") or "").strip()
     if url:
         return url.rstrip("/")
+    if provider == "peanut_browsing":
+        return (os.environ.get("PEANUT_SEARCH_API_URL") or "").strip().rstrip("/")
     return SEARXNG_INSTANCE
 
 
@@ -59,6 +62,7 @@ def _get_provider_key(provider: str) -> str:
     """Return the API key for a specific provider, with legacy fallback."""
     settings = _get_search_settings()
     key_map = {
+        "peanut_browsing": "peanut_search_api_key",
         "brave": "brave_api_key",
         "google_pse": "google_pse_key",
         "tavily": "tavily_api_key",
@@ -76,6 +80,7 @@ def _get_provider_key(provider: str) -> str:
     env_map = {
         # DATA_BRAVE_API_KEY is the historical Odysseus name; BRAVE_API_KEY is
         # the standard name used by headless runners and the Brave SDK.
+        "peanut_browsing": ("PEANUT_SEARCH_API_KEY",),
         "brave": ("DATA_BRAVE_API_KEY", "BRAVE_API_KEY"),
         "google_pse": ("GOOGLE_API_KEY",),
         "tavily": ("TAVILY_API_KEY",),
@@ -101,6 +106,8 @@ def provider_configured(provider: str) -> bool:
     """Configuration readiness only; a configured engine can still fail upstream."""
     if provider in {"searxng", "searxng_yep", "duckduckgo"}:
         return True
+    if provider == "peanut_browsing":
+        return bool(_get_search_instance("peanut_browsing") and _get_provider_key(provider))
     if provider not in {"brave", "google_pse", "tavily", "serper"}:
         return False
     if not _get_provider_key(provider):
@@ -145,6 +152,20 @@ def _safesearch_for(provider: str) -> Optional[str]:
     if provider == "serper":
         return None if level == "off" else "active"
     return None
+
+
+# ── Peanut Browsing ──
+
+def peanut_browsing_search(query: str, count: int = 10, time_filter: str = None) -> List[dict]:
+    """Search the first-party Peanut Browsing index."""
+    from src.peanut_browsing import PeanutBrowsingClient
+
+    client = PeanutBrowsingClient(
+        base_url=_get_search_instance("peanut_browsing"),
+        api_key=_get_provider_key("peanut_browsing"),
+    )
+    payload = client.search_sync(query, limit=max(1, min(50, int(count))))
+    return payload.get("results", [])
 
 
 # ── SearXNG ──
