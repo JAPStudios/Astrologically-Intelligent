@@ -42,6 +42,10 @@ Astrologically Intelligent incorporates working capabilities from the ten reques
 
 Upstream source is retained with its repository boundaries and license files. Native adapters, tools and skills are wired into the runtime where implemented; each upstream project remains independently versioned so updates can be reviewed without overwriting its licensing or security requirements.
 
+## Android client
+
+The Android client is a supplementary interface to the same authenticated agent API. It is not a separate intelligence engine. Build and run its unit tests from `app/` with `gradle testDebugUnitTest assembleDebug`.
+
 ## Tests
 
 From the repository root:
