@@ -8,7 +8,7 @@ The Python agent runtime can run headlessly with Python 3.10+. The full FastAPI 
 
 The optional headless service binds to `127.0.0.1:8765` by default and requires provider-specific environment settings. It exposes health, authenticated chat, session listing, safe conversation history and session deletion routes. Non-loopback binding requires a bearer token configured through `ASTRO_AI_API_TOKEN`.
 
-The full web system lives in `astrologically_intelligent/`. Follow [its setup guide](astrologically_intelligent/README.md) and [runtime documentation](AGENT_RUNTIME.md). From that directory, start the web service with:
+CatChat direct messages use the full web system's `/api/session` and `/api/chat` routes. The optional `/v1/chat` route is the headless agent API used by standalone clients. The full web system lives in `astrologically_intelligent/`. Follow [its setup guide](astrologically_intelligent/README.md) and [runtime documentation](AGENT_RUNTIME.md). From that directory, start the web service with:
 
 ```sh
 python -m uvicorn app:app --host 127.0.0.1 --port 7000
