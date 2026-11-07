@@ -10,9 +10,15 @@ Includes a task registry so research survives page refreshes and can be cancelle
 import asyncio
 import json
 import logging
+import sys
 import time
 from pathlib import Path
 from typing import Optional, Dict
+
+# Ensure the application's internal src package resolves when imported from the repository root.
+_APP_ROOT = Path(__file__).resolve().parents[2]
+if str(_APP_ROOT) not in sys.path:
+    sys.path.insert(0, str(_APP_ROOT))
 
 from src.research_utils import is_low_quality
 from src.constants import DEEP_RESEARCH_DIR
