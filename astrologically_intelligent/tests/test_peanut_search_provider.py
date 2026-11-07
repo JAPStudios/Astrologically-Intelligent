@@ -81,7 +81,7 @@ def test_peanut_provider_calls_the_first_party_client(monkeypatch):
         "query": "JAPStudios",
         "limit": 12,
     }
-    assert results[0]["engine"] == "Peanut Browsing" if "engine" in results[0] else results[0]["title"] == "Example"
+    assert results[0]["title"] == "Example"
 
 
 def test_peanut_provider_has_no_competing_search_fallback(monkeypatch):
