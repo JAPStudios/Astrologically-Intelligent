@@ -3585,3 +3585,103 @@
 	path = upstream/meta-llama/llama-models
 	url = https://github.com/meta-llama/llama-models.git
 	branch = main
+[submodule "upstream/meta-llama/llama-stack-ops"]
+	path = upstream/meta-llama/llama-stack-ops
+	url = https://github.com/meta-llama/llama-stack-ops.git
+	branch = main
+[submodule "upstream/meta-llama/prompt-ops"]
+	path = upstream/meta-llama/prompt-ops
+	url = https://github.com/meta-llama/prompt-ops.git
+	branch = main
+[submodule "upstream/meta-llama/llama-api-python"]
+	path = upstream/meta-llama/llama-api-python
+	url = https://github.com/meta-llama/llama-api-python.git
+	branch = main
+[submodule "upstream/meta-llama/synthetic-data-kit"]
+	path = upstream/meta-llama/synthetic-data-kit
+	url = https://github.com/meta-llama/synthetic-data-kit.git
+	branch = main
+[submodule "upstream/meta-llama/llama-api-typescript"]
+	path = upstream/meta-llama/llama-api-typescript
+	url = https://github.com/meta-llama/llama-api-typescript.git
+	branch = main
+[submodule "upstream/meta-llama/llama-verifications"]
+	path = upstream/meta-llama/llama-verifications
+	url = https://github.com/meta-llama/llama-verifications.git
+	branch = main
+[submodule "upstream/microsoft/AI"]
+	path = upstream/microsoft/AI
+	url = https://github.com/microsoft/AI.git
+	branch = master
+[submodule "upstream/microsoft/AirSim"]
+	path = upstream/microsoft/AirSim
+	url = https://github.com/microsoft/AirSim.git
+	branch = main
+[submodule "upstream/microsoft/generative-ai-for-beginners"]
+	path = upstream/microsoft/generative-ai-for-beginners
+	url = https://github.com/microsoft/generative-ai-for-beginners.git
+	branch = main
+[submodule "upstream/microsoft/ai-agents-for-beginners"]
+	path = upstream/microsoft/ai-agents-for-beginners
+	url = https://github.com/microsoft/ai-agents-for-beginners.git
+	branch = main
+[submodule "upstream/microsoft/AI-For-Beginners"]
+	path = upstream/microsoft/AI-For-Beginners
+	url = https://github.com/microsoft/AI-For-Beginners.git
+	branch = main
+[submodule "upstream/microsoft/ai-edu"]
+	path = upstream/microsoft/ai-edu
+	url = https://github.com/microsoft/ai-edu.git
+	branch = master
+[submodule "upstream/microsoft/VibeVoice"]
+	path = upstream/microsoft/VibeVoice
+	url = https://github.com/microsoft/VibeVoice.git
+	branch = main
+[submodule "upstream/microsoft/autogen"]
+	path = upstream/microsoft/autogen
+	url = https://github.com/microsoft/autogen.git
+	branch = main
+[submodule "upstream/microsoft/ailab"]
+	path = upstream/microsoft/ailab
+	url = https://github.com/microsoft/ailab.git
+	branch = master
+[submodule "upstream/microsoft/call-center-ai"]
+	path = upstream/microsoft/call-center-ai
+	url = https://github.com/microsoft/call-center-ai.git
+	branch = main
+[submodule "upstream/microsoft/Generative-AI-for-beginners-dotnet"]
+	path = upstream/microsoft/Generative-AI-for-beginners-dotnet
+	url = https://github.com/microsoft/Generative-AI-for-beginners-dotnet.git
+	branch = main
+[submodule "upstream/microsoft/AI-System"]
+	path = upstream/microsoft/AI-System
+	url = https://github.com/microsoft/AI-System.git
+	branch = main
+[submodule "upstream/microsoft/AIOpsLab"]
+	path = upstream/microsoft/AIOpsLab
+	url = https://github.com/microsoft/AIOpsLab.git
+	branch = main
+[submodule "upstream/microsoft/semantic-kernel"]
+	path = upstream/microsoft/semantic-kernel
+	url = https://github.com/microsoft/semantic-kernel.git
+	branch = main
+[submodule "upstream/microsoft/AI-Engineering-Coach"]
+	path = upstream/microsoft/AI-Engineering-Coach
+	url = https://github.com/microsoft/AI-Engineering-Coach.git
+	branch = main
+[submodule "upstream/microsoft/ContosoAir"]
+	path = upstream/microsoft/ContosoAir
+	url = https://github.com/microsoft/ContosoAir.git
+	branch = master
+[submodule "upstream/microsoft/responsible-ai-toolbox"]
+	path = upstream/microsoft/responsible-ai-toolbox
+	url = https://github.com/microsoft/responsible-ai-toolbox.git
+	branch = main
+[submodule "upstream/microsoft/generative-ai-with-javascript"]
+	path = upstream/microsoft/generative-ai-with-javascript
+	url = https://github.com/microsoft/generative-ai-with-javascript.git
+	branch = main
+[submodule "upstream/microsoft/OpenAIWorkshop"]
+	path = upstream/microsoft/OpenAIWorkshop
+	url = https://github.com/microsoft/OpenAIWorkshop.git
+	branch = main
