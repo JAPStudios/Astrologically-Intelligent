@@ -4885,3 +4885,103 @@
 	path = upstream/microsoft/AI-Pex-for-SDC
 	url = https://github.com/microsoft/AI-Pex-for-SDC.git
 	branch = main
+[submodule "upstream/microsoft/Binha"]
+	path = upstream/microsoft/Binha
+	url = https://github.com/microsoft/Binha.git
+	branch = main
+[submodule "upstream/microsoft/federal-ai-services"]
+	path = upstream/microsoft/federal-ai-services
+	url = https://github.com/microsoft/federal-ai-services.git
+	branch = main
+[submodule "upstream/microsoft/Build25-LAB329"]
+	path = upstream/microsoft/Build25-LAB329
+	url = https://github.com/microsoft/Build25-LAB329.git
+	branch = main
+[submodule "upstream/microsoft/botframework-solutions"]
+	path = upstream/microsoft/botframework-solutions
+	url = https://github.com/microsoft/botframework-solutions.git
+	branch = master
+[submodule "upstream/microsoft/azure-ai-proxy-lite"]
+	path = upstream/microsoft/azure-ai-proxy-lite
+	url = https://github.com/microsoft/azure-ai-proxy-lite.git
+	branch = main
+[submodule "upstream/microsoft/aienergy_simulation"]
+	path = upstream/microsoft/aienergy_simulation
+	url = https://github.com/microsoft/aienergy_simulation.git
+	branch = main
+[submodule "upstream/microsoft/PwR-Studio"]
+	path = upstream/microsoft/PwR-Studio
+	url = https://github.com/microsoft/PwR-Studio.git
+	branch = main
+[submodule "upstream/microsoft/Acoustic-Perception-for-Virtual-AI-Agents"]
+	path = upstream/microsoft/Acoustic-Perception-for-Virtual-AI-Agents
+	url = https://github.com/microsoft/Acoustic-Perception-for-Virtual-AI-Agents.git
+	branch = main
+[submodule "upstream/microsoft/agentic-ai-lab-dotnet"]
+	path = upstream/microsoft/agentic-ai-lab-dotnet
+	url = https://github.com/microsoft/agentic-ai-lab-dotnet.git
+	branch = main
+[submodule "upstream/microsoft/moodle-ai-assistant"]
+	path = upstream/microsoft/moodle-ai-assistant
+	url = https://github.com/microsoft/moodle-ai-assistant.git
+	branch = main
+[submodule "upstream/microsoft/ai-mindset-experiment"]
+	path = upstream/microsoft/ai-mindset-experiment
+	url = https://github.com/microsoft/ai-mindset-experiment.git
+	branch = main
+[submodule "upstream/microsoft/aitour-ai-readiness-with-azure"]
+	path = upstream/microsoft/aitour-ai-readiness-with-azure
+	url = https://github.com/microsoft/aitour-ai-readiness-with-azure.git
+	branch = main
+[submodule "upstream/microsoft/ai-cheatcode"]
+	path = upstream/microsoft/ai-cheatcode
+	url = https://github.com/microsoft/ai-cheatcode.git
+	branch = main
+[submodule "upstream/microsoft/iot-curriculum"]
+	path = upstream/microsoft/iot-curriculum
+	url = https://github.com/microsoft/iot-curriculum.git
+	branch = main
+[submodule "upstream/microsoft/ConversationLearner-Models"]
+	path = upstream/microsoft/ConversationLearner-Models
+	url = https://github.com/microsoft/ConversationLearner-Models.git
+	branch = master
+[submodule "upstream/microsoft/xtreme-distil-transformers"]
+	path = upstream/microsoft/xtreme-distil-transformers
+	url = https://github.com/microsoft/xtreme-distil-transformers.git
+	branch = main
+[submodule "upstream/microsoft/project-telescope"]
+	path = upstream/microsoft/project-telescope
+	url = https://github.com/microsoft/project-telescope.git
+	branch = main
+[submodule "upstream/microsoft/azure-ai-search-foundry-iq-live-knowledge-sources"]
+	path = upstream/microsoft/azure-ai-search-foundry-iq-live-knowledge-sources
+	url = https://github.com/microsoft/azure-ai-search-foundry-iq-live-knowledge-sources.git
+	branch = main
+[submodule "upstream/microsoft/Dataverse-skills"]
+	path = upstream/microsoft/Dataverse-skills
+	url = https://github.com/microsoft/Dataverse-skills.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB514-build-and-deploy-ai-agents-with-mcp-and-azure-functions"]
+	path = upstream/microsoft/ignite25-LAB514-build-and-deploy-ai-agents-with-mcp-and-azure-functions
+	url = https://github.com/microsoft/ignite25-LAB514-build-and-deploy-ai-agents-with-mcp-and-azure-functions.git
+	branch = main
+[submodule "upstream/microsoft/Litmus"]
+	path = upstream/microsoft/Litmus
+	url = https://github.com/microsoft/Litmus.git
+	branch = main
+[submodule "upstream/microsoft/finnts"]
+	path = upstream/microsoft/finnts
+	url = https://github.com/microsoft/finnts.git
+	branch = main
+[submodule "upstream/microsoft/social-reasoning-bench"]
+	path = upstream/microsoft/social-reasoning-bench
+	url = https://github.com/microsoft/social-reasoning-bench.git
+	branch = main
+[submodule "upstream/microsoft/github-copilot-advanced-hackathon"]
+	path = upstream/microsoft/github-copilot-advanced-hackathon
+	url = https://github.com/microsoft/github-copilot-advanced-hackathon.git
+	branch = main
+[submodule "upstream/microsoft/PromptKit"]
+	path = upstream/microsoft/PromptKit
+	url = https://github.com/microsoft/PromptKit.git
+	branch = main
