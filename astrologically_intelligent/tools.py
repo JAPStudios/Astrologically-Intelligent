@@ -545,15 +545,11 @@ class ToolRegistry:
                 or any(part in {"", ".", ".."} for part in name.split("/"))):
             raise ValueError("Invalid skill name")
         repo_root = Path(repo_root)
-        roots = []
         if name.startswith("upstream/"):
-            roots.extend([
-                (repo_root / "skills").resolve(),
-                (repo_root / "upstream").resolve(),
-            ])
-            relative_name = name
+            roots = [(repo_root / "upstream").resolve()]
+            relative_name = name[len("upstream/"):]
         else:
-            roots.append((repo_root / "skills").resolve())
+            roots = [(repo_root / "skills").resolve()]
             relative_name = name
         for root in roots:
             path = (root / relative_name / "SKILL.md").resolve()
