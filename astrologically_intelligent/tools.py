@@ -546,12 +546,13 @@ class ToolRegistry:
             raise ValueError("Invalid skill name")
         repo_root = Path(repo_root)
         if name.startswith("upstream/"):
-            roots = [(repo_root / "upstream").resolve()]
-            relative_name = name[len("upstream/"):]
+            candidates = [
+                ((repo_root / "skills").resolve(), name),
+                ((repo_root / "upstream").resolve(), name[len("upstream/"):]),
+            ]
         else:
-            roots = [(repo_root / "skills").resolve()]
-            relative_name = name
-        for root in roots:
+            candidates = [((repo_root / "skills").resolve(), name)]
+        for root, relative_name in candidates:
             path = (root / relative_name / "SKILL.md").resolve()
             if path.is_relative_to(root) and path.is_file():
                 return path
