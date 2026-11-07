@@ -144,6 +144,10 @@ PLAN_MODE_READONLY_TOOLS = {
     "chat_with_model",
     "ask_teacher",
     "get_editor_screenshot",
+    "herdr_agent_list",
+    "herdr_agent_get",
+    "herdr_agent_read",
+    "herdr_agent_explain",
 }
 
 
