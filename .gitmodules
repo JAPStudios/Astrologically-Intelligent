@@ -5685,3 +5685,103 @@
 	path = upstream/microsoft/Pytorch-Wildlife
 	url = https://github.com/microsoft/Pytorch-Wildlife.git
 	branch = main
+[submodule "upstream/microsoft/Build26-BRK221-idea-to-production-ready-agent-in-seconds-on-ai-native-runtime"]
+	path = upstream/microsoft/Build26-BRK221-idea-to-production-ready-agent-in-seconds-on-ai-native-runtime
+	url = https://github.com/microsoft/Build26-BRK221-idea-to-production-ready-agent-in-seconds-on-ai-native-runtime.git
+	branch = main
+[submodule "upstream/microsoft/documentdb-mcp"]
+	path = upstream/microsoft/documentdb-mcp
+	url = https://github.com/microsoft/documentdb-mcp.git
+	branch = main
+[submodule "upstream/microsoft/cat-tools-activate-pipeline"]
+	path = upstream/microsoft/cat-tools-activate-pipeline
+	url = https://github.com/microsoft/cat-tools-activate-pipeline.git
+	branch = master
+[submodule "upstream/microsoft/MegaDetector-Acoustic"]
+	path = upstream/microsoft/MegaDetector-Acoustic
+	url = https://github.com/microsoft/MegaDetector-Acoustic.git
+	branch = main
+[submodule "upstream/microsoft/promptu"]
+	path = upstream/microsoft/promptu
+	url = https://github.com/microsoft/promptu.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM312-multi-agents-in-action-with-3-ai-agents-3-frameworks-tools-models"]
+	path = upstream/microsoft/Build26-DEM312-multi-agents-in-action-with-3-ai-agents-3-frameworks-tools-models
+	url = https://github.com/microsoft/Build26-DEM312-multi-agents-in-action-with-3-ai-agents-3-frameworks-tools-models.git
+	branch = main
+[submodule "upstream/microsoft/ai_night_scientist"]
+	path = upstream/microsoft/ai_night_scientist
+	url = https://github.com/microsoft/ai_night_scientist.git
+	branch = main
+[submodule "upstream/microsoft/gpschina-ai-transformation"]
+	path = upstream/microsoft/gpschina-ai-transformation
+	url = https://github.com/microsoft/gpschina-ai-transformation.git
+	branch = main
+[submodule "upstream/microsoft/aip"]
+	path = upstream/microsoft/aip
+	url = https://github.com/microsoft/aip.git
+	branch = main
+[submodule "upstream/microsoft/GPS-Prompt-Engineering-Labs"]
+	path = upstream/microsoft/GPS-Prompt-Engineering-Labs
+	url = https://github.com/microsoft/GPS-Prompt-Engineering-Labs.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM310-ship-code-faster-with-ai-powered-nosql-schema-design"]
+	path = upstream/microsoft/Build26-DEM310-ship-code-faster-with-ai-powered-nosql-schema-design
+	url = https://github.com/microsoft/Build26-DEM310-ship-code-faster-with-ai-powered-nosql-schema-design.git
+	branch = main
+[submodule "upstream/microsoft/Build26-OD812-bringing-enterprise-ontology-directly-into-the-developer-workflow"]
+	path = upstream/microsoft/Build26-OD812-bringing-enterprise-ontology-directly-into-the-developer-workflow
+	url = https://github.com/microsoft/Build26-OD812-bringing-enterprise-ontology-directly-into-the-developer-workflow.git
+	branch = main
+[submodule "upstream/microsoft/frontiertour27-BRK390-building-ai-applications-with-microsoft-databases-and-fabric"]
+	path = upstream/microsoft/frontiertour27-BRK390-building-ai-applications-with-microsoft-databases-and-fabric
+	url = https://github.com/microsoft/frontiertour27-BRK390-building-ai-applications-with-microsoft-databases-and-fabric.git
+	branch = main
+[submodule "upstream/microsoft/Build26-OD819-real-time-intelligence-building-event-driven-ai-apps-and-agents"]
+	path = upstream/microsoft/Build26-OD819-real-time-intelligence-building-event-driven-ai-apps-and-agents
+	url = https://github.com/microsoft/Build26-OD819-real-time-intelligence-building-event-driven-ai-apps-and-agents.git
+	branch = main
+[submodule "upstream/microsoft/aitour-windows-theater"]
+	path = upstream/microsoft/aitour-windows-theater
+	url = https://github.com/microsoft/aitour-windows-theater.git
+	branch = main
+[submodule "upstream/microsoft/Container-Migration-Solution-Accelerator"]
+	path = upstream/microsoft/Container-Migration-Solution-Accelerator
+	url = https://github.com/microsoft/Container-Migration-Solution-Accelerator.git
+	branch = main
+[submodule "upstream/microsoft/Azure-Edge-Solutions-Lab"]
+	path = upstream/microsoft/Azure-Edge-Solutions-Lab
+	url = https://github.com/microsoft/Azure-Edge-Solutions-Lab.git
+	branch = main
+[submodule "upstream/microsoft/PAX"]
+	path = upstream/microsoft/PAX
+	url = https://github.com/microsoft/PAX.git
+	branch = release
+[submodule "upstream/microsoft/amplifier-app-actions"]
+	path = upstream/microsoft/amplifier-app-actions
+	url = https://github.com/microsoft/amplifier-app-actions.git
+	branch = main
+[submodule "upstream/microsoft/nxmndr"]
+	path = upstream/microsoft/nxmndr
+	url = https://github.com/microsoft/nxmndr.git
+	branch = main
+[submodule "upstream/microsoft/frontiertour27-BRK231-trusted-ai-at-scale-foundry-to-agent-365"]
+	path = upstream/microsoft/frontiertour27-BRK231-trusted-ai-at-scale-foundry-to-agent-365
+	url = https://github.com/microsoft/frontiertour27-BRK231-trusted-ai-at-scale-foundry-to-agent-365.git
+	branch = main
+[submodule "upstream/microsoft/sql-modernization-foundations-with-azuresql-ai-and-fabric"]
+	path = upstream/microsoft/sql-modernization-foundations-with-azuresql-ai-and-fabric
+	url = https://github.com/microsoft/sql-modernization-foundations-with-azuresql-ai-and-fabric.git
+	branch = main
+[submodule "upstream/microsoft/Interacting-with-Multimodal-Models-and-Agents-in-Azure-AI-Foundry"]
+	path = upstream/microsoft/Interacting-with-Multimodal-Models-and-Agents-in-Azure-AI-Foundry
+	url = https://github.com/microsoft/Interacting-with-Multimodal-Models-and-Agents-in-Azure-AI-Foundry.git
+	branch = main
+[submodule "upstream/microsoft/sqlaiinaction"]
+	path = upstream/microsoft/sqlaiinaction
+	url = https://github.com/microsoft/sqlaiinaction.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK205-aspire-for-agents-transform-how-you-build-and-deploy-distributed-apps"]
+	path = upstream/microsoft/Build26-BRK205-aspire-for-agents-transform-how-you-build-and-deploy-distributed-apps
+	url = https://github.com/microsoft/Build26-BRK205-aspire-for-agents-transform-how-you-build-and-deploy-distributed-apps.git
+	branch = main
