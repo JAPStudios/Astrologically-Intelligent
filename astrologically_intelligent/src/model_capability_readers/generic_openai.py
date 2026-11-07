@@ -28,7 +28,7 @@ def record_from_model(
 ) -> ModelCapabilityRecord | None:
     # Generic gateways do not share one model identifier field. Accept common
     # identity-only keys, but never infer capabilities from their values.
-    model_id = model_id_from(raw, "id", "name", "model", "key", "slug")
+    model_id = model_id_from(raw, "key", "slug", "id", "model", "name")
     if not model_id:
         return None
     capability = mc.unknown_capability(
