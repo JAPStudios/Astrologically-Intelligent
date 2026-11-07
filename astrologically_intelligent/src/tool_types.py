@@ -26,6 +26,7 @@ TOOL_TAGS = {
     "manage_notes", "manage_calendar", "resolve_contact", "manage_contact",
     "download_model", "serve_model", "list_served_models", "stop_served_model",
     "tail_serve_output", "list_downloads", "cancel_download", "search_hf_models",
+    "herdr_agent_list", "herdr_agent_get", "herdr_agent_read", "herdr_agent_explain",
     "list_cached_models", "list_serve_presets", "serve_preset", "adopt_served_model",
     "list_cookbook_servers", "edit_image", "trigger_research", "manage_research",
     "plan_edit", "run_editor_command", "get_editor_screenshot", "ai_edit_image",
