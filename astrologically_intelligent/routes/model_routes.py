@@ -1063,7 +1063,7 @@ def _capture_model_capabilities(
     )
     if output is not None:
         output.extend(records)
-    return records
+    return list(records)
 
 
 def _probe_endpoint(
