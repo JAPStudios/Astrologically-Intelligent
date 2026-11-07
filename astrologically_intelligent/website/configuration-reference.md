@@ -262,10 +262,10 @@ Listed for completeness. Setting one of these on a real install is either a no-o
 | `ODYSSEUS_ORGANIZER_TRACE` | *unset* | `tests/tools/organizer_smoke.py` | Any non-empty value prints each provider request the organizer smoke tool sends. |
 | `ODYSSEUS_ORGANIZER_TRACE_MESSAGES` | *unset* | `tests/tools/organizer_smoke.py` | With organizer tracing on, any non-empty value also prints the request messages. |
 | `ODYSSEUS_PEANUT_SMOKE_STUB_ENABLED` | *unset* | `tests/smoke/test_peanut_browsing_smoke.py` | Internal smoke-test switch set by the release smoke runner when its local Peanut Browsing gateway fixture is active; do not set on a deployed service. |
-| `ODYSSEUS_REQUIRE_CHROMA` | *unset* | `tests/smoke/test_documents_rag_smoke.py` | Makes release smoke fail when the ChromaDB server is unavailable instead of skipping vector-indexing coverage; set only in the required CI job. |
 | `ODYSSEUS_QA_PASSWORD` | *unset* | `scripts/odysseus_related_flow_audit.py` (+6 more) | Account password passed to the related-flow audit script when authenticating. |
 | `ODYSSEUS_QA_TEACHER_ATTEMPTS` | `'3'` | `scripts/odysseus_conversation_qa.py` | Retry budget for the conversation-QA teacher model call. Clamped to 1-3. |
 | `ODYSSEUS_QA_TEACHER_TIMEOUT` | `'120'` | `scripts/odysseus_conversation_qa.py` | Timeout in seconds for that call. Clamped to 15-120. |
+| `ODYSSEUS_REQUIRE_CHROMA` | *unset* | `tests/smoke/test_documents_rag_smoke.py` | Makes release smoke fail when the ChromaDB server is unavailable instead of skipping vector-indexing coverage; set only in the required CI job. |
 | `ODYSSEUS_RUNTIME_REVISION` | `''` | `routes/chat_helpers.py` (+1 more) | Revision string stamped into each captured SFT trace record, so a trace can be tied back to the build that produced it. |
 | `ODYSSEUS_SFT_DIR` | *unset* | `scripts/run_odysseus_search_teacher_pipeline.py` | Base directory containing SFT training datasets for the search teacher pipeline. |
 | `ODYSSEUS_SFT_DISABLE_WORKSPACE_TOOLS` | `'1'` | `src/agent_loop.py` | On by default. Keeps synthetic personal-assistant fixtures out of workspace mode; set 0, false, no or off to let them through. |
