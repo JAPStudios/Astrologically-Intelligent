@@ -26,12 +26,19 @@ class ChatCompletionsProvider:
         self.config = config
 
     @classmethod
-    def from_env(cls) -> "ChatCompletionsProvider":
-        base_url = os.getenv("ASTRO_AI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
+    def from_env(
+        cls,
+        *,
+        default_base_url: str = "https://api.openai.com/v1",
+        default_model: str = "gpt-4.1-mini",
+    ) -> "ChatCompletionsProvider":
+        base_url = os.getenv("ASTRO_AI_BASE_URL", default_base_url).rstrip("/")
         api_key = os.getenv("ASTRO_AI_API_KEY", "")
-        model = os.getenv("ASTRO_AI_MODEL", "gpt-4.1-mini")
+        model = os.getenv("ASTRO_AI_MODEL", default_model).strip()
+        if not model:
+            raise RuntimeError("Set ASTRO_AI_MODEL to the exact installed model identifier")
         if not api_key and "localhost" not in base_url and "127.0.0.1" not in base_url:
-            raise RuntimeError("Set ASTRO_AI_API_KEY (or configure a local provider endpoint)")
+            raise RuntimeError("Set ASTRO_AI_API_KEY for non-local provider endpoints")
         return cls(ProviderConfig(base_url, api_key, model))
 
     def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None, *, temperature: float | None = None, max_tokens: int | None = None, timeout: float | None = None) -> dict[str, Any]:
@@ -432,12 +439,19 @@ def _post_json(url: str, payload: dict[str, Any], headers: dict[str, str], timeo
 
 def provider_from_env():
     """Select the configured model transport using ASTRO_AI_PROVIDER."""
-    name = os.getenv("ASTRO_AI_PROVIDER", "chat-completions").strip().lower()
+    # Prefer a locally served model. Cloud competitors are opt-in providers,
+    # never an implicit dependency of a fresh installation.
+    name = os.getenv("ASTRO_AI_PROVIDER", "local").strip().lower()
     if name in {"anthropic", "claude"}:
         return AnthropicMessagesProvider.from_env()
     if name in {"gemini", "google", "google-gemini"}:
         return GeminiGenerateContentProvider.from_env()
-    if name in {"openai", "chat-completions", "local"}:
+    if name == "local":
+        return ChatCompletionsProvider.from_env(
+            default_base_url="http://127.0.0.1:11434/v1",
+            default_model="",
+        )
+    if name in {"openai", "chat-completions"}:
         return ChatCompletionsProvider.from_env()
     if name in {"xai", "grok"}:
         key = os.getenv("XAI_API_KEY") or os.getenv("ASTRO_AI_API_KEY", "")
