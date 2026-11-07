@@ -5385,3 +5385,103 @@
 	path = upstream/microsoft/Build26-OD851-expand-local-ai-reach-with-windows-ml
 	url = https://github.com/microsoft/Build26-OD851-expand-local-ai-reach-with-windows-ml.git
 	branch = main
+[submodule "upstream/microsoft/GeoFaham"]
+	path = upstream/microsoft/GeoFaham
+	url = https://github.com/microsoft/GeoFaham.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB547-implement-insider-risk-management-and-adaptive-protection-for-ai"]
+	path = upstream/microsoft/ignite25-LAB547-implement-insider-risk-management-and-adaptive-protection-for-ai
+	url = https://github.com/microsoft/ignite25-LAB547-implement-insider-risk-management-and-adaptive-protection-for-ai.git
+	branch = main
+[submodule "upstream/microsoft/GhostNetAI"]
+	path = upstream/microsoft/GhostNetAI
+	url = https://github.com/microsoft/GhostNetAI.git
+	branch = main
+[submodule "upstream/microsoft/macaroni"]
+	path = upstream/microsoft/macaroni
+	url = https://github.com/microsoft/macaroni.git
+	branch = main
+[submodule "upstream/microsoft/ai.ed"]
+	path = upstream/microsoft/ai.ed
+	url = https://github.com/microsoft/ai.ed.git
+	branch = main
+[submodule "upstream/microsoft/dromedary"]
+	path = upstream/microsoft/dromedary
+	url = https://github.com/microsoft/dromedary.git
+	branch = main
+[submodule "upstream/microsoft/agent-for-hr-service-solution-accelerator"]
+	path = upstream/microsoft/agent-for-hr-service-solution-accelerator
+	url = https://github.com/microsoft/agent-for-hr-service-solution-accelerator.git
+	branch = main
+[submodule "upstream/microsoft/MegaDetector"]
+	path = upstream/microsoft/MegaDetector
+	url = https://github.com/microsoft/MegaDetector.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB595-extending-dragon-copilot-with-partner-built-ai-solutions"]
+	path = upstream/microsoft/ignite25-LAB595-extending-dragon-copilot-with-partner-built-ai-solutions
+	url = https://github.com/microsoft/ignite25-LAB595-extending-dragon-copilot-with-partner-built-ai-solutions.git
+	branch = main
+[submodule "upstream/microsoft/cvbp"]
+	path = upstream/microsoft/cvbp
+	url = https://github.com/microsoft/cvbp.git
+	branch = master
+[submodule "upstream/microsoft/Build26-LAB513-build-an-ai-app-with-azure-sql-hyperscale-microsoft-fabric-foundry"]
+	path = upstream/microsoft/Build26-LAB513-build-an-ai-app-with-azure-sql-hyperscale-microsoft-fabric-foundry
+	url = https://github.com/microsoft/Build26-LAB513-build-an-ai-app-with-azure-sql-hyperscale-microsoft-fabric-foundry.git
+	branch = main
+[submodule "upstream/microsoft/github-constellation-software"]
+	path = upstream/microsoft/github-constellation-software
+	url = https://github.com/microsoft/github-constellation-software.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB548-prevent-data-exposure-in-copilot-and-ai-apps-with-data-loss-prevention"]
+	path = upstream/microsoft/ignite25-LAB548-prevent-data-exposure-in-copilot-and-ai-apps-with-data-loss-prevention
+	url = https://github.com/microsoft/ignite25-LAB548-prevent-data-exposure-in-copilot-and-ai-apps-with-data-loss-prevention.git
+	branch = main
+[submodule "upstream/microsoft/MCP-Server-and-PostgreSQL-Sample-Retail"]
+	path = upstream/microsoft/MCP-Server-and-PostgreSQL-Sample-Retail
+	url = https://github.com/microsoft/MCP-Server-and-PostgreSQL-Sample-Retail.git
+	branch = main
+[submodule "upstream/microsoft/aitour-models-as-a-service-15-minute-theatre-talk"]
+	path = upstream/microsoft/aitour-models-as-a-service-15-minute-theatre-talk
+	url = https://github.com/microsoft/aitour-models-as-a-service-15-minute-theatre-talk.git
+	branch = main
+[submodule "upstream/microsoft/FSQ"]
+	path = upstream/microsoft/FSQ
+	url = https://github.com/microsoft/FSQ.git
+	branch = main
+[submodule "upstream/microsoft/github-canada"]
+	path = upstream/microsoft/github-canada
+	url = https://github.com/microsoft/github-canada.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB583-manage-ai-capabilities-for-copilot-plus-pcs-and-windows-11"]
+	path = upstream/microsoft/ignite25-LAB583-manage-ai-capabilities-for-copilot-plus-pcs-and-windows-11
+	url = https://github.com/microsoft/ignite25-LAB583-manage-ai-capabilities-for-copilot-plus-pcs-and-windows-11.git
+	branch = main
+[submodule "upstream/microsoft/FlowSim"]
+	path = upstream/microsoft/FlowSim
+	url = https://github.com/microsoft/FlowSim.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM345-from-prompt-to-app-build-ai-powered-apps-on-windows"]
+	path = upstream/microsoft/Build26-DEM345-from-prompt-to-app-build-ai-powered-apps-on-windows
+	url = https://github.com/microsoft/Build26-DEM345-from-prompt-to-app-build-ai-powered-apps-on-windows.git
+	branch = main
+[submodule "upstream/microsoft/Azure-Secure-Enclave-for-Research"]
+	path = upstream/microsoft/Azure-Secure-Enclave-for-Research
+	url = https://github.com/microsoft/Azure-Secure-Enclave-for-Research.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB535-azure-databricks-in-action-unified-ai-and-analytics-across-microsoft"]
+	path = upstream/microsoft/ignite25-LAB535-azure-databricks-in-action-unified-ai-and-analytics-across-microsoft
+	url = https://github.com/microsoft/ignite25-LAB535-azure-databricks-in-action-unified-ai-and-analytics-across-microsoft.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK222-the-honest-practitioners-take-on-agentic-ai-on-kubernetes"]
+	path = upstream/microsoft/Build26-BRK222-the-honest-practitioners-take-on-agentic-ai-on-kubernetes
+	url = https://github.com/microsoft/Build26-BRK222-the-honest-practitioners-take-on-agentic-ai-on-kubernetes.git
+	branch = main
+[submodule "upstream/microsoft/EvalsforAgentsInterop"]
+	path = upstream/microsoft/EvalsforAgentsInterop
+	url = https://github.com/microsoft/EvalsforAgentsInterop.git
+	branch = main
+[submodule "upstream/microsoft/sip-ai-workshop"]
+	path = upstream/microsoft/sip-ai-workshop
+	url = https://github.com/microsoft/sip-ai-workshop.git
+	branch = main
