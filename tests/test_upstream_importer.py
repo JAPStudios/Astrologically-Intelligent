@@ -1,5 +1,8 @@
+import io
+import json
 import tempfile
 import unittest
+import urllib.parse
 from pathlib import Path
 from unittest.mock import patch
 
@@ -71,6 +74,84 @@ class UpstreamImporterTests(unittest.TestCase):
                        return_value=type("Result",(),{"returncode":0,"stdout":"submodule.upstream/openai/skills.url https://github.com/openai/skills.git\n","stderr":""})()):
                 self.assertEqual(existing_submodule_urls(root),{"https://github.com/openai/skills"})
 
+
+    def test_requested_organization_scope_includes_all_twenty_organizations(self):
+        from scripts.import_upstream_orgs import ORGANIZATIONS, AI_QUERY_ORGANIZATIONS
+
+        self.assertEqual(len(ORGANIZATIONS), 20)
+        self.assertTrue({
+            "apple", "aws", "brave", "cursor", "deepseek-ai", "google",
+            "herdrdev", "kagisearch", "lukalabs", "meta-llama", "microsoft",
+            "n8n-io", "NousResearch", "odysseus-dev", "openai", "openclaw",
+            "paperclipai", "perplexityai", "xai-org", "anthropics",
+        }.issubset(set(ORGANIZATIONS)))
+        self.assertEqual(
+            AI_QUERY_ORGANIZATIONS,
+            {"apple", "aws", "brave", "google", "kagisearch", "microsoft"},
+        )
+
+    def test_ai_query_organizations_use_search_results_not_full_org_listing(self):
+        item = {
+            "name": "ml-project",
+            "owner": {"login": "apple"},
+            "private": False,
+            "clone_url": "https://github.com/apple/ml-project.git",
+            "default_branch": "main",
+            "size": 10,
+        }
+        with patch("scripts.import_upstream_orgs.fetch_search_page", return_value=([item], 1)) as search:
+            with patch("scripts.import_upstream_orgs.fetch_page") as listing:
+                repos = list_repositories(("apple",))
+        self.assertEqual([repo["name"] for repo in repos], ["ml-project"])
+        search.assert_called_once_with("apple", 1, None)
+        listing.assert_not_called()
+
+    def test_ai_search_uses_the_requested_org_query(self):
+        from scripts.import_upstream_orgs import fetch_search_page
+
+        response = io.BytesIO(json.dumps({"items": []}).encode("utf-8"))
+        with patch("scripts.import_upstream_orgs.urllib.request.urlopen", return_value=response) as open_url:
+            self.assertEqual(fetch_search_page("apple", 1, "test-token"), ([], 0))
+        request = open_url.call_args.args[0]
+        parsed = urllib.parse.urlparse(request.full_url)
+        self.assertEqual(parsed.path, "/search/repositories")
+        self.assertEqual(urllib.parse.parse_qs(parsed.query)["q"], ["org:apple AI"])
+        self.assertEqual(request.get_header("Authorization"), "Bearer test-token")
+
+    def test_non_query_organizations_still_import_all_public_repositories(self):
+        item = {
+            "name": "repo",
+            "owner": {"login": "cursor"},
+            "private": False,
+            "clone_url": "https://github.com/cursor/repo.git",
+            "default_branch": "main",
+            "size": 10,
+        }
+        with patch("scripts.import_upstream_orgs.fetch_page", side_effect=[[item]]) as listing:
+            with patch("scripts.import_upstream_orgs.fetch_search_page") as search:
+                repos = list_repositories(("cursor",))
+        self.assertEqual([repo["name"] for repo in repos], ["repo"])
+        listing.assert_called_once_with("cursor", 1, None)
+        search.assert_not_called()
+
+    def test_ai_search_stops_at_github_search_limit_and_reports_truncation(self):
+        pages = []
+        for page in range(10):
+            pages.append(([{
+                "name": f"repo-{page}-{index}",
+                "owner": {"login": "microsoft"},
+                "private": False,
+                "clone_url": f"https://github.com/microsoft/repo-{page}-{index}.git",
+                "default_branch": "main",
+                "size": 10,
+            } for index in range(100)], 1200))
+        with patch("scripts.import_upstream_orgs.fetch_search_page", side_effect=pages) as search:
+            with patch("builtins.print") as output:
+                repos = list_repositories(("microsoft",))
+        self.assertEqual(len(repos), 1000)
+        self.assertEqual(search.call_count, 10)
+        output.assert_called_once()
+        self.assertIn("first 1,000", output.call_args.args[0])
 
 if __name__ == "__main__":
     unittest.main()

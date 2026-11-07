@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Import every public repository from the configured upstream organizations as Git submodules.
+"""Import the requested public repositories from configured upstream organizations as Git submodules.
 
 Run from the root of a clean Astrologically Intelligent checkout:
     python scripts/import_upstream_orgs.py --dry-run
@@ -24,9 +24,14 @@ import urllib.request
 from pathlib import Path
 
 ORGANIZATIONS = (
-    "anthropics", "herdrdev", "n8n-io", "NousResearch", "odysseus-dev", "openai",
-    "openclaw", "paperclipai", "perplexityai", "xai-org",
+    "anthropics", "apple", "aws", "brave", "cursor", "deepseek-ai", "google",
+    "herdrdev", "kagisearch", "lukalabs", "meta-llama", "microsoft", "n8n-io",
+    "NousResearch", "odysseus-dev", "openai", "openclaw", "paperclipai",
+    "perplexityai", "xai-org",
 )
+AI_QUERY_ORGANIZATIONS = frozenset({
+    "apple", "aws", "brave", "google", "kagisearch", "microsoft",
+})
 API_ROOT = "https://api.github.com"
 
 
@@ -52,12 +57,51 @@ def fetch_page(org: str, page: int, token: str | None = None) -> list[dict]:
     return result
 
 
+def fetch_search_page(org: str, page: int, token: str | None = None) -> tuple[list[dict], int]:
+    """Search AI-related public repositories within a broad organization.
+
+    The requested AI-query organizations are not imported wholesale: only
+    repositories matching GitHub repository search for org:<name> AI enter
+    the source inventory.
+    """
+    if org not in AI_QUERY_ORGANIZATIONS:
+        raise ValueError(f"Organization does not use the AI repository query: {org}")
+    query = urllib.parse.urlencode({
+        "q": f"org:{org} AI",
+        "per_page": 100,
+        "page": page,
+    })
+    request = urllib.request.Request(
+        f"{API_ROOT}/search/repositories?{query}",
+        headers={
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            **({"Authorization": f"Bearer {token}"} if token else {}),
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=45) as response:
+            result = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, urllib.error.HTTPError) as exc:
+        raise RuntimeError(f"Could not search AI repositories for {org}: {exc}") from exc
+    if not isinstance(result, dict) or not isinstance(result.get("items"), list):
+        raise RuntimeError(f"GitHub returned an invalid AI repository search for {org}")
+    total_count = result.get("total_count")
+    if isinstance(total_count, bool) or not isinstance(total_count, int) or total_count < 0:
+        total_count = len(result["items"])
+    return result["items"], total_count
+
+
 def list_repositories(orgs: tuple[str, ...], token: str | None = None) -> list[dict]:
     repositories: list[dict] = []
     for org in orgs:
         page = 1
         while True:
-            batch = fetch_page(org, page, token)
+            if org in AI_QUERY_ORGANIZATIONS:
+                batch, total_count = fetch_search_page(org, page, token)
+            else:
+                batch = fetch_page(org, page, token)
+                total_count = None
             if not batch:
                 break
             for item in batch:
@@ -74,6 +118,13 @@ def list_repositories(orgs: tuple[str, ...], token: str | None = None) -> list[d
                     "fork": bool(item.get("fork")), "empty": not branch or int(item.get("size") or 0) == 0,
                 })
             if len(batch) < 100:
+                break
+            if org in AI_QUERY_ORGANIZATIONS and page >= 10:
+                if total_count is not None and total_count > 1000:
+                    print(
+                        f"[search cap] {org}: GitHub returned {total_count} matches; "
+                        "only the first 1,000 are available per query."
+                    )
                 break
             page += 1
     return repositories
@@ -161,7 +212,7 @@ def import_repositories(root: Path, repositories: list[dict], dry_run: bool = Fa
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--org", action="append", choices=ORGANIZATIONS,
-                        help="Import one organization; repeat to select several. Default: all ten.")
+                        help="Import one organization; repeat to select several. Default: all twenty; six broad organizations use an AI repository search.")
     parser.add_argument("--dry-run", action="store_true", help="List imports without cloning repositories.")
     parser.add_argument("--limit", type=int, help="Stop after adding this many new submodules.")
     args = parser.parse_args(argv)
