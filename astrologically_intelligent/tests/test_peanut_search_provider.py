@@ -47,13 +47,13 @@ def test_peanut_provider_requires_its_gateway_and_key(monkeypatch):
     monkeypatch.delenv("PEANUT_SEARCH_API_URL", raising=False)
     monkeypatch.delenv("PEANUT_SEARCH_API_KEY", raising=False)
     monkeypatch.setattr(providers, "_get_search_settings", lambda: {
-        "search_url": "https://peanut.example",
-        "search_api_key": "test-key",
+        "peanut_search_api_url": "https://peanut.example",
+        "peanut_search_api_key": "test-key",
     })
     assert providers.provider_configured("peanut_browsing") is True
 
     monkeypatch.setattr(providers, "_get_search_settings", lambda: {
-        "search_url": "https://peanut.example",
+        "peanut_search_api_url": "https://peanut.example",
     })
     assert providers.provider_configured("peanut_browsing") is False
 
