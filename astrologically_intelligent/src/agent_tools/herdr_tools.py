@@ -94,11 +94,11 @@ class HerdrAgentReadTool(HerdrRuntimeTool):
         output_format = args.get("format", "text")
         if not isinstance(target, str) or not target.strip() or len(target) > 128 or any(ord(ch) < 32 for ch in target):
             return {"error": "target must be a non-empty agent name or pane ID of at most 128 characters.", "exit_code": 1}
-        if source not in {"visible", "recent", "recent-unwrapped", "detection"}:
+        if not isinstance(source, str) or source not in {"visible", "recent", "recent-unwrapped", "detection"}:
             return {"error": "source must be visible, recent, recent-unwrapped or detection.", "exit_code": 1}
         if isinstance(lines, bool) or not isinstance(lines, int) or not 1 <= lines <= 500:
             return {"error": "lines must be an integer from 1 to 500.", "exit_code": 1}
-        if output_format not in {"text", "ansi"}:
+        if not isinstance(output_format, str) or output_format not in {"text", "ansi"}:
             return {"error": "format must be text or ansi.", "exit_code": 1}
         return await self._run(
             ["agent", "read", target.strip(), "--source", source, "--lines", str(lines), "--format", output_format],
