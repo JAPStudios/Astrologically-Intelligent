@@ -74,13 +74,21 @@ class NeuralNetworkClassifier:
 
     def _forward(self, features):
         activations, pre_activations = [features], []
-        for weights, bias in zip(self._weights[:-1], self._biases[:-1]):
-            linear = activations[-1] @ weights + bias
-            pre_activations.append(linear)
-            activations.append(np.maximum(linear, 0.0))
-        logits = activations[-1] @ self._weights[-1] + self._biases[-1]
-        exponentials = np.exp(logits - np.max(logits, axis=1, keepdims=True))
-        probabilities = exponentials / np.sum(exponentials, axis=1, keepdims=True)
+        with np.errstate(over="ignore", invalid="ignore", under="ignore"):
+            for weights, bias in zip(self._weights[:-1], self._biases[:-1]):
+                linear = activations[-1] @ weights + bias
+                if not np.isfinite(linear).all():
+                    raise FloatingPointError("non-finite hidden-layer activation")
+                pre_activations.append(linear)
+                activations.append(np.maximum(linear, 0.0))
+            logits = activations[-1] @ self._weights[-1] + self._biases[-1]
+            if not np.isfinite(logits).all():
+                raise FloatingPointError("non-finite output logits")
+            exponentials = np.exp(logits - np.max(logits, axis=1, keepdims=True))
+            denominator = np.sum(exponentials, axis=1, keepdims=True)
+            probabilities = exponentials / denominator
+        if not np.isfinite(probabilities).all():
+            raise FloatingPointError("non-finite output probabilities")
         return activations, pre_activations, probabilities
 
     def predict_proba(self, features: Iterable[Iterable[float]]) -> np.ndarray:
