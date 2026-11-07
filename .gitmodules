@@ -5985,3 +5985,103 @@
 	path = upstream/microsoft/TechLab-Module24-AI-Services-iSIM
 	url = https://github.com/microsoft/TechLab-Module24-AI-Services-iSIM.git
 	branch = main
+[submodule "upstream/microsoft/Workshop-AI-Ready-Apps-with-SQLDB-on-Fabric"]
+	path = upstream/microsoft/Workshop-AI-Ready-Apps-with-SQLDB-on-Fabric
+	url = https://github.com/microsoft/Workshop-AI-Ready-Apps-with-SQLDB-on-Fabric.git
+	branch = main
+[submodule "upstream/microsoft/some-python-demos"]
+	path = upstream/microsoft/some-python-demos
+	url = https://github.com/microsoft/some-python-demos.git
+	branch = main
+[submodule "upstream/microsoft/Responsible-AI-Principles-and-examples-from-regulated-industries"]
+	path = upstream/microsoft/Responsible-AI-Principles-and-examples-from-regulated-industries
+	url = https://github.com/microsoft/Responsible-AI-Principles-and-examples-from-regulated-industries.git
+	branch = main
+[submodule "upstream/microsoft/Token-Wars"]
+	path = upstream/microsoft/Token-Wars
+	url = https://github.com/microsoft/Token-Wars.git
+	branch = main
+[submodule "upstream/microsoft/TechLab-Integrate-an-AI-agent-with-Foundry-IQ"]
+	path = upstream/microsoft/TechLab-Integrate-an-AI-agent-with-Foundry-IQ
+	url = https://github.com/microsoft/TechLab-Integrate-an-AI-agent-with-Foundry-IQ.git
+	branch = main
+[submodule "upstream/microsoft/Analytics-with-Microsoft-Fabric-Data-to-AI-Powered-Insights"]
+	path = upstream/microsoft/Analytics-with-Microsoft-Fabric-Data-to-AI-Powered-Insights
+	url = https://github.com/microsoft/Analytics-with-Microsoft-Fabric-Data-to-AI-Powered-Insights.git
+	branch = main
+[submodule "upstream/microsoft/Creating-a-Goal-Driven-AI-Agent-with-Copilot-Studio"]
+	path = upstream/microsoft/Creating-a-Goal-Driven-AI-Agent-with-Copilot-Studio
+	url = https://github.com/microsoft/Creating-a-Goal-Driven-AI-Agent-with-Copilot-Studio.git
+	branch = main
+[submodule "upstream/microsoft/Project-Plaid-Secure-extensible-framework-for-AI-first-delivery"]
+	path = upstream/microsoft/Project-Plaid-Secure-extensible-framework-for-AI-first-delivery
+	url = https://github.com/microsoft/Project-Plaid-Secure-extensible-framework-for-AI-first-delivery.git
+	branch = main
+[submodule "upstream/microsoft/RHELM"]
+	path = upstream/microsoft/RHELM
+	url = https://github.com/microsoft/RHELM.git
+	branch = main
+[submodule "upstream/microsoft/Embedding-Copilot-AI-Chat-and-Power-Apps-Integrations-Made-Easy"]
+	path = upstream/microsoft/Embedding-Copilot-AI-Chat-and-Power-Apps-Integrations-Made-Easy
+	url = https://github.com/microsoft/Embedding-Copilot-AI-Chat-and-Power-Apps-Integrations-Made-Easy.git
+	branch = main
+[submodule "upstream/microsoft/TechLab-Build-Scalable-AI-Apps-with-AKS-and-APIM"]
+	path = upstream/microsoft/TechLab-Build-Scalable-AI-Apps-with-AKS-and-APIM
+	url = https://github.com/microsoft/TechLab-Build-Scalable-AI-Apps-with-AKS-and-APIM.git
+	branch = main
+[submodule "upstream/microsoft/Building-collaborative-agents-in-Microsoft-Teams-with-Teams-AI-Library"]
+	path = upstream/microsoft/Building-collaborative-agents-in-Microsoft-Teams-with-Teams-AI-Library
+	url = https://github.com/microsoft/Building-collaborative-agents-in-Microsoft-Teams-with-Teams-AI-Library.git
+	branch = main
+[submodule "upstream/microsoft/Scaling-AI-Experiences-with-Microsoft-Foundry-and-Fabric-Data-Agent"]
+	path = upstream/microsoft/Scaling-AI-Experiences-with-Microsoft-Foundry-and-Fabric-Data-Agent
+	url = https://github.com/microsoft/Scaling-AI-Experiences-with-Microsoft-Foundry-and-Fabric-Data-Agent.git
+	branch = main
+[submodule "upstream/microsoft/TechLab-Mastering-GitHub-Copilot-for-AI-Paired-Programming"]
+	path = upstream/microsoft/TechLab-Mastering-GitHub-Copilot-for-AI-Paired-Programming
+	url = https://github.com/microsoft/TechLab-Mastering-GitHub-Copilot-for-AI-Paired-Programming.git
+	branch = main
+[submodule "upstream/microsoft/Build-and-deploy-AI-Agents-with-MCP-and-Azure-Functions"]
+	path = upstream/microsoft/Build-and-deploy-AI-Agents-with-MCP-and-Azure-Functions
+	url = https://github.com/microsoft/Build-and-deploy-AI-Agents-with-MCP-and-Azure-Functions.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM350-github-agentic-workflows-automation-that-actually-reads-the-room"]
+	path = upstream/microsoft/Build26-DEM350-github-agentic-workflows-automation-that-actually-reads-the-room
+	url = https://github.com/microsoft/Build26-DEM350-github-agentic-workflows-automation-that-actually-reads-the-room.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM300-supercharged-profiling-finding-performance-bugs-with-agents"]
+	path = upstream/microsoft/Build26-DEM300-supercharged-profiling-finding-performance-bugs-with-agents
+	url = https://github.com/microsoft/Build26-DEM300-supercharged-profiling-finding-performance-bugs-with-agents.git
+	branch = main
+[submodule "upstream/microsoft/LAB513-Build-an-AI-Powered-FAQ-Assistant-with-Azure-SQL"]
+	path = upstream/microsoft/LAB513-Build-an-AI-Powered-FAQ-Assistant-with-Azure-SQL
+	url = https://github.com/microsoft/LAB513-Build-an-AI-Powered-FAQ-Assistant-with-Azure-SQL.git
+	branch = main
+[submodule "upstream/microsoft/LAB501-From-zero-to-deployed-on-Azure-with-AI-agents"]
+	path = upstream/microsoft/LAB501-From-zero-to-deployed-on-Azure-with-AI-agents
+	url = https://github.com/microsoft/LAB501-From-zero-to-deployed-on-Azure-with-AI-agents.git
+	branch = main
+[submodule "upstream/microsoft/Unified-AI-Analytics-MS-FabricFoundryDatabricks-and-Copilot-in-Action"]
+	path = upstream/microsoft/Unified-AI-Analytics-MS-FabricFoundryDatabricks-and-Copilot-in-Action
+	url = https://github.com/microsoft/Unified-AI-Analytics-MS-FabricFoundryDatabricks-and-Copilot-in-Action.git
+	branch = main
+[submodule "upstream/microsoft/universal-artifact-sdk"]
+	path = upstream/microsoft/universal-artifact-sdk
+	url = https://github.com/microsoft/universal-artifact-sdk.git
+	branch = main
+[submodule "upstream/microsoft/triage-and-improvement-playbook"]
+	path = upstream/microsoft/triage-and-improvement-playbook
+	url = https://github.com/microsoft/triage-and-improvement-playbook.git
+	branch = main
+[submodule "upstream/microsoft/TechLab-Build-and-Deploy-AI-Agents-with-MCP-and-Azure-Functions"]
+	path = upstream/microsoft/TechLab-Build-and-Deploy-AI-Agents-with-MCP-and-Azure-Functions
+	url = https://github.com/microsoft/TechLab-Build-and-Deploy-AI-Agents-with-MCP-and-Azure-Functions.git
+	branch = main
+[submodule "upstream/microsoft/Vibhasha"]
+	path = upstream/microsoft/Vibhasha
+	url = https://github.com/microsoft/Vibhasha.git
+	branch = main
+[submodule "upstream/microsoft/CommonGround"]
+	path = upstream/microsoft/CommonGround
+	url = https://github.com/microsoft/CommonGround.git
+	branch = main
