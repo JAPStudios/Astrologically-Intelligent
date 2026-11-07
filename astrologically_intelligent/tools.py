@@ -11,6 +11,36 @@ from .orchestration import Orchestrator
 from .plugins import PluginManager
 
 
+_SENSITIVE_TRACE_KEY = __import__("re").compile(
+    r"(?:api[_-]?key|token|secret|password|credential|authorization|private[_-]?key|access[_-]?key)",
+    __import__("re").IGNORECASE,
+)
+
+
+def _redact_trace_secrets(value):
+    """Remove credential-shaped fields from persisted agent tool traces."""
+    if isinstance(value, dict):
+        redacted = {}
+        for key, item in value.items():
+            if _SENSITIVE_TRACE_KEY.search(str(key)):
+                redacted[key] = "[REDACTED]"
+            elif str(key).lower() == "config" and isinstance(item, str):
+                try:
+                    parsed = json.loads(item)
+                except (TypeError, ValueError):
+                    redacted[key] = item
+                else:
+                    redacted[key] = json.dumps(
+                        _redact_trace_secrets(parsed), ensure_ascii=False
+                    )
+            else:
+                redacted[key] = _redact_trace_secrets(item)
+        return redacted
+    if isinstance(value, list):
+        return [_redact_trace_secrets(item) for item in value]
+    return value
+
+
 def _unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     """Reject duplicate keys instead of silently accepting the last value."""
     result: dict[str, Any] = {}
@@ -464,10 +494,12 @@ class ToolRegistry:
                     result = self.execute(
                         name, function.get("arguments", "{}"), provider=agent_provider
                     )
-                    trace.append({"tool": name, "result": json.loads(result)})
+                    safe_result = _redact_trace_secrets(json.loads(result))
+                    safe_content = json.dumps(safe_result, ensure_ascii=False)
+                    trace.append({"tool": name, "result": safe_result})
                     messages.append({
                         "role": "tool", "tool_call_id": call.get("id", ""),
-                        "name": name, "content": result,
+                        "name": name, "content": safe_content,
                     })
             if output is None:
                 raise RuntimeError("Agent produced no final output")

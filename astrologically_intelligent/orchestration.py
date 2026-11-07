@@ -152,11 +152,33 @@ class Orchestrator:
             raise ValueError("A non-negative limit, period, and three-letter currency are required")
         budget_id, now = uuid.uuid4().hex, time.time()
         with self._lock, self.db:
-            self.db.execute("""INSERT INTO org_budgets(id,agent_id,period,limit_amount,spent_amount,currency,updated_at)
-              VALUES(?,?,?,?,0,?,?) ON CONFLICT(agent_id,period) DO UPDATE SET
-              limit_amount=excluded.limit_amount,currency=excluded.currency,updated_at=excluded.updated_at""",
-              (budget_id,agent_id,period,limit_amount,currency.upper(),now))
-            row = self.db.execute("SELECT * FROM org_budgets WHERE agent_id IS ? AND period=?",(agent_id,period)).fetchone()
+            if agent_id is None:
+                existing = self.db.execute(
+                    "SELECT id FROM org_budgets WHERE agent_id IS NULL AND period=?",
+                    (period,),
+                ).fetchone()
+                if existing:
+                    self.db.execute(
+                        """UPDATE org_budgets SET limit_amount=?,currency=?,updated_at=?
+                           WHERE id=?""",
+                        (limit_amount, currency.upper(), now, existing["id"]),
+                    )
+                else:
+                    self.db.execute(
+                        """INSERT INTO org_budgets
+                           (id,agent_id,period,limit_amount,spent_amount,currency,updated_at)
+                           VALUES(?,NULL,?,?,0,?,?)""",
+                        (budget_id, period, limit_amount, currency.upper(), now),
+                    )
+            else:
+                self.db.execute("""INSERT INTO org_budgets(id,agent_id,period,limit_amount,spent_amount,currency,updated_at)
+                  VALUES(?,?,?,?,0,?,?) ON CONFLICT(agent_id,period) DO UPDATE SET
+                  limit_amount=excluded.limit_amount,currency=excluded.currency,updated_at=excluded.updated_at""",
+                  (budget_id,agent_id,period,limit_amount,currency.upper(),now))
+            row = self.db.execute(
+                "SELECT * FROM org_budgets WHERE agent_id IS ? AND period=?",
+                (agent_id, period),
+            ).fetchone()
         return dict(row)
 
     def record_cost(self, amount: float, period: str, agent_id: str | None = None):
