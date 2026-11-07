@@ -31,9 +31,50 @@ Provider selection is controlled by `ASTRO_AI_PROVIDER`. A fresh installation de
 The local runtime uses an OpenAI-compatible local inference endpoint. The local model is still a separately installed model; this configuration does not claim that Astrologically Intelligent already contains a trained proprietary foundation model. Cloud provider transports are optional compatibility routes, not the product's required intelligence engine. DeepSeek uses the same validated Chat Completions transport as OpenAI-compatible endpoints, preserving native function-call IDs, argument payloads, and tool results across turns. Anthropic maps system messages, assistant tool-use blocks, tool schemas, and tool results to the runtime's function-tool interface. Gemini uses its native `generateContent` endpoint and preserves model-returned content, function-call IDs, and thought signatures across tool turns. xAI and Perplexity use the Chat Completions request format.
 
 
+## Service integration contracts
+
+### CatChat
+
+The separate `JAPStudios/CatChat` service already implements the Astrologically Intelligent reply path. For each CatChat conversation it creates one persistent AI session through `POST /api/session`, using the configured `ASTRO_AI_ENDPOINT_ID` plus `ASTRO_AI_MODEL`. It sends each incoming message through `POST /api/chat` with that conversation's AI session identifier. The response is stored as a normal CatChat assistant message. The bearer token stays in CatChat's server process; it must have the `chat` scope. The endpoint owner must be authorized to use the selected model endpoint. The CatChat repository's automated tests currently mock the responder; this contract documents the implemented request path, not a public deployment or live model test.
+
+The root-runtime `POST /v1/chat` endpoint is a separate direct API for trusted clients that do not use CatChat's conversation service. It accepts `message` plus an optional `session_id` and returns `session_id` plus `response`.
+
+### Peanut Browsing
+
+The full web application registers `web_search` for Peanut Browsing's first-party index plus `peanut_browsing_crawl` for submitting public sites to that index. Configure `PEANUT_SEARCH_API_URL` plus `PEANUT_SEARCH_API_KEY`. The gateway must use HTTPS outside loopback development. Search returns only indexed pages; an unavailable or empty index does not silently fall back to another search provider. Release smoke uses a deterministic loopback gateway fixture; it verifies the tool cycle, not broad live-web coverage.
+
+### PanMedia
+
+PanMedia's agent-management integration uses the authenticated `/v1/agents`, `/v1/goals`, `/v1/approvals`, `/v1/budgets`, and `/v1/runs` routes documented below. These routes expose the existing orchestration store; they do not create a second agent database. Keep the bearer token in a trusted PanMedia server process, never in browser JavaScript.
+
 ## HTTP service
 
-The service binds to `127.0.0.1:8765` by default. It exposes `GET /health`, authenticated `GET /v1/history?session_id=...`, `GET /v1/sessions`, authenticated `DELETE /v1/sessions/{session_id}` and `POST /v1/chat`. Conversation deletion removes only messages belonging to the selected session and returns 404 when that session has no messages. Conversation history returns up to 200 messages (40 by default) in chronological order. Non-loopback binding requires `ASTRO_AI_API_TOKEN` with at least 24 characters; clients authenticate with a bearer token. Request bodies are limited to 1 MB. A supplied `session_id` must contain 1–128 ASCII letters, digits, underscores, or hyphens; invalid identifiers are rejected with HTTP 400 before the model runtime is invoked.
+The service binds to `127.0.0.1:8765` by default. It exposes public `GET /health`, authenticated `GET /v1/history?session_id=...`, `GET /v1/sessions`, `DELETE /v1/sessions/{session_id}`, and `POST /v1/chat`. The authenticated agent-management API also exposes `GET/POST /v1/agents`, `GET /v1/agents/{agent_id}`, `PATCH /v1/agents/{agent_id}`, `POST /v1/agents/{agent_id}/heartbeat`, `POST /v1/agents/{agent_id}/execute`, goal and approval routes, budget routes, plus `GET /v1/runs/{run_id}`. Conversation deletion removes only messages belonging to the selected session and returns 404 when that session has no messages. Conversation history returns up to 200 messages (40 by default) in chronological order. Non-loopback binding requires `ASTRO_AI_API_TOKEN` with at least 24 characters; clients authenticate with a bearer token. Request bodies are limited to 1 MB. A supplied `session_id` must contain 1–128 ASCII letters, digits, underscores, or hyphens; invalid identifiers are rejected with HTTP 400 before the model runtime is invoked.
+
+## Authenticated agent-management API
+
+The loopback HTTP service exposes the same SQLite-backed orchestration control plane used by native agent tools. PanMedia or another trusted server-side client can manage agents with the bearer token configured as `ASTRO_AI_API_TOKEN`. Keep this API on loopback or behind an HTTPS reverse proxy; do not place the token in browser JavaScript.
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/v1/agents` | List agents; optional `?state=active`, `paused`, or `disabled` |
+| `GET` | `/v1/agents/{agent_id}` | Retrieve one registered agent |
+| `GET` | `/v1/agents/due` | List agents whose heartbeat is due |
+| `POST` | `/v1/agents/{agent_id}/heartbeat` | Mark an active agent heartbeat |
+| `POST` | `/v1/agents` | Register an agent with `name`, `adapter`, optional `model`, `role`, `config`, and `heartbeat_seconds` |
+| `PATCH` | `/v1/agents/{agent_id}` | Set an agent's state to `active`, `paused`, or `disabled` |
+| `POST` | `/v1/agents/{agent_id}/execute` | Execute a prompt with an active model-backed agent |
+| `GET` | `/v1/goals` | List goals; optional status filter |
+| `POST` | `/v1/goals` | Create a goal |
+| `GET` | `/v1/approvals?status=pending` | List approval requests |
+| `POST` | `/v1/approvals` | Create an approval request |
+| `POST` | `/v1/approvals/{approval_id}/decision` | Approve, reject, or cancel a pending request |
+| `GET` | `/v1/budgets` | List organization and agent budgets |
+| `POST` | `/v1/budgets` | Set a budget |
+| `POST` | `/v1/budgets/costs` | Record cost within the configured budget |
+| `GET` | `/v1/runs/{run_id}` | Retrieve an execution record |
+
+All management routes require the bearer token. JSON request bodies are limited to 1 MB. Agent responses recursively redact API keys, tokens, secrets, passwords, credentials, and authorization fields from configuration objects. Agent execution enforces the registered adapter, active state, explicit tool allowlist, and configured tool-round limit. Budget overruns return HTTP 409. The API is server-to-server; browser clients should call a trusted PanMedia backend rather than expose the token.
 
 ## Runtime tools
 
