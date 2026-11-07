@@ -4585,3 +4585,103 @@
 	path = upstream/microsoft/SignalR-Samples-AI
 	url = https://github.com/microsoft/SignalR-Samples-AI.git
 	branch = main
+[submodule "upstream/microsoft/aitour-data-security-for-ai"]
+	path = upstream/microsoft/aitour-data-security-for-ai
+	url = https://github.com/microsoft/aitour-data-security-for-ai.git
+	branch = main
+[submodule "upstream/microsoft/Multilingual-Evaluation-of-Generative-AI-MEGA"]
+	path = upstream/microsoft/Multilingual-Evaluation-of-Generative-AI-MEGA
+	url = https://github.com/microsoft/Multilingual-Evaluation-of-Generative-AI-MEGA.git
+	branch = main
+[submodule "upstream/microsoft/SwiftStreamingMarkdown"]
+	path = upstream/microsoft/SwiftStreamingMarkdown
+	url = https://github.com/microsoft/SwiftStreamingMarkdown.git
+	branch = main
+[submodule "upstream/microsoft/Sico"]
+	path = upstream/microsoft/Sico
+	url = https://github.com/microsoft/Sico.git
+	branch = main
+[submodule "upstream/microsoft/aitour-securing-ai-apps-on-azure"]
+	path = upstream/microsoft/aitour-securing-ai-apps-on-azure
+	url = https://github.com/microsoft/aitour-securing-ai-apps-on-azure.git
+	branch = main
+[submodule "upstream/microsoft/prompt-engineering"]
+	path = upstream/microsoft/prompt-engineering
+	url = https://github.com/microsoft/prompt-engineering.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-LTG156-safeguard-agentic-ai-solutions-with-ai-red-teaming-agent"]
+	path = upstream/microsoft/aitour26-LTG156-safeguard-agentic-ai-solutions-with-ai-red-teaming-agent
+	url = https://github.com/microsoft/aitour26-LTG156-safeguard-agentic-ai-solutions-with-ai-red-teaming-agent.git
+	branch = main
+[submodule "upstream/microsoft/aitour-operate-ai-responsibly-with-ai-studio"]
+	path = upstream/microsoft/aitour-operate-ai-responsibly-with-ai-studio
+	url = https://github.com/microsoft/aitour-operate-ai-responsibly-with-ai-studio.git
+	branch = main
+[submodule "upstream/microsoft/hi-ml"]
+	path = upstream/microsoft/hi-ml
+	url = https://github.com/microsoft/hi-ml.git
+	branch = main
+[submodule "upstream/microsoft/aitour-copilot-studio-agents-and-experiences"]
+	path = upstream/microsoft/aitour-copilot-studio-agents-and-experiences
+	url = https://github.com/microsoft/aitour-copilot-studio-agents-and-experiences.git
+	branch = main
+[submodule "upstream/microsoft/aitour-customizing-trustworthy-gen-ai-systems-with-azure-open-ai"]
+	path = upstream/microsoft/aitour-customizing-trustworthy-gen-ai-systems-with-azure-open-ai
+	url = https://github.com/microsoft/aitour-customizing-trustworthy-gen-ai-systems-with-azure-open-ai.git
+	branch = main
+[submodule "upstream/microsoft/AI-Developer-Plugin-for-Eclipse"]
+	path = upstream/microsoft/AI-Developer-Plugin-for-Eclipse
+	url = https://github.com/microsoft/AI-Developer-Plugin-for-Eclipse.git
+	branch = main
+[submodule "upstream/microsoft/microhacks-agentic-ai"]
+	path = upstream/microsoft/microhacks-agentic-ai
+	url = https://github.com/microsoft/microhacks-agentic-ai.git
+	branch = main
+[submodule "upstream/microsoft/brainsmith"]
+	path = upstream/microsoft/brainsmith
+	url = https://github.com/microsoft/brainsmith.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-WRK523-copilot-ready-strategy-data-and-security"]
+	path = upstream/microsoft/aitour26-WRK523-copilot-ready-strategy-data-and-security
+	url = https://github.com/microsoft/aitour26-WRK523-copilot-ready-strategy-data-and-security.git
+	branch = main
+[submodule "upstream/microsoft/ai-at-edge"]
+	path = upstream/microsoft/ai-at-edge
+	url = https://github.com/microsoft/ai-at-edge.git
+	branch = master
+[submodule "upstream/microsoft/Foundry-AI-solution-templates-creation"]
+	path = upstream/microsoft/Foundry-AI-solution-templates-creation
+	url = https://github.com/microsoft/Foundry-AI-solution-templates-creation.git
+	branch = main
+[submodule "upstream/microsoft/career-ai"]
+	path = upstream/microsoft/career-ai
+	url = https://github.com/microsoft/career-ai.git
+	branch = main
+[submodule "upstream/microsoft/aibast-agents-library"]
+	path = upstream/microsoft/aibast-agents-library
+	url = https://github.com/microsoft/aibast-agents-library.git
+	branch = main
+[submodule "upstream/microsoft/learn-ai-native-dev"]
+	path = upstream/microsoft/learn-ai-native-dev
+	url = https://github.com/microsoft/learn-ai-native-dev.git
+	branch = main
+[submodule "upstream/microsoft/sre-agent"]
+	path = upstream/microsoft/sre-agent
+	url = https://github.com/microsoft/sre-agent.git
+	branch = main
+[submodule "upstream/microsoft/microhacks-rag-ai"]
+	path = upstream/microsoft/microhacks-rag-ai
+	url = https://github.com/microsoft/microhacks-rag-ai.git
+	branch = main
+[submodule "upstream/microsoft/tui-test"]
+	path = upstream/microsoft/tui-test
+	url = https://github.com/microsoft/tui-test.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-LTG152-from-protocol-to-practice-build-and-use-your-first-mcp-server"]
+	path = upstream/microsoft/aitour26-LTG152-from-protocol-to-practice-build-and-use-your-first-mcp-server
+	url = https://github.com/microsoft/aitour26-LTG152-from-protocol-to-practice-build-and-use-your-first-mcp-server.git
+	branch = main
+[submodule "upstream/microsoft/SPARROW"]
+	path = upstream/microsoft/SPARROW
+	url = https://github.com/microsoft/SPARROW.git
+	branch = main
