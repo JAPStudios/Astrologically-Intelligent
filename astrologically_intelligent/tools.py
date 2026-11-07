@@ -11,6 +11,25 @@ from .orchestration import Orchestrator
 from .plugins import PluginManager
 
 
+_SENSITIVE_TRACE_KEY = __import__("re").compile(
+    r"(?:api[_-]?key|token|secret|password|credential|authorization|private[_-]?key|access[_-]?key)",
+    __import__("re").IGNORECASE,
+)
+
+
+def _redact_trace_secrets(value):
+    """Remove credential-shaped fields from persisted agent tool traces."""
+    if isinstance(value, dict):
+        return {
+            key: "[REDACTED]" if _SENSITIVE_TRACE_KEY.search(str(key))
+            else _redact_trace_secrets(item)
+            for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [_redact_trace_secrets(item) for item in value]
+    return value
+
+
 def _unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     """Reject duplicate keys instead of silently accepting the last value."""
     result: dict[str, Any] = {}
@@ -464,7 +483,10 @@ class ToolRegistry:
                     result = self.execute(
                         name, function.get("arguments", "{}"), provider=agent_provider
                     )
-                    trace.append({"tool": name, "result": json.loads(result)})
+                    trace.append({
+                        "tool": name,
+                        "result": _redact_trace_secrets(json.loads(result)),
+                    })
                     messages.append({
                         "role": "tool", "tool_call_id": call.get("id", ""),
                         "name": name, "content": result,

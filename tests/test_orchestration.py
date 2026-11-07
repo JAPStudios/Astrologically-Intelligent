@@ -35,6 +35,18 @@ class OrchestrationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.org.record_cost(4, "2026-11", agent["id"])
 
+    def test_organization_budget_upsert_updates_null_agent_row(self):
+        first = self.org.set_budget(100, "2026-11", currency="USD")
+        self.org.record_cost(25, "2026-11")
+        updated = self.org.set_budget(60, "2026-11", currency="EUR")
+
+        self.assertEqual(updated["id"], first["id"])
+        self.assertEqual(updated["limit_amount"], 60)
+        self.assertEqual(updated["spent_amount"], 25)
+        self.assertEqual(updated["currency"], "EUR")
+        budgets = [row for row in self.org.budgets() if row["agent_id"] is None]
+        self.assertEqual(len(budgets), 1)
+
     def test_run_lifecycle(self):
         agent = self.org.register_agent("Worker", "local")
         run = self.org.start_run(agent["id"], input_data={"task": "test"})

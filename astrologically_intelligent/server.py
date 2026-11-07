@@ -75,6 +75,9 @@ def make_handler(runtime: AgentRuntime, token: str):
                 self.headers.get("Authorization", ""), f"Bearer {token}"
             )
 
+        def _control_authorized(self):
+            return bool(token) and self._authorized()
+
         def _read_object(self):
             try:
                 length = int(self.headers.get("Content-Length", "0"))
@@ -113,6 +116,12 @@ def make_handler(runtime: AgentRuntime, token: str):
                 return self._send(200, {"status": "ok", "service": "astrologically-intelligent"})
             if not self._authorized():
                 return self._send(401, {"error": "unauthorized"})
+            control_route = (
+                path.startswith(("/v1/agents", "/v1/goals", "/v1/approvals",
+                                 "/v1/budgets", "/v1/runs"))
+            )
+            if control_route and not self._control_authorized():
+                return self._send(401, {"error": "control_plane_authentication_required"})
             query = parse_qs(parsed.query, keep_blank_values=True)
             orchestration = runtime.tools.orchestration
 
@@ -195,8 +204,8 @@ def make_handler(runtime: AgentRuntime, token: str):
             return self._send(200, {"deleted": True, "session_id": session_id})
 
         def do_PATCH(self):
-            if not self._authorized():
-                return self._send(401, {"error": "unauthorized"})
+            if not self._control_authorized():
+                return self._send(401, {"error": "control_plane_authentication_required"})
             parts = urlsplit(self.path).path.strip("/").split("/")
             if len(parts) != 3 or parts[:2] != ["v1", "agents"]:
                 return self._send(404, {"error": "not_found"})
@@ -218,6 +227,12 @@ def make_handler(runtime: AgentRuntime, token: str):
             if not self._authorized():
                 return self._send(401, {"error": "unauthorized"})
             path = urlsplit(self.path).path
+            control_route = (
+                path.startswith(("/v1/agents", "/v1/goals", "/v1/approvals",
+                                 "/v1/budgets", "/v1/runs"))
+            )
+            if control_route and not self._control_authorized():
+                return self._send(401, {"error": "control_plane_authentication_required"})
             orchestration = runtime.tools.orchestration
 
             if path == "/v1/chat":

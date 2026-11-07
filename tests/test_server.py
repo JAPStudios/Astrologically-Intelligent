@@ -156,6 +156,35 @@ class HistoryEndpointTests(unittest.TestCase):
             self.request("/v1/agents", token="")
         self.assertEqual(raised.exception.code, 401)
 
+        # The local chat API may remain token-optional, but control-plane
+        # routes must never become unauthenticated when no token is configured.
+        server = ThreadingHTTPServer(
+            ("127.0.0.1", 0), make_handler(self.runtime, "")
+        )
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        url = f"http://127.0.0.1:{server.server_port}"
+        try:
+            for path, method, body in (
+                ("/v1/agents", "GET", None),
+                ("/v1/agents", "POST", {"name": "No auth", "adapter": "llm"}),
+                ("/v1/goals", "POST", {"title": "No auth"}),
+                ("/v1/runs", "POST", {"agent_id": "missing", "input_data": {}}),
+            ):
+                data = None if body is None else json.dumps(body).encode("utf-8")
+                request = urllib.request.Request(
+                    url + path, data=data, method=method,
+                    headers={"Content-Type": "application/json"} if data is not None else {},
+                )
+                with self.subTest(path=path, method=method):
+                    with self.assertRaises(urllib.error.HTTPError) as denied:
+                        urllib.request.urlopen(request, timeout=3)
+                    self.assertEqual(denied.exception.code, 401)
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=2)
+
     def test_panmedia_can_register_list_pause_and_execute_agents(self):
         provider = StubProvider()
         self.runtime.provider = provider
