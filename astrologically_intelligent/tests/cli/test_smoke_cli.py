@@ -1,5 +1,6 @@
 """CLI contract tests for the full-application release smoke runner."""
 import argparse
+from pathlib import Path
 from types import SimpleNamespace
 
 from tests.helpers.cli_loader import load_script
@@ -42,7 +43,7 @@ def test_no_chroma_flag_is_forwarded_to_the_isolated_app_boot(tmp_path, monkeypa
         "./venv",
         "--no-chroma",
     ]
-    assert captured["cwd"] == tmp_path
+    assert Path(captured["cwd"]) == tmp_path
     assert captured["env"][smoke.EMAIL_FIXTURE_ENV] == "1"
     assert captured["check"] is False
 

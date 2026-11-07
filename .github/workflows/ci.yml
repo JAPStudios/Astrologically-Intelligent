@@ -314,5 +314,4 @@ jobs:
         run: scripts/odysseus-smoke --venv ./venv --no-chroma
       - name: Stop the isolated smoke instance
         if: always()
-        continue-on-error: true
         run: scripts/odysseus-dev down
