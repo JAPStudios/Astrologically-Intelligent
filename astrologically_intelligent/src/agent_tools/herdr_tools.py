@@ -8,8 +8,12 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import shutil
 import subprocess
+
+
+_TARGET = re.compile(r"^(?:[a-z][a-z0-9_-]{0,31}|w[0-9]+:p[0-9]+)$")
 
 
 class HerdrRuntimeTool:
@@ -71,8 +75,8 @@ class HerdrAgentGetTool(HerdrRuntimeTool):
         except (TypeError, ValueError):
             return {"error": "Arguments must be valid JSON.", "exit_code": 1}
         target = args.get("target") if isinstance(args, dict) else None
-        if not isinstance(target, str) or not target.strip() or len(target) > 128 or any(ord(ch) < 32 for ch in target):
-            return {"error": "target must be a non-empty agent name or pane ID of at most 128 characters.", "exit_code": 1}
+        if not isinstance(target, str) or not _TARGET.fullmatch(target.strip()):
+            return {"error": "target must be a Herdr agent name or pane ID such as reviewer or w1:p2.", "exit_code": 1}
         return await self._run(["agent", "get", target.strip(), "--json"])
 
 
