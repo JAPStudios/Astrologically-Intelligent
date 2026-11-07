@@ -3685,3 +3685,103 @@
 	path = upstream/microsoft/OpenAIWorkshop
 	url = https://github.com/microsoft/OpenAIWorkshop.git
 	branch = main
+[submodule "upstream/microsoft/agent-lightning"]
+	path = upstream/microsoft/agent-lightning
+	url = https://github.com/microsoft/agent-lightning.git
+	branch = main
+[submodule "upstream/microsoft/TypeChat"]
+	path = upstream/microsoft/TypeChat
+	url = https://github.com/microsoft/TypeChat.git
+	branch = main
+[submodule "upstream/microsoft/AI2BMD"]
+	path = upstream/microsoft/AI2BMD
+	url = https://github.com/microsoft/AI2BMD.git
+	branch = main
+[submodule "upstream/microsoft/ai-dev-gallery"]
+	path = upstream/microsoft/ai-dev-gallery
+	url = https://github.com/microsoft/ai-dev-gallery.git
+	branch = main
+[submodule "upstream/microsoft/farmvibes-ai"]
+	path = upstream/microsoft/farmvibes-ai
+	url = https://github.com/microsoft/farmvibes-ai.git
+	branch = main
+[submodule "upstream/microsoft/aici"]
+	path = upstream/microsoft/aici
+	url = https://github.com/microsoft/aici.git
+	branch = main
+[submodule "upstream/microsoft/AI-Red-Teaming-Playground-Labs"]
+	path = upstream/microsoft/AI-Red-Teaming-Playground-Labs
+	url = https://github.com/microsoft/AI-Red-Teaming-Playground-Labs.git
+	branch = main
+[submodule "upstream/microsoft/RecAI"]
+	path = upstream/microsoft/RecAI
+	url = https://github.com/microsoft/RecAI.git
+	branch = main
+[submodule "upstream/microsoft/Generative-AI-for-beginners-java"]
+	path = upstream/microsoft/Generative-AI-for-beginners-java
+	url = https://github.com/microsoft/Generative-AI-for-beginners-java.git
+	branch = main
+[submodule "upstream/microsoft/lets-learn-mcp-python"]
+	path = upstream/microsoft/lets-learn-mcp-python
+	url = https://github.com/microsoft/lets-learn-mcp-python.git
+	branch = main
+[submodule "upstream/microsoft/samples-for-ai"]
+	path = upstream/microsoft/samples-for-ai
+	url = https://github.com/microsoft/samples-for-ai.git
+	branch = master
+[submodule "upstream/microsoft/onnxruntime-genai"]
+	path = upstream/microsoft/onnxruntime-genai
+	url = https://github.com/microsoft/onnxruntime-genai.git
+	branch = main
+[submodule "upstream/microsoft/pai"]
+	path = upstream/microsoft/pai
+	url = https://github.com/microsoft/pai.git
+	branch = master
+[submodule "upstream/microsoft/AirSim-NeurIPS2019-Drone-Racing"]
+	path = upstream/microsoft/AirSim-NeurIPS2019-Drone-Racing
+	url = https://github.com/microsoft/AirSim-NeurIPS2019-Drone-Racing.git
+	branch = master
+[submodule "upstream/microsoft/PyRIT"]
+	path = upstream/microsoft/PyRIT
+	url = https://github.com/microsoft/PyRIT.git
+	branch = main
+[submodule "upstream/microsoft/AIforITOps"]
+	path = upstream/microsoft/AIforITOps
+	url = https://github.com/microsoft/AIforITOps.git
+	branch = main
+[submodule "upstream/microsoft/AIforEarthDataSets"]
+	path = upstream/microsoft/AIforEarthDataSets
+	url = https://github.com/microsoft/AIforEarthDataSets.git
+	branch = main
+[submodule "upstream/microsoft/agent-governance-toolkit"]
+	path = upstream/microsoft/agent-governance-toolkit
+	url = https://github.com/microsoft/agent-governance-toolkit.git
+	branch = main
+[submodule "upstream/microsoft/AIVisualProvision"]
+	path = upstream/microsoft/AIVisualProvision
+	url = https://github.com/microsoft/AIVisualProvision.git
+	branch = master
+[submodule "upstream/microsoft/TWL300-AI-Apps-and-agents"]
+	path = upstream/microsoft/TWL300-AI-Apps-and-agents
+	url = https://github.com/microsoft/TWL300-AI-Apps-and-agents.git
+	branch = main
+[submodule "upstream/microsoft/LangChain4j-for-Beginners"]
+	path = upstream/microsoft/LangChain4j-for-Beginners
+	url = https://github.com/microsoft/LangChain4j-for-Beginners.git
+	branch = main
+[submodule "upstream/microsoft/AISkillsForWindows"]
+	path = upstream/microsoft/AISkillsForWindows
+	url = https://github.com/microsoft/AISkillsForWindows.git
+	branch = master
+[submodule "upstream/microsoft/AirSim-Drone-Racing-VAE-Imitation"]
+	path = upstream/microsoft/AirSim-Drone-Racing-VAE-Imitation
+	url = https://github.com/microsoft/AirSim-Drone-Racing-VAE-Imitation.git
+	branch = master
+[submodule "upstream/microsoft/aitour26-resource-center"]
+	path = upstream/microsoft/aitour26-resource-center
+	url = https://github.com/microsoft/aitour26-resource-center.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-WRK540-unlock-your-agents-potential-with-model-context-protocol"]
+	path = upstream/microsoft/aitour26-WRK540-unlock-your-agents-potential-with-model-context-protocol
+	url = https://github.com/microsoft/aitour26-WRK540-unlock-your-agents-potential-with-model-context-protocol.git
+	branch = main
