@@ -4985,3 +4985,103 @@
 	path = upstream/microsoft/PromptKit
 	url = https://github.com/microsoft/PromptKit.git
 	branch = main
+[submodule "upstream/microsoft/rag-time"]
+	path = upstream/microsoft/rag-time
+	url = https://github.com/microsoft/rag-time.git
+	branch = main
+[submodule "upstream/microsoft/art"]
+	path = upstream/microsoft/art
+	url = https://github.com/microsoft/art.git
+	branch = master
+[submodule "upstream/microsoft/aitour-reimagine-fabric-intelligence"]
+	path = upstream/microsoft/aitour-reimagine-fabric-intelligence
+	url = https://github.com/microsoft/aitour-reimagine-fabric-intelligence.git
+	branch = main
+[submodule "upstream/microsoft/gitagu"]
+	path = upstream/microsoft/gitagu
+	url = https://github.com/microsoft/gitagu.git
+	branch = main
+[submodule "upstream/microsoft/Azure_OpenAI_Summarization"]
+	path = upstream/microsoft/Azure_OpenAI_Summarization
+	url = https://github.com/microsoft/Azure_OpenAI_Summarization.git
+	branch = main
+[submodule "upstream/microsoft/aibuilder-labs"]
+	path = upstream/microsoft/aibuilder-labs
+	url = https://github.com/microsoft/aibuilder-labs.git
+	branch = main
+[submodule "upstream/microsoft/build26-next-steps"]
+	path = upstream/microsoft/build26-next-steps
+	url = https://github.com/microsoft/build26-next-steps.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB531-accelerate-bi-with-azure-databricks-in-the-era-of-ai"]
+	path = upstream/microsoft/ignite25-LAB531-accelerate-bi-with-azure-databricks-in-the-era-of-ai
+	url = https://github.com/microsoft/ignite25-LAB531-accelerate-bi-with-azure-databricks-in-the-era-of-ai.git
+	branch = main
+[submodule "upstream/microsoft/leprosy-skin-lesion-ai-analysis"]
+	path = upstream/microsoft/leprosy-skin-lesion-ai-analysis
+	url = https://github.com/microsoft/leprosy-skin-lesion-ai-analysis.git
+	branch = main
+[submodule "upstream/microsoft/HAXPlaybook"]
+	path = upstream/microsoft/HAXPlaybook
+	url = https://github.com/microsoft/HAXPlaybook.git
+	branch = dev
+[submodule "upstream/microsoft/mcp-gateway"]
+	path = upstream/microsoft/mcp-gateway
+	url = https://github.com/microsoft/mcp-gateway.git
+	branch = main
+[submodule "upstream/microsoft/aspire-skills"]
+	path = upstream/microsoft/aspire-skills
+	url = https://github.com/microsoft/aspire-skills.git
+	branch = main
+[submodule "upstream/microsoft/aitour-buisness-impact-of-intelligent-apps"]
+	path = upstream/microsoft/aitour-buisness-impact-of-intelligent-apps
+	url = https://github.com/microsoft/aitour-buisness-impact-of-intelligent-apps.git
+	branch = main
+[submodule "upstream/microsoft/agents-humanoversight"]
+	path = upstream/microsoft/agents-humanoversight
+	url = https://github.com/microsoft/agents-humanoversight.git
+	branch = main
+[submodule "upstream/microsoft/confidential-ai-workshop"]
+	path = upstream/microsoft/confidential-ai-workshop
+	url = https://github.com/microsoft/confidential-ai-workshop.git
+	branch = main
+[submodule "upstream/microsoft/Conversation-Knowledge-Mining-Solution-Accelerator"]
+	path = upstream/microsoft/Conversation-Knowledge-Mining-Solution-Accelerator
+	url = https://github.com/microsoft/Conversation-Knowledge-Mining-Solution-Accelerator.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-BRK422-deploy-and-manage-agents-securely-at-scale-with-the-copilot-control-system"]
+	path = upstream/microsoft/aitour26-BRK422-deploy-and-manage-agents-securely-at-scale-with-the-copilot-control-system
+	url = https://github.com/microsoft/aitour26-BRK422-deploy-and-manage-agents-securely-at-scale-with-the-copilot-control-system.git
+	branch = main
+[submodule "upstream/microsoft/Medical-Imaging-AI-RSNA-2021-Demo"]
+	path = upstream/microsoft/Medical-Imaging-AI-RSNA-2021-Demo
+	url = https://github.com/microsoft/Medical-Imaging-AI-RSNA-2021-Demo.git
+	branch = main
+[submodule "upstream/microsoft/dstoolkit-text2sql-and-imageprocessing"]
+	path = upstream/microsoft/dstoolkit-text2sql-and-imageprocessing
+	url = https://github.com/microsoft/dstoolkit-text2sql-and-imageprocessing.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB530-build-new-ai-applications-with-azure-sql-databases"]
+	path = upstream/microsoft/ignite25-LAB530-build-new-ai-applications-with-azure-sql-databases
+	url = https://github.com/microsoft/ignite25-LAB530-build-new-ai-applications-with-azure-sql-databases.git
+	branch = main
+[submodule "upstream/microsoft/agentic-applications-for-unified-data-foundation-solution-accelerator"]
+	path = upstream/microsoft/agentic-applications-for-unified-data-foundation-solution-accelerator
+	url = https://github.com/microsoft/agentic-applications-for-unified-data-foundation-solution-accelerator.git
+	branch = main
+[submodule "upstream/microsoft/iq-series"]
+	path = upstream/microsoft/iq-series
+	url = https://github.com/microsoft/iq-series.git
+	branch = main
+[submodule "upstream/microsoft/dstoolkit-genai-shap"]
+	path = upstream/microsoft/dstoolkit-genai-shap
+	url = https://github.com/microsoft/dstoolkit-genai-shap.git
+	branch = main
+[submodule "upstream/microsoft/context-window"]
+	path = upstream/microsoft/context-window
+	url = https://github.com/microsoft/context-window.git
+	branch = main
+[submodule "upstream/microsoft/aitour-copilot-implementation-essentials"]
+	path = upstream/microsoft/aitour-copilot-implementation-essentials
+	url = https://github.com/microsoft/aitour-copilot-implementation-essentials.git
+	branch = main
