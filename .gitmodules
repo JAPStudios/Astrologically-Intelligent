@@ -5285,3 +5285,103 @@
 	path = upstream/microsoft/promptflow-rag-project-template
 	url = https://github.com/microsoft/promptflow-rag-project-template.git
 	branch = main
+[submodule "upstream/microsoft/ai-notebooks"]
+	path = upstream/microsoft/ai-notebooks
+	url = https://github.com/microsoft/ai-notebooks.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK252-from-observability-to-roi-for-ai-agents-on-any-framework"]
+	path = upstream/microsoft/Build26-BRK252-from-observability-to-roi-for-ai-agents-on-any-framework
+	url = https://github.com/microsoft/Build26-BRK252-from-observability-to-roi-for-ai-agents-on-any-framework.git
+	branch = main
+[submodule "upstream/microsoft/DroneRescue"]
+	path = upstream/microsoft/DroneRescue
+	url = https://github.com/microsoft/DroneRescue.git
+	branch = master
+[submodule "upstream/microsoft/Azure-AI-Contents-Generation"]
+	path = upstream/microsoft/Azure-AI-Contents-Generation
+	url = https://github.com/microsoft/Azure-AI-Contents-Generation.git
+	branch = main
+[submodule "upstream/microsoft/agentic-sdlc-starter"]
+	path = upstream/microsoft/agentic-sdlc-starter
+	url = https://github.com/microsoft/agentic-sdlc-starter.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB584-integrating-local-ai-with-windows-ml"]
+	path = upstream/microsoft/ignite25-LAB584-integrating-local-ai-with-windows-ml
+	url = https://github.com/microsoft/ignite25-LAB584-integrating-local-ai-with-windows-ml.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-BRK482-secure-govern-and-scale-your-ai-agents-with-azure-api-management"]
+	path = upstream/microsoft/aitour26-BRK482-secure-govern-and-scale-your-ai-agents-with-azure-api-management
+	url = https://github.com/microsoft/aitour26-BRK482-secure-govern-and-scale-your-ai-agents-with-azure-api-management.git
+	branch = main
+[submodule "upstream/microsoft/postgres-skills"]
+	path = upstream/microsoft/postgres-skills
+	url = https://github.com/microsoft/postgres-skills.git
+	branch = main
+[submodule "upstream/microsoft/AIandJS"]
+	path = upstream/microsoft/AIandJS
+	url = https://github.com/microsoft/AIandJS.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-PREL18-secure-your-m365-tenant-from-defaults-to-ai-ready"]
+	path = upstream/microsoft/ignite25-PREL18-secure-your-m365-tenant-from-defaults-to-ai-ready
+	url = https://github.com/microsoft/ignite25-PREL18-secure-your-m365-tenant-from-defaults-to-ai-ready.git
+	branch = main
+[submodule "upstream/microsoft/frontier-agentic-cobuild-rvas"]
+	path = upstream/microsoft/frontier-agentic-cobuild-rvas
+	url = https://github.com/microsoft/frontier-agentic-cobuild-rvas.git
+	branch = main
+[submodule "upstream/microsoft/Build25-LAB324"]
+	path = upstream/microsoft/Build25-LAB324
+	url = https://github.com/microsoft/Build25-LAB324.git
+	branch = main
+[submodule "upstream/microsoft/GenAIOps-workshop"]
+	path = upstream/microsoft/GenAIOps-workshop
+	url = https://github.com/microsoft/GenAIOps-workshop.git
+	branch = main
+[submodule "upstream/microsoft/ai-for-startups-lab"]
+	path = upstream/microsoft/ai-for-startups-lab
+	url = https://github.com/microsoft/ai-for-startups-lab.git
+	branch = main
+[submodule "upstream/microsoft/monitors4codegen"]
+	path = upstream/microsoft/monitors4codegen
+	url = https://github.com/microsoft/monitors4codegen.git
+	branch = main
+[submodule "upstream/microsoft/SharePoint-Embedded-Samples"]
+	path = upstream/microsoft/SharePoint-Embedded-Samples
+	url = https://github.com/microsoft/SharePoint-Embedded-Samples.git
+	branch = main
+[submodule "upstream/microsoft/skmultiagents"]
+	path = upstream/microsoft/skmultiagents
+	url = https://github.com/microsoft/skmultiagents.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-PREL19-an-it-pros-guide-to-deploying-and-managing-ai-applications"]
+	path = upstream/microsoft/ignite25-PREL19-an-it-pros-guide-to-deploying-and-managing-ai-applications
+	url = https://github.com/microsoft/ignite25-PREL19-an-it-pros-guide-to-deploying-and-managing-ai-applications.git
+	branch = main
+[submodule "upstream/microsoft/aicreator"]
+	path = upstream/microsoft/aicreator
+	url = https://github.com/microsoft/aicreator.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK260-build-apps-with-local-ai-for-unmetered-intelligence-on-every-windows-pc"]
+	path = upstream/microsoft/Build26-BRK260-build-apps-with-local-ai-for-unmetered-intelligence-on-every-windows-pc
+	url = https://github.com/microsoft/Build26-BRK260-build-apps-with-local-ai-for-unmetered-intelligence-on-every-windows-pc.git
+	branch = main
+[submodule "upstream/microsoft/Health-AI-Blueprints-TA4HVisualizer"]
+	path = upstream/microsoft/Health-AI-Blueprints-TA4HVisualizer
+	url = https://github.com/microsoft/Health-AI-Blueprints-TA4HVisualizer.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-LTG155-fast-data-transformation-in-fabric-with-onelake-and-the-data-wrangler"]
+	path = upstream/microsoft/aitour26-LTG155-fast-data-transformation-in-fabric-with-onelake-and-the-data-wrangler
+	url = https://github.com/microsoft/aitour26-LTG155-fast-data-transformation-in-fabric-with-onelake-and-the-data-wrangler.git
+	branch = main
+[submodule "upstream/microsoft/aitour-Essential-Prompting-for-GitHub-Copilot-in-VS-Code-v2"]
+	path = upstream/microsoft/aitour-Essential-Prompting-for-GitHub-Copilot-in-VS-Code-v2
+	url = https://github.com/microsoft/aitour-Essential-Prompting-for-GitHub-Copilot-in-VS-Code-v2.git
+	branch = main
+[submodule "upstream/microsoft/openpaivscode"]
+	path = upstream/microsoft/openpaivscode
+	url = https://github.com/microsoft/openpaivscode.git
+	branch = master
+[submodule "upstream/microsoft/Build26-OD851-expand-local-ai-reach-with-windows-ml"]
+	path = upstream/microsoft/Build26-OD851-expand-local-ai-reach-with-windows-ml
+	url = https://github.com/microsoft/Build26-OD851-expand-local-ai-reach-with-windows-ml.git
+	branch = main
