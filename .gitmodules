@@ -3885,3 +3885,103 @@
 	path = upstream/microsoft/physical-ai-toolchain
 	url = https://github.com/microsoft/physical-ai-toolchain.git
 	branch = main
+[submodule "upstream/microsoft/Spring-AI-for-Beginners"]
+	path = upstream/microsoft/Spring-AI-for-Beginners
+	url = https://github.com/microsoft/Spring-AI-for-Beginners.git
+	branch = main
+[submodule "upstream/microsoft/project-oagents"]
+	path = upstream/microsoft/project-oagents
+	url = https://github.com/microsoft/project-oagents.git
+	branch = main
+[submodule "upstream/microsoft/ai4eutils"]
+	path = upstream/microsoft/ai4eutils
+	url = https://github.com/microsoft/ai4eutils.git
+	branch = master
+[submodule "upstream/microsoft/agent-framework"]
+	path = upstream/microsoft/agent-framework
+	url = https://github.com/microsoft/agent-framework.git
+	branch = main
+[submodule "upstream/microsoft/workshop-library"]
+	path = upstream/microsoft/workshop-library
+	url = https://github.com/microsoft/workshop-library.git
+	branch = main
+[submodule "upstream/microsoft/vscode-copilot-release"]
+	path = upstream/microsoft/vscode-copilot-release
+	url = https://github.com/microsoft/vscode-copilot-release.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-BRK445-building-enterprise-ready-ai-agents-with-microsoft-foundry"]
+	path = upstream/microsoft/aitour26-BRK445-building-enterprise-ready-ai-agents-with-microsoft-foundry
+	url = https://github.com/microsoft/aitour26-BRK445-building-enterprise-ready-ai-agents-with-microsoft-foundry.git
+	branch = main
+[submodule "upstream/microsoft/edge-ai"]
+	path = upstream/microsoft/edge-ai
+	url = https://github.com/microsoft/edge-ai.git
+	branch = main
+[submodule "upstream/microsoft/ResearchStudio"]
+	path = upstream/microsoft/ResearchStudio
+	url = https://github.com/microsoft/ResearchStudio.git
+	branch = main
+[submodule "upstream/microsoft/aisdkforsapabap"]
+	path = upstream/microsoft/aisdkforsapabap
+	url = https://github.com/microsoft/aisdkforsapabap.git
+	branch = main
+[submodule "upstream/microsoft/vision-ai-developer-kit"]
+	path = upstream/microsoft/vision-ai-developer-kit
+	url = https://github.com/microsoft/vision-ai-developer-kit.git
+	branch = master
+[submodule "upstream/microsoft/AI-Chat-App-Hack"]
+	path = upstream/microsoft/AI-Chat-App-Hack
+	url = https://github.com/microsoft/AI-Chat-App-Hack.git
+	branch = main
+[submodule "upstream/microsoft/microhacks-trust-ai"]
+	path = upstream/microsoft/microhacks-trust-ai
+	url = https://github.com/microsoft/microhacks-trust-ai.git
+	branch = main
+[submodule "upstream/microsoft/aitour-build-a-copilot-on-azure-ai"]
+	path = upstream/microsoft/aitour-build-a-copilot-on-azure-ai
+	url = https://github.com/microsoft/aitour-build-a-copilot-on-azure-ai.git
+	branch = main
+[submodule "upstream/microsoft/AICentral"]
+	path = upstream/microsoft/AICentral
+	url = https://github.com/microsoft/AICentral.git
+	branch = main
+[submodule "upstream/microsoft/Magma"]
+	path = upstream/microsoft/Magma
+	url = https://github.com/microsoft/Magma.git
+	branch = main
+[submodule "upstream/microsoft/AIReferenceArchitectures"]
+	path = upstream/microsoft/AIReferenceArchitectures
+	url = https://github.com/microsoft/AIReferenceArchitectures.git
+	branch = master
+[submodule "upstream/microsoft/aitour-build-your-first-agent-with-azure-ai-agent-service"]
+	path = upstream/microsoft/aitour-build-your-first-agent-with-azure-ai-agent-service
+	url = https://github.com/microsoft/aitour-build-your-first-agent-with-azure-ai-agent-service.git
+	branch = main
+[submodule "upstream/microsoft/qlib"]
+	path = upstream/microsoft/qlib
+	url = https://github.com/microsoft/qlib.git
+	branch = main
+[submodule "upstream/microsoft/agent-host-protocol"]
+	path = upstream/microsoft/agent-host-protocol
+	url = https://github.com/microsoft/agent-host-protocol.git
+	branch = main
+[submodule "upstream/microsoft/data-formulator"]
+	path = upstream/microsoft/data-formulator
+	url = https://github.com/microsoft/data-formulator.git
+	branch = main
+[submodule "upstream/microsoft/robustlearn"]
+	path = upstream/microsoft/robustlearn
+	url = https://github.com/microsoft/robustlearn.git
+	branch = main
+[submodule "upstream/microsoft/AIforEarth-API-Platform"]
+	path = upstream/microsoft/AIforEarth-API-Platform
+	url = https://github.com/microsoft/AIforEarth-API-Platform.git
+	branch = master
+[submodule "upstream/microsoft/aitour-generative-ai-in-azure"]
+	path = upstream/microsoft/aitour-generative-ai-in-azure
+	url = https://github.com/microsoft/aitour-generative-ai-in-azure.git
+	branch = main
+[submodule "upstream/microsoft/aifundamentalbootcamp"]
+	path = upstream/microsoft/aifundamentalbootcamp
+	url = https://github.com/microsoft/aifundamentalbootcamp.git
+	branch = main
