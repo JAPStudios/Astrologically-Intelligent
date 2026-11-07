@@ -200,7 +200,7 @@ def records_from_payload(
         for item in as_list(payload.get("data")):
             if not isinstance(item, Mapping):
                 continue
-            model_id = model_id_from(item, "id", "model", "name")
+            model_id = model_id_from(item, "id", "model")
             if not model_id:
                 continue
             records.append(
