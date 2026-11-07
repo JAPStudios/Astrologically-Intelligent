@@ -183,13 +183,13 @@ def cmd_run(args):
     try:
         started_by_us, note = boot(dev, root, args)
         if note:
-            sys.stdout.write(f"  {note}\\n")
+            sys.stdout.write(f"  {note}\n")
 
         python = venv_python(dev, root, args)
         env = suite_environment(dev, root, ports, account)
         command = [str(python), "-m", "pytest", SMOKE_SUITE, "-q"] + list(args.pytest_args)
         app_port = ports["app"]
-        sys.stdout.write(f"\\n  running {SMOKE_SUITE} against http://127.0.0.1:{app_port}\\n\\n")
+        sys.stdout.write(f"\n  running {SMOKE_SUITE} against http://127.0.0.1:{app_port}\n\n")
         sys.stdout.flush()
         result = subprocess.run(command, cwd=str(root), env=env, check=False)
     finally:
@@ -198,10 +198,12 @@ def cmd_run(args):
                            cwd=str(root), check=False)
         elif started_by_us:
             app_port = ports["app"]
+            username = account["username"]
+            password = account["password"]
             sys.stdout.write(
-                f"\\n  left running: http://127.0.0.1:{app_port} "
-                f"({account[\"username\"]} / {account[\"password\"]})\\n"
-                "  stop it with `odysseus dev down`\\n"
+                f"\n  left running: http://127.0.0.1:{app_port} "
+                f"({username} / {password})\n"
+                "  stop it with `odysseus dev down`\n"
             )
         if peanut_stub is not None:
             peanut_stub.stop()
@@ -210,7 +212,6 @@ def cmd_run(args):
                 os.environ.pop(key, None)
             else:
                 os.environ[key] = previous
-
     if result is None:
         return 1
     if result.returncode != 0:
