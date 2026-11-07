@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
-from src.agent_tools.herdr_tools import (
+from src.tool_security import NON_ADMIN_BLOCKED_TOOLS\n\nfrom src.agent_tools.herdr_tools import (
     HerdrAgentExplainTool,
     HerdrAgentGetTool,
     HerdrAgentListTool,
@@ -93,3 +93,11 @@ async def test_herdr_agent_read_rejects_invalid_limits(monkeypatch):
         result = await HerdrAgentReadTool().execute('{"target":"reviewer","lines":0}')
     assert "lines must be" in result["error"]
     run.assert_not_called()
+
+def test_herdr_inspection_tools_are_privileged():
+    assert {
+        "herdr_agent_list",
+        "herdr_agent_get",
+        "herdr_agent_read",
+        "herdr_agent_explain",
+    } <= NON_ADMIN_BLOCKED_TOOLS
