@@ -26,11 +26,13 @@ class PeanutBrowsingClient:
         *,
         timeout: float = 20.0,
         client_factory=httpx.AsyncClient,
+        sync_client_factory=httpx.Client,
     ) -> None:
         self.base_url = (base_url if base_url is not None else os.getenv("PEANUT_SEARCH_API_URL", "")).strip().rstrip("/")
         self.api_key = api_key if api_key is not None else os.getenv("PEANUT_SEARCH_API_KEY", "")
         self.timeout = timeout
         self.client_factory = client_factory
+        self.sync_client_factory = sync_client_factory
 
     def _configuration(self) -> tuple[str, dict[str, str]]:
         if not self.base_url or not self.api_key:
@@ -78,16 +80,28 @@ class PeanutBrowsingClient:
             raise PeanutBrowsingError("Peanut Browsing returned an invalid or unsuccessful response.")
         return payload
 
-    async def search(self, query: str, *, limit: int = 20, offset: int = 0) -> dict:
-        if not isinstance(query, str) or not query.strip() or len(query) > 200:
-            raise ValueError("Search query must contain 1–200 characters.")
-        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 50:
-            raise ValueError("Search limit must be an integer from 1 to 50.")
-        if isinstance(offset, bool) or not isinstance(offset, int) or not 0 <= offset <= 100_000:
-            raise ValueError("Search offset must be an integer from 0 to 100000.")
-        payload = await self._request(
-            "GET", "search", params={"q": query.strip(), "limit": limit, "offset": offset}
-        )
+    def _request_sync(self, method: str, path: str, *, params=None, json_body=None) -> dict:
+        base_url, headers = self._configuration()
+        try:
+            with self.sync_client_factory(timeout=self.timeout, follow_redirects=False) as client:
+                response = client.request(
+                    method, f"{base_url}/index/{path}", headers=headers,
+                    params=params, json=json_body,
+                )
+                response.raise_for_status()
+                payload = response.json()
+        except httpx.HTTPStatusError as exc:
+            raise PeanutBrowsingError(
+                f"Peanut Browsing returned HTTP {exc.response.status_code}."
+            ) from exc
+        except (httpx.HTTPError, ValueError) as exc:
+            raise PeanutBrowsingError(f"Peanut Browsing request failed: {type(exc).__name__}.") from exc
+        if not isinstance(payload, dict) or payload.get("status") != "ok":
+            raise PeanutBrowsingError("Peanut Browsing returned an invalid or unsuccessful response.")
+        return payload
+
+    @staticmethod
+    def _normalize_search_payload(payload: dict) -> dict:
         rows = payload.get("results")
         if not isinstance(rows, list):
             raise PeanutBrowsingError("Peanut Browsing search response did not contain a results list.")
@@ -119,6 +133,31 @@ class PeanutBrowsingClient:
         if isinstance(total, bool) or not isinstance(total, int) or total < 0:
             total = len(results)
         return {"results": results, "totalResults": total}
+
+    @staticmethod
+    def _validate_search_arguments(query: str, limit: int, offset: int) -> str:
+        if not isinstance(query, str) or not query.strip() or len(query) > 200:
+            raise ValueError("Search query must contain 1–200 characters.")
+        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 50:
+            raise ValueError("Search limit must be an integer from 1 to 50.")
+        if isinstance(offset, bool) or not isinstance(offset, int) or not 0 <= offset <= 100_000:
+            raise ValueError("Search offset must be an integer from 0 to 100000.")
+        return query.strip()
+
+    async def search(self, query: str, *, limit: int = 20, offset: int = 0) -> dict:
+        query = self._validate_search_arguments(query, limit, offset)
+        payload = await self._request(
+            "GET", "search", params={"q": query, "limit": limit, "offset": offset}
+        )
+        return self._normalize_search_payload(payload)
+
+    def search_sync(self, query: str, *, limit: int = 20, offset: int = 0) -> dict:
+        """Synchronous search entry point for the app's provider registry."""
+        query = self._validate_search_arguments(query, limit, offset)
+        payload = self._request_sync(
+            "GET", "search", params={"q": query, "limit": limit, "offset": offset}
+        )
+        return self._normalize_search_payload(payload)
 
     async def crawl(self, url: str, *, max_pages: int = 10) -> dict:
         if not isinstance(url, str) or len(url) > 2048:
