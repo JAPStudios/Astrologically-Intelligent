@@ -4385,3 +4385,103 @@
 	path = upstream/microsoft/AI4FluidSimulations
 	url = https://github.com/microsoft/AI4FluidSimulations.git
 	branch = main
+[submodule "upstream/microsoft/aitour-leveraging-ai-for-infrastructure-management"]
+	path = upstream/microsoft/aitour-leveraging-ai-for-infrastructure-management
+	url = https://github.com/microsoft/aitour-leveraging-ai-for-infrastructure-management.git
+	branch = main
+[submodule "upstream/microsoft/ark"]
+	path = upstream/microsoft/ark
+	url = https://github.com/microsoft/ark.git
+	branch = main
+[submodule "upstream/microsoft/aitour-customizing-microsoft-copilot"]
+	path = upstream/microsoft/aitour-customizing-microsoft-copilot
+	url = https://github.com/microsoft/aitour-customizing-microsoft-copilot.git
+	branch = main
+[submodule "upstream/microsoft/aitour-opimizing-your-ai-costs"]
+	path = upstream/microsoft/aitour-opimizing-your-ai-costs
+	url = https://github.com/microsoft/aitour-opimizing-your-ai-costs.git
+	branch = main
+[submodule "upstream/microsoft/aitour-writing-assistant-with-azure-openai"]
+	path = upstream/microsoft/aitour-writing-assistant-with-azure-openai
+	url = https://github.com/microsoft/aitour-writing-assistant-with-azure-openai.git
+	branch = main
+[submodule "upstream/microsoft/aiida-pyscf"]
+	path = upstream/microsoft/aiida-pyscf
+	url = https://github.com/microsoft/aiida-pyscf.git
+	branch = main
+[submodule "upstream/microsoft/agent-framework-go"]
+	path = upstream/microsoft/agent-framework-go
+	url = https://github.com/microsoft/agent-framework-go.git
+	branch = main
+[submodule "upstream/microsoft/working-with-ai"]
+	path = upstream/microsoft/working-with-ai
+	url = https://github.com/microsoft/working-with-ai.git
+	branch = main
+[submodule "upstream/microsoft/Workshop-Interact-with-OpenAI-models"]
+	path = upstream/microsoft/Workshop-Interact-with-OpenAI-models
+	url = https://github.com/microsoft/Workshop-Interact-with-OpenAI-models.git
+	branch = main
+[submodule "upstream/microsoft/AIDocIntelligence"]
+	path = upstream/microsoft/AIDocIntelligence
+	url = https://github.com/microsoft/AIDocIntelligence.git
+	branch = main
+[submodule "upstream/microsoft/Build26-LAB501-from-zero-to-deployed-on-azure-with-ai-agents"]
+	path = upstream/microsoft/Build26-LAB501-from-zero-to-deployed-on-azure-with-ai-agents
+	url = https://github.com/microsoft/Build26-LAB501-from-zero-to-deployed-on-azure-with-ai-agents.git
+	branch = main
+[submodule "upstream/microsoft/responsible-ai-toolbox-privacy"]
+	path = upstream/microsoft/responsible-ai-toolbox-privacy
+	url = https://github.com/microsoft/responsible-ai-toolbox-privacy.git
+	branch = main
+[submodule "upstream/microsoft/aitour-ai-agents-theater-session"]
+	path = upstream/microsoft/aitour-ai-agents-theater-session
+	url = https://github.com/microsoft/aitour-ai-agents-theater-session.git
+	branch = main
+[submodule "upstream/microsoft/genaiops-azureaisdk-template"]
+	path = upstream/microsoft/genaiops-azureaisdk-template
+	url = https://github.com/microsoft/genaiops-azureaisdk-template.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-LTG153-automate-model-selection-with-microsoft-foundry-model-router"]
+	path = upstream/microsoft/aitour26-LTG153-automate-model-selection-with-microsoft-foundry-model-router
+	url = https://github.com/microsoft/aitour26-LTG153-automate-model-selection-with-microsoft-foundry-model-router.git
+	branch = main
+[submodule "upstream/microsoft/aitour-building-copilots-with-copilot-studio"]
+	path = upstream/microsoft/aitour-building-copilots-with-copilot-studio
+	url = https://github.com/microsoft/aitour-building-copilots-with-copilot-studio.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-BRK471-ai-tools-for-infrastructure-management"]
+	path = upstream/microsoft/aitour26-BRK471-ai-tools-for-infrastructure-management
+	url = https://github.com/microsoft/aitour26-BRK471-ai-tools-for-infrastructure-management.git
+	branch = main
+[submodule "upstream/microsoft/teams-agent-accelerator-templates"]
+	path = upstream/microsoft/teams-agent-accelerator-templates
+	url = https://github.com/microsoft/teams-agent-accelerator-templates.git
+	branch = main
+[submodule "upstream/microsoft/intelligent-terminal"]
+	path = upstream/microsoft/intelligent-terminal
+	url = https://github.com/microsoft/intelligent-terminal.git
+	branch = main
+[submodule "upstream/microsoft/az-python"]
+	path = upstream/microsoft/az-python
+	url = https://github.com/microsoft/az-python.git
+	branch = main
+[submodule "upstream/microsoft/Agents-League-AISF-Regulations"]
+	path = upstream/microsoft/Agents-League-AISF-Regulations
+	url = https://github.com/microsoft/Agents-League-AISF-Regulations.git
+	branch = main
+[submodule "upstream/microsoft/InnerEye-Inference"]
+	path = upstream/microsoft/InnerEye-Inference
+	url = https://github.com/microsoft/InnerEye-Inference.git
+	branch = main
+[submodule "upstream/microsoft/mastering-github-copilot-for-dotnet-csharp-developers"]
+	path = upstream/microsoft/mastering-github-copilot-for-dotnet-csharp-developers
+	url = https://github.com/microsoft/mastering-github-copilot-for-dotnet-csharp-developers.git
+	branch = main
+[submodule "upstream/microsoft/spatial-computing"]
+	path = upstream/microsoft/spatial-computing
+	url = https://github.com/microsoft/spatial-computing.git
+	branch = master
+[submodule "upstream/microsoft/apache-airflow-microsoft-fabric-plugin"]
+	path = upstream/microsoft/apache-airflow-microsoft-fabric-plugin
+	url = https://github.com/microsoft/apache-airflow-microsoft-fabric-plugin.git
+	branch = main
