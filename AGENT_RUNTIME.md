@@ -35,9 +35,9 @@ The local runtime uses an OpenAI-compatible local inference endpoint. The local 
 
 ### CatChat
 
-CatChat's output boundary is the authenticated root-runtime endpoint `POST /v1/chat`. Send a JSON object containing `message` plus an optional `session_id`; the response contains `session_id` plus `response`. The endpoint uses the same configured model provider, persistent session store, native tool registry, and tool-round limits as the local agent runtime. A non-loopback deployment requires `ASTRO_AI_API_TOKEN` with at least 24 characters. Keep the bearer token in CatChat's trusted server process, never in browser JavaScript.
+The separate `JAPStudios/CatChat` service already implements the Astrologically Intelligent reply path. For each CatChat conversation it creates one persistent AI session through `POST /api/session`, using the configured `ASTRO_AI_ENDPOINT_ID` plus `ASTRO_AI_MODEL`. It sends each incoming message through `POST /api/chat` with that conversation's AI session identifier. The response is stored as a normal CatChat assistant message. The bearer token stays in CatChat's server process; it must have the `chat` scope. The endpoint owner must be authorized to use the selected model endpoint. The CatChat repository's automated tests currently mock the responder; this contract documents the implemented request path, not a public deployment or live model test.
 
-This repository supplies the backend API contract. The separate CatChat client implementation is not present in this repository, so this documentation does not claim a live CatChat deployment connection. The full FastAPI web application has a separate `/api/chat` surface; it is not the root-runtime API described here.
+The root-runtime `POST /v1/chat` endpoint is a separate direct API for trusted clients that do not use CatChat's conversation service. It accepts `message` plus an optional `session_id` and returns `session_id` plus `response`.
 
 ### Peanut Browsing
 
@@ -58,7 +58,6 @@ The loopback HTTP service exposes the same SQLite-backed orchestration control p
 | Method | Path | Purpose |
 | --- | --- | --- |
 | `GET` | `/v1/agents` | List agents; optional `?state=active`, `paused`, or `disabled` |
-| `GET` | `/v1/agents/{agent_id}` | Retrieve one registered agent |
 | `GET` | `/v1/agents/{agent_id}` | Retrieve one registered agent |
 | `GET` | `/v1/agents/due` | List agents whose heartbeat is due |
 | `POST` | `/v1/agents/{agent_id}/heartbeat` | Mark an active agent heartbeat |
