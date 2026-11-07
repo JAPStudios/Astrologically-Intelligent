@@ -733,8 +733,8 @@ def test_vllm_reader_preserves_explicit_context_limit_without_inventing_capabili
     assert records[0].capability.family == mc.FAMILY_UNKNOWN
     assert dict(records[0].capability.limits) == {"context_tokens": 32768}
     assert records[0].capability.confidence == mc.CONFIDENCE_PROVIDER_REPORTED
-    assert records[1].capability.limits == {}
-    assert records[2].capability.limits == {}
+    assert records[1].capability.limits == ()
+    assert records[2].capability.limits == ()
 
 
 def test_registry_routes_vllm_to_native_reader():
