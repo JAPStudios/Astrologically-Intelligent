@@ -70,11 +70,10 @@ DEFAULT_SETTINGS = {
     "stt_provider": "disabled",
     "stt_model": "base",
     "stt_language": "",
-    "search_provider": "searxng",
-    # Default fallback chain — when the primary provider fails or
-    # rate-limits, we try DuckDuckGo next. Free, no API key required, so
-    # safe to ship on by default for every user.
-    "search_fallback_chain": ["duckduckgo"],
+    "search_provider": "peanut_browsing",
+    # Peanut Browsing is the first-party default. Its provider chain does not
+    # fall back to competing search engines when the index is empty or unavailable.
+    "search_fallback_chain": [],
     "search_url": "",
     "search_result_count": 5,
     # SafeSearch level applied to every provider that exposes one.
