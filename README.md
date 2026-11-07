@@ -32,7 +32,7 @@ python -m unittest discover -s tests -v
 
 ## Upstream source imports
 
-The current `.gitmodules` inventory contains **742 pinned public repositories across all ten requested GitHub organizations**, including five repositories from `herdrdev`. Three previously listed repositories were empty and had no source tree to pin. The inventory records upstream repositories as Git submodules; it does not claim that their applications or functionality have been merged into Astrologically Intelligent.
+The current `.gitmodules` inventory contains **742 pinned public repositories across the original ten organizations**, including five repositories from `herdrdev`. The requested scope is twenty organizations; the importer now covers the additional ten. Cursor, DeepSeek AI, LukaLabs, and Meta Llama use full public-repository listings. Apple, AWS, Brave, Google, Kagi Search, and Microsoft use GitHub repository search for `org:<name> AI`. Their new Gitlinks are added by the import workflow after the importer update is merged. Three previously listed repositories were empty and had no source tree to pin. The inventory records upstream repositories as Git submodules; it does not claim that their applications or functionality have been merged into Astrologically Intelligent.
 
 Retrieve the pinned source trees with:
 
@@ -47,7 +47,17 @@ The resumable importer in `scripts/import_upstream_orgs.py` can add later upstre
 The requested upstream scope comprises public repositories from these GitHub organizations:
 
 - [Anthropic](https://github.com/orgs/anthropics/repositories)
+- [Apple](https://github.com/orgs/apple/repositories)
+- [AWS](https://github.com/orgs/aws/repositories)
+- [Brave](https://github.com/orgs/brave/repositories)
+- [Cursor](https://github.com/orgs/cursor/repositories)
+- [DeepSeek AI](https://github.com/orgs/deepseek-ai/repositories)
+- [Google](https://github.com/orgs/google/repositories)
 - [Herdr](https://github.com/orgs/herdrdev/repositories)
+- [Kagi Search](https://github.com/orgs/kagisearch/repositories)
+- [LukaLabs](https://github.com/orgs/lukalabs/repositories)
+- [Meta Llama](https://github.com/orgs/meta-llama/repositories)
+- [Microsoft](https://github.com/orgs/microsoft/repositories)
 - [n8n](https://github.com/orgs/n8n-io/repositories)
 - [NousResearch](https://github.com/orgs/NousResearch/repositories)
 - [Odysseus](https://github.com/orgs/odysseus-dev/repositories)
@@ -57,4 +67,4 @@ The requested upstream scope comprises public repositories from these GitHub org
 - [Perplexity](https://github.com/orgs/perplexityai/repositories)
 - [xAI](https://github.com/orgs/xai-org/repositories)
 
-These repositories are source references, not a claim that their projects or functionality have been incorporated into Astrologically Intelligent. Evaluate any proposed source use individually for licensing, compatibility, security, dependencies, executable behaviour, and tests.
+Apple, AWS, Brave, Google, Kagi Search, and Microsoft are queried for AI-related repositories; the other organizations use their public repository listings. These repositories are source references, not a claim that their projects or functionality have been incorporated into Astrologically Intelligent. Evaluate any proposed source use individually for licensing, compatibility, security, dependencies, executable behaviour, and tests.
