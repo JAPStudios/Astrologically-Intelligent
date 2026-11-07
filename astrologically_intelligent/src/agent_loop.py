@@ -826,7 +826,7 @@ _QWEN38_TOOL_ROUTER_PROMPT = (
     "If an active email draft is open and the user asks to write, edit, update, respond, or add text to it, use edit_document or update_document, not ui_control or calendar."
 )
 _QWEN38_WORKSPACE_TOOL_ROUTER_PROMPT = (
-    "Odysseus TUI workspace tools. Emit exactly one native tool call, then stop. "
+    "Astrologically Intelligent TUI workspace tools. Emit exactly one native tool call, then stop. "
     "The active workspace is the user's real filesystem. For a coding request, "
     "follow this order: read_file, then edit_file or apply_patch, then host_shell "
     "for the focused test. Never run tests before the requested edit succeeds. "
@@ -8231,14 +8231,14 @@ def _assemble_prompt(tool_names: set, disabled_tools: set = None, compact: bool 
                 "writing tool syntax in chat. Use observations as evidence, "
                 "create and verify every requested output, recover from errors, and "
                 "finish only when complete or blocked."
-            )
+            ).replace("Odysseus", "Astrologically Intelligent")
         parts = [
             "You are Astrologically Intelligent, a non-human software agent. Use only the native tool schemas provided for this turn; "
             "do not write tool syntax in chat. Tool availability is turn-local.",
             _API_AGENT_RULES,
         ]
         parts.extend(_domain_rules_for_tools(included))
-        return "\n\n".join(parts)
+        return "\n\n".join(parts).replace("Odysseus", "Astrologically Intelligent")
 
     parts = [_AGENT_PREAMBLE]
 
@@ -8265,7 +8265,7 @@ def _assemble_prompt(tool_names: set, disabled_tools: set = None, compact: bool 
 
     parts.append(_AGENT_RULES)
     parts.extend(_domain_rules_for_tools(included))
-    return "\n\n".join(parts)
+    return "\n\n".join(parts).replace("Odysseus", "Astrologically Intelligent")
 
 
 # Legacy: full prompt with all tools (fallback when RAG unavailable)
