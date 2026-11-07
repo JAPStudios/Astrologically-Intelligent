@@ -133,9 +133,22 @@ def test_2fa_setup_still_generates_a_server_png():
 
 
 def test_distribution_paths_include_all_notices():
-    for name in ['Odysseus.spec', 'build-windows-portable.ps1', 'build-macos-app.sh', 'Dockerfile']:
+    for name in ['Odysseus.spec', 'build-macos-app.sh', 'Dockerfile']:
         text = (ROOT / name).read_text()
         assert 'licenses' in text and 'THIRD_PARTY_PROVENANCE.json' in text and 'ACKNOWLEDGMENTS.md' in text
+    windows_builder = (ROOT / 'build-windows-portable.ps1').read_text()
+    assert r'PyInstaller --noconfirm --clean .\Odysseus.spec' in windows_builder
+    assert r'dist\AstrologicallyIntelligent' in windows_builder
+    assert r'dist\Odysseus' not in windows_builder
+    spec = (ROOT / 'Odysseus.spec').read_text()
+    assert 'name="AstrologicallyIntelligent"' in spec
+    mac_builder = (ROOT / 'build-macos-app.sh').read_text()
+    assert 'APP_NAME="Astrologically Intelligent"' in mac_builder
+    assert 'APP_EXECUTABLE="AstrologicallyIntelligent"' in mac_builder
+    assert 'com.japstudios.astrologicallyintelligent' in mac_builder
+    assert 'odysseus.jpg' not in mac_builder
+    syntax = subprocess.run(['bash', '-n', str(ROOT / 'build-macos-app.sh')], capture_output=True, text=True)
+    assert syntax.returncode == 0, syntax.stderr
     ignore = (ROOT / '.dockerignore').read_text()
     assert '!ACKNOWLEDGMENTS.md' in ignore
     manifest = json.loads((ROOT / 'static/manifest.json').read_text())
