@@ -218,18 +218,33 @@ class NeuralNetworkClassifier:
         return history
 
     def _adam_update(self, gradients):
-        self._step += 1
-        b1, b2, epsilon = 0.9, 0.999, 1e-8
         parameters = self._parameters()
+        if set(gradients) != set(parameters):
+            raise ValueError("gradients must contain every network parameter exactly once")
+        for name, gradient in gradients.items():
+            if gradient.shape != parameters[name].shape or not np.isfinite(gradient).all():
+                raise FloatingPointError(f"invalid gradient for {name}")
+        next_step = self._step + 1
+        b1, b2, epsilon = 0.9, 0.999, 1e-8
+        updates = {}
+        next_moments = {}
         for name, gradient in gradients.items():
             first, second = self._adam[name]
-            first *= b1
-            first += (1.0 - b1) * gradient
-            second *= b2
-            second += (1.0 - b2) * np.square(gradient)
-            mhat = first / (1.0 - b1 ** self._step)
-            vhat = second / (1.0 - b2 ** self._step)
-            parameters[name] -= self.learning_rate * mhat / (np.sqrt(vhat) + epsilon)
+            next_first = b1 * first + (1.0 - b1) * gradient
+            next_second = b2 * second + (1.0 - b2) * np.square(gradient)
+            mhat = next_first / (1.0 - b1 ** next_step)
+            vhat = next_second / (1.0 - b2 ** next_step)
+            update = self.learning_rate * mhat / (np.sqrt(vhat) + epsilon)
+            candidate = parameters[name] - update
+            if not (np.isfinite(next_first).all() and np.isfinite(next_second).all()
+                    and np.isfinite(candidate).all()):
+                raise FloatingPointError(f"non-finite Adam update for {name}")
+            updates[name] = candidate
+            next_moments[name] = (next_first, next_second)
+        for name, candidate in updates.items():
+            parameters[name][...] = candidate
+            self._adam[name] = next_moments[name]
+        self._step = next_step
 
     def save(self, path: str | os.PathLike[str]) -> None:
         destination = Path(path)
