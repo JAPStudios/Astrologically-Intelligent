@@ -30,6 +30,7 @@ from .model_interaction_tools import ChatWithModelTool, AskTeacherTool, ListMode
 from .bg_job_tools import ManageBgJobsTool
 from .session_tools import CreateSessionTool, ListSessionsTool, SendToSessionTool, ManageSessionTool
 from .editor_tools import PlanEditTool, RunEditorCommandTool, GetEditorScreenshotTool, AiEditImageTool
+from .herdr_tools import HerdrAgentListTool, HerdrAgentGetTool, HerdrAgentReadTool, HerdrAgentExplainTool
 from .admin_tools import (
     ADMIN_TOOL_HANDLERS,
     do_manage_endpoints, do_manage_mcp, do_manage_webhooks,
@@ -77,6 +78,10 @@ TOOL_HANDLERS = {
     "run_editor_command": RunEditorCommandTool().execute,
     "get_editor_screenshot": GetEditorScreenshotTool().execute,
     "ai_edit_image": AiEditImageTool().execute,
+    "herdr_agent_list": HerdrAgentListTool().execute,
+    "herdr_agent_get": HerdrAgentGetTool().execute,
+    "herdr_agent_read": HerdrAgentReadTool().execute,
+    "herdr_agent_explain": HerdrAgentExplainTool().execute,
 }
 # Config/integration admin tools (manage_endpoints/mcp/webhooks/tokens/settings).
 TOOL_HANDLERS.update(ADMIN_TOOL_HANDLERS)
