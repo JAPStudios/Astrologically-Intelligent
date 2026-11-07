@@ -18,7 +18,7 @@ from src.agent_tools.peanut_tools import PeanutCrawlTool
 
 PEANUT_CRAWL_URL = "https://example.com/odysseus-smoke-peanut"
 
-CHAT_PATH = "/api/chat"
+CHAT_PATH = "/api/chat_stream"
 
 
 def _gateway_calls():
@@ -48,13 +48,32 @@ def _assert_tool_result_reached_follow_up(stub_provider, tool_name, marker):
 def test_peanut_search_completes_a_native_agent_tool_cycle(client, chat_session, stub_provider):
     _gateway_calls()
     stub_provider.recorder.clear()
-    response = client.post(CHAT_PATH, json={
+    events = []
+    with client.stream("POST", CHAT_PATH, data={
         "message": f"Search Peanut Browsing for {PEANUT_SEARCH_PROMPT}.",
         "session": chat_session,
-        "allow_web_search": True,
-    })
-    assert response.status_code == 200, response.text
-    assert response.json().get("response") == PEANUT_SEARCH_FINAL, response.json()
+        "mode": "agent",
+        "allow_web_search": "true",
+    }) as response:
+        assert response.status_code == 200
+        for line in response.iter_lines():
+            if not line.startswith("data: "):
+                continue
+            payload = line[6:]
+            if payload == "[DONE]":
+                break
+            try:
+                events.append(json.loads(payload))
+            except json.JSONDecodeError:
+                continue
+    final_events = [event for event in events if event.get("type") == "final_response"]
+    streamed_text = "".join(
+        event.get("delta", "")
+        for event in events
+        if isinstance(event.get("delta"), str) and not event.get("thinking")
+    )
+    final_text = (final_events[-1].get("content") or final_events[-1].get("delta") or "") if final_events else streamed_text
+    assert PEANUT_SEARCH_FINAL in final_text, events
     _assert_tool_result_reached_follow_up(stub_provider, "web_search", PEANUT_RESULT_MARKER)
     calls = _gateway_calls()
     assert any(call.get("method") == "GET" and call.get("query") == PEANUT_SEARCH_QUERY for call in calls), calls
