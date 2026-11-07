@@ -32,7 +32,7 @@ python -m unittest discover -s tests -v
 
 ## Upstream source imports
 
-The completed .gitmodules inventory contains **1,532 pinned public repositories across all twenty requested organizations**. Organization-by-organization counts are recorded in [UPSTREAM_IMPORT.md](UPSTREAM_IMPORT.md). The six AI-query organizations are Apple, AWS, Brave, Google, Kagi Search, and Microsoft; the remaining fourteen use public-repository listings. Five separate skill submodules under skills/upstream are not included in the 1,532 repository count. These Git submodules preserve upstream source boundaries; they do not mean that the upstream applications or their functionality have been integrated into Astrologically Intelligent.
+The current `.gitmodules` inventory contains **1,532 pinned public repositories across all twenty requested organizations**, including five repositories from `herdrdev`. The counts are measured directly from the committed Gitlink paths: 115 anthropics, 4 apple, 9 aws, 3 brave, 10 cursor, 46 deepseek-ai, 50 google, 5 herdrdev, 2 kagisearch, 20 lukalabs, 12 meta-llama, 634 microsoft, 52 n8n-io, 114 NousResearch, 2 odysseus-dev, 277 openai, 97 openclaw, 11 paperclipai, 57 perplexityai, plus 12 xai-org. The inventory records upstream repositories as Git submodules; it does not claim that their applications or functionality have been merged into Astrologically Intelligent.
 
 Retrieve the pinned source trees with:
 

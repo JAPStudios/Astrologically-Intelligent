@@ -2,11 +2,11 @@
 
 ## Result
 
-**Status: complete — source inventory imported; functionality integration remains a separate engineering task.**
+**Status: Source inventory imported — functionality integration and validation remain separate work.**
 
-The completed .gitmodules inventory contains **1,532 pinned public repositories across all twenty requested organizations**. The counts below are calculated directly from the current upstream organization submodule paths.
+The current `.gitmodules` file contains **1,532 pinned public repositories across all twenty requested organizations**. The table below is counted directly from the committed Gitlink paths at the current inventory revision.
 
-| Organization | Pinned repositories |
+| Organization | Pinned submodules |
 | --- | ---: |
 | anthropics | 115 |
 | apple | 4 |
@@ -30,36 +30,32 @@ The completed .gitmodules inventory contains **1,532 pinned public repositories 
 | xai-org | 12 |
 | **Total** | **1,532** |
 
-Five additional skill submodules under skills/upstream are maintained separately. They are not included in the total above.
-
-The six AI-query organizations are apple, aws, brave, google, kagisearch, and microsoft. The remaining fourteen organizations use public-repository listings. The importer completed its bounded GitHub Actions batches successfully. The inventory includes archived repositories and forks where returned by the listing or query. Existing submodule URLs are skipped; each imported repository is pinned to the commit resolved from its default branch.
-
-The inventory records Git submodules. It does not establish that every upstream source tree has been checked out, reviewed, built, or integrated into the application.
+The inventory was counted directly from the current `.gitmodules` file. It records pinned Git submodules; it does not establish that every upstream source tree has been checked out, reviewed, built, or integrated into the application.
 
 ## Retrieving the source
 
 The destination stores each upstream repository as a Git submodule pinned to a commit resolved from its default branch at import time. Retrieve the pinned source trees with:
 
-~~~
+```sh
 git submodule update --init --recursive
-~~~
+```
 
-Repositories using Git LFS may require Git LFS to be installed. Fetch their LFS objects separately:
+Repositories using Git LFS may require Git LFS to be installed and their LFS objects fetched separately:
 
-~~~
+```sh
 git submodule foreach --recursive 'git lfs pull'
-~~~
+```
 
 Each submodule retains its upstream repository boundary, source layout, and license files. The submodules are not flattened into one directory or relicensed by the destination repository.
 
 ## Import tooling
 
-scripts/import_upstream_orgs.py lists public repositories for the configured organizations, resolves default-branch commits, and records Gitlinks plus .gitmodules entries. It is resumable and skips existing submodule URLs. Six broad organizations use a repository search for AI rather than importing every public repository. GitHub limits each repository-search query to 1,000 results; the completed Microsoft query returned 634 pinned repositories, below that limit. The Import Upstream Repositories workflow performs imports in bounded batches.
+`scripts/import_upstream_orgs.py` lists public repositories for the configured organizations, resolves default-branch commits, and records Gitlinks and `.gitmodules` entries. It is resumable and skips existing submodule URLs. Six broad organizations use a repository search for `AI` rather than importing every public repository. GitHub limits each repository-search query to 1,000 results; the importer reports when an organization reaches that limit instead of failing on page eleven. The `Import Upstream Repositories` workflow performs imports in bounded batches.
 
 ## Runtime integrations
 
-The application contains specific API integrations for n8n workflow management, Paperclip company and issue operations, Perplexity Search, read-only OpenClaw session access, Anthropic Messages API transport, plus provider routing for xAI, Perplexity, and DeepSeek. These are selected application integrations; they do not mean the upstream applications themselves have all been merged into one runtime. The CatChat integration plus Peanut Browsing search tools are documented in AGENT_RUNTIME.md.
+The application also contains API integrations for n8n workflow management, Paperclip company/issue operations, Perplexity Search, and read-only OpenClaw session access, plus native Anthropic Messages API transport and provider routing for xAI and Perplexity. These are specific application integrations; they do not mean the upstream applications themselves have all been merged into one runtime.
 
 ## Remaining work
 
-The source inventory is not the completion criterion for the software. Each upstream project still needs an evidence-based disposition: identify relevant functionality, review license and dependency obligations, assess compatibility and security, integrate selected functionality, then add automated tests. Projects that are irrelevant, incompatible, redundant, or unsafe to incorporate should be documented as such rather than copied indiscriminately. The complete application also requires repeatable dependency installation, test execution, security checks, and deployment validation.
+The source inventory is not the completion criterion for the software. Each upstream project still needs an evidence-based disposition: relevant functionality identified, license and dependency obligations reviewed, compatibility assessed, any selected functionality integrated into the application, and automated tests added. Projects that are irrelevant, incompatible, redundant, or unsafe to incorporate should be documented as such rather than copied indiscriminately. The complete application also requires repeatable dependency installation, test execution, security checks, and deployment validation.
