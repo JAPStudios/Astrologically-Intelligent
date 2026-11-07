@@ -1,5 +1,8 @@
+import io
+import json
 import tempfile
 import unittest
+import urllib.parse
 from pathlib import Path
 from unittest.mock import patch
 
@@ -96,13 +99,24 @@ class UpstreamImporterTests(unittest.TestCase):
             "default_branch": "main",
             "size": 10,
         }
-        with patch("scripts.import_upstream_orgs.fetch_search_page", side_effect=[[item], []]) as search:
+        with patch("scripts.import_upstream_orgs.fetch_search_page", return_value=[item]) as search:
             with patch("scripts.import_upstream_orgs.fetch_page") as listing:
                 repos = list_repositories(("apple",))
         self.assertEqual([repo["name"] for repo in repos], ["ml-project"])
-        self.assertEqual(search.call_args_list[0].args, ("apple", 1, None))
-        self.assertEqual(search.call_args_list[1].args, ("apple", 2, None))
+        search.assert_called_once_with("apple", 1, None)
         listing.assert_not_called()
+
+    def test_ai_search_uses_the_requested_org_query(self):
+        from scripts.import_upstream_orgs import fetch_search_page
+
+        response = io.BytesIO(json.dumps({"items": []}).encode("utf-8"))
+        with patch("scripts.import_upstream_orgs.urllib.request.urlopen", return_value=response) as open_url:
+            self.assertEqual(fetch_search_page("apple", 1, "test-token"), [])
+        request = open_url.call_args.args[0]
+        parsed = urllib.parse.urlparse(request.full_url)
+        self.assertEqual(parsed.path, "/search/repositories")
+        self.assertEqual(urllib.parse.parse_qs(parsed.query)["q"], ["org:apple AI"])
+        self.assertEqual(request.get_header("Authorization"), "Bearer test-token")
 
     def test_non_query_organizations_still_import_all_public_repositories(self):
         item = {
