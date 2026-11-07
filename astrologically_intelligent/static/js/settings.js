@@ -775,6 +775,7 @@ var _LINK = function(href, text) {
   return '<a href="' + href + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent, var(--red));text-decoration:underline;">' + text + '</a>';
 };
 var _searchProviderHints = {
+  peanut_browsing: 'First-party Peanut Browsing index. Configure its gateway URL and API key here; search and deep research use this index without switching to competing search engines.',
   searxng: 'Private, self-hosted instance. Leave URL empty to use the SEARXNG_INSTANCE env var.',
   duckduckgo: 'No API key needed, but rate-limited — heavy use can return empty results. Configure a fallback below.',
   brave: 'Get your API key from ' + _LINK('https://brave.com/search/api/', 'brave.com/search/api'),
@@ -783,12 +784,13 @@ var _searchProviderHints = {
   serper: 'Google results via API. 2,500 free queries at ' + _LINK('https://serper.dev/', 'serper.dev'),
   disabled: 'Web search and deep research tools will be unavailable.',
 };
-var _searchNeedsKey = { brave: 1, google_pse: 1, tavily: 1, serper: 1 };
+var _searchNeedsKey = { peanut_browsing: 1, brave: 1, google_pse: 1, tavily: 1, serper: 1 };
 var _searchLabels = {
-  searxng: 'SearXNG', duckduckgo: 'DuckDuckGo', brave: 'Brave Search',
+  peanut_browsing: 'Peanut Browsing', searxng: 'SearXNG', duckduckgo: 'DuckDuckGo', brave: 'Brave Search',
   google_pse: 'Google PSE', tavily: 'Tavily', serper: 'Serper', disabled: 'Disabled',
 };
 var _searchKeyFields = {
+  peanut_browsing: 'peanut_search_api_key',
   brave: 'brave_api_key', google_pse: 'google_pse_key',
   tavily: 'tavily_api_key', serper: 'serper_api_key',
 };
@@ -808,23 +810,36 @@ async function initSearchSettings() {
   var _settings = {};
 
   function keyFieldFor(prov) { return _searchKeyFields[prov] || ''; }
+  function urlFieldFor(prov) {
+    if (prov === 'peanut_browsing') return 'peanut_search_api_url';
+    if (prov === 'searxng') return 'search_url';
+    return '';
+  }
 
   function loadKeyForProvider(prov) {
     var field = keyFieldFor(prov);
-    keyInput.value = field ? (_settings[field] || _settings.search_api_key || '') : '';
+    keyInput.value = field ? (_settings[field] || (prov === 'peanut_browsing' ? '' : _settings.search_api_key) || '') : '';
+  }
+
+  function loadUrlForProvider(prov) {
+    var field = urlFieldFor(prov);
+    urlInput.value = field ? (_settings[field] || '') : '';
   }
 
   function updateVisibility() {
     var prov = provSel.value;
-    urlRow.style.display = prov === 'searxng' ? 'flex' : 'none';
+    urlRow.style.display = (prov === 'searxng' || prov === 'peanut_browsing') ? 'flex' : 'none';
     keyRow.style.display = _searchNeedsKey[prov] ? 'flex' : 'none';
     cxRow.style.display = prov === 'google_pse' ? 'flex' : 'none';
     hint.innerHTML = _searchProviderHints[prov] || '';
-    if (prov === 'brave') keyInput.placeholder = 'Brave API key';
+    if (prov === 'peanut_browsing') keyInput.placeholder = 'Peanut Browsing gateway key';
+    else if (prov === 'brave') keyInput.placeholder = 'Brave API key';
     else if (prov === 'google_pse') keyInput.placeholder = 'Google API key';
     else if (prov === 'tavily') keyInput.placeholder = 'Tavily API key';
     else if (prov === 'serper') keyInput.placeholder = 'Serper API key';
     else keyInput.placeholder = 'API key';
+    urlInput.placeholder = prov === 'peanut_browsing' ? 'https://search.example (gateway base URL)' : 'http://localhost:8080 (optional)';
+    loadUrlForProvider(prov);
     loadKeyForProvider(prov);
   }
 
@@ -846,7 +861,7 @@ async function initSearchSettings() {
     _settings = await res.json();
     if (_settings.search_provider) provSel.value = _settings.search_provider;
     updateCountDisplay();
-    if (_settings.search_url) urlInput.value = _settings.search_url;
+    loadUrlForProvider(provSel.value);
     if (_settings.google_pse_cx) cxInput.value = _settings.google_pse_cx;
   } catch (e) { console.warn('Failed to load search settings', e); }
 
@@ -866,15 +881,17 @@ async function initSearchSettings() {
       var sRes = await fetch('/api/auth/settings', { credentials: 'same-origin' });
       var s = await sRes.json();
       _settings = s;
-      var active = s.search_provider || 'searxng';
+      var active = s.search_provider || 'peanut_browsing';
       var label = _searchLabels[active] || active;
       var extra = '';
       var kf = keyFieldFor(active);
-      var hasKey = kf ? ((s[kf] || '').trim() || (s.search_api_key || '').trim()) : false;
+      var hasKey = kf ? ((s[kf] || '').trim() || (active === 'peanut_browsing' ? '' : (s.search_api_key || '').trim())) : false;
       if (_searchNeedsKey[active]) {
         extra = hasKey ? ' (key set)' : ' (no key)';
       } else if (active === 'searxng' && (s.search_url || '').trim()) {
         extra = ' (' + s.search_url + ')';
+      } else if (active === 'peanut_browsing' && (s.peanut_search_api_url || '').trim()) {
+        extra = ' (' + s.peanut_search_api_url + ')';
       }
       var count = s.search_result_count || 5;
       msg.textContent = 'Active: ' + label + extra + ' \u00b7 ' + count + ' results';
@@ -900,9 +917,11 @@ async function initSearchSettings() {
       var payload = {
         search_provider: prov,
         search_result_count: resultCount,
-        search_url: urlInput.value.trim(),
         google_pse_cx: cxInput.value.trim(),
       };
+      var uf = urlFieldFor(prov);
+      if (uf) { payload[uf] = urlInput.value.trim(); _settings[uf] = urlInput.value.trim(); }
+      if (prov === 'peanut_browsing') { payload.search_fallback_chain = []; _settings.search_fallback_chain = []; }
       var kf = keyFieldFor(prov);
       if (kf) {
         payload[kf] = keyInput.value.trim();
@@ -984,6 +1003,14 @@ async function initSearchSettings() {
   var TRASH_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
   function _renderFallbackChain() {
     if (!fbWrap) return;
+    var fbRow = fbWrap.closest('.settings-row');
+    if (provSel.value === 'peanut_browsing') {
+      if (fbRow) fbRow.style.display = 'none';
+      fbWrap.innerHTML = '';
+      if (addBtn) addBtn.style.display = 'none';
+      return;
+    }
+    if (fbRow) fbRow.style.display = '';
     var chain = (_settings.search_fallback_chain || []).slice();
     fbWrap.innerHTML = '';
     chain.forEach(function(p, idx) {
