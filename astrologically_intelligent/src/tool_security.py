@@ -54,7 +54,12 @@ NON_ADMIN_BLOCKED_TOOLS = BUILTIN_EMAIL_TOOLS | {
     "glob",
     "ls",
     "get_workspace",
+    "peanut_browsing_crawl",
     "host_shell",
+    "herdr_agent_list",
+    "herdr_agent_get",
+    "herdr_agent_read",
+    "herdr_agent_explain",
     "search_chats",
     "manage_memory",
     "manage_skills",
@@ -144,6 +149,10 @@ PLAN_MODE_READONLY_TOOLS = {
     "chat_with_model",
     "ask_teacher",
     "get_editor_screenshot",
+    "herdr_agent_list",
+    "herdr_agent_get",
+    "herdr_agent_read",
+    "herdr_agent_explain",
 }
 
 
