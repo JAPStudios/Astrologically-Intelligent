@@ -363,7 +363,7 @@ FUNCTION_TOOL_SCHEMAS = [
         "function": {
             "name": "herdr_agent_list",
             "description": "List coding agents in the current Herdr runtime. Use only when the user explicitly asks to inspect or use Herdr. Requires HERDR_ENV=1; it will not inspect a Herdr session from outside Herdr.",
-            "parameters": {"type": "object", "properties": {}, "additionalProperties": false}
+            "parameters": {"type": "object", "properties": {}, "additionalProperties": False}
         }
     },
     {
@@ -375,7 +375,7 @@ FUNCTION_TOOL_SCHEMAS = [
                 "type": "object",
                 "properties": {"target": {"type": "string", "description": "Unique live agent name or pane ID, such as reviewer or w1:p2."}},
                 "required": ["target"],
-                "additionalProperties": false
+                "additionalProperties": False
             }
         }
     },
@@ -393,7 +393,7 @@ FUNCTION_TOOL_SCHEMAS = [
                     "format": {"type": "string", "enum": ["text", "ansi"], "description": "Output format."}
                 },
                 "required": ["target"],
-                "additionalProperties": false
+                "additionalProperties": False
             }
         }
     },
@@ -406,7 +406,7 @@ FUNCTION_TOOL_SCHEMAS = [
                 "type": "object",
                 "properties": {"target": {"type": "string", "description": "Unique live agent name or pane ID."}},
                 "required": ["target"],
-                "additionalProperties": false
+                "additionalProperties": False
             }
         }
     },
