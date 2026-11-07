@@ -6085,3 +6085,63 @@
 	path = upstream/microsoft/CommonGround
 	url = https://github.com/microsoft/CommonGround.git
 	branch = main
+[submodule "upstream/microsoft/M365-Data-Scanning-Auto-labeling-and-Getting-Data-Ready-for-AI-Use"]
+	path = upstream/microsoft/M365-Data-Scanning-Auto-labeling-and-Getting-Data-Ready-for-AI-Use
+	url = https://github.com/microsoft/M365-Data-Scanning-Auto-labeling-and-Getting-Data-Ready-for-AI-Use.git
+	branch = main
+[submodule "upstream/microsoft/TechLab-Training-AI-Models-on-Azure-VMs-using-Azure-CycleCloud-SLURM-Workspace"]
+	path = upstream/microsoft/TechLab-Training-AI-Models-on-Azure-VMs-using-Azure-CycleCloud-SLURM-Workspace
+	url = https://github.com/microsoft/TechLab-Training-AI-Models-on-Azure-VMs-using-Azure-CycleCloud-SLURM-Workspace.git
+	branch = main
+[submodule "upstream/microsoft/frontiertour27-BRK280-from-legacy-to-ai-ready-with-agentic-modernization-on-azure"]
+	path = upstream/microsoft/frontiertour27-BRK280-from-legacy-to-ai-ready-with-agentic-modernization-on-azure
+	url = https://github.com/microsoft/frontiertour27-BRK280-from-legacy-to-ai-ready-with-agentic-modernization-on-azure.git
+	branch = main
+[submodule "upstream/microsoft/BAM-Frontier-Hack"]
+	path = upstream/microsoft/BAM-Frontier-Hack
+	url = https://github.com/microsoft/BAM-Frontier-Hack.git
+	branch = main
+[submodule "upstream/microsoft/FixLab"]
+	path = upstream/microsoft/FixLab
+	url = https://github.com/microsoft/FixLab.git
+	branch = main
+[submodule "upstream/microsoft/typescript-skills"]
+	path = upstream/microsoft/typescript-skills
+	url = https://github.com/microsoft/typescript-skills.git
+	branch = main
+[submodule "upstream/microsoft/MSMARCO-Conversational-Search"]
+	path = upstream/microsoft/MSMARCO-Conversational-Search
+	url = https://github.com/microsoft/MSMARCO-Conversational-Search.git
+	branch = master
+[submodule "upstream/microsoft/LAB730-ignite-2026-healthcare-agents"]
+	path = upstream/microsoft/LAB730-ignite-2026-healthcare-agents
+	url = https://github.com/microsoft/LAB730-ignite-2026-healthcare-agents.git
+	branch = main
+[submodule "upstream/microsoft/universal-lake"]
+	path = upstream/microsoft/universal-lake
+	url = https://github.com/microsoft/universal-lake.git
+	branch = main
+[submodule "upstream/microsoft/azure-speech-mcp-server"]
+	path = upstream/microsoft/azure-speech-mcp-server
+	url = https://github.com/microsoft/azure-speech-mcp-server.git
+	branch = main
+[submodule "upstream/microsoft/Multimodal-Cultural-Alignment-Africa"]
+	path = upstream/microsoft/Multimodal-Cultural-Alignment-Africa
+	url = https://github.com/microsoft/Multimodal-Cultural-Alignment-Africa.git
+	branch = main
+[submodule "upstream/microsoft/mosaic-apim"]
+	path = upstream/microsoft/mosaic-apim
+	url = https://github.com/microsoft/mosaic-apim.git
+	branch = main
+[submodule "upstream/microsoft/Agentic-Shiksha"]
+	path = upstream/microsoft/Agentic-Shiksha
+	url = https://github.com/microsoft/Agentic-Shiksha.git
+	branch = main
+[submodule "upstream/microsoft/nexamem"]
+	path = upstream/microsoft/nexamem
+	url = https://github.com/microsoft/nexamem.git
+	branch = main
+[submodule "upstream/microsoft/acs-resource-explorer"]
+	path = upstream/microsoft/acs-resource-explorer
+	url = https://github.com/microsoft/acs-resource-explorer.git
+	branch = main
