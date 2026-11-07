@@ -5185,3 +5185,103 @@
 	path = upstream/microsoft/Data-AI-Hackathon
 	url = https://github.com/microsoft/Data-AI-Hackathon.git
 	branch = main
+[submodule "upstream/microsoft/ai-agent-eval-scenario-library"]
+	path = upstream/microsoft/ai-agent-eval-scenario-library
+	url = https://github.com/microsoft/ai-agent-eval-scenario-library.git
+	branch = main
+[submodule "upstream/microsoft/agentic-agile-template"]
+	path = upstream/microsoft/agentic-agile-template
+	url = https://github.com/microsoft/agentic-agile-template.git
+	branch = main
+[submodule "upstream/microsoft/ai-py-param-validation"]
+	path = upstream/microsoft/ai-py-param-validation
+	url = https://github.com/microsoft/ai-py-param-validation.git
+	branch = main
+[submodule "upstream/microsoft/aitour-unlock-value-with-copilot"]
+	path = upstream/microsoft/aitour-unlock-value-with-copilot
+	url = https://github.com/microsoft/aitour-unlock-value-with-copilot.git
+	branch = main
+[submodule "upstream/microsoft/InvisMark"]
+	path = upstream/microsoft/InvisMark
+	url = https://github.com/microsoft/InvisMark.git
+	branch = main
+[submodule "upstream/microsoft/ShadowFrog"]
+	path = upstream/microsoft/ShadowFrog
+	url = https://github.com/microsoft/ShadowFrog.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK202-azure-devops-meets-github-the-path-to-ai-powered-sdlc"]
+	path = upstream/microsoft/Build26-BRK202-azure-devops-meets-github-the-path-to-ai-powered-sdlc
+	url = https://github.com/microsoft/Build26-BRK202-azure-devops-meets-github-the-path-to-ai-powered-sdlc.git
+	branch = main
+[submodule "upstream/microsoft/StudentSim"]
+	path = upstream/microsoft/StudentSim
+	url = https://github.com/microsoft/StudentSim.git
+	branch = main
+[submodule "upstream/microsoft/microsoft-copilot-agents-playbook"]
+	path = upstream/microsoft/microsoft-copilot-agents-playbook
+	url = https://github.com/microsoft/microsoft-copilot-agents-playbook.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB585-supercharge-your-apps-with-local-ai"]
+	path = upstream/microsoft/ignite25-LAB585-supercharge-your-apps-with-local-ai
+	url = https://github.com/microsoft/ignite25-LAB585-supercharge-your-apps-with-local-ai.git
+	branch = main
+[submodule "upstream/microsoft/AIMFGIgnited"]
+	path = upstream/microsoft/AIMFGIgnited
+	url = https://github.com/microsoft/AIMFGIgnited.git
+	branch = main
+[submodule "upstream/microsoft/aitour-secure-future-in-ai-age"]
+	path = upstream/microsoft/aitour-secure-future-in-ai-age
+	url = https://github.com/microsoft/aitour-secure-future-in-ai-age.git
+	branch = main
+[submodule "upstream/microsoft/hack-workshop-iot"]
+	path = upstream/microsoft/hack-workshop-iot
+	url = https://github.com/microsoft/hack-workshop-iot.git
+	branch = main
+[submodule "upstream/microsoft/model-mondays"]
+	path = upstream/microsoft/model-mondays
+	url = https://github.com/microsoft/model-mondays.git
+	branch = main
+[submodule "upstream/microsoft/ConsumptionCentral-for-Microsoft-Copilot"]
+	path = upstream/microsoft/ConsumptionCentral-for-Microsoft-Copilot
+	url = https://github.com/microsoft/ConsumptionCentral-for-Microsoft-Copilot.git
+	branch = main
+[submodule "upstream/microsoft/coderec_programming_states"]
+	path = upstream/microsoft/coderec_programming_states
+	url = https://github.com/microsoft/coderec_programming_states.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB590-building-collaborative-agents-in-microsoft-teams-with-teams-ai-library"]
+	path = upstream/microsoft/ignite25-LAB590-building-collaborative-agents-in-microsoft-teams-with-teams-ai-library
+	url = https://github.com/microsoft/ignite25-LAB590-building-collaborative-agents-in-microsoft-teams-with-teams-ai-library.git
+	branch = main
+[submodule "upstream/microsoft/D365_AI_DCASE_2019_Task_5"]
+	path = upstream/microsoft/D365_AI_DCASE_2019_Task_5
+	url = https://github.com/microsoft/D365_AI_DCASE_2019_Task_5.git
+	branch = master
+[submodule "upstream/microsoft/Prior-Authorization-Multi-Agent-Solution-Accelerator"]
+	path = upstream/microsoft/Prior-Authorization-Multi-Agent-Solution-Accelerator
+	url = https://github.com/microsoft/Prior-Authorization-Multi-Agent-Solution-Accelerator.git
+	branch = main
+[submodule "upstream/microsoft/aitour-blueprint-to-transform-business"]
+	path = upstream/microsoft/aitour-blueprint-to-transform-business
+	url = https://github.com/microsoft/aitour-blueprint-to-transform-business.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-PREL14-unify-data-act-on-insights-and-build-ai-solutions-with-microsoft-fabric"]
+	path = upstream/microsoft/ignite25-PREL14-unify-data-act-on-insights-and-build-ai-solutions-with-microsoft-fabric
+	url = https://github.com/microsoft/ignite25-PREL14-unify-data-act-on-insights-and-build-ai-solutions-with-microsoft-fabric.git
+	branch = main
+[submodule "upstream/microsoft/monodex"]
+	path = upstream/microsoft/monodex
+	url = https://github.com/microsoft/monodex.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK223-from-rows-to-reasoning-designing-databases-for-ai-apps-and-agents"]
+	path = upstream/microsoft/Build26-BRK223-from-rows-to-reasoning-designing-databases-for-ai-apps-and-agents
+	url = https://github.com/microsoft/Build26-BRK223-from-rows-to-reasoning-designing-databases-for-ai-apps-and-agents.git
+	branch = main
+[submodule "upstream/microsoft/frontiertour27-ILL392-build-agentic-ai-postgres-apps-on-azure-horizondb"]
+	path = upstream/microsoft/frontiertour27-ILL392-build-agentic-ai-postgres-apps-on-azure-horizondb
+	url = https://github.com/microsoft/frontiertour27-ILL392-build-agentic-ai-postgres-apps-on-azure-horizondb.git
+	branch = main
+[submodule "upstream/microsoft/promptflow-rag-project-template"]
+	path = upstream/microsoft/promptflow-rag-project-template
+	url = https://github.com/microsoft/promptflow-rag-project-template.git
+	branch = main
