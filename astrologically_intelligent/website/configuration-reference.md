@@ -21,7 +21,7 @@ described as a switch that turns something off, the read rejects `0`, `false`,
 `no` and `off` and treats everything else as on. The `Default` column is the
 value the code falls back to when the variable is unset, quoted from the source.
 
-The source tree reads **150** `ODYSSEUS_*` variables: 92 an operator may want to set, and 58 that are internal - sentinels, fixture switches, capture hooks and development tooling. The internal ones are listed too, in their own section, so this page can be checked against the source mechanically.
+The source tree reads **151** `ODYSSEUS_*` variables: 92 an operator may want to set, and 59 that are internal - sentinels, fixture switches, capture hooks and development tooling. The internal ones are listed too, in their own section, so this page can be checked against the source mechanically.
 
 > This page is generated. Edit `scripts/generate_env_reference.py` and
 > re-run it; `tests/test_env_reference.py` enforces that the committed page
@@ -265,6 +265,7 @@ Listed for completeness. Setting one of these on a real install is either a no-o
 | `ODYSSEUS_QA_PASSWORD` | *unset* | `scripts/odysseus_related_flow_audit.py` (+6 more) | Account password passed to the related-flow audit script when authenticating. |
 | `ODYSSEUS_QA_TEACHER_ATTEMPTS` | `'3'` | `scripts/odysseus_conversation_qa.py` | Retry budget for the conversation-QA teacher model call. Clamped to 1-3. |
 | `ODYSSEUS_QA_TEACHER_TIMEOUT` | `'120'` | `scripts/odysseus_conversation_qa.py` | Timeout in seconds for that call. Clamped to 15-120. |
+| `ODYSSEUS_REQUIRE_CHROMA` | *unset* | `tests/smoke/test_documents_rag_smoke.py` | Makes release smoke fail when the ChromaDB server is unavailable instead of skipping vector-indexing coverage; set only in the required CI job. |
 | `ODYSSEUS_RUNTIME_REVISION` | `''` | `routes/chat_helpers.py` (+1 more) | Revision string stamped into each captured SFT trace record, so a trace can be tied back to the build that produced it. |
 | `ODYSSEUS_SFT_DIR` | *unset* | `scripts/run_odysseus_search_teacher_pipeline.py` | Base directory containing SFT training datasets for the search teacher pipeline. |
 | `ODYSSEUS_SFT_DISABLE_WORKSPACE_TOOLS` | `'1'` | `src/agent_loop.py` | On by default. Keeps synthetic personal-assistant fixtures out of workspace mode; set 0, false, no or off to let them through. |
@@ -303,7 +304,7 @@ reads three ways, because no single pattern covers the codebase:
   lines, so one read lives inside a string literal.
 
 The three passes are not redundancy. A line-based grep for a direct
-`os.environ.get("ODYSSEUS_...` call finds 118 of the 150 variables on this
+`os.environ.get("ODYSSEUS_...` call finds 119 of the 151 variables on this
 page. What it misses is reads through an env-reader helper, reads whose call
 spans more than one line, reads whose variable name is held in a module
 constant, and reads through a mapping passed in as an argument - which is the
