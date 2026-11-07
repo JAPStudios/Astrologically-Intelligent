@@ -31,6 +31,9 @@ _BINARY_VISUAL_MEDIA_SUFFIXES = {
 _REQUIRED_NATIVE_TOOL_ARGS = {
     "web_search": ("query", "queries"),
     "peanut_browsing_crawl": ("url",),
+    "herdr_agent_get": ("target",),
+    "herdr_agent_read": ("target",),
+    "herdr_agent_explain": ("target",),
     "get_weather": ("location",),
     "web_fetch": ("url", "urls"),
     "pdf_extract": ("url", "path"),
@@ -366,6 +369,58 @@ FUNCTION_TOOL_SCHEMAS = [
                     "max_pages": {"type": "integer", "minimum": 1, "maximum": 25, "description": "Maximum number of pages to visit, from 1 to 25."}
                 },
                 "required": ["url"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "herdr_agent_list",
+            "description": "List coding agents in the current Herdr runtime. Use only when the user explicitly asks to inspect or use Herdr. Requires HERDR_ENV=1; it will not inspect a Herdr session from outside Herdr.",
+            "parameters": {"type": "object", "properties": {}, "additionalProperties": False}
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "herdr_agent_get",
+            "description": "Inspect one Herdr agent by its unique live agent name or pane ID. Use only when the user explicitly asks to inspect or use Herdr. Requires HERDR_ENV=1.",
+            "parameters": {
+                "type": "object",
+                "properties": {"target": {"type": "string", "description": "Unique live agent name or pane ID, such as reviewer or w1:p2."}},
+                "required": ["target"],
+                "additionalProperties": False
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "herdr_agent_read",
+            "description": "Read output from a Herdr agent or pane. Use only when the user explicitly asks to inspect or use Herdr. Requires HERDR_ENV=1 and never reads a Herdr session from outside Herdr.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "target": {"type": "string", "description": "Unique live agent name or pane ID."},
+                    "source": {"type": "string", "enum": ["visible", "recent", "recent-unwrapped", "detection"], "description": "Which Herdr output buffer to read."},
+                    "lines": {"type": "integer", "minimum": 1, "maximum": 500, "description": "Maximum number of output lines."},
+                    "format": {"type": "string", "enum": ["text", "ansi"], "description": "Output format."}
+                },
+                "required": ["target"],
+                "additionalProperties": False
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "herdr_agent_explain",
+            "description": "Explain Herdr's evidence for an agent's lifecycle state. Use only when the user explicitly asks to inspect or use Herdr. Requires HERDR_ENV=1.",
+            "parameters": {
+                "type": "object",
+                "properties": {"target": {"type": "string", "description": "Unique live agent name or pane ID."}},
+                "required": ["target"],
+                "additionalProperties": False
             }
         }
     },
