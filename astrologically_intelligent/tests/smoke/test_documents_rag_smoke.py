@@ -30,7 +30,8 @@ UNAVAILABLE_MARKER = "RAG system is not available"
 
 def test_an_uploaded_file_is_indexed_and_listed(client):
     response = client.post(UPLOAD_PATH,
-                           files={"files": (FILENAME, CONTENT.encode("utf-8"), "text/plain")})
+                           files={"files": (FILENAME, CONTENT.encode("utf-8"), "text/plain")},
+                           timeout=180)
     if response.status_code == 503 and UNAVAILABLE_MARKER in response.text:
         reason = (
             "no vector service reachable, so indexing is unavailable. "
