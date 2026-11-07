@@ -4,7 +4,9 @@ from unittest.mock import patch
 
 import pytest
 
-from src.tool_security import NON_ADMIN_BLOCKED_TOOLS\n\nfrom src.agent_tools.herdr_tools import (
+from src.tool_security import NON_ADMIN_BLOCKED_TOOLS
+
+from src.agent_tools.herdr_tools import (
     HerdrAgentExplainTool,
     HerdrAgentGetTool,
     HerdrAgentListTool,
