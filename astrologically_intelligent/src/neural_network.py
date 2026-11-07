@@ -99,7 +99,8 @@ class NeuralNetworkClassifier:
 
     def fit(self, features, labels, *, epochs: int = 100, batch_size: int = 32,
             shuffle: bool = True, validation_data=None, patience: int | None = None,
-            min_delta: float = 0.0, restore_best_weights: bool = False) -> list[dict[str, float]]:
+            min_delta: float = 0.0, restore_best_weights: bool = False,
+            max_grad_norm: float | None = None) -> list[dict[str, float]]:
         values = self._features(features)
         targets = self._labels(labels, len(values))
         if isinstance(epochs, bool) or not isinstance(epochs, int) or epochs < 1:
@@ -121,6 +122,13 @@ class NeuralNetworkClassifier:
             raise ValueError("min_delta must be a non-negative finite number")
         if not isinstance(restore_best_weights, bool):
             raise ValueError("restore_best_weights must be a boolean")
+        if max_grad_norm is not None and (
+            isinstance(max_grad_norm, (bool, np.bool_))
+            or not isinstance(max_grad_norm, (int, float, np.integer, np.floating))
+            or not np.isfinite(max_grad_norm)
+            or max_grad_norm <= 0
+        ):
+            raise ValueError("max_grad_norm must be a positive finite number or None")
         validation = None
         if validation_data is not None:
             if not isinstance(validation_data, (tuple, list)) or len(validation_data) != 2:
@@ -156,6 +164,18 @@ class NeuralNetworkClassifier:
                     gradients[f"bias{layer + 1}"] = np.sum(upstream, axis=0)
                     if layer:
                         upstream = upstream @ self._weights[layer].T
+                if max_grad_norm is not None:
+                    gradient_norm = float(np.sqrt(sum(
+                        np.sum(np.square(gradient)) for gradient in gradients.values()
+                    )))
+                    if not np.isfinite(gradient_norm):
+                        raise FloatingPointError("non-finite gradient norm")
+                    if gradient_norm > max_grad_norm:
+                        scale = float(max_grad_norm) / gradient_norm
+                        gradients = {
+                            name: gradient * scale
+                            for name, gradient in gradients.items()
+                        }
                 self._adam_update(gradients)
 
             metrics = {"epoch": float(epoch + 1), **self.evaluate(values, targets)}
