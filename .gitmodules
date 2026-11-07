@@ -5485,3 +5485,103 @@
 	path = upstream/microsoft/sip-ai-workshop
 	url = https://github.com/microsoft/sip-ai-workshop.git
 	branch = main
+[submodule "upstream/microsoft/Build26-BRK241-from-prototype-to-production-build-and-run-agents-at-scale"]
+	path = upstream/microsoft/Build26-BRK241-from-prototype-to-production-build-and-run-agents-at-scale
+	url = https://github.com/microsoft/Build26-BRK241-from-prototype-to-production-build-and-run-agents-at-scale.git
+	branch = main
+[submodule "upstream/microsoft/react-component-toolkit"]
+	path = upstream/microsoft/react-component-toolkit
+	url = https://github.com/microsoft/react-component-toolkit.git
+	branch = main
+[submodule "upstream/microsoft/azure-ai-search-rest-api-spec"]
+	path = upstream/microsoft/azure-ai-search-rest-api-spec
+	url = https://github.com/microsoft/azure-ai-search-rest-api-spec.git
+	branch = main
+[submodule "upstream/microsoft/vscode-edu-HourOfAI2025"]
+	path = upstream/microsoft/vscode-edu-HourOfAI2025
+	url = https://github.com/microsoft/vscode-edu-HourOfAI2025.git
+	branch = main
+[submodule "upstream/microsoft/AI-in-One-Dashboard-Extended"]
+	path = upstream/microsoft/AI-in-One-Dashboard-Extended
+	url = https://github.com/microsoft/AI-in-One-Dashboard-Extended.git
+	branch = main
+[submodule "upstream/microsoft/Build26-BRK231-deploy-observe-learn-reinforcement-learning-for-production-agents"]
+	path = upstream/microsoft/Build26-BRK231-deploy-observe-learn-reinforcement-learning-for-production-agents
+	url = https://github.com/microsoft/Build26-BRK231-deploy-observe-learn-reinforcement-learning-for-production-agents.git
+	branch = main
+[submodule "upstream/microsoft/entrabot"]
+	path = upstream/microsoft/entrabot
+	url = https://github.com/microsoft/entrabot.git
+	branch = main
+[submodule "upstream/microsoft/PurviewforAICxETeam"]
+	path = upstream/microsoft/PurviewforAICxETeam
+	url = https://github.com/microsoft/PurviewforAICxETeam.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB562-jumpstart-ai-powered-hr-and-it-support-with-employee-self-service-agent"]
+	path = upstream/microsoft/ignite25-LAB562-jumpstart-ai-powered-hr-and-it-support-with-employee-self-service-agent
+	url = https://github.com/microsoft/ignite25-LAB562-jumpstart-ai-powered-hr-and-it-support-with-employee-self-service-agent.git
+	branch = main
+[submodule "upstream/microsoft/eval-framework-learnings"]
+	path = upstream/microsoft/eval-framework-learnings
+	url = https://github.com/microsoft/eval-framework-learnings.git
+	branch = main
+[submodule "upstream/microsoft/fabric-task-flows"]
+	path = upstream/microsoft/fabric-task-flows
+	url = https://github.com/microsoft/fabric-task-flows.git
+	branch = main
+[submodule "upstream/microsoft/workshop-aml-pytorch"]
+	path = upstream/microsoft/workshop-aml-pytorch
+	url = https://github.com/microsoft/workshop-aml-pytorch.git
+	branch = main
+[submodule "upstream/microsoft/CosmicBeats-Simulator"]
+	path = upstream/microsoft/CosmicBeats-Simulator
+	url = https://github.com/microsoft/CosmicBeats-Simulator.git
+	branch = main
+[submodule "upstream/microsoft/medusa"]
+	path = upstream/microsoft/medusa
+	url = https://github.com/microsoft/medusa.git
+	branch = main
+[submodule "upstream/microsoft/Build26-DEM351-ai-skills-navigator-accelerate-tech-skills-with-personalized-learning"]
+	path = upstream/microsoft/Build26-DEM351-ai-skills-navigator-accelerate-tech-skills-with-personalized-learning
+	url = https://github.com/microsoft/Build26-DEM351-ai-skills-navigator-accelerate-tech-skills-with-personalized-learning.git
+	branch = main
+[submodule "upstream/microsoft/causal-impact-long-covid"]
+	path = upstream/microsoft/causal-impact-long-covid
+	url = https://github.com/microsoft/causal-impact-long-covid.git
+	branch = main
+[submodule "upstream/microsoft/MegaDetector-Overhead"]
+	path = upstream/microsoft/MegaDetector-Overhead
+	url = https://github.com/microsoft/MegaDetector-Overhead.git
+	branch = main
+[submodule "upstream/microsoft/agent-forge"]
+	path = upstream/microsoft/agent-forge
+	url = https://github.com/microsoft/agent-forge.git
+	branch = main
+[submodule "upstream/microsoft/synthetic-rag-index"]
+	path = upstream/microsoft/synthetic-rag-index
+	url = https://github.com/microsoft/synthetic-rag-index.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-LTG154-breaking-down-the-ai-tour-advisor-agent"]
+	path = upstream/microsoft/aitour26-LTG154-breaking-down-the-ai-tour-advisor-agent
+	url = https://github.com/microsoft/aitour26-LTG154-breaking-down-the-ai-tour-advisor-agent.git
+	branch = main
+[submodule "upstream/microsoft/MultiAgent-Accelerator"]
+	path = upstream/microsoft/MultiAgent-Accelerator
+	url = https://github.com/microsoft/MultiAgent-Accelerator.git
+	branch = main
+[submodule "upstream/microsoft/doodle-to-code"]
+	path = upstream/microsoft/doodle-to-code
+	url = https://github.com/microsoft/doodle-to-code.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB596-working-with-healthcare-ai-models-from-set-up-to-use-case"]
+	path = upstream/microsoft/ignite25-LAB596-working-with-healthcare-ai-models-from-set-up-to-use-case
+	url = https://github.com/microsoft/ignite25-LAB596-working-with-healthcare-ai-models-from-set-up-to-use-case.git
+	branch = main
+[submodule "upstream/microsoft/release-manager-assistant"]
+	path = upstream/microsoft/release-manager-assistant
+	url = https://github.com/microsoft/release-manager-assistant.git
+	branch = main
+[submodule "upstream/microsoft/aiida-autocas"]
+	path = upstream/microsoft/aiida-autocas
+	url = https://github.com/microsoft/aiida-autocas.git
+	branch = main
