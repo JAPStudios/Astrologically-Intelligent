@@ -143,7 +143,7 @@ def test_forward_pass_rejects_overflowing_hidden_activations():
 
 
 def test_forward_pass_rejects_non_finite_output_logits():
-    model = NeuralNetworkClassifier(2, 4, 3, seed=83)
+    model = NeuralNetworkClassifier(4, 4, 3, seed=83)
     model._weights[-1].fill(1e308)
     with pytest.raises(FloatingPointError, match="output logits"):
         model.predict([[1.0, 1.0, 1.0, 1.0]])
