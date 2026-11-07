@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from astrologically_intelligent.runtime import AgentRuntime
 from astrologically_intelligent.storage import Store
-from astrologically_intelligent.server import make_handler
+from astrologically_intelligent.server import make_handler, serve
 
 
 class HistoryEndpointTests(unittest.TestCase):
