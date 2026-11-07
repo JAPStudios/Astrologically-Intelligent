@@ -101,6 +101,8 @@ def test_checkpoint_rejects_invalid_version_step_and_random_state(tmp_path):
 def test_rejects_invalid_dimensions_and_training_data():
     with pytest.raises(ValueError, match="dimensions"):
         NeuralNetworkClassifier(2, 0, 3)
+    with pytest.raises(ValueError, match="output_size"):
+        NeuralNetworkClassifier(2, 4, 1)
     model = NeuralNetworkClassifier(2, 4, 3)
     with pytest.raises(ValueError, match="columns"):
         model.predict([[1.0]])
