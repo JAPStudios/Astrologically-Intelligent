@@ -4085,3 +4085,103 @@
 	path = upstream/microsoft/mscclpp
 	url = https://github.com/microsoft/mscclpp.git
 	branch = main
+[submodule "upstream/microsoft/ignite25-PREL13-observe-manage-and-scale-agentic-ai-apps-with-microsoft-foundry"]
+	path = upstream/microsoft/ignite25-PREL13-observe-manage-and-scale-agentic-ai-apps-with-microsoft-foundry
+	url = https://github.com/microsoft/ignite25-PREL13-observe-manage-and-scale-agentic-ai-apps-with-microsoft-foundry.git
+	branch = main
+[submodule "upstream/microsoft/Microsoft-AI-Decision-Framework"]
+	path = upstream/microsoft/Microsoft-AI-Decision-Framework
+	url = https://github.com/microsoft/Microsoft-AI-Decision-Framework.git
+	branch = main
+[submodule "upstream/microsoft/Hack-Together-Fabric-AI"]
+	path = upstream/microsoft/Hack-Together-Fabric-AI
+	url = https://github.com/microsoft/Hack-Together-Fabric-AI.git
+	branch = main
+[submodule "upstream/microsoft/ai-agent-runbooks"]
+	path = upstream/microsoft/ai-agent-runbooks
+	url = https://github.com/microsoft/ai-agent-runbooks.git
+	branch = main
+[submodule "upstream/microsoft/AI-Immersion-Workshop"]
+	path = upstream/microsoft/AI-Immersion-Workshop
+	url = https://github.com/microsoft/AI-Immersion-Workshop.git
+	branch = master
+[submodule "upstream/microsoft/SpeciesClassification"]
+	path = upstream/microsoft/SpeciesClassification
+	url = https://github.com/microsoft/SpeciesClassification.git
+	branch = master
+[submodule "upstream/microsoft/vscode-mermAId"]
+	path = upstream/microsoft/vscode-mermAId
+	url = https://github.com/microsoft/vscode-mermAId.git
+	branch = main
+[submodule "upstream/microsoft/magentic-ui"]
+	path = upstream/microsoft/magentic-ui
+	url = https://github.com/microsoft/magentic-ui.git
+	branch = main
+[submodule "upstream/microsoft/content-processing-solution-accelerator"]
+	path = upstream/microsoft/content-processing-solution-accelerator
+	url = https://github.com/microsoft/content-processing-solution-accelerator.git
+	branch = main
+[submodule "upstream/microsoft/ai-tour-26-zava-diy-dataset-plus-mcp"]
+	path = upstream/microsoft/ai-tour-26-zava-diy-dataset-plus-mcp
+	url = https://github.com/microsoft/ai-tour-26-zava-diy-dataset-plus-mcp.git
+	branch = main
+[submodule "upstream/microsoft/ignite25-LAB512-prototyping-multimodal-agents-with-microsoft-foundry-and-the-ai-toolkit"]
+	path = upstream/microsoft/ignite25-LAB512-prototyping-multimodal-agents-with-microsoft-foundry-and-the-ai-toolkit
+	url = https://github.com/microsoft/ignite25-LAB512-prototyping-multimodal-agents-with-microsoft-foundry-and-the-ai-toolkit.git
+	branch = main
+[submodule "upstream/microsoft/FrontierWeekHack"]
+	path = upstream/microsoft/FrontierWeekHack
+	url = https://github.com/microsoft/FrontierWeekHack.git
+	branch = main
+[submodule "upstream/microsoft/AI-in-One-Dashboard"]
+	path = upstream/microsoft/AI-in-One-Dashboard
+	url = https://github.com/microsoft/AI-in-One-Dashboard.git
+	branch = main
+[submodule "upstream/microsoft/agentic-factory-hack"]
+	path = upstream/microsoft/agentic-factory-hack
+	url = https://github.com/microsoft/agentic-factory-hack.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-WRK532-building-agentic-solutions-with-copilot-studio"]
+	path = upstream/microsoft/aitour26-WRK532-building-agentic-solutions-with-copilot-studio
+	url = https://github.com/microsoft/aitour26-WRK532-building-agentic-solutions-with-copilot-studio.git
+	branch = main
+[submodule "upstream/microsoft/aitour-exploring-cutting-edge-models"]
+	path = upstream/microsoft/aitour-exploring-cutting-edge-models
+	url = https://github.com/microsoft/aitour-exploring-cutting-edge-models.git
+	branch = main
+[submodule "upstream/microsoft/agentic-ai-lab"]
+	path = upstream/microsoft/agentic-ai-lab
+	url = https://github.com/microsoft/agentic-ai-lab.git
+	branch = main
+[submodule "upstream/microsoft/powerbi-modeling-mcp"]
+	path = upstream/microsoft/powerbi-modeling-mcp
+	url = https://github.com/microsoft/powerbi-modeling-mcp.git
+	branch = main
+[submodule "upstream/microsoft/sql-ai-datathon"]
+	path = upstream/microsoft/sql-ai-datathon
+	url = https://github.com/microsoft/sql-ai-datathon.git
+	branch = main
+[submodule "upstream/microsoft/windows-ai-studio-templates"]
+	path = upstream/microsoft/windows-ai-studio-templates
+	url = https://github.com/microsoft/windows-ai-studio-templates.git
+	branch = main
+[submodule "upstream/microsoft/confidential-ai"]
+	path = upstream/microsoft/confidential-ai
+	url = https://github.com/microsoft/confidential-ai.git
+	branch = main
+[submodule "upstream/microsoft/AnthropomorphicIntelligence"]
+	path = upstream/microsoft/AnthropomorphicIntelligence
+	url = https://github.com/microsoft/AnthropomorphicIntelligence.git
+	branch = main
+[submodule "upstream/microsoft/agentsleague"]
+	path = upstream/microsoft/agentsleague
+	url = https://github.com/microsoft/agentsleague.git
+	branch = main
+[submodule "upstream/microsoft/HealthyCountryAI"]
+	path = upstream/microsoft/HealthyCountryAI
+	url = https://github.com/microsoft/HealthyCountryAI.git
+	branch = master
+[submodule "upstream/microsoft/malmo-challenge"]
+	path = upstream/microsoft/malmo-challenge
+	url = https://github.com/microsoft/malmo-challenge.git
+	branch = master
