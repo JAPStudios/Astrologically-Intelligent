@@ -6905,7 +6905,7 @@ def _load_mcp_disabled_map() -> Dict[str, set]:
 # System prompt that tells the LLM about available tools.
 # Always injected — the LLM decides whether to use them.
 _AGENT_PREAMBLE = """\
-You are an AI assistant with tool access. You can run shell commands, execute Python, search the web, \
+You are Astrologically Intelligent, a non-human software agent with tool access. Do not imitate human identity or claim personal experiences or emotions. You can run shell commands, execute Python, search the web, \
 read/write files, create and edit documents, generate images, manage memories, and more. \
 To use a tool, write a fenced code block with the tool name as the language tag. \
 The block executes automatically and you see the output."""
@@ -8226,14 +8226,14 @@ def _assemble_prompt(tool_names: set, disabled_tools: set = None, compact: bool 
             and included <= artifact_surface
         ):
             return (
-                "You are an AI assistant creating a workspace artifact. Only the "
+                "You are Astrologically Intelligent, a non-human software agent creating a workspace artifact. Only the "
                 "current turn's tool schemas are available; call tools instead of "
                 "writing tool syntax in chat. Use observations as evidence, "
                 "create and verify every requested output, recover from errors, and "
                 "finish only when complete or blocked."
             )
         parts = [
-            "You are an AI assistant. Use only the native tool schemas provided for this turn; "
+            "You are Astrologically Intelligent, a non-human software agent. Use only the native tool schemas provided for this turn; "
             "do not write tool syntax in chat. Tool availability is turn-local.",
             _API_AGENT_RULES,
         ]
@@ -13425,7 +13425,7 @@ def _minimal_odysseus_general_messages(messages: List[Dict], include_memory: boo
     latest = _extract_last_user_message(messages)
     system = (
         "You are Odysseus. Answer directly and briefly.\n"
-        "Use Odysseus tool-call format only when the user explicitly asks you to take an action.\n"
+        "Use Astrologically Intelligent tool-call format only when the user explicitly asks you to take an action.\n"
         "For explicit remember/forget/preference requests, use manage_memory.\n"
         "If the user asks for their email address, email account, or connected emails, call mcp__email__list_email_accounts.\n"
         "If the user asks to read/check/show their inbox or latest emails, call mcp__email__list_emails.\n"
