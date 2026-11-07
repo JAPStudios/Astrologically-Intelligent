@@ -4,7 +4,7 @@ Astrologically Intelligent is a virtual intelligence and agent system for everyd
 
 ## Runtime surfaces
 
-The Python agent runtime can run headlessly with Python 3.10+. The full FastAPI system also mounts the runtime API in its own process; running the full web system does not require a second headless service.
+The Python agent runtime can run headlessly with Python 3.10+. The full FastAPI system mounts the runtime API in the same process as its web interface; running the full web system does not require a second headless service.
 
 ```sh
 python -m astrologically_intelligent
