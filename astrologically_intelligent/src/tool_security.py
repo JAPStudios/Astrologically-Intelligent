@@ -54,6 +54,7 @@ NON_ADMIN_BLOCKED_TOOLS = BUILTIN_EMAIL_TOOLS | {
     "glob",
     "ls",
     "get_workspace",
+    "peanut_browsing_crawl",
     "host_shell",
     "herdr_agent_list",
     "herdr_agent_get",
