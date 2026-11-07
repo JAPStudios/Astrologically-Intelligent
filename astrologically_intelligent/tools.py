@@ -494,13 +494,12 @@ class ToolRegistry:
                     result = self.execute(
                         name, function.get("arguments", "{}"), provider=agent_provider
                     )
-                    trace.append({
-                        "tool": name,
-                        "result": _redact_trace_secrets(json.loads(result)),
-                    })
+                    safe_result = _redact_trace_secrets(json.loads(result))
+                    safe_content = json.dumps(safe_result, ensure_ascii=False)
+                    trace.append({"tool": name, "result": safe_result})
                     messages.append({
                         "role": "tool", "tool_call_id": call.get("id", ""),
-                        "name": name, "content": result,
+                        "name": name, "content": safe_content,
                     })
             if output is None:
                 raise RuntimeError("Agent produced no final output")

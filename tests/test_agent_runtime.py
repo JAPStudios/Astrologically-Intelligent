@@ -519,6 +519,7 @@ class RuntimeTests(unittest.TestCase):
                         "type": "function",
                         "function": {"name": "agents.list", "arguments": "{}"},
                     }]}
+                self.tool_result = json.loads(messages[-1]["content"])
                 return {"role": "assistant", "content": "Agent inventory checked."}
 
         provider = ListingProvider()
@@ -540,7 +541,7 @@ class RuntimeTests(unittest.TestCase):
         persisted = self.runtime.tools.orchestration.get_run(result["run_id"])
         trace = result["tool_trace"][0]["result"]
         persisted_trace = persisted["output"]["tool_trace"][0]["result"]
-        for rows in (trace, persisted_trace):
+        for rows in (trace, persisted_trace, provider.tool_result):
             listed = next(item for item in rows if item["id"] == secret_agent["id"])
             config = json.loads(listed["config"])
             self.assertEqual(config["api_key"], "[REDACTED]")
