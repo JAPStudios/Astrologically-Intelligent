@@ -295,6 +295,41 @@ def test_fit_rejects_invalid_gradient_norm_limit(max_grad_norm):
         model.fit(features, labels, epochs=1, max_grad_norm=max_grad_norm)
 
 
+def test_adam_rejects_invalid_gradient_without_mutating_training_state():
+    model = NeuralNetworkClassifier(2, 4, 3, seed=89)
+    parameters_before = {name: value.copy() for name, value in model._parameters().items()}
+    moments_before = {
+        name: (first.copy(), second.copy())
+        for name, (first, second) in model._adam.items()
+    }
+    gradients = {
+        name: np.zeros_like(value)
+        for name, value in model._parameters().items()
+    }
+    gradients["weights1"][0, 0] = np.nan
+
+    with pytest.raises(FloatingPointError, match="invalid gradient"):
+        model._adam_update(gradients)
+
+    assert model._step == 0
+    for name, value in model._parameters().items():
+        assert np.array_equal(value, parameters_before[name])
+        assert np.array_equal(model._adam[name][0], moments_before[name][0])
+        assert np.array_equal(model._adam[name][1], moments_before[name][1])
+
+
+def test_adam_rejects_incomplete_gradient_set():
+    model = NeuralNetworkClassifier(2, 4, 3, seed=97)
+    gradients = {
+        name: np.zeros_like(value)
+        for name, value in model._parameters().items()
+    }
+    gradients.pop("bias1")
+
+    with pytest.raises(ValueError, match="every network parameter"):
+        model._adam_update(gradients)
+
+
 def test_gradient_norm_clipping_bounds_each_update():
     features, labels = _dataset()
     model = NeuralNetworkClassifier(2, 4, 3, learning_rate=0.01, seed=73)
