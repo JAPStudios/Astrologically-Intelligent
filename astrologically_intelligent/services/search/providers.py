@@ -54,7 +54,6 @@ def _get_search_instance(provider: str = "searxng") -> str:
         url = (
             os.environ.get("PEANUT_SEARCH_API_URL")
             or settings.get("peanut_search_api_url")
-            or settings.get("search_url")
             or ""
         )
         return str(url).strip().rstrip("/")
@@ -74,7 +73,7 @@ def _get_provider_key(provider: str) -> str:
         env_key = (os.environ.get("PEANUT_SEARCH_API_KEY") or "").strip()
         if env_key:
             return env_key
-        return (settings.get("search_api_key") or "").strip()
+        return ""
     key_map = {
         "peanut_browsing": "peanut_search_api_key",
         "brave": "brave_api_key",
