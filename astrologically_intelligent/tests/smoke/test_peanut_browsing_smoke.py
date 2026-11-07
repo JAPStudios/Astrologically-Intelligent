@@ -51,6 +51,7 @@ def test_peanut_search_completes_a_native_agent_tool_cycle(client, chat_session,
     response = client.post(CHAT_PATH, json={
         "message": f"Search Peanut Browsing for {PEANUT_SEARCH_PROMPT}.",
         "session": chat_session,
+        "allow_web_search": True,
     })
     assert response.status_code == 200, response.text
     assert response.json().get("response") == PEANUT_SEARCH_FINAL, response.json()
