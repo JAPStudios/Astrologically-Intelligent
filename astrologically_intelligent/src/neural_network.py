@@ -22,6 +22,8 @@ class NeuralNetworkClassifier:
         if (not hidden_sizes or any(isinstance(v, bool) or not isinstance(v, int) or v <= 0
                                     for v in dimensions)):
             raise ValueError("network dimensions must be positive integers")
+        if output_size < 2:
+            raise ValueError("output_size must be at least 2 for classification")
         if not np.isfinite(learning_rate) or learning_rate <= 0:
             raise ValueError("learning_rate must be a positive finite number")
         self.input_size = input_size
