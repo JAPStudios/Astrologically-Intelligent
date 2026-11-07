@@ -58,7 +58,7 @@ logger = logging.getLogger(__name__)
 
 # ========= CONFIG =========
 SEARCH_CONFIG: Dict[str, Any] = {
-    "primary_provider": "searxng",
+    "primary_provider": "peanut_browsing",
 }
 
 
@@ -80,9 +80,9 @@ def get_search_config() -> Dict[str, Any]:
     config["active_provider"] = provider
     config["has_api_key"] = bool(_get_provider_key(provider))
     config["result_count"] = _get_result_count()
-    if provider == "searxng":
+    if provider in {"searxng", "peanut_browsing"}:
         from .providers import _get_search_instance
-        config["search_url"] = _get_search_instance()
+        config["search_url"] = _get_search_instance(provider)
     # Strip any string-valued credential so secrets never reach the response;
     # the boolean has_api_key flag (presence only) is preserved.
     return {
@@ -108,7 +108,10 @@ def update_search_config(api_key: str = None, **kwargs):
 
 def _call_provider(provider_name: str, query: str, count: int, time_filter: str = None) -> List[dict]:
     """Call a search provider by name. Returns list of results or empty list."""
-    if provider_name == "searxng":
+    if provider_name == "peanut_browsing":
+        from .providers import peanut_browsing_search
+        return peanut_browsing_search(query, count, time_filter)
+    elif provider_name == "searxng":
         return searxng_search_api(query, count, time_filter=time_filter)
     elif provider_name == "searxng_yep":
         return searxng_search_api(query, count, time_filter=time_filter, engines="yep")
@@ -138,7 +141,7 @@ def _build_provider_chain(primary: str) -> List[str]:
     user_chain = settings.get("search_fallback_chain") or []
     if isinstance(user_chain, str):
         user_chain = [s.strip() for s in user_chain.split(",") if s.strip()]
-    fallbacks = user_chain if user_chain else _FALLBACK_ORDER
+    fallbacks = [] if primary == "peanut_browsing" else (user_chain if user_chain else _FALLBACK_ORDER)
     for fb in fallbacks:
         if fb and fb != primary and fb not in chain and fb != "disabled":
             chain.append(fb)
@@ -842,7 +845,7 @@ def searxng_search_results(query: str, count: int = 10, time_filter: str = None)
     """Perform a web search using configured provider with caching and retry."""
     provider_query = _provider_friendly_query(query)
     settings = _get_search_settings()
-    search_provider = settings.get("search_provider", "searxng")
+    search_provider = settings.get("search_provider", "peanut_browsing")
     result_count = _get_result_count()
     # Use configured count if caller used default
     if count == 10:
