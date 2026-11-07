@@ -929,9 +929,14 @@ def _ollama_model_names(data: Any) -> List[str]:
     for m in (items or []):
         if not isinstance(m, dict):
             continue
-        v = m.get("name") or m.get("model")
-        if isinstance(v, str) and v:
-            out.append(v)
+        # Ollama's native identifier is normally `name`; some compatible
+        # servers return `model`. Accept only non-empty string identifiers.
+        # If `name` is malformed, still allow a valid `model` fallback.
+        for key in ("name", "model"):
+            value = m.get(key)
+            if isinstance(value, str) and value.strip():
+                out.append(value.strip())
+                break
     return out
 
 
