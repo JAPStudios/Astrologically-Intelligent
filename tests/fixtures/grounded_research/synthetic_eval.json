@@ -6,13 +6,35 @@
     {"id": "market-flyer", "title": "Fictional Market Flyer", "text": "The Lumen Bay night market opens on Fridays and sells smoked fish and lanterns."}
   ],
   "cases": [
-    {"name": "supported", "question": "How often does the Lumen Bay ferry depart?", "expect": "supported", "must_cite": ["harbor-guide#p2"],
-     "fake_answer": "The ferry departs every 40 minutes between 6am and 10pm [harbor-guide#p2]."},
+    {"name": "supported", "question": "How often does the Lumen Bay ferry depart?", "expect": "supported",
+     "must_cite": ["harbor-guide#p2"],
+     "good_answer": "The ferry departs every 40 minutes between 6am and 10pm [harbor-guide#p2].",
+     "bad_answers": [
+       {"why": "uncited extra claim", "answer": "The ferry departs every 40 minutes [harbor-guide#p2]. Tickets cost 3 coins."},
+       {"why": "short uncited claim", "answer": "Every 40 minutes."},
+       {"why": "non-canonical citation", "answer": "The ferry departs every 40 minutes [harbor-guide#p02]."},
+       {"why": "citation mid-sentence covers an uncited clause", "answer": "The ferry departs every 40 minutes [harbor-guide#p2] and it is free of charge."},
+       {"why": "cites wrong passage only", "answer": "The ferry departs every 40 minutes [harbor-guide#p1]."},
+       {"why": "known limitation: fabricated detail with a real citation is NOT detectable structurally", "answer": "The ferry departs every 40 minutes and carries 500 passengers [harbor-guide#p2].", "known_undetectable": true}
+     ]},
     {"name": "insufficient_evidence", "question": "What is the population of Lumen Bay?", "expect": "insufficient",
-     "fake_answer": "INSUFFICIENT_EVIDENCE: the supplied passages do not state the population of Lumen Bay."},
-    {"name": "conflicting_sources", "question": "When was the Lumen Bay lighthouse built?", "expect": "conflict", "must_cite": ["harbor-guide#p1", "council-notes#p1"],
-     "fake_answer": "The sources conflict. The harbor guide says the lighthouse was built in 1902 [harbor-guide#p1]. The council notes say it was built in 1911 [council-notes#p1]."},
-    {"name": "fabricated_citation_is_caught", "question": "What does the Lumen Bay night market sell?", "expect": "invalid",
-     "fake_answer": "The night market sells smoked fish and lanterns [market-flyer#p1]. It also sells antique maps [market-flyer#p7]."}
+     "good_answer": "INSUFFICIENT_EVIDENCE",
+     "bad_answers": [
+       {"why": "abstention prefix used to smuggle a claim", "answer": "INSUFFICIENT_EVIDENCE. However the population is 9000."},
+       {"why": "invented answer with fabricated citation", "answer": "About 9000 people live there [harbor-guide#p9]."}
+     ]},
+    {"name": "conflicting_sources", "question": "When was the Lumen Bay lighthouse built?", "expect": "conflict",
+     "must_cite": ["harbor-guide#p1", "council-notes#p1"],
+     "good_answer": "The harbor guide says the lighthouse was built in 1902 [harbor-guide#p1]. The council notes say it was built in 1911, so the sources conflict [council-notes#p1].",
+     "bad_answers": [
+       {"why": "picks one side and drops the conflicting source", "answer": "The lighthouse was built in 1902 [harbor-guide#p1]."},
+       {"why": "says conflict without citing", "answer": "The sources conflict about the date."}
+     ]},
+    {"name": "market", "question": "What does the Lumen Bay night market sell?", "expect": "supported",
+     "must_cite": ["market-flyer#p1"],
+     "good_answer": "The night market sells smoked fish and lanterns [market-flyer#p1].",
+     "bad_answers": [
+       {"why": "fabricated citation ID", "answer": "The night market sells smoked fish and lanterns [market-flyer#p1]. It also sells antique maps [market-flyer#p7]."}
+     ]}
   ]
 }
