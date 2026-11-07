@@ -161,30 +161,59 @@ def cmd_run(args):
 
     ports = dev.derive_ports(root)
     account = dev.credentials(root)
-    started_by_us, note = boot(dev, root, args)
-    if note:
-        sys.stdout.write(f"  {note}\n")
+    existing = dev.running_app(dev.read_state(root))
+    will_boot = bool(args.restart or not existing)
+    peanut_stub = None
+    previous_env = {}
+    if will_boot and not args.keep_up:
+        sys.path.insert(0, str(root))
+        from tests.smoke.peanut_stub import PeanutIndexStub
+        peanut_stub = PeanutIndexStub().start()
+        peanut_environment = {
+            "PEANUT_SEARCH_API_URL": peanut_stub.base_url,
+            "PEANUT_SEARCH_API_KEY": peanut_stub.api_key,
+            "ODYSSEUS_PEANUT_SMOKE_STUB_ENABLED": "1",
+        }
+        for key, value in peanut_environment.items():
+            previous_env[key] = os.environ.get(key)
+            os.environ[key] = value
 
-    python = venv_python(dev, root, args)
-    env = suite_environment(dev, root, ports, account)
-    command = [str(python), "-m", "pytest", SMOKE_SUITE, "-q"] + list(args.pytest_args)
-    sys.stdout.write(f"\n  running {SMOKE_SUITE} against http://127.0.0.1:{ports['app']}\n\n")
-    # Flush before handing the terminal to pytest, or our own lines land
-    # after its output and the report reads out of order.
-    sys.stdout.flush()
-    result = subprocess.run(command, cwd=str(root), env=env, check=False)
+    started_by_us = False
+    result = None
+    try:
+        started_by_us, note = boot(dev, root, args)
+        if note:
+            sys.stdout.write(f"  {note}\n")
 
-    if started_by_us and not args.keep_up:
-        subprocess.run([sys.executable, str(SCRIPTS_DIR / DEV_SCRIPT), "down"],
-                       cwd=str(root), check=False)
-    elif started_by_us:
-        sys.stdout.write(
-            f"\n  left running: http://127.0.0.1:{ports['app']} "
-            f"({account['username']} / {account['password']})\n"
-            f"  stop it with `odysseus dev down`\n"
-        )
-    # `cli.run` discards a returned value but lets SystemExit through, and
-    # a smoke run's exit code is the whole point of having one command.
+        python = venv_python(dev, root, args)
+        env = suite_environment(dev, root, ports, account)
+        command = [str(python), "-m", "pytest", SMOKE_SUITE, "-q"] + list(args.pytest_args)
+        app_port = ports["app"]
+        sys.stdout.write(f"\n  running {SMOKE_SUITE} against http://127.0.0.1:{app_port}\n\n")
+        sys.stdout.flush()
+        result = subprocess.run(command, cwd=str(root), env=env, check=False)
+    finally:
+        if started_by_us and not args.keep_up:
+            subprocess.run([sys.executable, str(SCRIPTS_DIR / DEV_SCRIPT), "down"],
+                           cwd=str(root), check=False)
+        elif started_by_us:
+            app_port = ports["app"]
+            username = account["username"]
+            password = account["password"]
+            sys.stdout.write(
+                f"\n  left running: http://127.0.0.1:{app_port} "
+                f"({username} / {password})\n"
+                "  stop it with `odysseus dev down`\n"
+            )
+        if peanut_stub is not None:
+            peanut_stub.stop()
+        for key, previous in previous_env.items():
+            if previous is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = previous
+    if result is None:
+        return 1
     if result.returncode != 0:
         raise SystemExit(result.returncode)
     return 0

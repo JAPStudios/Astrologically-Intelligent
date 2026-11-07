@@ -28,6 +28,10 @@ MODELS = (MODEL_PRIMARY, MODEL_SECONDARY)
 # in a response body cannot be a coincidence, and short enough to read
 # in a failure message.
 REPLY_MARKER = "ODYSSEUS-SMOKE-REPLY"
+PEANUT_SEARCH_PROMPT = "ODYSSEUS-SMOKE-PEANUT-SEARCH"
+PEANUT_SEARCH_QUERY = "ODYSSEUS-SMOKE-PEANUT-QUERY"
+PEANUT_SEARCH_FINAL = "ODYSSEUS-SMOKE-PEANUT-SEARCH-COMPLETE"
+PEANUT_RESULT_MARKER = "ODYSSEUS-SMOKE-PEANUT-RESULT"
 
 # Bind on loopback, kernel-assigned port. No literal port anywhere.
 BIND_HOST = "127.0.0.1"
@@ -94,6 +98,34 @@ def _handler_for(recorder: _Recorder):
                 return
             self._send_json(404, {"error": {"message": f"no route {self.path}"}})
 
+        def _peanut_tool_response(self, payload):
+            messages = payload.get("messages") or []
+            user_text = "\n".join(
+                str(message.get("content") or "")
+                for message in messages
+                if isinstance(message, dict) and message.get("role") == "user"
+            )
+            if PEANUT_SEARCH_PROMPT in user_text:
+                tool_name = "web_search"
+                arguments = {"query": PEANUT_SEARCH_QUERY, "limit": 5}
+                final_text = PEANUT_SEARCH_FINAL
+            else:
+                return None, None
+            if any(isinstance(message, dict) and message.get("role") == "tool"
+                   for message in messages):
+                return None, final_text
+            available = {
+                (tool.get("function") or {}).get("name")
+                for tool in payload.get("tools") or []
+                if isinstance(tool, dict)
+            }
+            if tool_name not in available:
+                return None, "ODYSSEUS-SMOKE-MISSING-TOOL-SCHEMA"
+            return {
+                "id": "call-" + tool_name,
+                "type": "function",
+                "function": {"name": tool_name, "arguments": json.dumps(arguments)},
+            }, None
         def do_POST(self):  # noqa: N802 - BaseHTTPRequestHandler's contract
             length = int(self.headers.get("Content-Length") or 0)
             try:
@@ -105,7 +137,24 @@ def _handler_for(recorder: _Recorder):
             recorder.record(payload)
 
             model = str(payload.get("model") or MODEL_PRIMARY)
-            text = reply_for(model)
+            tool_call, forced_text = self._peanut_tool_response(payload)
+            if tool_call:
+                if payload.get("stream"):
+                    self._send_tool_call_stream(model, tool_call)
+                else:
+                    self._send_json(200, {
+                        "id": "smoke-completion",
+                        "object": "chat.completion",
+                        "model": model,
+                        "choices": [{
+                            "index": 0,
+                            "message": {"role": "assistant", "content": None, "tool_calls": [tool_call]},
+                            "finish_reason": "tool_calls",
+                        }],
+                        "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
+                    })
+                return
+            text = forced_text or reply_for(model)
             if payload.get("stream"):
                 self._send_stream(model, text)
                 return
@@ -121,6 +170,26 @@ def _handler_for(recorder: _Recorder):
                 "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
             })
 
+        def _send_tool_call_stream(self, model: str, tool_call: dict) -> None:
+            self.send_response(200)
+            self.send_header("Content-Type", "text/event-stream")
+            self.send_header("Cache-Control", "no-cache")
+            self.send_header("Connection", "close")
+            self.end_headers()
+            delta = {"tool_calls": [{
+                "index": 0,
+                "id": tool_call["id"],
+                "type": "function",
+                "function": tool_call["function"],
+            }]}
+            chunks = (
+                {"choices": [{"index": 0, "delta": delta}], "model": model},
+                {"choices": [{"index": 0, "delta": {}, "finish_reason": "tool_calls"}], "model": model},
+            )
+            for chunk in chunks:
+                self.wfile.write(b"data: " + json.dumps(chunk).encode("utf-8") + b"\n\n")
+            self.wfile.write(b"data: [DONE]\n\n")
+            self.wfile.flush()
         def _send_stream(self, model: str, text: str) -> None:
             self.send_response(200)
             self.send_header("Content-Type", "text/event-stream")

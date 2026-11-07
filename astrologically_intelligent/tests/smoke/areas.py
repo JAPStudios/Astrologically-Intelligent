@@ -60,6 +60,7 @@ class Gap:
 # the feature areas README.md advertises, then the setup surface.
 COVERED = (
     Area("chat", "Chat", "test_chat_smoke.py"),
+    Area("peanut_browsing", "Peanut Browsing", "test_peanut_browsing_smoke.py"),
     Area("compare", "Compare", "test_compare_smoke.py"),
     Area("notes", "Notes", "test_notes_smoke.py"),
     Area("calendar", "Calendar", "test_calendar_smoke.py"),
@@ -76,13 +77,8 @@ COVERED = (
 DECLARED_GAPS = (
     Gap(
         "Deep Research",
-        "needs live web egress; the crawler has no deterministic stub and adding "
-        "one would be an application change",
-    ),
-    Gap(
-        "Web Search",
-        "needs a reachable SearXNG or an external provider, so the result is not "
-        "reproducible from a clean checkout",
+        "full multi-source synthesis still needs live indexed evidence; the local "
+        "Peanut fixture validates search and crawl tool transport only",
     ),
     Gap(
         "Email over IMAP/SMTP",
@@ -99,9 +95,9 @@ DECLARED_GAPS = (
         "already the one area with Playwright specs under tests/e2e/photo-editor/",
     ),
     Gap(
-        "Agent tool loop",
-        "measured by the checkpoint benchmark, which is the safety net that does "
-        "cover the agent runtime",
+        "Multi-agent orchestration",
+        "the core runtime has a separate Agent Runtime workflow; the full web app "
+        "smoke does not yet exercise multi-agent handoff and approval end to end",
     ),
     Gap(
         "MCP servers",

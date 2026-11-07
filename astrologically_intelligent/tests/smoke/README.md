@@ -60,11 +60,15 @@ because the scenarios create and delete real records.
 
 `stub_provider.py` is an OpenAI-compatible server on an ephemeral
 loopback port: `GET /v1/models` and `POST /v1/chat/completions`, both
-buffered and streamed. No scenario touches a live model endpoint or the
-network. It serves two model ids so the Compare area has something to
-reveal, and it records every request so a scenario can assert the user's
-message actually reached the provider rather than only that some text
-came back.
+buffered and streamed. It serves two model ids for Compare. It also
+returns deterministic native tool calls for Peanut Browsing search and
+crawl scenarios. No scenario contacts a live model endpoint.
+
+Peanut Browsing uses a loopback index gateway fixture started by the
+smoke launcher before the app boots. The app receives the fixture URL
+and API key through its normal environment configuration. The fixture
+records search queries plus crawl submissions, so the tests verify the
+real tool-to-client-to-gateway path without external egress.
 
 Email uses the repo's own deterministic path rather than a second
 mechanism: `routes/email_routes.py` serves a fixture inbox when
@@ -79,14 +83,15 @@ a status code. `scripts/odysseus-smoke --areas` prints the current list.
 
 | Area | What it asserts |
 |---|---|
-| Chat | a turn against the stub comes back rendered, on both the buffered and the streamed path, and is in the session history |
-| Compare | a blind comparison streams both sides and the vote reveals which model produced which reply |
+| Chat | a turn against the stub comes back rendered on both the buffered and streamed paths, then appears in session history |
+| Compare | a blind comparison streams both sides; the vote reveals which model produced each reply |
 | Notes | a note is listed, read back, edited, and 404s after delete |
 | Calendar | an event appears in the window the UI queries and is gone after delete |
 | Tasks | a daily task is accepted with a computed next run, is listed, and pauses |
 | Documents (editor) | an edit adds a version, both versions read back, and a restore returns the first |
 | Documents (RAG) | an uploaded file is chunked, indexed and listed |
-| Email | the fixture inbox lists, opens with its body, and the unread count drops on mark-read |
+| Peanut Browsing | a native search tool cycle retrieves an indexed result; the crawl handler submits a public URL to the first-party gateway |
+| Email | the fixture inbox lists, opens with its body, then the unread count drops on mark-read |
 | Memory | a fact is listed, found by search, and gone after delete |
 | Uploads | an attachment reads back byte for byte |
 | Cookbook | CPU/RAM hardware is detected; GPU probing either returns device data or an explicit no-NVIDIA-utility status; a fresh install's recommendation request returns the empty-catalog Rescan guidance; state persists |
@@ -98,9 +103,9 @@ Printed next to the results on every run, so a reader cannot mistake the
 table for coverage of everything it does not mention. `DECLARED_GAPS` in
 `areas.py` is the list; the short version:
 
-- **Deep Research** and **Web Search** need live egress. A deterministic
-  stub for the crawler would be an application change, which this is
-  not.
+- **Deep Research** still needs live indexed evidence for multi-source
+  synthesis. The Peanut Browsing fixture validates search and crawl
+  transport only; it does not prove broad public-web coverage.
 - **Email over IMAP/SMTP** is covered only as far as the fixture path
   goes. There is no local mail server, so real account sync and send are
   untested.
@@ -108,17 +113,17 @@ table for coverage of everything it does not mention. `DECLARED_GAPS` in
   multi-gigabyte download.
 - **Gallery and the photo editor** already have the repo's only
   Playwright specs.
-- **The agent tool loop** is what the checkpoint benchmark measures.
+- **Multi-agent orchestration** is covered by the core runtime workflow;
+  web-app handoff plus approval still need a dedicated end-to-end scenario.
 - **MCP servers** are stdio subprocesses outside the app's readiness
   contract.
 - **Rendering and layout** are pinned by the computed-style snapshot.
 
-`Documents (RAG)` is the one covered area that can report `SKIP` on a
-clean checkout: `requirements.txt` pins `chromadb-client`, the HTTP
-client, and the ChromaDB *server* is a separate install. Without one
-reachable, the upload route returns a deliberate 503 and the row reads
-`SKIP` with that reason. Install `chromadb` in the venv and it goes
-green.
+`Documents (RAG)` uses the ChromaDB HTTP server. Release CI installs the
+pinned server, validates the Compose configuration, waits for its
+heartbeat, then runs with `ODYSSEUS_REQUIRE_CHROMA=1`; a missing server
+fails that required path. Local runs without a server retain the
+explanatory skip.
 
 ## Reading the report
 
