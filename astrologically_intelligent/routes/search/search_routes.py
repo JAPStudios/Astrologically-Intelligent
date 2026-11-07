@@ -173,11 +173,8 @@ def setup_search_routes(config) -> APIRouter:
         for pid, (label, needs_key, needs_url) in PROVIDER_INFO.items():
             if pid == "disabled":
                 continue
-            available = True
-            if needs_key and not _get_provider_key(pid):
-                available = False
-            if needs_url and pid == "searxng" and not _get_search_instance():
-                available = False
+            from services.search.providers import provider_configured
+            available = provider_configured(pid)
             providers.append({
                 "id": pid,
                 "label": label,
