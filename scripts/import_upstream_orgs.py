@@ -24,9 +24,14 @@ import urllib.request
 from pathlib import Path
 
 ORGANIZATIONS = (
-    "anthropics", "herdrdev", "n8n-io", "NousResearch", "odysseus-dev", "openai",
-    "openclaw", "paperclipai", "perplexityai", "xai-org",
+    "anthropics", "apple", "aws", "brave", "cursor", "deepseek-ai", "google",
+    "herdrdev", "kagisearch", "lukalabs", "meta-llama", "microsoft", "n8n-io",
+    "NousResearch", "odysseus-dev", "openai", "openclaw", "paperclipai",
+    "perplexityai", "xai-org",
 )
+AI_QUERY_ORGANIZATIONS = frozenset({
+    "apple", "aws", "brave", "google", "kagisearch", "microsoft",
+})
 API_ROOT = "https://api.github.com"
 
 
@@ -52,12 +57,45 @@ def fetch_page(org: str, page: int, token: str | None = None) -> list[dict]:
     return result
 
 
+def fetch_search_page(org: str, page: int, token: str | None = None) -> list[dict]:
+    """Search AI-related public repositories within a broad organization.
+
+    The requested AI-query organizations are not imported wholesale: only
+    repositories matching GitHub repository search for org:<name> AI enter
+    the source inventory.
+    """
+    if org not in AI_QUERY_ORGANIZATIONS:
+        raise ValueError(f"Organization does not use the AI repository query: {org}")
+    query = urllib.parse.urlencode({
+        "q": f"org:{org} AI",
+        "per_page": 100,
+        "page": page,
+    })
+    request = urllib.request.Request(
+        f"{API_ROOT}/search/repositories?{query}",
+        headers={
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            **({"Authorization": f"Bearer {token}"} if token else {}),
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=45) as response:
+            result = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, urllib.error.HTTPError) as exc:
+        raise RuntimeError(f"Could not search AI repositories for {org}: {exc}") from exc
+    if not isinstance(result, dict) or not isinstance(result.get("items"), list):
+        raise RuntimeError(f"GitHub returned an invalid AI repository search for {org}")
+    return result["items"]
+
+
 def list_repositories(orgs: tuple[str, ...], token: str | None = None) -> list[dict]:
     repositories: list[dict] = []
     for org in orgs:
         page = 1
         while True:
-            batch = fetch_page(org, page, token)
+            fetcher = fetch_search_page if org in AI_QUERY_ORGANIZATIONS else fetch_page
+            batch = fetcher(org, page, token)
             if not batch:
                 break
             for item in batch:
@@ -161,7 +199,7 @@ def import_repositories(root: Path, repositories: list[dict], dry_run: bool = Fa
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--org", action="append", choices=ORGANIZATIONS,
-                        help="Import one organization; repeat to select several. Default: all ten.")
+                        help="Import one organization; repeat to select several. Default: all twenty; six broad organizations use an AI repository search.")
     parser.add_argument("--dry-run", action="store_true", help="List imports without cloning repositories.")
     parser.add_argument("--limit", type=int, help="Stop after adding this many new submodules.")
     args = parser.parse_args(argv)

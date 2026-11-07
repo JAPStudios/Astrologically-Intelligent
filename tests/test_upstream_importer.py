@@ -72,5 +72,53 @@ class UpstreamImporterTests(unittest.TestCase):
                 self.assertEqual(existing_submodule_urls(root),{"https://github.com/openai/skills"})
 
 
+    def test_requested_organization_scope_includes_all_twenty_organizations(self):
+        from scripts.import_upstream_orgs import ORGANIZATIONS, AI_QUERY_ORGANIZATIONS
+
+        self.assertEqual(len(ORGANIZATIONS), 20)
+        self.assertTrue({
+            "apple", "aws", "brave", "cursor", "deepseek-ai", "google",
+            "herdrdev", "kagisearch", "lukalabs", "meta-llama", "microsoft",
+            "n8n-io", "NousResearch", "odysseus-dev", "openai", "openclaw",
+            "paperclipai", "perplexityai", "xai-org", "anthropics",
+        }.issubset(set(ORGANIZATIONS)))
+        self.assertEqual(
+            AI_QUERY_ORGANIZATIONS,
+            {"apple", "aws", "brave", "google", "kagisearch", "microsoft"},
+        )
+
+    def test_ai_query_organizations_use_search_results_not_full_org_listing(self):
+        item = {
+            "name": "ml-project",
+            "owner": {"login": "apple"},
+            "private": False,
+            "clone_url": "https://github.com/apple/ml-project.git",
+            "default_branch": "main",
+            "size": 10,
+        }
+        with patch("scripts.import_upstream_orgs.fetch_search_page", side_effect=[[item], []]) as search:
+            with patch("scripts.import_upstream_orgs.fetch_page") as listing:
+                repos = list_repositories(("apple",))
+        self.assertEqual([repo["name"] for repo in repos], ["ml-project"])
+        self.assertEqual(search.call_args_list[0].args, ("apple", 1, None))
+        self.assertEqual(search.call_args_list[1].args, ("apple", 2, None))
+        listing.assert_not_called()
+
+    def test_non_query_organizations_still_import_all_public_repositories(self):
+        item = {
+            "name": "repo",
+            "owner": {"login": "cursor"},
+            "private": False,
+            "clone_url": "https://github.com/cursor/repo.git",
+            "default_branch": "main",
+            "size": 10,
+        }
+        with patch("scripts.import_upstream_orgs.fetch_page", side_effect=[[item]]) as listing:
+            with patch("scripts.import_upstream_orgs.fetch_search_page") as search:
+                repos = list_repositories(("cursor",))
+        self.assertEqual([repo["name"] for repo in repos], ["repo"])
+        listing.assert_called_once_with("cursor", 1, None)
+        search.assert_not_called()
+
 if __name__ == "__main__":
     unittest.main()

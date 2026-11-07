@@ -4,7 +4,7 @@
 
 **Status: Source inventory imported — functionality integration and validation remain separate work.**
 
-The current `.gitmodules` file contains **742 pinned public repositories across all ten requested GitHub organizations**. Five repositories from `herdrdev` were added in the latest Herdr import batch. The current organization-directory counts are:
+The current `.gitmodules` file contains **742 pinned public repositories across the original ten organizations**. The requested source scope is twenty organizations. The importer is being expanded to include the remaining ten: `cursor`, `deepseek-ai`, `lukalabs`, and `meta-llama` are imported by public-repository listing; `apple`, `aws`, `brave`, `google`, `kagisearch`, and `microsoft` are searched for repositories matching GitHub’s `org:<name> AI` query. These additional repositories are not counted in the current 742 until the import workflow records their Gitlinks. Five repositories from `herdrdev` were added in the latest Herdr import batch. The current organization-directory counts are:
 
 | Organization | Pinned submodules |
 | --- | ---: |
@@ -40,7 +40,7 @@ Each submodule retains its upstream repository boundary, source layout, and lice
 
 ## Import tooling
 
-`scripts/import_upstream_orgs.py` lists public repositories for the ten configured organizations, resolves default-branch commits, and records Gitlinks and `.gitmodules` entries. It is resumable and skips existing submodule URLs. The `Import Upstream Repositories` workflow performs imports in bounded batches.
+`scripts/import_upstream_orgs.py` lists public repositories for the configured organizations, resolves default-branch commits, and records Gitlinks and `.gitmodules` entries. It is resumable and skips existing submodule URLs. Six broad organizations use a repository search for `AI` rather than importing every public repository. The `Import Upstream Repositories` workflow performs imports in bounded batches.
 
 ## Runtime integrations
 
