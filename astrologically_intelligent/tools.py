@@ -20,11 +20,22 @@ _SENSITIVE_TRACE_KEY = __import__("re").compile(
 def _redact_trace_secrets(value):
     """Remove credential-shaped fields from persisted agent tool traces."""
     if isinstance(value, dict):
-        return {
-            key: "[REDACTED]" if _SENSITIVE_TRACE_KEY.search(str(key))
-            else _redact_trace_secrets(item)
-            for key, item in value.items()
-        }
+        redacted = {}
+        for key, item in value.items():
+            if _SENSITIVE_TRACE_KEY.search(str(key)):
+                redacted[key] = "[REDACTED]"
+            elif str(key).lower() == "config" and isinstance(item, str):
+                try:
+                    parsed = json.loads(item)
+                except (TypeError, ValueError):
+                    redacted[key] = item
+                else:
+                    redacted[key] = json.dumps(
+                        _redact_trace_secrets(parsed), ensure_ascii=False
+                    )
+            else:
+                redacted[key] = _redact_trace_secrets(item)
+        return redacted
     if isinstance(value, list):
         return [_redact_trace_secrets(item) for item in value]
     return value
