@@ -4485,3 +4485,103 @@
 	path = upstream/microsoft/apache-airflow-microsoft-fabric-plugin
 	url = https://github.com/microsoft/apache-airflow-microsoft-fabric-plugin.git
 	branch = main
+[submodule "upstream/microsoft/ignite25-LAB511-build-agentic-knowledge-bases-next-level-rag-with-azure-ai-search"]
+	path = upstream/microsoft/ignite25-LAB511-build-agentic-knowledge-bases-next-level-rag-with-azure-ai-search
+	url = https://github.com/microsoft/ignite25-LAB511-build-agentic-knowledge-bases-next-level-rag-with-azure-ai-search.git
+	branch = main
+[submodule "upstream/microsoft/AgenticCookBook"]
+	path = upstream/microsoft/AgenticCookBook
+	url = https://github.com/microsoft/AgenticCookBook.git
+	branch = main
+[submodule "upstream/microsoft/AirbandData"]
+	path = upstream/microsoft/AirbandData
+	url = https://github.com/microsoft/AirbandData.git
+	branch = main
+[submodule "upstream/microsoft/ai-diffusion-report"]
+	path = upstream/microsoft/ai-diffusion-report
+	url = https://github.com/microsoft/ai-diffusion-report.git
+	branch = main
+[submodule "upstream/microsoft/Power-Platform-For-Beginners"]
+	path = upstream/microsoft/Power-Platform-For-Beginners
+	url = https://github.com/microsoft/Power-Platform-For-Beginners.git
+	branch = main
+[submodule "upstream/microsoft/aitour-Essential-Prompting-for-GitHub-Copilot-in-VS-Code"]
+	path = upstream/microsoft/aitour-Essential-Prompting-for-GitHub-Copilot-in-VS-Code
+	url = https://github.com/microsoft/aitour-Essential-Prompting-for-GitHub-Copilot-in-VS-Code.git
+	branch = main
+[submodule "upstream/microsoft/airflow-providers-microsoft-fabric"]
+	path = upstream/microsoft/airflow-providers-microsoft-fabric
+	url = https://github.com/microsoft/airflow-providers-microsoft-fabric.git
+	branch = main
+[submodule "upstream/microsoft/AI-for-Operations-Framework"]
+	path = upstream/microsoft/AI-for-Operations-Framework
+	url = https://github.com/microsoft/AI-for-Operations-Framework.git
+	branch = main
+[submodule "upstream/microsoft/intelligence-toolkit"]
+	path = upstream/microsoft/intelligence-toolkit
+	url = https://github.com/microsoft/intelligence-toolkit.git
+	branch = main
+[submodule "upstream/microsoft/Windows-Machine-Learning"]
+	path = upstream/microsoft/Windows-Machine-Learning
+	url = https://github.com/microsoft/Windows-Machine-Learning.git
+	branch = master
+[submodule "upstream/microsoft/MonocleAI"]
+	path = upstream/microsoft/MonocleAI
+	url = https://github.com/microsoft/MonocleAI.git
+	branch = master
+[submodule "upstream/microsoft/power-platform-skills"]
+	path = upstream/microsoft/power-platform-skills
+	url = https://github.com/microsoft/power-platform-skills.git
+	branch = main
+[submodule "upstream/microsoft/AzureAISpeechToolKit"]
+	path = upstream/microsoft/AzureAISpeechToolKit
+	url = https://github.com/microsoft/AzureAISpeechToolKit.git
+	branch = main
+[submodule "upstream/microsoft/responsible-ai-toolbox-tracker"]
+	path = upstream/microsoft/responsible-ai-toolbox-tracker
+	url = https://github.com/microsoft/responsible-ai-toolbox-tracker.git
+	branch = main
+[submodule "upstream/microsoft/acceleratoRs"]
+	path = upstream/microsoft/acceleratoRs
+	url = https://github.com/microsoft/acceleratoRs.git
+	branch = master
+[submodule "upstream/microsoft/dstoolkit-maiva"]
+	path = upstream/microsoft/dstoolkit-maiva
+	url = https://github.com/microsoft/dstoolkit-maiva.git
+	branch = main
+[submodule "upstream/microsoft/mcp-for-beginners"]
+	path = upstream/microsoft/mcp-for-beginners
+	url = https://github.com/microsoft/mcp-for-beginners.git
+	branch = main
+[submodule "upstream/microsoft/conversational-ai-chat-sdk"]
+	path = upstream/microsoft/conversational-ai-chat-sdk
+	url = https://github.com/microsoft/conversational-ai-chat-sdk.git
+	branch = main
+[submodule "upstream/microsoft/vscode-ai-pack"]
+	path = upstream/microsoft/vscode-ai-pack
+	url = https://github.com/microsoft/vscode-ai-pack.git
+	branch = main
+[submodule "upstream/microsoft/FoundryLocalAndroid"]
+	path = upstream/microsoft/FoundryLocalAndroid
+	url = https://github.com/microsoft/FoundryLocalAndroid.git
+	branch = main
+[submodule "upstream/microsoft/aitour-get-started-with-fabric"]
+	path = upstream/microsoft/aitour-get-started-with-fabric
+	url = https://github.com/microsoft/aitour-get-started-with-fabric.git
+	branch = main
+[submodule "upstream/microsoft/Planetary-Explorer"]
+	path = upstream/microsoft/Planetary-Explorer
+	url = https://github.com/microsoft/Planetary-Explorer.git
+	branch = main
+[submodule "upstream/microsoft/aitour26-LTG151-build-trustworthy-ai-with-systematic-evaluations-in-microsoft-foundry"]
+	path = upstream/microsoft/aitour26-LTG151-build-trustworthy-ai-with-systematic-evaluations-in-microsoft-foundry
+	url = https://github.com/microsoft/aitour26-LTG151-build-trustworthy-ai-with-systematic-evaluations-in-microsoft-foundry.git
+	branch = main
+[submodule "upstream/microsoft/Build26-LAB520-get-started-with-models-in-microsoft-foundry-to-build-ai-apps"]
+	path = upstream/microsoft/Build26-LAB520-get-started-with-models-in-microsoft-foundry-to-build-ai-apps
+	url = https://github.com/microsoft/Build26-LAB520-get-started-with-models-in-microsoft-foundry-to-build-ai-apps.git
+	branch = main
+[submodule "upstream/microsoft/SignalR-Samples-AI"]
+	path = upstream/microsoft/SignalR-Samples-AI
+	url = https://github.com/microsoft/SignalR-Samples-AI.git
+	branch = main
