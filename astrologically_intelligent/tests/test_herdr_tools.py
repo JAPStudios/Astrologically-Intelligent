@@ -78,6 +78,15 @@ async def test_herdr_agent_get_and_explain_use_agent_identifiers(monkeypatch):
 
 
 @pytest.mark.asyncio
+async def test_herdr_agent_get_rejects_option_injection(monkeypatch):
+    monkeypatch.setenv("HERDR_ENV", "1")
+    with patch("src.agent_tools.herdr_tools.subprocess.run") as run:
+        result = await HerdrAgentGetTool().execute('{"target":"--machine"}')
+    assert "agent name or pane ID" in result["error"]
+    run.assert_not_called()
+
+
+@pytest.mark.asyncio
 async def test_herdr_agent_read_rejects_invalid_limits(monkeypatch):
     monkeypatch.setenv("HERDR_ENV", "1")
     with patch("src.agent_tools.herdr_tools.subprocess.run") as run:
