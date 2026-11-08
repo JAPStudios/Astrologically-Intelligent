@@ -15,7 +15,9 @@ from typing import Any
 _ALLOWED_SPLITS = {"train", "validation", "test"}
 
 
-def convert_row(row: Any, line_number: int) -> dict[str, Any]:
+def convert_row(
+    row: Any, line_number: int, expected_split: str | None = None
+) -> dict[str, Any]:
     if not isinstance(row, dict):
         raise ValueError(f"line {line_number}: source row must be an object")
 
@@ -54,6 +56,10 @@ def convert_row(row: Any, line_number: int) -> dict[str, Any]:
     split = metadata.get("dataset_split") or row.get("dataset_split")
     if split not in _ALLOWED_SPLITS:
         raise ValueError(f"line {line_number}: dataset_split must be train, validation, or test")
+    if expected_split is not None and split != expected_split:
+        raise ValueError(
+            f"line {line_number}: expected {expected_split} split but source row is assigned to {split}"
+        )
 
     output_metadata = dict(metadata)
     output_metadata["seed_family_id"] = family_id.strip()
@@ -75,7 +81,9 @@ def convert_row(row: Any, line_number: int) -> dict[str, Any]:
     return converted
 
 
-def convert_file(source: Path, destination: Path) -> dict[str, int]:
+def convert_file(
+    source: Path, destination: Path, expected_split: str | None = None
+) -> dict[str, int]:
     counts = {"source_rows": 0, "converted_rows": 0}
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_name(destination.name + ".tmp")
@@ -91,7 +99,7 @@ def convert_file(source: Path, destination: Path) -> dict[str, int]:
                     row = json.loads(raw)
                 except json.JSONDecodeError as exc:
                     raise ValueError(f"{source}:{line_number}: invalid JSON: {exc.msg}") from exc
-                converted = convert_row(row, line_number)
+                converted = convert_row(row, line_number, expected_split=expected_split)
                 writer.write(json.dumps(converted, ensure_ascii=False) + "\n")
                 counts["converted_rows"] += 1
         if counts["source_rows"] == 0:
@@ -107,9 +115,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--expected-split", choices=sorted(_ALLOWED_SPLITS))
     args = parser.parse_args(argv)
     try:
-        counts = convert_file(args.input, args.output)
+        counts = convert_file(args.input, args.output, expected_split=args.expected_split)
     except (OSError, UnicodeError, ValueError) as exc:
         parser.exit(2, f"conversion refused: {exc}\n")
     print(json.dumps({"status": "converted", **counts}, ensure_ascii=False, indent=2))
