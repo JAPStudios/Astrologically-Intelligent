@@ -134,17 +134,7 @@ def main() -> None:
 
     results = json.loads(args.run.read_text(encoding="utf-8")).get("results", [])
     candidates = [row for row in results if row.get("pass") is True and row.get("session_id")]
-    owner_by_session: dict[str, str] = {}
-    for row in candidates:
-        session_id = _safe_session_id(row["session_id"])
-        owner = _safe_owner(row.get("owner"))
-        previous_owner = owner_by_session.get(session_id)
-        if previous_owner is not None and previous_owner != owner:
-            raise ValueError(
-                f"session {session_id!r} is assigned to multiple owners: "
-                f"{previous_owner!r} and {owner!r}"
-            )
-        owner_by_session[session_id] = owner
+    owner_by_session = _owner_session_map(candidates)
     review_rows: list[dict[str, Any]] = []
     for owner in sorted(set(owner_by_session.values())):
         ids = {sid for sid, candidate_owner in owner_by_session.items() if candidate_owner == owner}
