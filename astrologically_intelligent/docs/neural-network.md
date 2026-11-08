@@ -45,3 +45,39 @@ runtime do not call it for user-facing tasks. Using it for a defined task
 requires a suitable labelled dataset, a documented task contract and a
 tested application call site.
 
+## Character-level recurrent language model
+
+`src/character_language_model.py` adds a separate trainable recurrent model
+for next-character prediction. It uses a vocabulary supplied by the caller,
+a tanh recurrent hidden state, softmax output, truncated backpropagation
+through time and mini-batch Adam updates. `fit()` learns from caller-supplied
+text and reports per-epoch training loss. `evaluate()` measures next-character
+cross-entropy on text supplied separately. `generate()` continues a prompt
+using temperature and optional top-k sampling.
+
+A minimal example:
+
+```python
+from src.character_language_model import CharacterLanguageModel
+
+corpus = "A small example corpus. " * 100
+vocabulary = sorted(set(corpus))
+model = CharacterLanguageModel(vocabulary, hidden_size=128, seed=7)
+history = model.fit(
+    corpus,
+    epochs=20,
+    steps_per_epoch=100,
+    sequence_length=48,
+    batch_size=16,
+)
+continuation = model.generate("A small", max_new_tokens=120, temperature=0.8, top_k=12)
+model.save("character-model.npz")
+```
+
+The caller must provide the training corpus and vocabulary. This is a compact
+character-level recurrent language model, not a pretrained, production-scale
+language model, a transformer or a replacement for the full conversational
+runtime. It has not been trained on a broad corpus and is not connected to
+user-facing chat, CatChat or the other public services. The separate
+classification and language-generation components must not be described as
+the completed Astrologically Intelligent neural network.
