@@ -74,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         import torch
         from peft import PeftConfig, PeftModel
-        from transformers import AutoModelForImageTextToText, AutoProcessor
+        from transformers import AutoConfig, AutoModelForImageTextToText, AutoProcessor
     except ImportError as exc:
         raise SystemExit(
             "merge dependencies are unavailable; install the model-training "
@@ -86,6 +86,15 @@ def main(argv: list[str] | None = None) -> int:
         "float16": torch.float16,
         "float32": torch.float32,
     }[args.dtype]
+
+    base_config = AutoConfig.from_pretrained(
+        str(args.base), trust_remote_code=args.trust_remote_code
+    )
+    if getattr(base_config, "model_type", None) != "qwen3_5":
+        raise SystemExit(
+            f"expected a Qwen3.5 checkpoint (model_type=qwen3_5), got "
+            f"{getattr(base_config, 'model_type', None)!r}"
+        )
 
     print("Loading full multimodal Qwen3.5 base checkpoint...", flush=True)
     model = AutoModelForImageTextToText.from_pretrained(
@@ -130,6 +139,23 @@ def main(argv: list[str] | None = None) -> int:
         autocast_adapter_dtype=False,
     )
     peft_model.eval()
+    loaded_parameter_names = [name for name, _ in peft_model.named_parameters()]
+    missing_targets = [
+        target for target in targets
+        if not any(
+            name.endswith(f"{target}.lora_A.default.weight")
+            for name in loaded_parameter_names
+        )
+        or not any(
+            name.endswith(f"{target}.lora_B.default.weight")
+            for name in loaded_parameter_names
+        )
+    ]
+    if missing_targets:
+        raise SystemExit(
+            "adapter injection incomplete; missing LoRA A/B weights for "
+            f"{len(missing_targets)} target modules, examples={missing_targets[:8]}"
+        )
     with torch.inference_mode():
         adapted_logits = peft_model(**processor_inputs).logits[:, -1, :].float().cpu()
 
