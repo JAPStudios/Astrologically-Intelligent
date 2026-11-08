@@ -2,6 +2,22 @@
 
 Astrologically Intelligent is an artificial neural network. CatChat is the direct-messaging service for private one-to-one and group conversations, persistent message history and read receipts; its reserved Astrologically Intelligent account can provide AI replies. WaveWeaver provides literary recommendations, Peanut Browsing provides research, PanMedia provides agent management, Terracotta provides artistic guidance, NoiseGround provides sound engineering assistance, MyOutlet provides video editing recommendations, Engzen provides programming review and correction and Honest Education provides fact-checking.
 
+## JAPStudios public-service integrations
+
+The nine connected public services are part of the product's intended architecture, but they are not all integrated yet. Current implementation evidence is recorded in [the public-service integration audit](UPSTREAM_IMPORT.md#japstudios-public-service-integration-audit).
+
+- CatChat: assistant-session and message API contract documented; live deployment has not been verified.
+- Peanut Browsing: first-party search and crawl tools implemented; deterministic tests pass, while live production-index coverage remains unverified.
+- PanMedia: authenticated agent-management API and service proxy implemented; live public deployment has not been verified.
+- WaveWeaver: literary-recommendation integration is not implemented.
+- Terracotta: artistic-guidance integration is not implemented.
+- NoiseGround: sound-engineering integration is not implemented.
+- MyOutlet: video-editing recommendation integration is not implemented; its existing media platform is not a substitute.
+- Engzen: programming-review and code-correction integration is not implemented.
+- Honest Education: fact-checking integration is not implemented.
+
+The six unfinished services require their actual service-side capabilities and documented API contracts before working integrations can be built. No endpoint, data source, or completed capability should be inferred from a site name or an unrelated repository. A documented contract or passing mock test is not evidence of a live production connection.
+
 ## Python agent platform
 
 See [AGENT_RUNTIME.md](AGENT_RUNTIME.md) for setup, provider configuration, API usage, orchestration tools, native capabilities, and security controls.
