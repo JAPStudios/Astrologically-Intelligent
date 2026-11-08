@@ -216,3 +216,24 @@ def test_retained_expansion_trace_is_included_in_declared_split(tmp_path, monkey
     assert summary["retained_expansion_sessions"] == 1
     assert summary["turns"] == {"train": 0, "validation": 0, "test": 1}
 
+def test_unassigned_seed_family_is_not_silently_added_to_training(tmp_path):
+    app_root = Path(__file__).resolve().parents[1]
+    manifest = tmp_path / "manifest.json"
+    trace = tmp_path / "approved.jsonl"
+    output = tmp_path / "splits"
+    _write_json(manifest, {"seeds": []})
+    trace.write_text(
+        json.dumps({
+            "session_id": "session-unassigned",
+            "user": "Find a note",
+            "assistant": "The note is ready.",
+            "tool_events": [],
+        }) + "\n",
+        encoding="utf-8",
+    )
+
+    result = _run_builder(app_root, manifest, trace, output)
+
+    assert result.returncode != 0
+    assert "no dataset split is recorded" in result.stderr
+
