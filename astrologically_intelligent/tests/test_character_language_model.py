@@ -88,3 +88,20 @@ def test_generation_rejects_non_finite_logits_instead_of_sampling_invalid_probab
     model._parameters["output_bias"][0] = 1e308
     with pytest.raises(FloatingPointError, match="non-finite logits"):
         model.generate("a", max_new_tokens=1, temperature=1e-308)
+
+
+def test_generation_uses_validated_probability_path_for_every_generated_token(monkeypatch):
+    model = _model()
+    original = model._next_token_probabilities
+    calls = []
+
+    def tracked(hidden, *, temperature, top_k):
+        calls.append((temperature, top_k))
+        return original(hidden, temperature=temperature, top_k=top_k)
+
+    monkeypatch.setattr(model, "_next_token_probabilities", tracked)
+    generated = model.generate("ab", max_new_tokens=4, temperature=0.8, top_k=3, seed=12)
+
+    assert generated.startswith("ab")
+    assert len(generated) == 6
+    assert calls == [(0.8, 3)] * 6
