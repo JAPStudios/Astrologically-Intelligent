@@ -85,3 +85,5 @@ These gaps do not change the service responsibilities defined by JAPStudios. The
 ## Destination-repository licensing status
 
 The destination repository currently has no top-level license file and GitHub reports no detected repository license. The 1,532 imported Git submodules retain their own upstream repository boundaries and license files; that does not license the destination repository's original code or grant blanket permission to redistribute the submodule contents. Do not infer a project-wide license from the upstream inventory. A project-wide license decision and a source-by-source redistribution review remain release blockers.
+
+A separate Wix site-context check confirms that Terracotta, NoiseGround, and Honest Education are published Wix sites with Velo enabled; MyOutlet and Engzen are also published Wix sites with Velo enabled. WaveWeaver is a published Wix site with Velo disabled. These are site records, not GitHub repositories. A published site or enabled Velo setting does not by itself establish that a service API exists or is callable; no endpoint has been inferred from site metadata.
