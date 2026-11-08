@@ -34,6 +34,13 @@ def _safe_session_id(value: object) -> str:
         raise ValueError(f"invalid SFT session identifier: {session_id!r}")
     return session_id
 
+def _owner_trace_path(owner: object) -> Path:
+    safe_owner = _safe_owner(owner)
+    path = TRACE_DIR / f"{safe_owner}.jsonl"
+    if path.resolve().parent != TRACE_DIR.resolve():
+        raise ValueError(f"SFT trace path escapes its directory for owner {safe_owner!r}")
+    return path
+
 def atomic_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
@@ -46,7 +53,7 @@ def atomic_json(path: Path, payload: Any) -> None:
 def trace_rows(owner: str, session_ids: set[str]) -> list[dict[str, Any]]:
     owner = _safe_owner(owner)
     session_ids = {_safe_session_id(value) for value in session_ids}
-    path = TRACE_DIR / f"{owner}.jsonl"
+    path = _owner_trace_path(owner)
     if not path.exists():
         return []
     rows = []
