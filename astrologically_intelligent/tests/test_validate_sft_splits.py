@@ -121,3 +121,17 @@ def test_malformed_tool_call_arguments_fail_closed(tmp_path):
         assert "invalid JSON arguments" in str(exc)
     else:
         raise AssertionError("malformed tool arguments were accepted")
+
+
+def test_tool_result_must_reference_a_declared_call(tmp_path):
+    row = {"messages": [
+        {"role": "user", "content": "Create a reminder."},
+        {"role": "assistant", "content": "I cannot do that."},
+        {"role": "tool", "tool_call_id": "missing-call", "content": "Created."},
+    ]}
+    try:
+        MODULE._conversation(row, 1)
+    except ValueError as exc:
+        assert "unknown tool_call_id" in str(exc)
+    else:
+        raise AssertionError("orphan tool result was accepted")
