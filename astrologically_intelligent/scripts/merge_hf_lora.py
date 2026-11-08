@@ -10,7 +10,6 @@ from __future__ import annotations
 import argparse
 import json
 import math
-import sys
 from pathlib import Path
 from typing import Iterable
 
@@ -46,6 +45,22 @@ def language_target_modules(
     return sorted(set(selected))
 
 
+def validate_paths(base: Path, adapter: Path, output: Path) -> None:
+    """Refuse output paths that could overwrite or recursively contain inputs."""
+    base_path = base.resolve()
+    adapter_path = adapter.resolve()
+    output_path = output.resolve()
+    for label, source in (("base checkpoint", base_path), ("adapter", adapter_path)):
+        if output_path == source or output_path in source.parents or source in output_path.parents:
+            raise ValueError(
+                f"output directory must be separate from the {label}: {source}"
+            )
+    if output.exists() and not output.is_dir():
+        raise ValueError(f"output path exists but is not a directory: {output}")
+    if output.is_dir() and any(output.iterdir()):
+        raise ValueError(f"output directory must be absent or empty: {output}")
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True, help="Local full Qwen3.5-9B base checkpoint")
@@ -64,8 +79,10 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit(f"base checkpoint directory does not exist: {args.base}")
     if not (args.adapter / "adapter_config.json").is_file():
         raise SystemExit(f"adapter_config.json is missing: {args.adapter}")
-    if args.output.exists() and any(args.output.iterdir()):
-        raise SystemExit(f"output directory must be absent or empty: {args.output}")
+    try:
+        validate_paths(args.base, args.adapter, args.output)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
     if not math.isfinite(args.min_logit_delta) or args.min_logit_delta <= 0:
         raise SystemExit("--min-logit-delta must be a finite positive number")
     if not args.verify_prompt.strip():
@@ -121,7 +138,13 @@ def main(argv: list[str] | None = None) -> int:
     }, indent=2), flush=True)
 
     processor_inputs = processor(text=[args.verify_prompt], return_tensors="pt")
-    model_device = next(model.parameters()).device
+    input_embeddings = model.get_input_embeddings()
+    model_device = input_embeddings.weight.device
+    if model_device.type == "meta":
+        raise SystemExit(
+            "input embedding weights are offloaded to meta; load the model with "
+            "an input-embedding device available for the activation probe"
+        )
     processor_inputs = {
         key: value.to(model_device) if hasattr(value, "to") else value
         for key, value in processor_inputs.items()
