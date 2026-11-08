@@ -95,7 +95,11 @@ keys from `model.layers` to `model.language_model.layers`, checks that every
 target has both LoRA A and B weights, and compares deterministic base and
 adapter logits. It refuses to save if the adapter has no measurable effect.
 The processor is saved alongside the merged checkpoint, and a manifest
-records the inputs and activation measurement.
+records the inputs and activation measurement. Before loading model dependencies,
+the script rejects output paths that overlap the base checkpoint or adapter,
+including ancestor/descendant paths, existing files, and non-empty directories.
+The activation probe places text inputs on the input-embedding device and fails
+closed if those weights are offloaded to a meta device.
 
 This is a reproducible merge and activation gate, not a training run or a
 production deployment. The merge must still be run against the actual approved
