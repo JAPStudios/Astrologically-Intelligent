@@ -8,8 +8,6 @@ smoke provider; no external model credentials or network service are used.
 from __future__ import annotations
 
 import httpx
-import pytest
-
 from tests.smoke.stub_provider import MODEL_PRIMARY, reply_for
 
 
