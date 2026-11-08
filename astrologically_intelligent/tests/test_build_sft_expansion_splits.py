@@ -90,3 +90,25 @@ def test_same_family_same_split_deduplicates_without_leakage(tmp_path):
     summary = json.loads((output / "summary.json").read_text(encoding="utf-8"))
     assert summary["turns"] == {"train": 1, "validation": 0, "test": 0}
     assert summary["family_leaks"] == 0
+
+def test_manifest_rejects_one_seed_family_assigned_to_multiple_splits(tmp_path):
+    app_root = Path(__file__).resolve().parents[1]
+    manifest = tmp_path / "manifest.json"
+    trace = tmp_path / "approved.jsonl"
+    output = tmp_path / "splits"
+    _write_json(
+        manifest,
+        {
+            "seeds": [
+                {"seed_family_id": "family-a", "split": "train"},
+                {"seed_family_id": "family-a", "split": "test"},
+            ]
+        },
+    )
+    trace.write_text("", encoding="utf-8")
+
+    result = _run_builder(app_root, manifest, trace, output)
+
+    assert result.returncode != 0
+    assert "manifest seed-family split leakage" in result.stderr
+
