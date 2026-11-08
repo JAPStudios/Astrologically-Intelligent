@@ -84,3 +84,40 @@ def test_seed_family_id_in_repository_metadata_is_detected(tmp_path):
         {"role": "assistant", "content": "answer"},
     ]}
     assert MODULE._family_id(row) == "family-meta"
+
+
+def test_assistant_tool_call_without_text_is_valid_and_included_in_digest(tmp_path):
+    row = {
+        "source_family_id": "tool-family",
+        "messages": [
+            {"role": "user", "content": "Create a reminder."},
+            {"role": "assistant", "content": "", "tool_calls": [{
+                "id": "call-1",
+                "type": "function",
+                "function": {"name": "manage_tasks", "arguments": "{\\"action\\":\\"create\\"}"},
+            }]},
+            {"role": "tool", "tool_call_id": "call-1", "content": "Created."},
+            {"role": "assistant", "content": "The reminder was created."},
+        ],
+    }
+    normalized = MODULE._conversation(row, 1)
+    assert normalized[1]["tool_calls"][0]["name"] == "manage_tasks"
+    assert normalized[1]["tool_calls"][0]["arguments"] == {"action": "create"}
+
+
+def test_malformed_tool_call_arguments_fail_closed(tmp_path):
+    row = {
+        "messages": [
+            {"role": "user", "content": "Do something."},
+            {"role": "assistant", "content": "", "tool_calls": [{
+                "id": "call-1",
+                "function": {"name": "manage_tasks", "arguments": "{bad"},
+            }]},
+        ],
+    }
+    try:
+        MODULE._conversation(row, 1)
+    except ValueError as exc:
+        assert "invalid JSON arguments" in str(exc)
+    else:
+        raise AssertionError("malformed tool arguments were accepted")
