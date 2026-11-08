@@ -94,23 +94,32 @@ class CharacterLanguageModel:
         if len(encoded) < 2:
             raise ValueError("evaluation text must contain at least two characters")
 
-        # Evaluate every next-character target, including the final partial
-        # window. The previous fixed-size slicing silently dropped the tail
-        # and rejected otherwise valid short validation corpora.
-        starts = list(range(0, len(encoded) - 1, sequence_length))
-        losses = []
-        for offset in range(0, len(starts), batch_size):
-            selected = starts[offset:offset + batch_size]
-            lengths = [min(sequence_length, len(encoded) - start - 1) for start in selected]
-            for start, length in zip(selected, lengths):
-                x = encoded[start:start + length][None, :]
-                y = encoded[start + 1:start + length + 1]
-                _, probabilities = self._forward(x)
-                chosen = np.clip(probabilities[0, np.arange(length), y], 1e-12, 1.0)
-                losses.extend((-np.log(chosen)).tolist())
-        if not losses:
-            raise ValueError("evaluation text must contain at least two characters")
-        return float(np.mean(losses))
+        # Keep the recurrent context bounded while evaluating every target.
+        # Group equal-length windows so batch_size controls actual vectorized
+        # inference rather than merely grouping a Python loop.
+        windows_by_length: dict[int, list[int]] = {}
+        for start in range(0, len(encoded) - 1, sequence_length):
+            length = min(sequence_length, len(encoded) - start - 1)
+            windows_by_length.setdefault(length, []).append(start)
+
+        total_loss = 0.0
+        target_count = 0
+        for length, starts in windows_by_length.items():
+            for offset in range(0, len(starts), batch_size):
+                selected = starts[offset:offset + batch_size]
+                inputs = np.stack([encoded[start:start + length] for start in selected])
+                targets = np.stack([encoded[start + 1:start + length + 1] for start in selected])
+                _, probabilities = self._forward(inputs)
+                chosen = np.clip(
+                    np.take_along_axis(probabilities, targets[..., None], axis=2)[..., 0],
+                    1e-12,
+                    1.0,
+                )
+                total_loss += float(-np.log(chosen).sum())
+                target_count += int(chosen.size)
+        if target_count != len(encoded) - 1:
+            raise RuntimeError("language-model evaluation did not cover every next-character target")
+        return total_loss / target_count
 
     @staticmethod
     def _validate_window(encoded: np.ndarray, sequence_length: int, batch_size: int) -> None:
