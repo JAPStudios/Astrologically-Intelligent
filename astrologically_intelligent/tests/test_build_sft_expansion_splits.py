@@ -297,3 +297,27 @@ def test_retained_expansion_owner_cannot_escape_trace_directory(tmp_path, monkey
     with pytest.raises(ValueError, match="invalid SFT trace owner identifier"):
         _run_split_builder_main(monkeypatch, module, manifest, trace, review, output)
 
+def test_retained_expansion_trace_symlink_cannot_escape_trace_directory(tmp_path, monkeypatch):
+    module = _load_split_builder()
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+    trace_dir = tmp_path / "data" / "sft_traces"
+    trace_dir.mkdir(parents=True)
+    outside = tmp_path / "outside.jsonl"
+    outside.write_text(json.dumps({"session_id": "session-a"}) + "\\n", encoding="utf-8")
+    (trace_dir / "owner-a.jsonl").symlink_to(outside)
+    manifest = tmp_path / "manifest.json"
+    trace = tmp_path / "approved.jsonl"
+    review = tmp_path / "review.json"
+    output = tmp_path / "splits"
+    _write_json(manifest, {"seeds": []})
+    trace.write_text("", encoding="utf-8")
+    _write_json(
+        review,
+        {"results": [{"owner": "owner-a", "session_id": "session-a", "retained": True}]},
+    )
+
+    import pytest
+
+    with pytest.raises(ValueError, match="SFT trace path escapes its directory"):
+        _run_split_builder_main(monkeypatch, module, manifest, trace, review, output)
+
