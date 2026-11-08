@@ -1,0 +1,6 @@
+# Optional dependencies for supervised fine-tuning and Qwen3.5 LoRA merging.
+# Install PyTorch from the official selector for the target CUDA/ROCm/CPU platform.
+accelerate>=1.2
+transformers>=5.0
+peft>=0.18
+safetensors>=0.5
