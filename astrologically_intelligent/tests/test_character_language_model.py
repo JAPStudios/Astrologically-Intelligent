@@ -57,3 +57,27 @@ def test_rejects_invalid_vocabulary_and_training_window():
         CharacterLanguageModel(("ab", "c"))
     with pytest.raises(ValueError, match="longer than sequence_length"):
         _model().fit("abc", sequence_length=3)
+
+def test_checkpoint_rejects_malformed_scalar_metadata(tmp_path):
+    model = _model()
+    checkpoint = tmp_path / "valid-character-model.npz"
+    model.save(checkpoint)
+    with np.load(checkpoint, allow_pickle=False) as archive:
+        original = {name: archive[name].copy() for name in archive.files}
+
+    invalid = {
+        "fractional-version": ("format_version", np.array(1.5)),
+        "fractional-hidden-size": ("hidden_size", np.array(12.5)),
+        "non-finite-learning-rate": ("learning_rate", np.array(float("nan"))),
+        "fractional-step": ("step", np.array(0.5)),
+        "invalid-vocabulary-json": ("vocabulary", np.array("not-json")),
+        "invalid-random-state": ("rng_state", np.array("{}")),
+    }
+    for name, (field, value) in invalid.items():
+        arrays = {key: item.copy() for key, item in original.items()}
+        arrays[field] = value
+        invalid_checkpoint = tmp_path / f"{name}.npz"
+        np.savez_compressed(invalid_checkpoint, **arrays)
+        with pytest.raises(ValueError):
+            CharacterLanguageModel.load(invalid_checkpoint)
+
