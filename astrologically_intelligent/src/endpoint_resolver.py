@@ -189,6 +189,7 @@ def resolve_endpoint_runtime(ep, owner: Optional[str] = None) -> Tuple[str, Opti
             normalize_base(creds.get("base_url") or base)
         )
         api_key = creds.get("api_key")
+    _require_local_inference_endpoint(base)
     return base, api_key
 
 
