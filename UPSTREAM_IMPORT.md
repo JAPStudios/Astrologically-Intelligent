@@ -56,31 +56,31 @@ Each submodule retains its upstream repository boundary, source layout, and lice
 
 scripts/import_upstream_orgs.py lists public repositories for the configured organizations, resolves default-branch commits, and records Gitlinks plus .gitmodules entries. It is resumable and skips existing submodule URLs. Six broad organizations use a repository search for AI rather than importing every public repository. GitHub limits each repository-search query to 1,000 results; the completed Microsoft query returned 634 pinned repositories, below that limit. The Import Upstream Repositories workflow performs imports in bounded batches.
 
-## Runtime integrations
+## Existing optional external-provider and connector code
 
-The application contains specific API integrations for n8n workflow management, Paperclip company and issue operations, Perplexity Search, read-only OpenClaw session access, Anthropic Messages API transport, plus provider routing for xAI, Perplexity, and DeepSeek. These are selected application integrations; they do not mean the upstream applications themselves have all been merged into one runtime. The CatChat integration plus Peanut Browsing search tools are documented in AGENT_RUNTIME.md.
+The repository currently contains optional connector/provider code paths for n8n workflow management, Paperclip operations, OpenClaw session access, Anthropic Messages transport, Perplexity Search, and xAI/Perplexity/DeepSeek model routing. This is an inventory of existing code, not a recommendation to integrate competitors, not a statement of partnership or endorsement, and not a requirement for Astrologically Intelligent's core capabilities. These adapters must not be treated as the product's differentiator or as substitutes for JAPStudios' own intelligence and services. No additional competitor integration should be introduced as a development objective. The CatChat and Peanut Browsing service relationships are documented separately in AGENT_RUNTIME.md.
 
 ## Remaining work
 
 The source inventory is not the completion criterion for the software. Each upstream project still needs an evidence-based disposition: identify relevant functionality, review license and dependency obligations, assess compatibility and security, integrate selected functionality, then add automated tests. Projects that are irrelevant, incompatible, redundant, or unsafe to incorporate should be documented as such rather than copied indiscriminately. The complete application also requires repeatable dependency installation, test execution, security checks, and deployment validation.
 
-## JAPStudios public-service integration audit
+## JAPStudios public-service responsibilities and evidence
 
-This section records the current repository evidence for the service relationships described by JAPStudios. A source repository, a documented endpoint contract, and a tested integration are distinct states; no missing service endpoint is inferred or fabricated.
+The following are JAPStudios' own service names and product responsibilities. They are not aliases for, equivalents of, or dependencies on unrelated third-party products. A Wix CMS inspection, missing endpoint, or absent content collection cannot establish that a capability is absent from Astrologically Intelligent's own application. Likewise, the presence of general-purpose tools does not by itself prove that a specialist workflow is complete.
 
-| JAPStudios public service | Current evidence in the accessible repositories | Astrologically Intelligent integration status |
+| JAPStudios public service | Defined responsibility | Evidence status in this document |
 | --- | --- | --- |
-| CatChat — conversational output | `JAPStudios/CatChat` contains a working messaging service and documents its assistant-account path to Astrologically Intelligent through `POST /api/session` and `POST /api/chat`. Its tests use a mocked responder. | Integration contract documented. Live service-to-service deployment has not been verified. |
-| Peanut Browsing — research | `JAPStudios/Peanut-Browsing` contains the first-party crawler, index, and authenticated search gateway. The full web application has native search and crawl tools; the Deep Research provider connection was merged in PR #16. | Implemented and covered by deterministic tool-cycle and navigator tests. Live production-index coverage has not been verified. |
-| PanMedia — agent management | `JAPStudios/PanMedia` uses the authenticated agent, goal, approval, budget, and run APIs in this repository. Cross-repository backend/proxy tests were reported passing in the completion issue. | Backend API and service proxy implemented. Live public deployment has not been verified. |
-| WaveWeaver — literary recommendations | The required responsibility is literary discovery and recommendations. | Specialist capability is not yet demonstrated in the Astrologically Intelligent application. |
-| Terracotta — artistic guidance | The required responsibility is artistic guidance and vector-graphics work. | Specialist capability is not yet demonstrated in the Astrologically Intelligent application. |
-| NoiseGround — sound-engineering assistance | The required responsibility is sound-engineering assistance. | Specialist capability is not yet demonstrated in the Astrologically Intelligent application. |
-| MyOutlet — video-editing recommendations | The required responsibility is video-editing recommendations and guidance. | Specialist capability is not yet demonstrated in the Astrologically Intelligent application. |
-| Engzen — programming review and correction | The required responsibility is programming review and correction. | Specialist capability is not yet demonstrated in the Astrologically Intelligent application. |
-| Honest Education — fact-checking | The required responsibility is fact-checking grounded in public education. | Specialist capability is not yet demonstrated in the Astrologically Intelligent application. |
+| CatChat | Conversational output | A service API contract is documented; live deployment is not verified here. |
+| Peanut Browsing | Research | First-party search/crawl tools are present; live production-index coverage is not verified here. |
+| PanMedia | Agentic guidance and agent management | Backend API and service proxy implementation are documented; live public deployment is not verified here. |
+| WaveWeaver | Literary recommendations | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| Terracotta | Artistic guidance | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| NoiseGround | Sound-engineering assistance | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| MyOutlet | Video-editing recommendations | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| Engzen | Programming review and correction | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| Honest Education | Fact-checking | No conclusion about native application capability is drawn from Wix CMS metadata. |
 
-These entries describe the product responsibilities, not a demand for separate service APIs. Build the specialist capabilities into Astrologically Intelligent according to those responsibilities, and record implementation evidence only after the relevant functionality exists and is tested.
+The service responsibilities are the product requirements. Implementations must be assessed in the application itself against those requirements; a separate service API is not a prerequisite. Wix CMS and site-setting observations below concern only those sites' exposed CMS data and cannot be used as evidence that the corresponding Astrologically Intelligent capability does or does not exist.
 
 ## Destination-repository licensing status
 
