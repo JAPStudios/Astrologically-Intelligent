@@ -1,0 +1,59 @@
+import numpy as np
+import pytest
+
+from src.character_language_model import CharacterLanguageModel
+
+
+def _model(seed=5):
+    return CharacterLanguageModel(tuple("abc "), hidden_size=12, learning_rate=0.03, seed=seed)
+
+
+def test_recurrent_language_model_learns_repeating_character_sequence():
+    text = "abc " * 120
+    model = _model()
+    before = model.evaluate(text, sequence_length=8, batch_size=16)
+    history = model.fit(text, epochs=8, steps_per_epoch=35, sequence_length=8, batch_size=16)
+    after = model.evaluate(text, sequence_length=8, batch_size=16)
+    assert after < before
+    assert history[-1]["loss"] < history[0]["loss"]
+    assert len(history) == 8
+    generated = model.generate("a", max_new_tokens=24, temperature=0.7, top_k=1, seed=4)
+    assert generated.startswith("a")
+    assert set(generated) <= set("abc ")
+
+
+def test_checkpoint_round_trip_and_resume_are_deterministic(tmp_path):
+    text = "abc " * 80
+    model = _model(seed=9)
+    model.fit(text, epochs=2, steps_per_epoch=5, sequence_length=6, batch_size=4)
+    checkpoint = tmp_path / "character-model.npz"
+    model.save(checkpoint)
+    restored = CharacterLanguageModel.load(checkpoint)
+    assert restored.vocabulary == model.vocabulary
+    assert restored._step == model._step
+    assert model.generate("ab", max_new_tokens=20, seed=17) == restored.generate(
+        "ab", max_new_tokens=20, seed=17
+    )
+    model.fit(text, epochs=1, steps_per_epoch=3, sequence_length=6, batch_size=4)
+    restored.fit(text, epochs=1, steps_per_epoch=3, sequence_length=6, batch_size=4)
+    for name, value in model._parameters.items():
+        assert np.array_equal(value, restored._parameters[name])
+
+
+def test_rejects_unknown_characters_and_invalid_generation_settings():
+    model = _model()
+    with pytest.raises(ValueError, match="outside the vocabulary"):
+        model.fit("abcx abc", sequence_length=2)
+    with pytest.raises(ValueError, match="temperature"):
+        model.generate("a", temperature=0)
+    with pytest.raises(ValueError, match="top_k"):
+        model.generate("a", top_k=0)
+
+
+def test_rejects_invalid_vocabulary_and_training_window():
+    with pytest.raises(ValueError, match="unique"):
+        CharacterLanguageModel(("a", "a"))
+    with pytest.raises(ValueError, match="single-character"):
+        CharacterLanguageModel(("ab", "c"))
+    with pytest.raises(ValueError, match="longer than sequence_length"):
+        _model().fit("abc", sequence_length=3)
