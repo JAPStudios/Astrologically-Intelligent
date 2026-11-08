@@ -24,3 +24,33 @@ def test_trace_rows_selects_only_requested_sessions(tmp_path, monkeypatch):
         json.dumps({"session_id": "one"}) + "\n" + json.dumps({"session_id": "two"}) + "\n"
     )
     assert review.trace_rows("owner", {"two"}) == [{"session_id": "two"}]
+
+def test_trace_owner_cannot_escape_trace_directory(tmp_path, monkeypatch):
+    monkeypatch.setattr(review, "TRACE_DIR", tmp_path)
+    import pytest
+
+    with pytest.raises(ValueError, match="invalid SFT trace owner identifier"):
+        review.trace_rows("../../outside", {"session"})
+
+
+def test_session_identifier_is_validated_before_trace_lookup_or_deletion(tmp_path, monkeypatch):
+    monkeypatch.setattr(review, "TRACE_DIR", tmp_path)
+    import pytest
+
+    with pytest.raises(ValueError, match="invalid SFT session identifier"):
+        review.trace_rows("owner", {"../outside"})
+
+    with pytest.raises(ValueError, match="invalid SFT session identifier"):
+        review.remove_trace_sessions("owner", {"../outside"})
+
+
+def test_live_session_deletion_rejects_unsafe_owner_before_network_access(monkeypatch):
+    import pytest
+
+    def forbidden_client():
+        raise AssertionError("network client must not be created for an invalid owner")
+
+    monkeypatch.setattr(review.httpx, "Client", forbidden_client)
+    with pytest.raises(ValueError, match="invalid SFT trace owner identifier"):
+        review.delete_live_sessions("http://127.0.0.1:7011", "password", {"../outside": {"session"}})
+
