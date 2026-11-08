@@ -94,7 +94,7 @@ def test_assistant_tool_call_without_text_is_valid_and_included_in_digest(tmp_pa
             {"role": "assistant", "content": "", "tool_calls": [{
                 "id": "call-1",
                 "type": "function",
-                "function": {"name": "manage_tasks", "arguments": "{\\"action\\":\\"create\\"}"},
+                "function": {"name": "manage_tasks", "arguments": json.dumps({"action": "create"})},
             }]},
             {"role": "tool", "tool_call_id": "call-1", "content": "Created."},
             {"role": "assistant", "content": "The reminder was created."},
@@ -111,7 +111,7 @@ def test_malformed_tool_call_arguments_fail_closed(tmp_path):
             {"role": "user", "content": "Do something."},
             {"role": "assistant", "content": "", "tool_calls": [{
                 "id": "call-1",
-                "function": {"name": "manage_tasks", "arguments": "{bad"},
+                "function": {"name": "manage_tasks", "arguments": json.dumps({"action": "create"})},
             }]},
         ],
     }
