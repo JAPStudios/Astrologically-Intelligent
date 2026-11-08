@@ -244,6 +244,9 @@ class CharacterLanguageModel:
         if top_k is not None and (isinstance(top_k, bool) or not isinstance(top_k, int)
                                   or not 1 <= top_k <= len(self.vocabulary)):
             raise ValueError("top_k must be between 1 and the vocabulary size")
+        if max_new_tokens == 0:
+            return prompt
+
         rng = np.random.default_rng(seed) if seed is not None else self._rng
         hidden = np.zeros(self.hidden_size, dtype=np.float64)
         probabilities = None
@@ -255,15 +258,16 @@ class CharacterLanguageModel:
                 hidden, temperature=float(temperature), top_k=top_k
             )
         output = list(prompt)
-        for _ in range(max_new_tokens):
+        for index in range(max_new_tokens):
             next_token = int(rng.choice(len(self.vocabulary), p=probabilities))
             output.append(self.vocabulary[next_token])
-            hidden = np.tanh(self._parameters["input_weights"][next_token]
-                             + hidden @ self._parameters["recurrent_weights"]
-                             + self._parameters["hidden_bias"])
-            probabilities = self._next_token_probabilities(
-                hidden, temperature=float(temperature), top_k=top_k
-            )
+            if index + 1 < max_new_tokens:
+                hidden = np.tanh(self._parameters["input_weights"][next_token]
+                                 + hidden @ self._parameters["recurrent_weights"]
+                                 + self._parameters["hidden_bias"])
+                probabilities = self._next_token_probabilities(
+                    hidden, temperature=float(temperature), top_k=top_k
+                )
         return "".join(output)
 
     def save(self, path: str | os.PathLike[str]) -> None:
