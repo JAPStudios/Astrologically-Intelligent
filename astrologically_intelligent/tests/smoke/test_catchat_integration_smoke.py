@@ -60,3 +60,42 @@ def test_catchat_chat_token_creates_session_and_completes_message(
             assert deleted_session.status_code in (200, 204), deleted_session.text
         deleted_token = client.delete(f"/api/tokens/{token['id']}")
         assert deleted_token.status_code == 200, deleted_token.text
+
+
+def test_non_chat_token_cannot_create_catchat_session_or_send_chat(
+    client, stub_endpoint
+):
+    """A token with unrelated scope cannot use CatChat's chat endpoints."""
+    token_response = client.post(
+        "/api/tokens",
+        data={"name": "catchat-wrong-scope-smoke", "scopes": "cookbook:read"},
+    )
+    assert token_response.status_code == 200, token_response.text
+    token = token_response.json()
+    assert "chat" not in token["scopes"]
+
+    delegated = httpx.Client(
+        base_url=str(client.base_url),
+        headers={"Authorization": "Bearer " + token["token"]},
+        timeout=30.0,
+    )
+    try:
+        created = delegated.post(
+            "/api/session",
+            data={
+                "name": "CatChat wrong-scope smoke",
+                "endpoint_id": stub_endpoint,
+                "model": MODEL_PRIMARY,
+            },
+        )
+        assert created.status_code == 403, created.text
+
+        rejected = delegated.post(
+            "/api/chat",
+            json={"message": "must be denied", "session": "not-a-session"},
+        )
+        assert rejected.status_code == 403, rejected.text
+    finally:
+        delegated.close()
+        deleted_token = client.delete(f"/api/tokens/{token['id']}")
+        assert deleted_token.status_code == 200, deleted_token.text
