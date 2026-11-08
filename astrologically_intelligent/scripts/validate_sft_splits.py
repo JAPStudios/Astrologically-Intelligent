@@ -118,7 +118,7 @@ def main(argv: list[str] | None = None) -> int:
         report = {"status": "invalid", "error": str(exc)}
         print(json.dumps(report, ensure_ascii=False, indent=2), file=sys.stderr)
         return 2
-    rendered = json.dumps(report, ensure_ascii=False, indent=2) + "\\n"
+    rendered = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(rendered, encoding="utf-8")
