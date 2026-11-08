@@ -60,6 +60,7 @@ class Gap:
 # the feature areas README.md advertises, then the setup surface.
 COVERED = (
     Area("chat", "Chat", "test_chat_smoke.py"),
+    Area("catchat_integration", "CatChat API", "test_catchat_integration_smoke.py"),
     Area("peanut_browsing", "Peanut Browsing", "test_peanut_browsing_smoke.py"),
     Area("compare", "Compare", "test_compare_smoke.py"),
     Area("notes", "Notes", "test_notes_smoke.py"),
