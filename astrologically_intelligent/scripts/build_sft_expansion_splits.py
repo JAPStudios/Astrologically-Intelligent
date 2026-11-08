@@ -73,6 +73,10 @@ def main() -> None:
         )
         if split not in {"train", "validation", "test"}:
             raise ValueError(f"invalid split {split!r} for family {family}")
+        # Track every source row before content deduplication. Otherwise an
+        # exact duplicate assigned to another split can be skipped before its
+        # family is checked, concealing train/validation/test leakage.
+        family_splits[family].add(split)
         signature = json.dumps(
             [row.get("user"), row.get("assistant"), row.get("tool_events")],
             sort_keys=True,
@@ -81,7 +85,6 @@ def main() -> None:
         if signature in seen_messages:
             continue
         seen_messages.add(signature)
-        family_splits[family].add(split)
         split_rows[split].append(row)
     leaked = {family: values for family, values in family_splits.items() if len(values) > 1}
     if leaked:
