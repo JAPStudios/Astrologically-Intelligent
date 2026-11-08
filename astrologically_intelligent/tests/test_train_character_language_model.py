@@ -77,3 +77,31 @@ def test_training_cli_rejects_validation_characters_outside_training_vocabulary(
 
     assert result.returncode == 2
     assert "outside the vocabulary" in result.stderr
+
+
+def test_training_cli_rejects_same_file_for_training_and_validation(tmp_path):
+    app_root = Path(__file__).resolve().parents[1]
+    corpus = tmp_path / "corpus.txt"
+    corpus.write_text("abc " * 20, encoding="utf-8")
+    result = subprocess.run(
+        [sys.executable, str(app_root / "scripts" / "train_character_language_model.py"),
+         str(corpus), str(tmp_path / "model.npz"), "--validation-file", str(corpus)],
+        cwd=tmp_path, capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == 2
+    assert "must be separate" in result.stderr
+
+
+def test_training_cli_rejects_identical_training_and_validation_content(tmp_path):
+    app_root = Path(__file__).resolve().parents[1]
+    training = tmp_path / "training.txt"
+    validation = tmp_path / "validation.txt"
+    training.write_text("abc " * 20, encoding="utf-8")
+    validation.write_text("abc " * 20, encoding="utf-8")
+    result = subprocess.run(
+        [sys.executable, str(app_root / "scripts" / "train_character_language_model.py"),
+         str(training), str(tmp_path / "model.npz"), "--validation-file", str(validation)],
+        cwd=tmp_path, capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == 2
+    assert "must not be identical" in result.stderr
