@@ -76,3 +76,16 @@ async def test_streaming_inference_rejects_remote_endpoint_before_network_access
     )
     with pytest.raises(RuntimeError, match="Remote model-provider inference is disabled"):
         await anext(stream)
+
+
+def test_endpoint_resolution_rejects_remote_before_returning_credentials():
+    from types import SimpleNamespace
+    from src.endpoint_resolver import resolve_endpoint_runtime
+
+    endpoint = SimpleNamespace(
+        base_url="https://api.openai.com/v1",
+        api_key="must-not-be-returned",
+        provider_auth_id=None,
+    )
+    with pytest.raises(RuntimeError, match="Remote model-provider inference is disabled"):
+        resolve_endpoint_runtime(endpoint)
