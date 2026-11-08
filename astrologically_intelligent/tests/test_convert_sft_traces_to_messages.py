@@ -110,7 +110,7 @@ def test_expected_split_rejects_rows_from_another_partition():
 def test_file_conversion_can_enforce_partition_identity(tmp_path):
     source = tmp_path / "train.jsonl"
     output = tmp_path / "validation.jsonl"
-    source.write_text(json.dumps(valid_source()) + "\\n", encoding="utf-8")
+    source.write_text(json.dumps(valid_source()) + "\n", encoding="utf-8")
 
     with pytest.raises(ValueError, match="expected validation split"):
         CONVERTER.convert_file(source, output, expected_split="validation")
