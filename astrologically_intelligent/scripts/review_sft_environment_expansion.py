@@ -68,7 +68,7 @@ def trace_rows(owner: str, session_ids: set[str]) -> list[dict[str, Any]]:
 def remove_trace_sessions(owner: str, session_ids: set[str]) -> int:
     owner = _safe_owner(owner)
     session_ids = {_safe_session_id(value) for value in session_ids}
-    path = TRACE_DIR / f"{owner}.jsonl"
+    path = _owner_trace_path(owner)
     if not path.exists() or not session_ids:
         return 0
     kept: list[str] = []
