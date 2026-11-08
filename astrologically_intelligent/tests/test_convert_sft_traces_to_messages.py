@@ -116,3 +116,28 @@ def test_file_conversion_can_enforce_partition_identity(tmp_path):
         CONVERTER.convert_file(source, output, expected_split="validation")
 
     assert not output.exists()
+
+def test_converted_partitions_pass_the_sft_data_gate(tmp_path):
+    validator_path = APP_ROOT / "scripts" / "validate_sft_splits.py"
+    validator_spec = importlib.util.spec_from_file_location("validate_sft_splits_for_conversion_test", validator_path)
+    assert validator_spec and validator_spec.loader
+    validator = importlib.util.module_from_spec(validator_spec)
+    validator_spec.loader.exec_module(validator)
+
+    paths = {}
+    for split in ("train", "validation", "test"):
+        source = tmp_path / f"{split}-source.jsonl"
+        output = tmp_path / f"{split}.jsonl"
+        row = valid_source(
+            session_id=f"session-{split}",
+            metadata={"seed_family_id": f"family-{split}", "dataset_split": split},
+        )
+        source.write_text(json.dumps(row) + "\n", encoding="utf-8")
+        CONVERTER.convert_file(source, output, expected_split=split)
+        paths[split] = output
+
+    report = validator.validate_splits(paths)
+
+    assert report["status"] == "valid"
+    assert report["cross_split_family_leakage"] == 0
+    assert report["cross_split_exact_content_leakage"] == 0
