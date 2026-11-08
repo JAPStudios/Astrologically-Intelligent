@@ -10,6 +10,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 import urllib.parse
 from dataclasses import dataclass
 from typing import Any
@@ -131,6 +132,17 @@ def assess_source(url: str, *, title: str = "", retrieval: str = "", summary: st
     return ResearchSourceAssessment(kind=kind, score=score, reason=reason)
 
 
+def _bounded_peanut_query(query: str) -> str:
+    """Keep generated research queries within Peanut Browsing's 200-char contract."""
+    normalized = " ".join(str(query or "").split())
+    if len(normalized) <= 200:
+        return normalized
+    shortened = normalized[:200]
+    if " " in shortened:
+        shortened = shortened.rsplit(" ", 1)[0]
+    return shortened or normalized[:200]
+
+
 class ResearchNavigator:
     """Small web-navigation facade used by Deep Research.
 
@@ -161,7 +173,29 @@ class ResearchNavigator:
             settings = _get_search_settings()
             provider = self.search_provider or (settings.get("research_search_provider") or "").strip()
             if not provider:
-                provider = settings.get("search_provider", "searxng")
+                peanut_configured = bool(
+                    os.getenv("PEANUT_SEARCH_API_URL", "").strip()
+                    and os.getenv("PEANUT_SEARCH_API_KEY", "").strip()
+                )
+                provider = (
+                    "peanut_browsing"
+                    if peanut_configured
+                    else settings.get("search_provider", "searxng")
+                )
+            if provider in {"peanut", "peanut_browsing"}:
+                from src.peanut_browsing import PeanutBrowsingClient
+
+                result = await PeanutBrowsingClient().search(
+                    _bounded_peanut_query(query),
+                    limit=max(1, min(int(count), 50)),
+                )
+                rows = result.get("results") or []
+                if rows:
+                    if "peanut_browsing" not in self.providers_used:
+                        self.providers_used.append("peanut_browsing")
+                else:
+                    self.last_search_error = "Peanut Browsing returned no indexed results."
+                return rows
             if provider == "disabled":
                 logger.info("Search is disabled for research")
                 return []
