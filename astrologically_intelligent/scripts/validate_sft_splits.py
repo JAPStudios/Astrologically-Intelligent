@@ -37,6 +37,7 @@ def _conversation(row: dict[str, Any], line: int) -> list[dict[str, Any]]:
     if not isinstance(messages, list) or not messages:
         raise ValueError(f"line {line}: 'messages' must be a non-empty array")
     normalized = []
+    declared_tool_call_ids: set[str] = set()
     for index, message in enumerate(messages):
         if not isinstance(message, dict):
             raise ValueError(f"line {line}: message {index} must be an object")
@@ -68,8 +69,14 @@ def _conversation(row: dict[str, Any], line: int) -> list[dict[str, Any]]:
                         raise ValueError(f"line {line}: message {index} tool call {call_index} has invalid JSON arguments") from exc
                 if not isinstance(arguments, dict):
                     raise ValueError(f"line {line}: message {index} tool call {call_index} arguments must be an object")
+                call_id = call.get("id")
+                if not isinstance(call_id, str) or not call_id.strip():
+                    raise ValueError(f"line {line}: message {index} tool call {call_index} has no id")
+                if call_id in declared_tool_call_ids:
+                    raise ValueError(f"line {line}: duplicate tool call id {call_id!r}")
+                declared_tool_call_ids.add(call_id)
                 normalized_calls.append({
-                    "id": call.get("id"),
+                    "id": call_id,
                     "name": function["name"],
                     "arguments": arguments,
                 })
@@ -78,6 +85,8 @@ def _conversation(row: dict[str, Any], line: int) -> list[dict[str, Any]]:
             tool_call_id = message.get("tool_call_id")
             if not isinstance(tool_call_id, str) or not tool_call_id.strip():
                 raise ValueError(f"line {line}: tool message {index} must identify its tool_call_id")
+            if tool_call_id not in declared_tool_call_ids:
+                raise ValueError(f"line {line}: tool message {index} references unknown tool_call_id {tool_call_id!r}")
             item["tool_call_id"] = tool_call_id
         normalized.append(item)
     if not any(message["role"] == "assistant" for message in normalized):
