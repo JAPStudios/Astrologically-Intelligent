@@ -101,3 +101,18 @@ def test_failed_conversion_does_not_replace_existing_output(tmp_path):
 
     assert output.read_text(encoding="utf-8") == "previous\n"
     assert not output.with_name(output.name + ".tmp").exists()
+
+def test_expected_split_rejects_rows_from_another_partition():
+    with pytest.raises(ValueError, match="expected validation split but source row is assigned to train"):
+        CONVERTER.convert_row(valid_source(), 1, expected_split="validation")
+
+
+def test_file_conversion_can_enforce_partition_identity(tmp_path):
+    source = tmp_path / "train.jsonl"
+    output = tmp_path / "validation.jsonl"
+    source.write_text(json.dumps(valid_source()) + "\\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="expected validation split"):
+        CONVERTER.convert_file(source, output, expected_split="validation")
+
+    assert not output.exists()
