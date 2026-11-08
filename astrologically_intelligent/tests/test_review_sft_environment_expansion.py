@@ -70,3 +70,12 @@ def test_trace_symlink_cannot_escape_trace_directory(tmp_path, monkeypatch):
     with pytest.raises(ValueError, match="SFT trace path escapes its directory"):
         review.remove_trace_sessions("owner", {"session"})
 
+def test_review_rejects_one_session_assigned_to_multiple_owners():
+    import pytest
+
+    with pytest.raises(ValueError, match="assigned to multiple owners"):
+        review._owner_session_map([
+            {"session_id": "same-session", "owner": "owner-a"},
+            {"session_id": "same-session", "owner": "owner-b"},
+        ])
+
