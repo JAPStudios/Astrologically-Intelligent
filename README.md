@@ -1,6 +1,6 @@
 # Astrologically Intelligent
 
-Astrologically Intelligent is an AI application and agent platform for everyday work and research, with persistent conversations and memory, model-provider routing, native tools and skills, and multi-agent orchestration.
+Astrologically Intelligent is JAPStudios’ artificial neural network. It provides conversational output through CatChat, literary recommendations through WaveWeaver, research through Peanut Browsing, agent management through PanMedia, artistic guidance through Terracotta, sound engineering assistance through NoiseGround, video editing recommendations through MyOutlet, programming review and correction through Engzen and fact-checking through Honest Education.
 
 ## Python agent platform
 
