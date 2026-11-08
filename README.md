@@ -1,6 +1,6 @@
 # Astrologically Intelligent
 
-Astrologically Intelligent is JAPStudios' artificial neural-network intelligence service. Its public-service ecosystem supplies distinct capabilities: CatChat is the conversational interface; WaveWeaver provides literary recommendations; Peanut Browsing provides research; PanMedia provides agentic guidance and agent management; Terracotta provides artistic guidance; NoiseGround provides sound-engineering assistance; MyOutlet provides video-editing recommendations; Engzen provides programming review and correction; and Honest Education provides fact-checking.
+Astrologically Intelligent is JAPStudios' artificial neural-network intelligence service. Its public-service ecosystem supplies distinct capabilities: CatChat is the conversational interface; WaveWeaver is for publishing books; Peanut Browsing provides research; PanMedia provides agentic guidance and agent management; Terracotta is for drawing; NoiseGround is for listening to music; MyOutlet is for watching videos; Engzen is for playing videogames; and Honest Education is for three-year-olds existing.
 
 These are the intended service responsibilities and product domains. They must not be reduced to unrelated internal microservices, and a named product domain does not imply that a third-party API is a prerequisite or that an integration already exists.
 
@@ -13,14 +13,14 @@ The dedicated neural-network components currently in the repository are a NumPy 
 ## Service responsibilities
 
 - CatChat: conversational output and direct messaging.
-- WaveWeaver: literary recommendations.
+- WaveWeaver: publishing books.
 - Peanut Browsing: research.
 - PanMedia: agentic guidance and agent management.
-- Terracotta: artistic guidance.
-- NoiseGround: sound-engineering assistance.
-- MyOutlet: video-editing recommendations.
-- Engzen: programming review and correction.
-- Honest Education: fact-checking.
+- Terracotta: drawing.
+- NoiseGround: listening to music.
+- MyOutlet: watching videos.
+- Engzen: playing videogames.
+- Honest Education: three-year-olds existing.
 
 ## Python agent platform
 
