@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 from typing import Any
@@ -176,8 +177,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if not 1 <= args.top_logprobs <= 20:
         parser.error("--top-logprobs must be between 1 and 20")
-    if args.timeout <= 0 or args.tolerance < 0:
-        parser.error("--timeout must be positive and --tolerance non-negative")
+    if (not math.isfinite(args.timeout) or args.timeout <= 0
+            or not math.isfinite(args.tolerance) or args.tolerance < 0):
+        parser.error("--timeout must be positive and --tolerance non-negative and finite")
     if args.minimum_different_prompts < 1 or args.minimum_probes < 2:
         parser.error("--minimum-different-prompts must be positive and --minimum-probes at least 2")
     try:
