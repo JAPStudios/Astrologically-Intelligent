@@ -24,8 +24,9 @@ def _canonical(value: Any) -> str:
 
 
 def _family_id(row: dict[str, Any]) -> str | None:
-    for key in _FAMILY_KEYS:
-        value = row.get(key)
+    metadata = row.get("metadata") if isinstance(row.get("metadata"), dict) else {}
+    for key in ("seed_family_id", *_FAMILY_KEYS):
+        value = row.get(key) or metadata.get(key)
         if isinstance(value, str) and value.strip():
             return value.strip()
     return None
@@ -103,9 +104,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--validation", type=Path, required=True)
     parser.add_argument("--test", type=Path, required=True)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--require-family-id", action="store_true",
+                        help="reject any example without a stable family identifier")
     args = parser.parse_args(argv)
     try:
         report = validate_splits({"train": args.train, "validation": args.validation, "test": args.test})
+        if args.require_family_id:
+            missing = {name: sum(1 for row in read_split(path) if not _family_id(row))
+                       for name, path in {"train": args.train, "validation": args.validation, "test": args.test}.items()}
+            if any(missing.values()):
+                raise ValueError(f"examples missing stable family identifiers: {missing}")
     except (OSError, UnicodeError, ValueError) as exc:
         report = {"status": "invalid", "error": str(exc)}
         print(json.dumps(report, ensure_ascii=False, indent=2), file=sys.stderr)
