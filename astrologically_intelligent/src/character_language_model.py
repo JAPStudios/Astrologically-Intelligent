@@ -250,16 +250,9 @@ class CharacterLanguageModel:
             hidden = np.tanh(self._parameters["input_weights"][next_token]
                              + hidden @ self._parameters["recurrent_weights"]
                              + self._parameters["hidden_bias"])
-            logits = hidden @ self._parameters["output_weights"] + self._parameters["output_bias"]
-            logits = logits / float(temperature)
-            if top_k is not None and top_k < len(logits):
-                keep = np.argpartition(logits, -top_k)[-top_k:]
-                filtered = np.full_like(logits, -np.inf)
-                filtered[keep] = logits[keep]
-                logits = filtered
-            logits -= np.max(logits)
-            probabilities = np.exp(logits)
-            probabilities /= np.sum(probabilities)
+            probabilities = self._next_token_probabilities(
+                hidden, temperature=float(temperature), top_k=top_k
+            )
         return "".join(output)
 
     def save(self, path: str | os.PathLike[str]) -> None:
