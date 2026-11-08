@@ -76,7 +76,8 @@ def main() -> None:
             )
         corpus.extend(matching_rows)
 
-    seen_messages: set[str] = set()
+    seen_messages: dict[str, str] = {}
+    cross_split_duplicates: dict[str, set[str]] = defaultdict(set)
     split_rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
     family_splits: dict[str, set[str]] = defaultdict(set)
     for row in corpus:
@@ -108,12 +109,20 @@ def main() -> None:
             ensure_ascii=False,
         )
         if signature in seen_messages:
+            if seen_messages[signature] != split:
+                cross_split_duplicates[signature].update({seen_messages[signature], split})
             continue
-        seen_messages.add(signature)
+        seen_messages[signature] = split
         split_rows[split].append(row)
     leaked = {family: values for family, values in family_splits.items() if len(values) > 1}
     if leaked:
         raise ValueError(f"seed-family split leakage: {leaked}")
+    if cross_split_duplicates:
+        split_leaks = sorted(
+            (sorted(splits) for splits in cross_split_duplicates.values()),
+            key=lambda splits: tuple(splits),
+        )
+        raise ValueError(f"duplicate SFT content crosses dataset splits: {split_leaks}")
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     for split in ("train", "validation", "test"):
