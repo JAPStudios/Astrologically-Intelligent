@@ -41,12 +41,45 @@ def _conversation(row: dict[str, Any], line: int) -> list[dict[str, Any]]:
         if not isinstance(message, dict):
             raise ValueError(f"line {line}: message {index} must be an object")
         role = message.get("role")
-        content = message.get("content")
+        content = message.get("content", "")
+        tool_calls = message.get("tool_calls")
         if role not in _ALLOWED_ROLES:
             raise ValueError(f"line {line}: message {index} has unsupported role")
-        if not isinstance(content, str) or not content.strip():
-            raise ValueError(f"line {line}: message {index} has empty/non-text content")
-        normalized.append({"role": role, "content": re.sub(r"\s+", " ", content).strip()})
+        if not isinstance(content, str):
+            raise ValueError(f"line {line}: message {index} content must be text")
+        if not content.strip() and not (role == "assistant" and isinstance(tool_calls, list) and tool_calls):
+            raise ValueError(f"line {line}: message {index} has empty content without assistant tool calls")
+        item = {"role": role, "content": re.sub(r"\\s+", " ", content).strip()}
+        if tool_calls is not None:
+            if role != "assistant" or not isinstance(tool_calls, list) or not tool_calls:
+                raise ValueError(f"line {line}: message {index} has invalid tool_calls")
+            normalized_calls = []
+            for call_index, call in enumerate(tool_calls):
+                if not isinstance(call, dict) or not isinstance(call.get("function"), dict):
+                    raise ValueError(f"line {line}: message {index} tool call {call_index} is malformed")
+                function = call["function"]
+                if not isinstance(function.get("name"), str) or not function["name"].strip():
+                    raise ValueError(f"line {line}: message {index} tool call {call_index} has no function name")
+                arguments = function.get("arguments")
+                if isinstance(arguments, str):
+                    try:
+                        arguments = json.loads(arguments)
+                    except json.JSONDecodeError as exc:
+                        raise ValueError(f"line {line}: message {index} tool call {call_index} has invalid JSON arguments") from exc
+                if not isinstance(arguments, dict):
+                    raise ValueError(f"line {line}: message {index} tool call {call_index} arguments must be an object")
+                normalized_calls.append({
+                    "id": call.get("id"),
+                    "name": function["name"],
+                    "arguments": arguments,
+                })
+            item["tool_calls"] = normalized_calls
+        if role == "tool":
+            tool_call_id = message.get("tool_call_id")
+            if not isinstance(tool_call_id, str) or not tool_call_id.strip():
+                raise ValueError(f"line {line}: tool message {index} must identify its tool_call_id")
+            item["tool_call_id"] = tool_call_id
+        normalized.append(item)
     if not any(message["role"] == "assistant" for message in normalized):
         raise ValueError(f"line {line}: conversation has no assistant target")
     if not any(message["role"] == "user" for message in normalized):
