@@ -90,7 +90,7 @@ def main(argv: list[str] | None = None) -> int:
     print("Loading full multimodal Qwen3.5 base checkpoint...", flush=True)
     model = AutoModelForImageTextToText.from_pretrained(
         str(args.base),
-        torch_dtype=dtype,
+        dtype=dtype,
         device_map="auto",
         trust_remote_code=args.trust_remote_code,
     )
