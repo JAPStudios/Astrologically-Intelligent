@@ -87,18 +87,29 @@ class CharacterLanguageModel:
 
     def evaluate(self, text: str, *, sequence_length: int = 64, batch_size: int = 32) -> float:
         encoded = self._encode(text)
-        self._validate_window(encoded, sequence_length, batch_size)
-        starts = np.arange(0, len(encoded) - sequence_length, sequence_length)
+        if isinstance(sequence_length, bool) or not isinstance(sequence_length, int) or sequence_length < 1:
+            raise ValueError("sequence_length must be a positive integer")
+        if isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size < 1:
+            raise ValueError("batch_size must be a positive integer")
+        if len(encoded) < 2:
+            raise ValueError("evaluation text must contain at least two characters")
+
+        # Evaluate every next-character target, including the final partial
+        # window. The previous fixed-size slicing silently dropped the tail
+        # and rejected otherwise valid short validation corpora.
+        starts = list(range(0, len(encoded) - 1, sequence_length))
         losses = []
         for offset in range(0, len(starts), batch_size):
             selected = starts[offset:offset + batch_size]
-            x = np.stack([encoded[start:start + sequence_length] for start in selected])
-            y = np.stack([encoded[start + 1:start + sequence_length + 1] for start in selected])
-            _, probabilities = self._forward(x)
-            chosen = np.clip(np.take_along_axis(probabilities, y[..., None], axis=2)[..., 0], 1e-12, 1.0)
-            losses.extend((-np.log(chosen)).reshape(-1).tolist())
+            lengths = [min(sequence_length, len(encoded) - start - 1) for start in selected]
+            for start, length in zip(selected, lengths):
+                x = encoded[start:start + length][None, :]
+                y = encoded[start + 1:start + length + 1]
+                _, probabilities = self._forward(x)
+                chosen = np.clip(probabilities[0, np.arange(length), y], 1e-12, 1.0)
+                losses.extend((-np.log(chosen)).tolist())
         if not losses:
-            raise ValueError("text must contain at least two characters")
+            raise ValueError("evaluation text must contain at least two characters")
         return float(np.mean(losses))
 
     @staticmethod
@@ -279,51 +290,42 @@ class CharacterLanguageModel:
             version = archive["format_version"]
             if (version.ndim != 0 or not np.issubdtype(version.dtype, np.integer)
                     or int(version) != cls.FORMAT_VERSION):
-                raise ValueError("unsupported language-model checkpoint version")
+                raise ValueError("unsupported or malformed language-model checkpoint version")
+            vocabulary_value = archive["vocabulary"]
+            if vocabulary_value.ndim != 0:
+                raise ValueError("malformed language-model vocabulary metadata")
             try:
-                raw_vocabulary = archive["vocabulary"]
-                raw_hidden_size = archive["hidden_size"]
-                raw_learning_rate = archive["learning_rate"]
-                raw_step = archive["step"]
-                raw_rng_state = archive["rng_state"]
-                if (raw_vocabulary.ndim != 0 or raw_vocabulary.dtype.kind not in {"U", "S"}
-                        or raw_hidden_size.ndim != 0
-                        or not np.issubdtype(raw_hidden_size.dtype, np.integer)
-                        or raw_learning_rate.ndim != 0
-                        or raw_learning_rate.dtype.kind not in "iuf"
-                        or not np.isfinite(raw_learning_rate)
-                        or raw_step.ndim != 0
-                        or not np.issubdtype(raw_step.dtype, np.integer)
-                        or raw_rng_state.ndim != 0 or raw_rng_state.dtype.kind not in {"U", "S"}):
-                    raise ValueError("invalid scalar checkpoint metadata")
-                vocabulary = json.loads(str(raw_vocabulary))
-                hidden_size = int(raw_hidden_size)
-                learning_rate = float(raw_learning_rate)
-                step = int(raw_step)
-                rng_state = json.loads(str(raw_rng_state))
-            except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
-                raise ValueError("invalid language-model checkpoint metadata") from exc
-            if step < 0:
-                raise ValueError("invalid language-model optimizer step")
-            if not isinstance(vocabulary, list):
-                raise ValueError("invalid language-model vocabulary metadata")
-            model = cls(vocabulary, hidden_size, learning_rate=learning_rate)
-            if not isinstance(rng_state, dict):
-                raise ValueError("invalid language-model random-generator state")
-            try:
-                model._rng.bit_generator.state = rng_state
+                vocabulary = json.loads(str(vocabulary_value.item()))
             except (TypeError, ValueError) as exc:
-                raise ValueError("invalid language-model random-generator state") from exc
+                raise ValueError("malformed language-model vocabulary metadata") from exc
+            hidden_size_value = archive["hidden_size"]
+            learning_rate_value = archive["learning_rate"]
+            step_value = archive["step"]
+            if (hidden_size_value.ndim != 0 or not np.issubdtype(hidden_size_value.dtype, np.integer)
+                    or step_value.ndim != 0 or not np.issubdtype(step_value.dtype, np.integer)
+                    or learning_rate_value.ndim != 0 or not np.issubdtype(learning_rate_value.dtype, np.number)):
+                raise ValueError("malformed language-model scalar metadata")
+            hidden_size = int(hidden_size_value)
+            learning_rate = float(learning_rate_value)
+            step = int(step_value)
+            if step < 0:
+                raise ValueError("malformed language-model optimizer step")
+            model = cls(vocabulary, hidden_size, learning_rate=learning_rate)
+            model._step = step
+            try:
+                rng_state = json.loads(str(archive["rng_state"].item()))
+                model._rng.bit_generator.state = rng_state
+            except (TypeError, ValueError, KeyError) as exc:
+                raise ValueError("malformed language-model random state") from exc
             for name, parameter in model._parameters.items():
-                value = archive[name]
+                candidate = archive[name]
+                if candidate.shape != parameter.shape or not np.isfinite(candidate).all():
+                    raise ValueError(f"malformed language-model parameter: {name}")
+                parameter[...] = candidate
                 first = archive[f"adam_{name}_m"]
                 second = archive[f"adam_{name}_v"]
-                if (value.shape != parameter.shape or first.shape != parameter.shape
-                        or second.shape != parameter.shape or not np.isfinite(value).all()
-                        or not np.isfinite(first).all() or not np.isfinite(second).all()
-                        or np.any(second < 0.0)):
-                    raise ValueError(f"invalid language-model checkpoint tensor: {name}")
-                parameter[...] = value
+                if (first.shape != parameter.shape or second.shape != parameter.shape
+                        or not np.isfinite(first).all() or not np.isfinite(second).all()):
+                    raise ValueError(f"malformed language-model optimizer state: {name}")
                 model._adam[name] = (first.copy(), second.copy())
-            model._step = step
-            return model
+        return model
