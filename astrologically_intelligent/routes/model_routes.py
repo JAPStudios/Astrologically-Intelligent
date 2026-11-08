@@ -38,7 +38,7 @@ except ModuleNotFoundError:
             return "<endpoint>"
 from core.middleware import require_admin
 from src.constants import COOKBOOK_STATE_FILE
-from src.llm_core import _detect_provider, _host_match, ANTHROPIC_MODELS
+from src.llm_core import _detect_provider, _host_match, ANTHROPIC_MODELS, _require_local_inference_endpoint
 from src.tls_overrides import llm_verify
 from src.settings import load_settings as _load_settings, save_settings as _save_settings
 from src.endpoint_resolver import (
@@ -1076,6 +1076,7 @@ def _probe_endpoint(
     endpoint_kind: str = "",
 ) -> List[str]:
     """Probe a model endpoint and optionally collect its native capability records."""
+    _require_local_inference_endpoint(base_url)
     from src.endpoint_resolver import resolve_url
     from src.llm_core import httpx_get_kimi_aware
     base = resolve_url(_normalize_base(base_url))
@@ -1206,6 +1207,7 @@ def _probe_endpoint(
 
 def _ping_endpoint(base_url: str, api_key: str = None, timeout: float = 1.5) -> Dict[str, Any]:
     """Reachability probe that does not require installed/listed models."""
+    _require_local_inference_endpoint(base_url)
     from src.endpoint_resolver import resolve_url
     base = resolve_url(_normalize_base(base_url))
     headers = _safe_build_headers(api_key, base)
