@@ -55,7 +55,7 @@ text and reports per-epoch training loss. `evaluate()` measures next-character
 cross-entropy on text supplied separately. `generate()` continues a prompt
 using temperature and optional top-k sampling.
 
-A minimal example:
+A minimal Python example:
 
 ```python
 from src.character_language_model import CharacterLanguageModel
@@ -73,6 +73,20 @@ history = model.fit(
 continuation = model.generate("A small", max_new_tokens=120, temperature=0.8, top_k=12)
 model.save("character-model.npz")
 ```
+
+The training CLI reads a UTF-8 corpus, derives its character vocabulary,
+trains the model and writes a resumable checkpoint:
+
+```sh
+python scripts/train_character_language_model.py corpus.txt character-model.npz \
+  --epochs 20 --steps-per-epoch 100 --sequence-length 48 --batch-size 16
+```
+
+A separate validation file can be supplied with `--validation-file`. It must
+use characters present in the training vocabulary and contain more characters
+than the configured sequence length. The CLI reports the final training loss
+and optional validation loss as JSON. It does not download, select or claim
+rights to a training corpus.
 
 The caller must provide the training corpus and vocabulary. This is a compact
 character-level recurrent language model, not a pretrained, production-scale
