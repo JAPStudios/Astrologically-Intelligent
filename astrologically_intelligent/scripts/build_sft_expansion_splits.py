@@ -25,9 +25,20 @@ def main() -> None:
     args = parser.parse_args()
 
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
+    manifest_splits: dict[str, set[str]] = defaultdict(set)
+    for seed in manifest["seeds"]:
+        family = str(seed["seed_family_id"])
+        split = str(seed["split"])
+        if split not in {"train", "validation", "test"}:
+            raise ValueError(f"invalid manifest split {split!r} for family {family}")
+        manifest_splits[family].add(split)
+    manifest_leaks = {
+        family: values for family, values in manifest_splits.items() if len(values) > 1
+    }
+    if manifest_leaks:
+        raise ValueError(f"manifest seed-family split leakage: {manifest_leaks}")
     split_by_family = {
-        str(seed["seed_family_id"]): str(seed["split"])
-        for seed in manifest["seeds"]
+        family: next(iter(values)) for family, values in manifest_splits.items()
     }
     retained_sessions: set[str] = set()
     for review_path in args.review:
