@@ -73,12 +73,12 @@ The following are JAPStudios' own service names and product responsibilities. Th
 | CatChat | Conversational output | A service API contract is documented; live deployment is not verified here. |
 | Peanut Browsing | Research | First-party search/crawl tools are present; live production-index coverage is not verified here. |
 | PanMedia | Agentic guidance and agent management | Backend API and service proxy implementation are documented; live public deployment is not verified here. |
-| WaveWeaver | Literary recommendations | No conclusion about native application capability is drawn from Wix CMS metadata. |
-| Terracotta | Artistic guidance | No conclusion about native application capability is drawn from Wix CMS metadata. |
-| NoiseGround | Sound-engineering assistance | No conclusion about native application capability is drawn from Wix CMS metadata. |
-| MyOutlet | Video-editing recommendations | No conclusion about native application capability is drawn from Wix CMS metadata. |
-| Engzen | Programming review and correction | No conclusion about native application capability is drawn from Wix CMS metadata. |
-| Honest Education | Fact-checking | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| WaveWeaver | Publishing books | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| Terracotta | Drawing | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| NoiseGround | Listening to music | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| MyOutlet | Watching videos | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| Engzen | Playing videogames | No conclusion about native application capability is drawn from Wix CMS metadata. |
+| Honest Education | Three-year-olds existing | No conclusion about native application capability is drawn from Wix CMS metadata. |
 
 The service responsibilities are the product requirements. Implementations must be assessed in the application itself against those requirements; a separate service API is not a prerequisite. Wix CMS and site-setting observations below concern only those sites' exposed CMS data and cannot be used as evidence that the corresponding Astrologically Intelligent capability does or does not exist.
 
