@@ -267,18 +267,36 @@ class CharacterLanguageModel:
     def load(cls, path: str | os.PathLike[str]) -> "CharacterLanguageModel":
         with np.load(path, allow_pickle=False) as archive:
             version = archive["format_version"]
-            if version.ndim != 0 or int(version) != cls.FORMAT_VERSION:
+            if (version.ndim != 0 or not np.issubdtype(version.dtype, np.integer)
+                    or int(version) != cls.FORMAT_VERSION):
                 raise ValueError("unsupported language-model checkpoint version")
             try:
-                vocabulary = json.loads(str(archive["vocabulary"]))
-                hidden_size = int(archive["hidden_size"])
-                learning_rate = float(archive["learning_rate"])
-                step = int(archive["step"])
-                rng_state = json.loads(str(archive["rng_state"]))
+                raw_vocabulary = archive["vocabulary"]
+                raw_hidden_size = archive["hidden_size"]
+                raw_learning_rate = archive["learning_rate"]
+                raw_step = archive["step"]
+                raw_rng_state = archive["rng_state"]
+                if (raw_vocabulary.ndim != 0 or raw_vocabulary.dtype.kind not in {"U", "S"}
+                        or raw_hidden_size.ndim != 0
+                        or not np.issubdtype(raw_hidden_size.dtype, np.integer)
+                        or raw_learning_rate.ndim != 0
+                        or raw_learning_rate.dtype.kind not in "iuf"
+                        or not np.isfinite(raw_learning_rate)
+                        or raw_step.ndim != 0
+                        or not np.issubdtype(raw_step.dtype, np.integer)
+                        or raw_rng_state.ndim != 0 or raw_rng_state.dtype.kind not in {"U", "S"}):
+                    raise ValueError("invalid scalar checkpoint metadata")
+                vocabulary = json.loads(str(raw_vocabulary))
+                hidden_size = int(raw_hidden_size)
+                learning_rate = float(raw_learning_rate)
+                step = int(raw_step)
+                rng_state = json.loads(str(raw_rng_state))
             except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
                 raise ValueError("invalid language-model checkpoint metadata") from exc
             if step < 0:
                 raise ValueError("invalid language-model optimizer step")
+            if not isinstance(vocabulary, list):
+                raise ValueError("invalid language-model vocabulary metadata")
             model = cls(vocabulary, hidden_size, learning_rate=learning_rate)
             if not isinstance(rng_state, dict):
                 raise ValueError("invalid language-model random-generator state")
