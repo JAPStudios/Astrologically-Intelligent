@@ -1,0 +1,103 @@
+import importlib.util
+import json
+from pathlib import Path
+
+import pytest
+
+
+APP_ROOT = Path(__file__).resolve().parents[1]
+SCRIPT = APP_ROOT / "scripts" / "convert_sft_traces_to_messages.py"
+SPEC = importlib.util.spec_from_file_location("convert_sft_traces_to_messages", SCRIPT)
+assert SPEC and SPEC.loader
+CONVERTER = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(CONVERTER)
+
+
+def valid_source(**overrides):
+    row = {
+        "session_id": "session-001",
+        "user": "Explain the result.",
+        "assistant": "The result is ready.",
+        "tool_events": [],
+        "metadata": {
+            "seed_family_id": "family-001",
+            "dataset_split": "train",
+            "review_status": "approved",
+        },
+    }
+    row.update(overrides)
+    return row
+
+
+def test_converts_text_only_trace_and_preserves_family_and_provenance():
+    converted = CONVERTER.convert_row(valid_source(), 1)
+
+    assert converted["messages"] == [
+        {"role": "user", "content": "Explain the result."},
+        {"role": "assistant", "content": "The result is ready."},
+    ]
+    assert converted["seed_family_id"] == "family-001"
+    assert converted["metadata"]["seed_family_id"] == "family-001"
+    assert converted["metadata"]["dataset_split"] == "train"
+    assert converted["metadata"]["review_status"] == "approved"
+    assert converted["metadata"]["source_trace_session_id"] == "session-001"
+    assert converted["source_format"] == "approved_sft_trace_v1"
+
+
+def test_rejects_tool_events_instead_of_fabricating_calls_or_results():
+    row = valid_source(tool_events=[{"tool": "search", "output": "found"}])
+
+    with pytest.raises(ValueError, match="verified call/result schema"):
+        CONVERTER.convert_row(row, 1)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("user", "", "user must be non-empty text"),
+        ("assistant", None, "assistant must be non-empty text"),
+        ("session_id", "", "session_id must be a non-empty string"),
+        ("tool_events", None, "tool_events must be an array"),
+        ("metadata", [], "metadata must be an object"),
+    ],
+)
+def test_rejects_incomplete_source_rows(field, value, message):
+    with pytest.raises(ValueError, match=message):
+        CONVERTER.convert_row(valid_source(**{field: value}), 3)
+
+
+def test_rejects_missing_family_or_split():
+    row = valid_source(metadata={"dataset_split": "train"})
+    with pytest.raises(ValueError, match="stable seed_family_id"):
+        CONVERTER.convert_row(row, 1)
+
+    row = valid_source(metadata={"seed_family_id": "family-001"})
+    with pytest.raises(ValueError, match="dataset_split"):
+        CONVERTER.convert_row(row, 1)
+
+
+def test_jsonl_conversion_writes_one_newline_terminated_record(tmp_path):
+    source = tmp_path / "source.jsonl"
+    output = tmp_path / "messages.jsonl"
+    source.write_text(json.dumps(valid_source(), ensure_ascii=False) + "\n", encoding="utf-8")
+
+    counts = CONVERTER.convert_file(source, output)
+
+    assert counts == {"source_rows": 1, "converted_rows": 1}
+    raw = output.read_bytes()
+    assert raw.endswith(b"\n")
+    converted = json.loads(raw)
+    assert converted["messages"][0]["role"] == "user"
+
+
+def test_failed_conversion_does_not_replace_existing_output(tmp_path):
+    source = tmp_path / "source.jsonl"
+    output = tmp_path / "messages.jsonl"
+    output.write_text("previous\n", encoding="utf-8")
+    source.write_text(json.dumps(valid_source(tool_events=[{"opaque": True}])) + "\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="verified call/result schema"):
+        CONVERTER.convert_file(source, output)
+
+    assert output.read_text(encoding="utf-8") == "previous\n"
+    assert not output.with_name(output.name + ".tmp").exists()
