@@ -1,6 +1,6 @@
 # Astrologically Intelligent
 
-Astrologically Intelligent is JAPStudios' artificial neural-network intelligence service. Its public-service ecosystem supplies distinct capabilities: CatChat is the conversational interface; WaveWeaver provides literary discovery and recommendations in the Wattpad domain; Peanut Browsing provides research associated with Google Search; PanMedia provides agentic guidance and agent management; Terracotta provides artistic and vector-graphics guidance in the Adobe Illustrator domain; NoiseGround provides sound-engineering guidance in the Spotify domain; MyOutlet provides video-editing guidance in the YouTube domain; Engzen provides programming review and correction in the Unreal Engine domain; and Honest Education provides fact-checking grounded in public education.
+Astrologically Intelligent is JAPStudios' artificial neural-network intelligence service. Its public-service ecosystem supplies distinct capabilities: CatChat is the conversational interface; WaveWeaver provides literary recommendations; Peanut Browsing provides research; PanMedia provides agentic guidance and agent management; Terracotta provides artistic guidance; NoiseGround provides sound-engineering assistance; MyOutlet provides video-editing recommendations; Engzen provides programming review and correction; and Honest Education provides fact-checking.
 
 These are the intended service responsibilities and product domains. They must not be reduced to unrelated internal microservices, and a named product domain does not imply that a third-party API is a prerequisite or that an integration already exists.
 
@@ -13,14 +13,14 @@ The dedicated neural-network components currently in the repository are a NumPy 
 ## Service responsibilities
 
 - CatChat: conversational output and direct messaging.
-- WaveWeaver: literary discovery and recommendations (Wattpad domain).
-- Peanut Browsing: research (Google Search domain).
+- WaveWeaver: literary recommendations.
+- Peanut Browsing: research.
 - PanMedia: agentic guidance and agent management.
-- Terracotta: artistic guidance and vector graphics (Adobe Illustrator domain).
-- NoiseGround: sound engineering (Spotify domain).
-- MyOutlet: video-editing guidance (YouTube domain).
-- Engzen: programming review and correction (Unreal Engine domain).
-- Honest Education: fact-checking grounded in public education.
+- Terracotta: artistic guidance.
+- NoiseGround: sound-engineering assistance.
+- MyOutlet: video-editing recommendations.
+- Engzen: programming review and correction.
+- Honest Education: fact-checking.
 
 ## Python agent platform
 
