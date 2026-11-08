@@ -6,6 +6,7 @@ import os
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -18,6 +19,21 @@ ROOT = Path(__file__).resolve().parents[1]
 TRACE_DIR = ROOT / "data" / "sft_traces"
 
 
+
+def _safe_owner(value: object) -> str:
+    owner = str(value or "").strip()
+    if (not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}", owner)
+            or owner in {".", ".."}):
+        raise ValueError(f"invalid SFT trace owner identifier: {owner!r}")
+    return owner
+
+
+def _safe_session_id(value: object) -> str:
+    session_id = str(value or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", session_id):
+        raise ValueError(f"invalid SFT session identifier: {session_id!r}")
+    return session_id
+
 def atomic_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
@@ -28,6 +44,8 @@ def atomic_json(path: Path, payload: Any) -> None:
 
 
 def trace_rows(owner: str, session_ids: set[str]) -> list[dict[str, Any]]:
+    owner = _safe_owner(owner)
+    session_ids = {_safe_session_id(value) for value in session_ids}
     path = TRACE_DIR / f"{owner}.jsonl"
     if not path.exists():
         return []
@@ -41,6 +59,8 @@ def trace_rows(owner: str, session_ids: set[str]) -> list[dict[str, Any]]:
 
 
 def remove_trace_sessions(owner: str, session_ids: set[str]) -> int:
+    owner = _safe_owner(owner)
+    session_ids = {_safe_session_id(value) for value in session_ids}
     path = TRACE_DIR / f"{owner}.jsonl"
     if not path.exists() or not session_ids:
         return 0
@@ -63,6 +83,8 @@ def remove_trace_sessions(owner: str, session_ids: set[str]) -> int:
 
 def delete_live_sessions(base_url: str, password: str, by_owner: dict[str, set[str]]) -> None:
     for owner, session_ids in by_owner.items():
+        owner = _safe_owner(owner)
+        session_ids = {_safe_session_id(value) for value in session_ids}
         with httpx.Client() as client:
             response = client.post(
                 base_url.rstrip("/") + "/api/auth/login",
@@ -89,7 +111,10 @@ def main() -> None:
 
     results = json.loads(args.run.read_text(encoding="utf-8")).get("results", [])
     candidates = [row for row in results if row.get("pass") is True and row.get("session_id")]
-    owner_by_session = {str(row["session_id"]): str(row["owner"]) for row in candidates}
+    owner_by_session = {
+        _safe_session_id(row["session_id"]): _safe_owner(row.get("owner"))
+        for row in candidates
+    }
     review_rows: list[dict[str, Any]] = []
     for owner in sorted(set(owner_by_session.values())):
         ids = {sid for sid, candidate_owner in owner_by_session.items() if candidate_owner == owner}
