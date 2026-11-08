@@ -4,9 +4,7 @@ import urllib.error
 from io import BytesIO
 from unittest.mock import patch
 
-from astrologically_intelligent.providers import (
-    AnthropicMessagesProvider, GeminiGenerateContentProvider, ChatCompletionsProvider, ProviderConfig, _post_json, provider_from_env,
-)
+from astrologically_intelligent.providers import ChatCompletionsProvider, ProviderConfig, _post_json, provider_from_env
 from astrologically_intelligent.runtime import AgentRuntime, RuntimeConfig
 from astrologically_intelligent.storage import Store
 
@@ -126,21 +124,16 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(task["status"],"open")
         updated=self.store.update_task(task["id"],"in_progress","agent-1")
         self.assertEqual(updated["assignee"],"agent-1")
-    def test_vendor_provider_defaults(self):
-        with patch.dict("os.environ", {
-            "ASTRO_AI_PROVIDER":"xai", "XAI_API_KEY":"xai-test",
-        }, clear=True):
-            xai=provider_from_env()
-        self.assertEqual(xai.config.base_url,"https://api.x.ai/v1")
-        self.assertEqual(xai.config.api_key,"xai-test")
-        with patch.dict("os.environ", {
-            "ASTRO_AI_PROVIDER":"perplexity", "PERPLEXITY_API_KEY":"pplx-test",
-        }, clear=True):
-            perplexity=provider_from_env()
-        self.assertEqual(perplexity.config.base_url,"https://api.perplexity.ai")
-        self.assertEqual(perplexity.config.model,"sonar")
+    def test_remote_provider_names_are_rejected(self):
+        for name in ("openai", "anthropic", "gemini", "xai", "deepseek", "azure", "perplexity"):
+            with self.subTest(provider=name), patch.dict("os.environ", {
+                "ASTRO_AI_PROVIDER": name,
+                "ASTRO_AI_MODEL": "model",
+            }, clear=True):
+                with self.assertRaisesRegex(RuntimeError, "third-party model providers are disabled"):
+                    provider_from_env()
 
-    def test_fresh_runtime_defaults_to_local_model_without_openai_dependency(self):
+    def test_fresh_runtime_defaults_to_local_model(self):
         with patch.dict("os.environ", {
             "ASTRO_AI_MODEL": "installed-local-model",
         }, clear=True):
@@ -155,92 +148,13 @@ class RuntimeTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "ASTRO_AI_MODEL"):
                 provider_from_env()
 
-    def test_deepseek_provider_defaults_to_its_native_chat_completions_endpoint(self):
+    def test_local_provider_rejects_remote_endpoint_override(self):
         with patch.dict("os.environ", {
-            "ASTRO_AI_PROVIDER": "deepseek",
-            "DEEPSEEK_API_KEY": "deepseek-test",
+            "ASTRO_AI_MODEL": "model",
+            "ASTRO_AI_BASE_URL": "https://api.openai.com/v1",
         }, clear=True):
-            provider = provider_from_env()
-        self.assertIsInstance(provider, ChatCompletionsProvider)
-        self.assertEqual(provider.config.base_url, "https://api.deepseek.com")
-        self.assertEqual(provider.config.api_key, "deepseek-test")
-        self.assertEqual(provider.config.model, "deepseek-chat")
-
-    def test_deepseek_preserves_native_chat_completions_tool_calls(self):
-        with patch.dict("os.environ", {
-            "ASTRO_AI_PROVIDER": "deepseek-ai",
-            "DEEPSEEK_API_KEY": "deepseek-test",
-        }, clear=True):
-            provider = provider_from_env()
-        tool = {"type": "function", "function": {
-            "name": "memory.recall",
-            "description": "Read an exact memory key.",
-            "parameters": {"type": "object", "properties": {"namespace": {"type": "string"}}},
-        }}
-        expected_call = {
-            "id": "deepseek-call-1",
-            "type": "function",
-            "function": {"name": "memory.recall", "arguments": json.dumps({"namespace": "profile"})},
-        }
-        response_payload = {"choices": [{"message": {
-            "role": "assistant", "content": None, "tool_calls": [expected_call],
-        }}]}
-        with patch("astrologically_intelligent.providers._post_json", return_value=response_payload) as post:
-            response = provider.chat([{"role": "user", "content": "Read my profile memory."}], [tool])
-        self.assertEqual(response["tool_calls"], [expected_call])
-        self.assertEqual(post.call_args.args[0], "https://api.deepseek.com/chat/completions")
-        self.assertEqual(post.call_args.args[1]["tool_choice"], "auto")
-        self.assertEqual(post.call_args.args[1]["tools"], [tool])
-    def test_azure_openai_provider_uses_v1_endpoint_and_deployment_name(self):
-        with patch.dict("os.environ", {
-            "ASTRO_AI_PROVIDER": "azure-openai",
-            "AZURE_OPENAI_API_KEY": "azure-test",
-            "AZURE_OPENAI_ENDPOINT": "https://example.openai.azure.com/",
-            "AZURE_OPENAI_DEPLOYMENT": "gpt-4o-production",
-        }, clear=True):
-            provider = provider_from_env()
-        self.assertIsInstance(provider, ChatCompletionsProvider)
-        self.assertEqual(provider.config.base_url, "https://example.openai.azure.com/openai/v1")
-        self.assertEqual(provider.config.api_key, "azure-test")
-        self.assertEqual(provider.config.model, "gpt-4o-production")
-
-    def test_azure_foundry_provider_preserves_native_tool_calls(self):
-        with patch.dict("os.environ", {
-            "ASTRO_AI_PROVIDER": "microsoft-foundry",
-            "AZURE_INFERENCE_CREDENTIAL": "foundry-test-token",
-            "AZURE_AI_ENDPOINT": "https://example.services.ai.azure.com/openai/v1/",
-            "AZURE_OPENAI_DEPLOYMENT": "deepseek-v3-deployment",
-        }, clear=True):
-            provider = provider_from_env()
-        tool = {"type": "function", "function": {
-            "name": "memory.recall",
-            "description": "Read an exact memory key.",
-            "parameters": {"type": "object", "properties": {"namespace": {"type": "string"}}},
-        }}
-        expected_call = {
-            "id": "azure-call-1",
-            "type": "function",
-            "function": {"name": "memory.recall", "arguments": json.dumps({"namespace": "profile"})},
-        }
-        response_payload = {"choices": [{"message": {
-            "role": "assistant", "content": None, "tool_calls": [expected_call],
-        }}]}
-        with patch("astrologically_intelligent.providers._post_json", return_value=response_payload) as post:
-            response = provider.chat([{"role": "user", "content": "Read my profile memory."}], [tool])
-        self.assertEqual(response["tool_calls"], [expected_call])
-        self.assertEqual(post.call_args.args[0], "https://example.services.ai.azure.com/openai/v1/chat/completions")
-        self.assertEqual(post.call_args.args[1]["model"], "deepseek-v3-deployment")
-        self.assertEqual(post.call_args.args[1]["tool_choice"], "auto")
-        self.assertEqual(post.call_args.args[1]["tools"], [tool])
-        self.assertEqual(post.call_args.args[2]["Authorization"], "Bearer foundry-test-token")
-    def test_openai_is_available_only_when_explicitly_selected(self):
-        with patch.dict("os.environ", {
-            "ASTRO_AI_PROVIDER": "openai",
-            "ASTRO_AI_API_KEY": "openai-test",
-        }, clear=True):
-            provider = provider_from_env()
-        self.assertEqual(provider.config.base_url, "https://api.openai.com/v1")
-        self.assertEqual(provider.config.model, "gpt-4.1-mini")
+            with self.assertRaisesRegex(RuntimeError, "Remote model endpoints are disabled"):
+                provider_from_env()
 
     def test_external_competitor_connectors_are_not_exposed_as_native_tools(self):
         names={item["function"]["name"] for item in self.runtime.tools.definitions()}
@@ -252,12 +166,12 @@ class RuntimeTests(unittest.TestCase):
 
     def test_provider_http_error_body_is_not_exposed(self):
         error = urllib.error.HTTPError(
-            "https://provider.example/v1/chat/completions", 401, "Unauthorized", {},
+            "http://127.0.0.1:1234/v1/chat/completions", 401, "Unauthorized", {},
             BytesIO(b'{"error":"secret-provider-response"}'),
         )
         with patch("astrologically_intelligent.providers.urllib.request.urlopen", side_effect=error):
-            with self.assertRaisesRegex(RuntimeError, "Provider returned HTTP 401") as raised:
-                _post_json("https://provider.example/v1/chat/completions", {}, {}, 5)
+            with self.assertRaisesRegex(RuntimeError, "Local model returned HTTP 401") as raised:
+                _post_json("http://127.0.0.1:1234/v1/chat/completions", {}, {}, 5)
         self.assertNotIn("secret-provider-response", str(raised.exception))
 
     def test_provider_connection_error_details_are_not_exposed(self):
