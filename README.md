@@ -1,22 +1,26 @@
 # Astrologically Intelligent
 
-Astrologically Intelligent is an artificial neural network. CatChat is the direct-messaging service for private one-to-one and group conversations, persistent message history and read receipts; its reserved Astrologically Intelligent account can provide AI replies. WaveWeaver provides literary recommendations, Peanut Browsing provides research, PanMedia provides agent management, Terracotta provides artistic guidance, NoiseGround provides sound engineering assistance, MyOutlet provides video editing recommendations, Engzen provides programming review and correction and Honest Education provides fact-checking.
+Astrologically Intelligent is JAPStudios' artificial neural-network intelligence service. Its public-service ecosystem supplies distinct capabilities: CatChat is the conversational interface; WaveWeaver provides literary discovery and recommendations in the Wattpad domain; Peanut Browsing provides research associated with Google Search; PanMedia provides agentic guidance and agent management; Terracotta provides artistic and vector-graphics guidance in the Adobe Illustrator domain; NoiseGround provides sound-engineering guidance in the Spotify domain; MyOutlet provides video-editing guidance in the YouTube domain; Engzen provides programming review and correction in the Unreal Engine domain; and Honest Education provides fact-checking grounded in public education.
 
-## JAPStudios public-service integrations
+These are the intended service responsibilities and product domains. They must not be reduced to unrelated internal microservices, and a named product domain does not imply that a third-party API is a prerequisite or that an integration already exists.
 
-The nine connected public services are part of the product's intended architecture, but they are not all integrated yet. Current implementation evidence is recorded in [the public-service integration audit](UPSTREAM_IMPORT.md#japstudios-public-service-integration-audit).
+## Current development state
 
-- CatChat: assistant-session and message API contract documented; live deployment has not been verified.
-- Peanut Browsing: first-party search and crawl tools implemented; deterministic tests pass, while live production-index coverage remains unverified.
-- PanMedia: authenticated agent-management API and service proxy implemented; live public deployment has not been verified.
-- WaveWeaver: literary-recommendation integration is not implemented.
-- Terracotta: artistic-guidance integration is not implemented.
-- NoiseGround: sound-engineering integration is not implemented.
-- MyOutlet: video-editing recommendation integration is not implemented; its existing media platform is not a substitute.
-- Engzen: programming-review and code-correction integration is not implemented.
-- Honest Education: fact-checking integration is not implemented.
+The application has a substantial Python web application and agent runtime, multiple provider transports, research and tool execution, persistent application data, and a source inventory spanning twenty upstream organizations. The upstream inventory is source material, not proof that all upstream projects have been integrated.
 
-The six unfinished services require their actual service-side capabilities and documented API contracts before working integrations can be built. No endpoint, data source, or completed capability should be inferred from a site name or an unrelated repository. A documented contract or passing mock test is not evidence of a live production connection.
+The dedicated neural-network components currently in the repository are a NumPy multilayer classifier and a compact character-level recurrent language model. Neither is yet the trained, production-scale neural network that defines the completed Astrologically Intelligent service. The character model requires a supplied corpus; the broader conversational runtime currently routes to separately installed local or explicitly selected model providers. The neural-network training, evaluation, and application integration work remains unfinished.
+
+## Service responsibilities
+
+- CatChat: conversational output and direct messaging.
+- WaveWeaver: literary discovery and recommendations (Wattpad domain).
+- Peanut Browsing: research (Google Search domain).
+- PanMedia: agentic guidance and agent management.
+- Terracotta: artistic guidance and vector graphics (Adobe Illustrator domain).
+- NoiseGround: sound engineering (Spotify domain).
+- MyOutlet: video-editing guidance (YouTube domain).
+- Engzen: programming review and correction (Unreal Engine domain).
+- Honest Education: fact-checking grounded in public education.
 
 ## Python agent platform
 
@@ -25,8 +29,6 @@ See [AGENT_RUNTIME.md](AGENT_RUNTIME.md) for setup, provider configuration, API 
 Run with Python 3.10+:
 
 ```sh
-# Start Ollama locally and install a model before launching the runtime.
-# Set ASTRO_AI_MODEL to the exact identifier shown by: ollama list
 export ASTRO_AI_PROVIDER="local"
 export ASTRO_AI_BASE_URL="http://127.0.0.1:11434/v1"
 export ASTRO_AI_MODEL="YOUR_INSTALLED_MODEL"
@@ -39,7 +41,6 @@ The local service defaults to `127.0.0.1:8765`. It exposes `GET /health` and `PO
 
 The full-featured web application lives in `astrologically_intelligent/`. It is a separate FastAPI service with its own provider routing, web interface, documents, research, voice, and tools. Follow `astrologically_intelligent/README.md`; from that directory, start it with `python -m uvicorn app:app --host 127.0.0.1 --port 7000`. The root agent API described above is a separate service on port 8765; the two services are not yet a single process.
 
-
 ## Tests
 
 ```sh
@@ -48,39 +49,10 @@ python -m unittest discover -s tests -v
 
 ## Upstream source imports
 
-The completed .gitmodules inventory contains **1,532 pinned public repositories across all twenty requested organizations**. Organization-by-organization counts are recorded in [UPSTREAM_IMPORT.md](UPSTREAM_IMPORT.md). The six AI-query organizations are Apple, AWS, Brave, Google, Kagi Search, and Microsoft; the remaining fourteen use public-repository listings. Five separate skill submodules under skills/upstream are not included in the 1,532 repository count. These Git submodules preserve upstream source boundaries; they do not mean that the upstream applications or their functionality have been integrated into Astrologically Intelligent.
+The completed .gitmodules inventory contains **1,532 pinned public repositories across all twenty requested organizations**. These Git submodules preserve upstream source boundaries; they do not mean that the upstream applications or their functionality have been integrated into Astrologically Intelligent. See [UPSTREAM_IMPORT.md](UPSTREAM_IMPORT.md) for the inventory and integration audit.
 
 Retrieve the pinned source trees with:
 
 ```sh
 git submodule update --init --recursive
 ```
-
-The resumable importer in `scripts/import_upstream_orgs.py` can add later upstream repositories or refresh the inventory. It includes archived repositories and forks, skips URLs already represented as submodules, and pins each default-branch commit. It does not flatten or rewrite upstream source files.
-
-## Upstream organizations
-
-The requested upstream scope comprises public repositories from these GitHub organizations:
-
-- [Anthropic](https://github.com/orgs/anthropics/repositories)
-- [Apple](https://github.com/orgs/apple/repositories)
-- [AWS](https://github.com/orgs/aws/repositories)
-- [Brave](https://github.com/orgs/brave/repositories)
-- [Cursor](https://github.com/orgs/cursor/repositories)
-- [DeepSeek AI](https://github.com/orgs/deepseek-ai/repositories)
-- [Google](https://github.com/orgs/google/repositories)
-- [Herdr](https://github.com/orgs/herdrdev/repositories)
-- [Kagi Search](https://github.com/orgs/kagisearch/repositories)
-- [LukaLabs](https://github.com/orgs/lukalabs/repositories)
-- [Meta Llama](https://github.com/orgs/meta-llama/repositories)
-- [Microsoft](https://github.com/orgs/microsoft/repositories)
-- [n8n](https://github.com/orgs/n8n-io/repositories)
-- [NousResearch](https://github.com/orgs/NousResearch/repositories)
-- [Odysseus](https://github.com/orgs/odysseus-dev/repositories)
-- [OpenAI](https://github.com/orgs/openai/repositories)
-- [OpenClaw](https://github.com/orgs/openclaw/repositories)
-- [PaperclipAI](https://github.com/orgs/paperclipai/repositories)
-- [Perplexity](https://github.com/orgs/perplexityai/repositories)
-- [xAI](https://github.com/orgs/xai-org/repositories)
-
-Apple, AWS, Brave, Google, Kagi Search, and Microsoft are queried for AI-related repositories; the other organizations use their public repository listings. These repositories are source references, not a claim that their projects or functionality have been incorporated into Astrologically Intelligent. Evaluate any proposed source use individually for licensing, compatibility, security, dependencies, executable behaviour, and tests.
