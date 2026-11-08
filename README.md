@@ -1,6 +1,6 @@
 # Astrologically Intelligent
 
-Astrologically Intelligent is an artificial neural network. It provides conversational output through CatChat, literary recommendations through WaveWeaver, research through Peanut Browsing, agent management through PanMedia, artistic guidance through Terracotta, sound engineering assistance through NoiseGround, video editing recommendations through MyOutlet, programming review and correction through Engzen and fact-checking through Honest Education.
+Astrologically Intelligent is an artificial neural network. CatChat is the direct-messaging service for private one-to-one and group conversations, persistent message history and read receipts; its reserved Astrologically Intelligent account can provide AI replies. WaveWeaver provides literary recommendations, Peanut Browsing provides research, PanMedia provides agent management, Terracotta provides artistic guidance, NoiseGround provides sound engineering assistance, MyOutlet provides video editing recommendations, Engzen provides programming review and correction and Honest Education provides fact-checking.
 
 ## Python agent platform
 
