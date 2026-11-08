@@ -3030,6 +3030,7 @@ async def _stream_llm_inner(url: str, model: str, messages: List[Dict], temperat
       - data: [DONE]                       — end of stream
     """
     _require_local_inference_endpoint(url)
+    _require_local_inference_endpoint(url)
     provider = _detect_provider(url)
     messages_copy = _sanitize_llm_messages(messages)
 
