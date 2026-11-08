@@ -97,18 +97,36 @@ class NeuralNetworkClassifier:
     def predict(self, features: Iterable[Iterable[float]]) -> np.ndarray:
         return np.argmax(self.predict_proba(features), axis=1)
 
-    def evaluate(self, features, labels):
+    def evaluate(self, features, labels, *, class_weights=None):
         values = self._features(features)
         targets = self._labels(labels, len(values))
+        weights = self._class_weights(class_weights)
+        sample_weights = weights[targets]
         probabilities = self._forward(values)[2]
         selected = np.clip(probabilities[np.arange(len(targets)), targets], 1e-12, 1.0)
-        return {"loss": float(-np.mean(np.log(selected))),
+        weighted_loss = -np.sum(sample_weights * np.log(selected)) / np.sum(sample_weights)
+        return {"loss": float(weighted_loss),
                 "accuracy": float(np.mean(np.argmax(probabilities, axis=1) == targets))}
+
+    def _class_weights(self, class_weights):
+        if class_weights is None:
+            return np.ones(self.output_size, dtype=np.float64)
+        try:
+            raw = np.asarray(class_weights)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("class_weights must contain one positive finite number per class") from exc
+        if raw.dtype.kind not in "iuf" or raw.shape != (self.output_size,):
+            raise ValueError("class_weights must contain one positive finite number per class")
+        weights = raw.astype(np.float64, copy=False)
+        if not np.isfinite(weights).all() or np.any(weights <= 0.0):
+            raise ValueError("class_weights must contain one positive finite number per class")
+        return weights
 
     def fit(self, features, labels, *, epochs: int = 100, batch_size: int = 32,
             shuffle: bool = True, validation_data=None, patience: int | None = None,
             min_delta: float = 0.0, restore_best_weights: bool = False,
-            max_grad_norm: float | None = None) -> list[dict[str, float]]:
+            max_grad_norm: float | None = None,
+            class_weights: Sequence[float] | None = None) -> list[dict[str, float]]:
         values = self._features(features)
         targets = self._labels(labels, len(values))
         if isinstance(epochs, bool) or not isinstance(epochs, int) or epochs < 1:
@@ -137,6 +155,7 @@ class NeuralNetworkClassifier:
             or max_grad_norm <= 0
         ):
             raise ValueError("max_grad_norm must be a positive finite number or None")
+        weights = self._class_weights(class_weights)
         validation = None
         if validation_data is not None:
             if not isinstance(validation_data, (tuple, list)) or len(validation_data) != 2:
@@ -160,9 +179,11 @@ class NeuralNetworkClassifier:
                 x, y = values[chosen], targets[chosen]
                 activations, pre_activations, probabilities = self._forward(x)
                 count, last = len(chosen), len(self._weights) - 1
-                delta = probabilities
+                delta = probabilities.copy()
                 delta[np.arange(count), y] -= 1.0
-                delta /= count
+                sample_weights = weights[y]
+                delta *= sample_weights[:, None]
+                delta /= np.sum(sample_weights)
                 gradients = {f"weights{last + 1}": activations[-1].T @ delta,
                              f"bias{last + 1}": np.sum(delta, axis=0)}
                 upstream = delta @ self._weights[last].T
@@ -186,9 +207,10 @@ class NeuralNetworkClassifier:
                         }
                 self._adam_update(gradients)
 
-            metrics = {"epoch": float(epoch + 1), **self.evaluate(values, targets)}
+            metrics = {"epoch": float(epoch + 1),
+                       **self.evaluate(values, targets, class_weights=weights)}
             if validation is not None:
-                validation_metrics = self.evaluate(*validation)
+                validation_metrics = self.evaluate(*validation, class_weights=weights)
                 metrics["validation_loss"] = validation_metrics["loss"]
                 metrics["validation_accuracy"] = validation_metrics["accuracy"]
                 if validation_metrics["loss"] < best_loss - min_delta:
