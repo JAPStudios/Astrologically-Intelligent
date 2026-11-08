@@ -101,3 +101,21 @@ This is a reproducible merge and activation gate, not a training run or a
 production deployment. The merge must still be run against the actual approved
 adapter and base checkpoint, then the resulting full checkpoint must pass the
 serving-side log-probability check and held-out tool-routing evaluation.
+
+After the merge is served as a standalone model beside the base checkpoint,
+run the serving-side activation check against the same OpenAI-compatible
+endpoint:
+
+```sh
+python scripts/verify_qwen35_serving.py \
+  --base-url http://127.0.0.1:8000/v1 \
+  --base-model Qwen3.5-9B \
+  --merged-model Astrologically-Intelligent-Qwen3.5-9B \
+  --prompt "Select the appropriate tool for this request."
+```
+
+The verifier requests one deterministic token and top-token log probabilities
+from both model IDs. It requires at least three shared candidates and material
+log-probability differences on at least two candidates. A model name appearing
+in `/v1/models`, a successful HTTP response, or different generated text alone
+is not sufficient evidence that the merged adapter is active.
