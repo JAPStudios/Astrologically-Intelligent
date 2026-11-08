@@ -162,3 +162,45 @@ def test_research_navigator_does_not_record_peanut_when_index_is_empty(monkeypat
     assert asyncio.run(nav.search("no indexed matches")) == []
     assert nav.providers_used == []
     assert nav.last_search_error == "Peanut Browsing returned no indexed results."
+
+
+
+def test_research_navigator_clears_stale_error_after_later_success(monkeypatch):
+    providers_mod = types.ModuleType("src.search.providers")
+    providers_mod._get_search_settings = lambda: {"search_provider": "searxng"}
+    core_mod = types.ModuleType("src.search.core")
+    core_mod._build_provider_chain = lambda provider: ["searxng"]
+    calls = {"count": 0}
+
+    def provider(provider, query, count):
+        calls["count"] += 1
+        if calls["count"] == 1:
+            raise RuntimeError("temporary provider outage")
+        return [{"url": "https://example.com", "title": "Recovered"}]
+
+    core_mod._call_provider = provider
+    monkeypatch.setitem(sys.modules, "src.search.providers", providers_mod)
+    monkeypatch.setitem(sys.modules, "src.search.core", core_mod)
+
+    nav = ResearchNavigator()
+    assert asyncio.run(nav.search("first attempt")) == []
+    assert "temporary provider outage" in nav.last_search_error
+
+    results = asyncio.run(nav.search("second attempt"))
+    assert results[0]["title"] == "Recovered"
+    assert nav.last_search_error == ""
+
+
+def test_research_navigator_clears_error_when_search_is_disabled(monkeypatch):
+    providers_mod = types.ModuleType("src.search.providers")
+    providers_mod._get_search_settings = lambda: {
+        "research_search_provider": "disabled",
+        "search_provider": "searxng",
+    }
+    monkeypatch.setitem(sys.modules, "src.search.providers", providers_mod)
+
+    nav = ResearchNavigator()
+    nav.last_search_error = "stale failure"
+
+    assert asyncio.run(nav.search("disabled search")) == []
+    assert nav.last_search_error == ""
