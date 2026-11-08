@@ -23,6 +23,15 @@ def _safe_owner(value: object) -> str:
     return owner
 
 
+def owner_trace_path(owner: object) -> Path:
+    safe_owner = _safe_owner(owner)
+    trace_dir = ROOT / "data" / "sft_traces"
+    path = trace_dir / f"{safe_owner}.jsonl"
+    if path.resolve().parent != trace_dir.resolve():
+        raise ValueError(f"SFT trace path escapes its directory for owner {safe_owner!r}")
+    return path
+
+
 def rows(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
@@ -68,7 +77,7 @@ def main() -> None:
 
     corpus = rows(args.approved_trace)
     for owner, expected_sessions in sorted(retained_by_owner.items()):
-        trace_path = ROOT / "data" / "sft_traces" / f"{owner}.jsonl"
+        trace_path = owner_trace_path(owner)
         if not trace_path.is_file():
             raise FileNotFoundError(
                 f"retained expansion trace is missing for owner {owner!r}: {trace_path}"
