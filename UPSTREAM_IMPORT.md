@@ -63,3 +63,21 @@ The application contains specific API integrations for n8n workflow management, 
 ## Remaining work
 
 The source inventory is not the completion criterion for the software. Each upstream project still needs an evidence-based disposition: identify relevant functionality, review license and dependency obligations, assess compatibility and security, integrate selected functionality, then add automated tests. Projects that are irrelevant, incompatible, redundant, or unsafe to incorporate should be documented as such rather than copied indiscriminately. The complete application also requires repeatable dependency installation, test execution, security checks, and deployment validation.
+
+## JAPStudios public-service integration audit
+
+This section records the current repository evidence for the service relationships described by JAPStudios. A source repository, a documented endpoint contract, and a tested integration are distinct states; no missing service endpoint is inferred or fabricated.
+
+| JAPStudios public service | Current evidence in the accessible repositories | Astrologically Intelligent integration status |
+| --- | --- | --- |
+| CatChat — conversational output | `JAPStudios/CatChat` contains a working messaging service and documents its assistant-account path to Astrologically Intelligent through `POST /api/session` and `POST /api/chat`. Its tests use a mocked responder. | Integration contract documented. Live service-to-service deployment has not been verified. |
+| Peanut Browsing — research | `JAPStudios/Peanut-Browsing` contains the first-party crawler, index, and authenticated search gateway. The full web application has native search and crawl tools; the Deep Research provider connection was merged in PR #16. | Implemented and covered by deterministic tool-cycle and navigator tests. Live production-index coverage has not been verified. |
+| PanMedia — agentic guidance | `JAPStudios/PanMedia` uses the authenticated agent, goal, approval, budget, and run APIs in this repository. Cross-repository backend/proxy tests were reported passing in the completion issue. | Backend API and service proxy implemented. Live public deployment has not been verified. |
+| WaveWeaver — literary recommendations | `JAPStudios/WaveWeaver` exists, but its current repository is a Wix site scaffold with astrology/lifestyle page files; no literary-recommendation API or recommendation implementation was identified. | Not integrated; service capability/API contract remains unverified. |
+| Terracotta — artistic guidance | No matching repository was present in the accessible JAPStudios repository listing, and no service API contract was identified in this repository. | Not integrated; implementation source/API contract is required. |
+| NoiseGround — sound engineering assistance | No matching repository was present in the accessible JAPStudios repository listing, and no service API contract was identified in this repository. | Not integrated; implementation source/API contract is required. |
+| MyOutlet — video editing recommendations | `JAPStudios/MyOutlet` contains an audiovisual publishing and streaming platform, including creator channels, uploads, live streams, and moderation. No video-editing recommendation API was identified. | Not integrated for the stated video-editing capability; the existing media platform is not counted as that feature. |
+| Engzen — programming review and correction | The accessible `JAPStudios/Engzen` repository currently identifies itself as `MyOutlet-Extension` and contains browser-extension files plus funding documents. No programming-review or code-correction API was identified. | Not integrated for the stated programming capability. |
+| Honest Education — fact checking | No matching repository was present in the accessible JAPStudios repository listing, and no service API contract was identified in this repository. | Not integrated; implementation source/API contract is required. |
+
+These gaps do not change the service responsibilities defined by JAPStudios. They identify work that cannot be completed safely by guessing endpoints or treating unrelated repository contents as the required service. Update this table only when the relevant implementation and its integration tests provide evidence.
