@@ -49,7 +49,7 @@ def _conversation(row: dict[str, Any], line: int) -> list[dict[str, Any]]:
             raise ValueError(f"line {line}: message {index} content must be text")
         if not content.strip() and not (role == "assistant" and isinstance(tool_calls, list) and tool_calls):
             raise ValueError(f"line {line}: message {index} has empty content without assistant tool calls")
-        item = {"role": role, "content": re.sub(r"\\s+", " ", content).strip()}
+        item = {"role": role, "content": re.sub(r"\s+", " ", content).strip()}
         if tool_calls is not None:
             if role != "assistant" or not isinstance(tool_calls, list) or not tool_calls:
                 raise ValueError(f"line {line}: message {index} has invalid tool_calls")
