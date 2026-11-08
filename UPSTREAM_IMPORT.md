@@ -87,3 +87,16 @@ These gaps do not change the service responsibilities defined by JAPStudios. The
 The destination repository currently has no top-level license file and GitHub reports no detected repository license. The 1,532 imported Git submodules retain their own upstream repository boundaries and license files; that does not license the destination repository's original code or grant blanket permission to redistribute the submodule contents. Do not infer a project-wide license from the upstream inventory. A project-wide license decision and a source-by-source redistribution review remain release blockers.
 
 A separate Wix site-context check confirms that Terracotta, NoiseGround, and Honest Education are published Wix sites with Velo enabled; MyOutlet and Engzen are also published Wix sites with Velo enabled. WaveWeaver is a published Wix site with Velo disabled. These are site records, not GitHub repositories. A published site or enabled Velo setting does not by itself establish that a service API exists or is callable; no endpoint has been inferred from site metadata.
+
+## Read-only Wix content check
+
+The linked Wix site records and CMS APIs were checked without changing site settings or content:
+
+- WaveWeaver: the CMS API reports that the Wix CMS app is not installed; its site context reports Velo disabled. No CMS literary catalog or recommendation data is currently exposed.
+- Terracotta: Velo is enabled, but the only native custom collection found (`japs-rsrs`) contains zero items. No artistic-guidance content was found in the queried collection.
+- NoiseGround: its Blog/Posts collection contains zero items. Its portfolio contains six generic placeholder photography projects, not sound-engineering guidance.
+- MyOutlet: its Blog/Posts collection contains zero items. Its other native collections support the existing media/creator/live-streaming platform, but no video-editing recommendation data or API was identified.
+- Engzen: its Blog/Posts collection contains zero items. Its current GitHub repository is still the MyOutlet browser extension, not a programming-review service.
+- Honest Education: the available CMS collections do not include an educational knowledge base or fact-checking corpus; the inspected site data contains a generic booking service and a contact form.
+
+These results confirm that the named Wix sites exist, but their currently exposed data does not provide the content or API contracts needed to implement the stated specialist integrations. No content was created, altered, or published during this check.
