@@ -21,6 +21,22 @@ from urllib.parse import urlparse
 logger = logging.getLogger(__name__)
 
 
+def _require_local_inference_endpoint(url: str) -> str:
+    """Reject public model-provider endpoints before any inference request."""
+    if not isinstance(url, str) or not url.strip():
+        raise ValueError("A local model endpoint URL is required")
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"} or not parsed.hostname:
+        raise ValueError("The model endpoint must be a valid HTTP(S) local URL")
+    if parsed.username is not None or parsed.password is not None:
+        raise ValueError("Credentials must not be embedded in a model endpoint URL")
+    if not is_local_endpoint(url):
+        raise RuntimeError(
+            "Remote model-provider inference is disabled; configure a local or private-network model endpoint"
+        )
+    return url
+
+
 def _is_managed_stream_endpoint(url: str) -> bool:
     """Whether a stream is served by a host we control closely enough to watchdog.
 
@@ -2327,6 +2343,7 @@ def llm_call(url: str, model: str, messages: List[Dict], temperature: float = LL
              thinking_mode: Optional[str] = None,
              reasoning_effort: Optional[str] = None) -> str:
     """Synchronous LLM call with optional prompt type enhancement."""
+    _require_local_inference_endpoint(url)
     h = _provider_headers(_detect_provider(url))
     # Tolerate headers that arrive as a JSON string (some sessions stored them
     # double-encoded) — otherwise h.update() throws "dictionary update sequence
@@ -2657,6 +2674,7 @@ async def llm_call_async(
     reasoning_effort: Optional[str] = None,
 ) -> str | tuple[str, str]:
     """Asynchronous LLM call using httpx with connection pooling, timeout, retry logic, and performance logging."""
+    _require_local_inference_endpoint(url)
     provider = _detect_provider(url)
     messages_copy = _sanitize_llm_messages(messages)
 
@@ -2975,6 +2993,7 @@ async def stream_llm(url: str, model: str, messages: List[Dict], temperature: fl
                      tools: Optional[List[Dict]] = None, session_id: Optional[str] = None,
                      tool_choice_none: bool = False, workload: str = "foreground",
                      thinking_mode: Optional[str] = None, reasoning_effort: Optional[str] = None):
+    _require_local_inference_endpoint(url)
     target_url = _stream_target_url(url)
     async with _local_model_slot(target_url, model, workload):
         async for chunk in _stream_llm_inner(
@@ -3010,6 +3029,7 @@ async def _stream_llm_inner(url: str, model: str, messages: List[Dict], temperat
       - event: error                       — errors
       - data: [DONE]                       — end of stream
     """
+    _require_local_inference_endpoint(url)
     provider = _detect_provider(url)
     messages_copy = _sanitize_llm_messages(messages)
 
