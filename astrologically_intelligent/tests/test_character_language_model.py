@@ -104,7 +104,7 @@ def test_generation_uses_validated_probability_path_for_every_generated_token(mo
 
     assert generated.startswith("ab")
     assert len(generated) == 6
-    assert calls == [(0.8, 3)] * 6
+    assert calls == [(0.8, 3)] * 5
 
 
 def test_evaluation_includes_partial_final_window_and_short_validation_text(monkeypatch):
@@ -129,3 +129,13 @@ def test_evaluation_includes_partial_final_window_and_short_validation_text(monk
     assert [int(value) for array in observed for value in array[0]] == [
         model._indices[char] for char in "abc ab"
     ]
+
+
+def test_zero_token_generation_returns_prompt_without_running_inference(monkeypatch):
+    model = _model()
+
+    def unexpected(*args, **kwargs):
+        raise AssertionError("zero-token generation must not run model inference")
+
+    monkeypatch.setattr(model, "_next_token_probabilities", unexpected)
+    assert model.generate("ab", max_new_tokens=0) == "ab"
