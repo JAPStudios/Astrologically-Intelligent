@@ -10,7 +10,7 @@ SPEC.loader.exec_module(MODULE)
 
 
 def _write(path, rows):
-    path.write_text("".join(json.dumps(row) + "\\n" for row in rows), encoding="utf-8")
+    path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
     return path
 
 
@@ -76,3 +76,11 @@ def test_malformed_example_fails_closed(tmp_path):
         assert "non-empty array" in str(exc)
     else:
         raise AssertionError("empty messages were accepted")
+
+
+def test_seed_family_id_in_repository_metadata_is_detected(tmp_path):
+    row = {"metadata": {"seed_family_id": "family-meta"}, "messages": [
+        {"role": "user", "content": "one"},
+        {"role": "assistant", "content": "answer"},
+    ]}
+    assert MODULE._family_id(row) == "family-meta"
