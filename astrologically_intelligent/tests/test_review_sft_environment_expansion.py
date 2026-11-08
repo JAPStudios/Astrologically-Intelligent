@@ -78,4 +78,26 @@ def test_review_rejects_one_session_assigned_to_multiple_owners():
             {"session_id": "same-session", "owner": "owner-a"},
             {"session_id": "same-session", "owner": "owner-b"},
         ])
+def test_owner_session_map_accepts_multiple_sessions_for_one_owner():
+    assert review._owner_session_map([
+        {"session_id": "session-one", "owner": "owner-a"},
+        {"session_id": "session-two", "owner": "owner-a"},
+    ]) == {"session-one": "owner-a", "session-two": "owner-a"}
 
+
+def test_owner_session_map_rejects_invalid_session_identity():
+    import pytest
+
+    with pytest.raises(ValueError, match="invalid SFT session identifier"):
+        review._owner_session_map([
+            {"session_id": "../outside", "owner": "owner-a"},
+        ])
+
+
+def test_owner_session_map_rejects_invalid_owner_identity():
+    import pytest
+
+    with pytest.raises(ValueError, match="invalid SFT trace owner identifier"):
+        review._owner_session_map([
+            {"session_id": "session-one", "owner": "../outside"},
+        ])
