@@ -5,11 +5,22 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+
+
+def _safe_owner(value: object) -> str:
+    owner = str(value or "").strip()
+    if (not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}", owner)
+            or owner in {".", ".."}):
+        raise ValueError(f"invalid SFT trace owner identifier: {owner!r}")
+    return owner
 
 
 def rows(path: Path) -> list[dict[str, Any]]:
@@ -46,7 +57,7 @@ def main() -> None:
         for item in report.get("results", []):
             if item.get("retained") is not True:
                 continue
-            owner = str(item.get("owner") or "").strip()
+            owner = _safe_owner(item.get("owner"))
             session_id = str(item.get("session_id") or "").strip()
             if not owner or not session_id:
                 raise ValueError("retained expansion review rows require an owner and session_id")
