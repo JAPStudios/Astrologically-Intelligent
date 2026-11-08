@@ -190,6 +190,30 @@ class CharacterLanguageModel:
             self._adam[name] = moments[name]
         self._step = next_step
 
+    def _next_token_probabilities(
+        self, hidden: np.ndarray, *, temperature: float, top_k: int | None
+    ) -> np.ndarray:
+        """Return a finite sampling distribution or fail with a model error."""
+        with np.errstate(over="ignore", invalid="ignore", under="ignore", divide="ignore"):
+            logits = (hidden @ self._parameters["output_weights"]
+                      + self._parameters["output_bias"]) / float(temperature)
+            if not np.isfinite(logits).all():
+                raise FloatingPointError("language-model generation produced non-finite logits")
+            if top_k is not None and top_k < len(logits):
+                keep = np.argpartition(logits, -top_k)[-top_k:]
+                filtered = np.full_like(logits, -np.inf)
+                filtered[keep] = logits[keep]
+                logits = filtered
+            logits -= np.max(logits)
+            probabilities = np.exp(logits)
+            total = np.sum(probabilities)
+            if not np.isfinite(total) or total <= 0:
+                raise FloatingPointError("language-model generation produced invalid probabilities")
+            probabilities /= total
+        if not np.isfinite(probabilities).all():
+            raise FloatingPointError("language-model generation produced non-finite probabilities")
+        return probabilities
+
     def generate(
         self,
         prompt: str,
@@ -216,16 +240,9 @@ class CharacterLanguageModel:
             hidden = np.tanh(self._parameters["input_weights"][token]
                              + hidden @ self._parameters["recurrent_weights"]
                              + self._parameters["hidden_bias"])
-            logits = hidden @ self._parameters["output_weights"] + self._parameters["output_bias"]
-            logits = logits / float(temperature)
-            if top_k is not None and top_k < len(logits):
-                keep = np.argpartition(logits, -top_k)[-top_k:]
-                filtered = np.full_like(logits, -np.inf)
-                filtered[keep] = logits[keep]
-                logits = filtered
-            logits -= np.max(logits)
-            probabilities = np.exp(logits)
-            probabilities /= np.sum(probabilities)
+            probabilities = self._next_token_probabilities(
+                hidden, temperature=float(temperature), top_k=top_k
+            )
         output = list(prompt)
         for _ in range(max_new_tokens):
             next_token = int(rng.choice(len(self.vocabulary), p=probabilities))
