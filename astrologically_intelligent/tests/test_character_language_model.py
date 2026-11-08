@@ -85,6 +85,6 @@ def test_checkpoint_rejects_malformed_scalar_metadata(tmp_path):
 
 def test_generation_rejects_non_finite_logits_instead_of_sampling_invalid_probabilities():
     model = _model()
-    model._parameters["output_weights"][:] = np.finfo(np.float64).max
+    model._parameters["output_bias"][0] = 1e308
     with pytest.raises(FloatingPointError, match="non-finite logits"):
-        model.generate("a", max_new_tokens=1)
+        model.generate("a", max_new_tokens=1, temperature=1e-308)
