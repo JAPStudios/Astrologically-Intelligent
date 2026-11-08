@@ -69,3 +69,35 @@ python scripts/convert_sft_traces_to_messages.py --input /path/to/source/test.js
 ```
 
 Then validate those three chat files with `validate_sft_splits.py --require-family-id`.
+
+## Qwen3.5 multimodal LoRA merge
+
+The optional model-training dependencies are isolated in `requirements-sft.txt`.
+Install PyTorch separately for the target accelerator, then install that file.
+The application runtime requirements are intentionally not expanded by the
+training stack.
+
+The tracked merge entry point reproduces the Qwen3.5 text-adapter to full
+multimodal-checkpoint path recorded in the training ledger:
+
+```sh
+python scripts/merge_hf_lora.py \
+  --base /path/to/Qwen3.5-9B \
+  --adapter /path/to/final_adapter \
+  --output /path/to/merged-full-bf16 \
+  --verify-prompt "Select the appropriate tool for this request."
+```
+
+The merge requires a local full Qwen3.5 checkpoint and a PEFT adapter. It
+loads the full model with `AutoModelForImageTextToText`, limits adapter
+targets to explicitly matched language-tower modules, remaps causal adapter
+keys from `model.layers` to `model.language_model.layers`, checks that every
+target has both LoRA A and B weights, and compares deterministic base and
+adapter logits. It refuses to save if the adapter has no measurable effect.
+The processor is saved alongside the merged checkpoint, and a manifest
+records the inputs and activation measurement.
+
+This is a reproducible merge and activation gate, not a training run or a
+production deployment. The merge must still be run against the actual approved
+adapter and base checkpoint, then the resulting full checkpoint must pass the
+serving-side log-probability check and held-out tool-routing evaluation.
