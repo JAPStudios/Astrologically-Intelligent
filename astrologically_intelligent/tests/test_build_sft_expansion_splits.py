@@ -237,3 +237,44 @@ def test_unassigned_seed_family_is_not_silently_added_to_training(tmp_path):
     assert result.returncode != 0
     assert "no dataset split is recorded" in result.stderr
 
+def test_identical_content_cannot_cross_train_and_validation_splits(tmp_path):
+    app_root = Path(__file__).resolve().parents[1]
+    manifest = tmp_path / "manifest.json"
+    trace = tmp_path / "approved.jsonl"
+    output = tmp_path / "splits"
+    _write_json(
+        manifest,
+        {
+            "seeds": [
+                {"seed_family_id": "family-train", "split": "train"},
+                {"seed_family_id": "family-validation", "split": "validation"},
+            ]
+        },
+    )
+    base = {
+        "user": "Find the latest note",
+        "assistant": "The latest note is available.",
+        "tool_events": [{"tool": "manage_documents", "output": "success"}],
+    }
+    rows = [
+        {
+            **base,
+            "session_id": "session-train",
+            "metadata": {"seed_family_id": "family-train", "dataset_split": "train"},
+        },
+        {
+            **base,
+            "session_id": "session-validation",
+            "metadata": {"seed_family_id": "family-validation", "dataset_split": "validation"},
+        },
+    ]
+    trace.write_text(
+        "\n".join(json.dumps(row) for row in rows) + "\n",
+        encoding="utf-8",
+    )
+
+    result = _run_builder(app_root, manifest, trace, output)
+
+    assert result.returncode != 0
+    assert "duplicate SFT content crosses dataset splits" in result.stderr
+
