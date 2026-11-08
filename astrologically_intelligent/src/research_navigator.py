@@ -166,6 +166,9 @@ class ResearchNavigator:
 
     async def search(self, query: str, *, count: int = 10) -> list[dict[str, Any]]:
         """Run a provider-chain web search and return structured results."""
+        # Search errors describe the latest attempt, not the lifetime of this
+        # navigator. Clear stale state before selecting or invoking a provider.
+        self.last_search_error = ""
         try:
             from src.search.providers import _get_search_settings
             from src.search.core import _build_provider_chain, _call_provider
@@ -208,6 +211,10 @@ class ResearchNavigator:
                     if results:
                         if prov not in self.providers_used:
                             self.providers_used.append(prov)
+                        # A later provider may succeed after an earlier one
+                        # failed; a successful search must not report stale
+                        # failure state.
+                        self.last_search_error = ""
                         return results
                 except Exception as e:
                     raised = True
