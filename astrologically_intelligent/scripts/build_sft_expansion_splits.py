@@ -86,12 +86,16 @@ def main() -> None:
             or row.get("seed_family_id")
             or f"seed:{row.get('session_id')}"
         )
-        split = str(
-            metadata.get("dataset_split")
-            or row.get("dataset_split")
-            or split_by_family.get(family)
-            or "train"
-        )
+        explicit_split = metadata.get("dataset_split") or row.get("dataset_split")
+        if explicit_split:
+            split = str(explicit_split)
+        elif family in split_by_family:
+            split = split_by_family[family]
+        else:
+            raise ValueError(
+                f"no dataset split is recorded for seed family {family!r}; "
+                "refusing to default an unassigned row to train"
+            )
         if split not in {"train", "validation", "test"}:
             raise ValueError(f"invalid split {split!r} for family {family}")
         # Track every source row before content deduplication. Otherwise an
