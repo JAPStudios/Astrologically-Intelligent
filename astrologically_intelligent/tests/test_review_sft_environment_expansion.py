@@ -54,3 +54,19 @@ def test_live_session_deletion_rejects_unsafe_owner_before_network_access(monkey
     with pytest.raises(ValueError, match="invalid SFT trace owner identifier"):
         review.delete_live_sessions("http://127.0.0.1:7011", "password", {"../outside": {"session"}})
 
+def test_trace_symlink_cannot_escape_trace_directory(tmp_path, monkeypatch):
+    trace_dir = tmp_path / "traces"
+    trace_dir.mkdir()
+    outside = tmp_path / "outside.jsonl"
+    outside.write_text(json.dumps({"session_id": "session"}) + "\\n", encoding="utf-8")
+    (trace_dir / "owner.jsonl").symlink_to(outside)
+    monkeypatch.setattr(review, "TRACE_DIR", trace_dir)
+
+    import pytest
+
+    with pytest.raises(ValueError, match="SFT trace path escapes its directory"):
+        review.trace_rows("owner", {"session"})
+
+    with pytest.raises(ValueError, match="SFT trace path escapes its directory"):
+        review.remove_trace_sessions("owner", {"session"})
+
