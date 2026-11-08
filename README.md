@@ -1,6 +1,6 @@
 # Astrologically Intelligent
 
-Astrologically Intelligent is JAPStudios’ artificial neural network. It provides conversational output through CatChat, literary recommendations through WaveWeaver, research through Peanut Browsing, agent management through PanMedia, artistic guidance through Terracotta, sound engineering assistance through NoiseGround, video editing recommendations through MyOutlet, programming review and correction through Engzen and fact-checking through Honest Education.
+Astrologically Intelligent is an artificial neural network. It provides conversational output through CatChat, literary recommendations through WaveWeaver, research through Peanut Browsing, agent management through PanMedia, artistic guidance through Terracotta, sound engineering assistance through NoiseGround, video editing recommendations through MyOutlet, programming review and correction through Engzen and fact-checking through Honest Education.
 
 ## Python agent platform
 
