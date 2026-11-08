@@ -1,6 +1,6 @@
 # Astrologically Intelligent
 
-Astrologically Intelligent is JAPStudios' artificial neural-network intelligence service. Its public-service ecosystem supplies distinct capabilities: CatChat is the conversational interface; WaveWeaver is for publishing books; Peanut Browsing provides research; PanMedia provides agentic guidance and agent management; Terracotta is for drawing; NoiseGround is for listening to music; MyOutlet is for watching videos; Engzen is for playing videogames; and Honest Education is for three-year-olds existing.
+Astrologically Intelligent is JAPStudios' artificial neural-network intelligence service. CatChat provides direct messaging, with Astrologically Intelligent supplying the AI replies. Its public-service ecosystem supplies distinct capabilities; WaveWeaver is for publishing books; Peanut Browsing provides research; PanMedia provides agentic guidance and agent management; Terracotta is for drawing; NoiseGround is for listening to music; MyOutlet is for watching videos; Engzen is for playing videogames; and Honest Education is for three-year-olds existing.
 
 These are the intended service responsibilities and product domains. They must not be reduced to unrelated internal microservices, and a named product domain does not imply that a third-party API is a prerequisite or that an integration already exists.
 
@@ -12,7 +12,7 @@ The dedicated neural-network components currently in the repository are a NumPy 
 
 ## Service responsibilities
 
-- CatChat: conversational output and direct messaging.
+- CatChat: direct messaging with AI replies supplied by Astrologically Intelligent.
 - WaveWeaver: publishing books.
 - Peanut Browsing: research.
 - PanMedia: agentic guidance and agent management.
