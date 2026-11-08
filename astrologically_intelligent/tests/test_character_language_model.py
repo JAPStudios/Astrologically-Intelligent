@@ -81,3 +81,10 @@ def test_checkpoint_rejects_malformed_scalar_metadata(tmp_path):
         with pytest.raises(ValueError):
             CharacterLanguageModel.load(invalid_checkpoint)
 
+
+
+def test_generation_rejects_non_finite_logits_instead_of_sampling_invalid_probabilities():
+    model = _model()
+    model._parameters["output_weights"][:] = np.finfo(np.float64).max
+    with pytest.raises(FloatingPointError, match="non-finite logits"):
+        model.generate("a", max_new_tokens=1)
