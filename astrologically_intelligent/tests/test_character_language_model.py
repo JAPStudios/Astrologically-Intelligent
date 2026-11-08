@@ -105,3 +105,27 @@ def test_generation_uses_validated_probability_path_for_every_generated_token(mo
     assert generated.startswith("ab")
     assert len(generated) == 6
     assert calls == [(0.8, 3)] * 6
+
+
+def test_evaluation_includes_partial_final_window_and_short_validation_text(monkeypatch):
+    model = _model()
+    original = model._forward
+    observed = []
+
+    def tracked(inputs):
+        observed.append(inputs.copy())
+        return original(inputs)
+
+    monkeypatch.setattr(model, "_forward", tracked)
+    short_loss = model.evaluate("abc", sequence_length=8, batch_size=4)
+    assert np.isfinite(short_loss)
+    assert len(observed) == 1
+    assert observed[0].shape == (1, 2)
+
+    observed.clear()
+    loss = model.evaluate("abc abc", sequence_length=3, batch_size=2)
+    assert np.isfinite(loss)
+    assert [array.shape[1] for array in observed] == [3, 3]
+    assert [int(value) for array in observed for value in array[0]] == [
+        model._indices[char] for char in "abc a"
+    ]
