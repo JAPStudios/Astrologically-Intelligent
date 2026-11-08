@@ -88,6 +88,11 @@ def remove_trace_sessions(owner: str, session_ids: set[str]) -> int:
     return removed
 
 
+def _owner_session_map(candidates: list[dict[str, Any]]) -> dict[str, str]:
+    owner_by_session = _owner_session_map(candidates)
+    return owner_by_session
+
+
 def delete_live_sessions(base_url: str, password: str, by_owner: dict[str, set[str]]) -> None:
     for owner, session_ids in by_owner.items():
         owner = _safe_owner(owner)
