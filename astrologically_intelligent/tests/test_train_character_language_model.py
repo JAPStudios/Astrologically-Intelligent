@@ -105,3 +105,37 @@ def test_training_cli_rejects_identical_training_and_validation_content(tmp_path
     )
     assert result.returncode == 2
     assert "must not be identical" in result.stderr
+
+
+def test_training_cli_refuses_to_overwrite_training_corpus_with_checkpoint(tmp_path):
+    app_root = Path(__file__).resolve().parents[1]
+    corpus = tmp_path / "corpus.txt"
+    original = "abc " * 20
+    corpus.write_text(original, encoding="utf-8")
+    result = subprocess.run(
+        [sys.executable, str(app_root / "scripts" / "train_character_language_model.py"),
+         str(corpus), str(corpus), "--epochs", "1", "--steps-per-epoch", "1",
+         "--sequence-length", "8", "--batch-size", "2"],
+        cwd=tmp_path, capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == 2
+    assert "checkpoint path must differ" in result.stderr
+    assert corpus.read_text(encoding="utf-8") == original
+
+
+def test_training_cli_refuses_to_overwrite_validation_file_with_checkpoint(tmp_path):
+    app_root = Path(__file__).resolve().parents[1]
+    training = tmp_path / "training.txt"
+    validation = tmp_path / "validation.txt"
+    training.write_text("abc " * 20, encoding="utf-8")
+    original = "cba " * 20
+    validation.write_text(original, encoding="utf-8")
+    result = subprocess.run(
+        [sys.executable, str(app_root / "scripts" / "train_character_language_model.py"),
+         str(training), str(validation), "--validation-file", str(validation),
+         "--epochs", "1", "--steps-per-epoch", "1", "--sequence-length", "8", "--batch-size", "2"],
+        cwd=tmp_path, capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == 2
+    assert "checkpoint path must differ" in result.stderr
+    assert validation.read_text(encoding="utf-8") == original
