@@ -40,31 +40,41 @@ def main() -> None:
     split_by_family = {
         family: next(iter(values)) for family, values in manifest_splits.items()
     }
-    retained_sessions: set[str] = set()
+    retained_by_owner: dict[str, set[str]] = defaultdict(set)
     for review_path in args.review:
         report = json.loads(review_path.read_text(encoding="utf-8"))
-        retained_sessions.update(
-            str(item["session_id"])
-            for item in report.get("results", [])
-            if item.get("retained") is True
-        )
+        for item in report.get("results", []):
+            if item.get("retained") is not True:
+                continue
+            owner = str(item.get("owner") or "").strip()
+            session_id = str(item.get("session_id") or "").strip()
+            if not owner or not session_id:
+                raise ValueError("retained expansion review rows require an owner and session_id")
+            retained_by_owner[owner].add(session_id)
+    retained_sessions = {
+        session_id for session_ids in retained_by_owner.values() for session_id in session_ids
+    }
 
     corpus = rows(args.approved_trace)
-    if retained_sessions:
-        owners = sorted({
-            str(item.get("owner") or "")
-            for review_path in args.review
-            for item in json.loads(review_path.read_text(encoding="utf-8")).get("results", [])
-            if item.get("retained") is True
-        })
-        for owner in owners:
-            path = ROOT / "data" / "sft_traces" / f"{owner}.jsonl"
-            if not path.exists():
-                continue
-            corpus.extend(
-                row for row in rows(path)
-                if str(row.get("session_id") or "") in retained_sessions
+    for owner, expected_sessions in sorted(retained_by_owner.items()):
+        trace_path = ROOT / "data" / "sft_traces" / f"{owner}.jsonl"
+        if not trace_path.is_file():
+            raise FileNotFoundError(
+                f"retained expansion trace is missing for owner {owner!r}: {trace_path}"
             )
+        owner_rows = rows(trace_path)
+        matching_rows = [
+            row for row in owner_rows
+            if str(row.get("session_id") or "") in expected_sessions
+        ]
+        found_sessions = {str(row.get("session_id") or "") for row in matching_rows}
+        missing_sessions = expected_sessions - found_sessions
+        if missing_sessions:
+            raise ValueError(
+                f"retained expansion sessions missing from owner trace {owner!r}: "
+                f"{sorted(missing_sessions)}"
+            )
+        corpus.extend(matching_rows)
 
     seen_messages: set[str] = set()
     split_rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
