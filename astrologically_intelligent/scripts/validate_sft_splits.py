@@ -45,7 +45,7 @@ def _conversation(row: dict[str, Any], line: int) -> list[dict[str, Any]]:
             raise ValueError(f"line {line}: message {index} has unsupported role")
         if not isinstance(content, str) or not content.strip():
             raise ValueError(f"line {line}: message {index} has empty/non-text content")
-        normalized.append({"role": role, "content": re.sub(r"\\s+", " ", content).strip()})
+        normalized.append({"role": role, "content": re.sub(r"\s+", " ", content).strip()})
     if not any(message["role"] == "assistant" for message in normalized):
         raise ValueError(f"line {line}: conversation has no assistant target")
     if not any(message["role"] == "user" for message in normalized):
