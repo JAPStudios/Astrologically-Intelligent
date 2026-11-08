@@ -81,3 +81,7 @@ This section records the current repository evidence for the service relationshi
 | Honest Education — fact checking | No matching repository was present in the accessible JAPStudios repository listing, and no service API contract was identified in this repository. | Not integrated; implementation source/API contract is required. |
 
 These gaps do not change the service responsibilities defined by JAPStudios. They identify work that cannot be completed safely by guessing endpoints or treating unrelated repository contents as the required service. Update this table only when the relevant implementation and its integration tests provide evidence.
+
+## Destination-repository licensing status
+
+The destination repository currently has no top-level license file and GitHub reports no detected repository license. The 1,532 imported Git submodules retain their own upstream repository boundaries and license files; that does not license the destination repository's original code or grant blanket permission to redistribute the submodule contents. Do not infer a project-wide license from the upstream inventory. A project-wide license decision and a source-by-source redistribution review remain release blockers.
