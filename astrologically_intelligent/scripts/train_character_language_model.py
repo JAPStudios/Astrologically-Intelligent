@@ -48,6 +48,11 @@ def main(argv: list[str] | None = None) -> int:
     try:
         training_text = _read_text(args.corpus)
         validation_text = _read_text(args.validation_file) if args.validation_file else None
+        if args.validation_file:
+            if args.corpus.resolve() == args.validation_file.resolve():
+                raise ValueError("training and validation files must be separate")
+            if training_text == validation_text:
+                raise ValueError("training and validation text must not be identical")
         vocabulary = tuple(sorted(set(training_text)))
         model = CharacterLanguageModel(
             vocabulary,
