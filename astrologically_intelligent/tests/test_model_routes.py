@@ -2367,3 +2367,21 @@ def test_capabilities_route_rejects_provider_managed_auth(monkeypatch):
 
     assert exc.value.status_code == 409
     assert db.closed is True
+
+
+def test_ping_endpoint_rejects_public_model_provider_before_network(monkeypatch):
+    def forbidden(*args, **kwargs):
+        raise AssertionError("remote endpoint probe must not run")
+
+    monkeypatch.setattr(model_routes.httpx, "get", forbidden)
+    with pytest.raises(RuntimeError, match="Remote model-provider inference is disabled"):
+        _ping_endpoint("https://api.openai.com/v1", api_key="must-not-be-used")
+
+
+def test_probe_endpoint_rejects_public_model_provider_before_network(monkeypatch):
+    def forbidden(*args, **kwargs):
+        raise AssertionError("remote model discovery must not run")
+
+    monkeypatch.setattr(model_routes.httpx, "get", forbidden)
+    with pytest.raises(RuntimeError, match="Remote model-provider inference is disabled"):
+        _probe_endpoint("https://api.anthropic.com", api_key="must-not-be-used")
