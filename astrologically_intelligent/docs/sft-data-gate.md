@@ -33,3 +33,28 @@ high quality, safe, or sufficient to train the intended model.
 
 
 Use `--require-family-id` for training candidates when every example must carry a stable family identifier. The gate checks structural tool-call validity; it does not prove that a tool call was executed successfully or that its result supports the assistant response.
+
+## Converting approved source traces
+
+The expansion split builder writes source-trace rows (`user`, `assistant`,
+`tool_events`), not chat-training examples. Convert an approved text-only trace
+file explicitly:
+
+```sh
+python scripts/convert_sft_traces_to_messages.py \
+  --input /path/to/approved-trace.jsonl \
+  --output /path/to/messages.jsonl
+```
+
+The converter requires a non-empty session ID, user and assistant text, a
+stable seed-family ID, and an explicit `train`, `validation`, or `test`
+assignment. It preserves source metadata and family identity and writes
+newline-terminated JSONL. It refuses any row with tool events because the
+tracked source-trace schema does not establish a reliable mapping from those
+events to assistant tool-call IDs, function arguments, and tool-result
+messages. It does not invent those records. Tool-bearing traces require a
+separately verified schema adapter before they can enter chat SFT.
+
+The converter is a format bridge, not a data approval mechanism. Only already
+approved source traces should be passed to it. Run the split validator across
+the resulting train, validation, and test files before training.
