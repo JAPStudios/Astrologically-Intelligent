@@ -12,6 +12,14 @@ Passing a sequence configures a deeper network, for example
 gradients through reverse-mode backpropagation. `fit()` returns per-epoch
 loss and accuracy. `predict_proba()` returns normalized class probabilities.
 
+Training and evaluation accept optional `class_weights`, with one positive
+finite weight per output class. Per-example cross-entropy gradients are scaled
+by the weight assigned to each example's label and normalized by the sum of
+weights in the mini-batch. Reported loss uses the same weighted objective while
+accuracy remains the ordinary unweighted fraction of correct predictions.
+This supports imbalanced labelled datasets without changing default training;
+an all-ones weight vector is equivalent to leaving class weights unset.
+
 Training can monitor a separately prepared validation set through
 `validation_data=(validation_features, validation_labels)`. Each epoch then
 records validation loss plus validation accuracy. Set `patience` to stop when
