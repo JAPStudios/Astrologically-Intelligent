@@ -88,15 +88,15 @@ The destination repository currently has no top-level license file and GitHub re
 
 A separate Wix site-context check confirms that Terracotta, NoiseGround, and Honest Education are published Wix sites with Velo enabled; MyOutlet and Engzen are also published Wix sites with Velo enabled. WaveWeaver is a published Wix site with Velo disabled. These are site records, not GitHub repositories. A published site or enabled Velo setting does not by itself establish that a service API exists or is callable; no endpoint has been inferred from site metadata.
 
-## Read-only Wix content check
+## Read-only Wix site metadata check
 
-The linked Wix site records and CMS APIs were checked without changing site settings or content:
+The linked Wix site records and CMS APIs were checked without changing site settings or content. The observations below describe only the queried Wix CMS collections and site settings:
 
-- WaveWeaver: the CMS API reports that the Wix CMS app is not installed; its site context reports Velo disabled. No CMS literary catalog or recommendation data is currently exposed.
-- Terracotta: Velo is enabled, but the only native custom collection found (`japs-rsrs`) contains zero items. No artistic-guidance content was found in the queried collection.
-- NoiseGround: its Blog/Posts collection contains zero items. Its portfolio contains six generic placeholder photography projects, not sound-engineering guidance.
-- MyOutlet: its Blog/Posts collection contains zero items. Its other native collections support the existing media/creator/live-streaming platform, but no video-editing recommendation data or API was identified.
-- Engzen: its Blog/Posts collection contains zero items. Its current GitHub repository is still the MyOutlet browser extension, not a programming-review service.
-- Honest Education: the available CMS collections do not include an educational knowledge base or fact-checking corpus; the inspected site data contains a generic booking service and a contact form.
+- WaveWeaver: the CMS API reports that the Wix CMS app is not installed; its site context reports Velo disabled. The queried site did not expose a CMS literary catalog.
+- Terracotta: Velo is enabled, but the queried custom collection (`japs-rsrs`) contained zero items.
+- NoiseGround: the queried Blog/Posts collection contained zero items; its portfolio contained six generic photography entries.
+- MyOutlet: the queried Blog/Posts collection contained zero items; other native collections concern the site's media/creator/live-streaming features.
+- Engzen: the queried Blog/Posts collection contained zero items. The inspected GitHub repository was identified as the MyOutlet browser extension.
+- Honest Education: the queried CMS collections did not expose a fact-checking corpus; the inspected site data included a booking service and contact form.
 
-These results confirm that the named Wix sites exist, but their currently exposed data does not provide the content or API contracts needed to implement the stated specialist integrations. No content was created, altered, or published during this check.
+These site-level observations do not establish whether the corresponding capabilities exist in Astrologically Intelligent's native application code. They do not make third-party APIs a prerequisite, and they do not justify marking a native capability absent. No Wix content or settings were created, altered, or published during this check.
