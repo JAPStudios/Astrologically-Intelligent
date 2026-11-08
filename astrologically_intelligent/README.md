@@ -4,7 +4,7 @@
 
 # Astrologically Intelligent
 
-A non-human virtual intelligence platform for research, work, coding, documents, and agent workflows.
+Astrologically Intelligent is an artificial neural network. Its public-service connections are documented in the repository root README and in the service integration contracts.
 
 ## Quick start
 
