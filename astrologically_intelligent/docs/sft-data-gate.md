@@ -58,3 +58,14 @@ separately verified schema adapter before they can enter chat SFT.
 The converter is a format bridge, not a data approval mechanism. Only already
 approved source traces should be passed to it. Run the split validator across
 the resulting train, validation, and test files before training.
+
+The optional `--expected-split` flag makes each conversion reject rows assigned
+to a different partition. Convert the builder's three outputs separately:
+
+```sh
+python scripts/convert_sft_traces_to_messages.py --input /path/to/source/train.jsonl --output /path/to/chat/train.jsonl --expected-split train
+python scripts/convert_sft_traces_to_messages.py --input /path/to/source/validation.jsonl --output /path/to/chat/validation.jsonl --expected-split validation
+python scripts/convert_sft_traces_to_messages.py --input /path/to/source/test.jsonl --output /path/to/chat/test.jsonl --expected-split test
+```
+
+Then validate those three chat files with `validate_sft_splits.py --require-family-id`.
