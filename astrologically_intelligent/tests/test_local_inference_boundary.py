@@ -89,3 +89,25 @@ def test_endpoint_resolution_rejects_remote_before_returning_credentials():
     )
     with pytest.raises(RuntimeError, match="Remote model-provider inference is disabled"):
         resolve_endpoint_runtime(endpoint)
+
+
+def test_refreshed_auth_endpoint_is_revalidated_before_credentials_return(monkeypatch):
+    from types import SimpleNamespace
+    from src.endpoint_resolver import resolve_endpoint_runtime
+    import src.chatgpt_subscription
+
+    monkeypatch.setattr(
+        src.chatgpt_subscription,
+        "resolve_runtime_credentials",
+        lambda auth_id, owner=None: {
+            "base_url": "https://api.anthropic.com",
+            "api_key": "refreshed-secret",
+        },
+    )
+    endpoint = SimpleNamespace(
+        base_url="http://127.0.0.1:11434/v1",
+        api_key=None,
+        provider_auth_id="auth-session",
+    )
+    with pytest.raises(RuntimeError, match="Remote model-provider inference is disabled"):
+        resolve_endpoint_runtime(endpoint)
