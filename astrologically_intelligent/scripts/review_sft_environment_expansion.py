@@ -89,7 +89,18 @@ def remove_trace_sessions(owner: str, session_ids: set[str]) -> int:
 
 
 def _owner_session_map(candidates: list[dict[str, Any]]) -> dict[str, str]:
-    owner_by_session = _owner_session_map(candidates)
+    """Validate candidate identities and map each session to exactly one owner."""
+    owner_by_session: dict[str, str] = {}
+    for candidate in candidates:
+        session_id = _safe_session_id(candidate.get("session_id"))
+        owner = _safe_owner(candidate.get("owner"))
+        previous_owner = owner_by_session.get(session_id)
+        if previous_owner is not None and previous_owner != owner:
+            raise ValueError(
+                f"session {session_id!r} is assigned to multiple owners: "
+                f"{previous_owner!r} and {owner!r}"
+            )
+        owner_by_session[session_id] = owner
     return owner_by_session
 
 
