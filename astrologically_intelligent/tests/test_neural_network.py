@@ -348,3 +348,78 @@ def test_gradient_norm_clipping_bounds_each_update():
     model.fit(features * 1000.0, labels, epochs=2, batch_size=16, max_grad_norm=0.25)
     assert observed_norms
     assert all(np.isfinite(norm) and norm <= 0.2500001 for norm in observed_norms)
+
+
+def test_class_weighted_evaluation_uses_weighted_cross_entropy():
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, 8, 3, seed=101)
+    probabilities = model.predict_proba(features[:12])
+    selected = np.clip(probabilities[np.arange(12), labels[:12]], 1e-12, 1.0)
+    weights = np.array([1.0, 2.0, 5.0])
+    sample_weights = weights[labels[:12]]
+    expected_loss = -np.sum(sample_weights * np.log(selected)) / np.sum(sample_weights)
+
+    metrics = model.evaluate(features[:12], labels[:12], class_weights=weights)
+
+    assert metrics["loss"] == pytest.approx(expected_loss)
+    assert metrics["accuracy"] == pytest.approx(
+        np.mean(np.argmax(probabilities, axis=1) == labels[:12])
+    )
+
+
+def test_unit_class_weights_preserve_unweighted_training_exactly():
+    features, labels = _dataset()
+    plain = NeuralNetworkClassifier(2, (10, 6), 3, learning_rate=0.01, seed=103)
+    weighted = NeuralNetworkClassifier(2, (10, 6), 3, learning_rate=0.01, seed=103)
+
+    plain.fit(features, labels, epochs=5, batch_size=17)
+    weighted.fit(features, labels, epochs=5, batch_size=17, class_weights=[1.0, 1.0, 1.0])
+
+    for name, parameter in plain._parameters().items():
+        assert np.array_equal(parameter, weighted._parameters()[name])
+    assert plain._step == weighted._step
+
+
+@pytest.mark.parametrize(
+    "class_weights",
+    [
+        [1.0, 2.0],
+        [1.0, 0.0, 1.0],
+        [1.0, -1.0, 1.0],
+        [1.0, float("nan"), 1.0],
+        [1.0, float("inf"), 1.0],
+        [True, False, True],
+        ["1", "2", "3"],
+    ],
+)
+def test_class_weights_reject_invalid_values(class_weights):
+    features, labels = _dataset()
+    model = NeuralNetworkClassifier(2, 8, 3, seed=107)
+
+    with pytest.raises(ValueError, match="class_weights"):
+        model.fit(features, labels, epochs=1, class_weights=class_weights)
+    with pytest.raises(ValueError, match="class_weights"):
+        model.evaluate(features, labels, class_weights=class_weights)
+
+
+def test_class_weighted_training_changes_updates_for_underrepresented_class():
+    features = np.array([
+        [-2.0, -1.0], [-1.8, -1.2], [-2.2, -0.8],
+        [2.0, 1.0], [1.8, 1.2], [2.2, 0.8],
+        [0.0, 2.0],
+    ])
+    labels = np.array([0, 0, 0, 0, 0, 0, 1])
+    plain = NeuralNetworkClassifier(2, 8, 2, learning_rate=0.01, seed=109)
+    weighted = NeuralNetworkClassifier(2, 8, 2, learning_rate=0.01, seed=109)
+
+    plain.fit(features, labels, epochs=3, batch_size=7, shuffle=False)
+    weighted.fit(
+        features,
+        labels,
+        epochs=3,
+        batch_size=7,
+        shuffle=False,
+        class_weights=[1.0, 6.0],
+    )
+
+    assert not np.array_equal(plain._weights[-1], weighted._weights[-1])
