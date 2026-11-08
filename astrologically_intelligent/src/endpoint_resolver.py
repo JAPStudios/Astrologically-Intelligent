@@ -14,7 +14,7 @@ from typing import Optional, Tuple, Dict
 from urllib.parse import urlparse, urlunparse
 
 from core.database import SessionLocal, ModelEndpoint
-from src.llm_core import _detect_provider, _host_match, _is_kimi_code_url, KIMI_CODE_USER_AGENT, _ollama_api_root
+from src.llm_core import _detect_provider, _host_match, _is_kimi_code_url, KIMI_CODE_USER_AGENT, _ollama_api_root, _require_local_inference_endpoint
 
 logger = logging.getLogger(__name__)
 
@@ -178,6 +178,7 @@ def resolve_endpoint_runtime(ep, owner: Optional[str] = None) -> Tuple[str, Opti
     base = _rewrite_docker_host_for_native_runtime(
         normalize_base(getattr(ep, "base_url", "") or "")
     )
+    _require_local_inference_endpoint(base)
     api_key = getattr(ep, "api_key", None)
     auth_id = getattr(ep, "provider_auth_id", None)
     if auth_id:
