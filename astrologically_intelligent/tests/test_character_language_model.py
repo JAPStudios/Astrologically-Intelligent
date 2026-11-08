@@ -123,11 +123,11 @@ def test_evaluation_includes_partial_final_window_and_short_validation_text(monk
     assert observed[0].shape == (1, 2)
 
     observed.clear()
-    loss = model.evaluate("abc abc", sequence_length=3, batch_size=2)
+    loss = model.evaluate("abc abcd", sequence_length=3, batch_size=2)
     assert np.isfinite(loss)
-    assert [array.shape[1] for array in observed] == [3, 3]
+    assert [array.shape[1] for array in observed] == [3, 1]
     assert [int(value) for array in observed for value in array[0]] == [
-        model._indices[char] for char in "abc ab"
+        model._indices[char] for char in "abc ab c"
     ]
 
 
