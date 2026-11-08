@@ -278,3 +278,22 @@ def test_identical_content_cannot_cross_train_and_validation_splits(tmp_path):
     assert result.returncode != 0
     assert "duplicate SFT content crosses dataset splits" in result.stderr
 
+def test_retained_expansion_owner_cannot_escape_trace_directory(tmp_path, monkeypatch):
+    module = _load_split_builder()
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+    manifest = tmp_path / "manifest.json"
+    trace = tmp_path / "approved.jsonl"
+    review = tmp_path / "review.json"
+    output = tmp_path / "splits"
+    _write_json(manifest, {"seeds": []})
+    trace.write_text("", encoding="utf-8")
+    _write_json(
+        review,
+        {"results": [{"owner": "../../outside", "session_id": "session-a", "retained": True}]},
+    )
+
+    import pytest
+
+    with pytest.raises(ValueError, match="invalid SFT trace owner identifier"):
+        _run_split_builder_main(monkeypatch, module, manifest, trace, review, output)
+
