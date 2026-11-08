@@ -11,7 +11,25 @@ from typing import Any
 
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    records = []
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"invalid JSONL in {path} at line {line_number}: {exc}") from exc
+        if not isinstance(row, dict):
+            raise ValueError(f"JSONL record in {path} at line {line_number} must be an object")
+        records.append(row)
+    return records
+
+
+def _session_id(row: dict[str, Any], *, source: Path) -> str:
+    value = str(row.get("session_id") or "").strip()
+    if not value:
+        raise ValueError(f"record in {source} is missing session_id")
+    return value
 
 
 def main() -> None:
@@ -23,14 +41,32 @@ def main() -> None:
     parser.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
 
+    input_paths = [args.trace, args.verdicts, *args.repairs]
+    resolved_inputs = {path.resolve() for path in input_paths}
+    resolved_outputs = {args.out_trace.resolve(), args.report.resolve()}
+    if len(resolved_outputs) != 2 or resolved_inputs.intersection(resolved_outputs):
+        raise ValueError("output paths must be distinct from each other and every input file")
+
     source: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in load_jsonl(args.trace):
-        source[str(row.get("session_id") or "")].append(row)
-    verdicts = {str(row.get("session_id") or ""): row for row in load_jsonl(args.verdicts)}
+        source[_session_id(row, source=args.trace)].append(row)
+
+    verdicts: dict[str, dict[str, Any]] = {}
+    for row in load_jsonl(args.verdicts):
+        session_id = _session_id(row, source=args.verdicts)
+        if session_id in verdicts:
+            raise ValueError(f"duplicate verdict for session {session_id!r}")
+        if session_id not in source:
+            raise ValueError(f"verdict references unknown source session {session_id!r}")
+        verdicts[session_id] = row
+
     repaired: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for path in args.repairs:
         for row in load_jsonl(path):
-            repaired[str(row.get("session_id") or "")].append(row)
+            session_id = _session_id(row, source=path)
+            if session_id not in source:
+                raise ValueError(f"repair references unknown source session {session_id!r}")
+            repaired[session_id].append(row)
 
     output: list[dict[str, Any]] = []
     excluded: list[dict[str, Any]] = []
@@ -38,6 +74,8 @@ def main() -> None:
     for session_id in sorted(source):
         verdict = verdicts.get(session_id)
         decision = str((verdict or {}).get("verdict") or "missing")
+        if decision not in {"keep", "repair", "exclude", "missing"}:
+            raise ValueError(f"unsupported verdict {decision!r} for session {session_id!r}")
         if decision == "keep":
             output.extend(source[session_id])
             counts["kept"] += 1
