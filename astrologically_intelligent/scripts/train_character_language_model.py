@@ -53,6 +53,11 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("training and validation files must be separate")
             if training_text == validation_text:
                 raise ValueError("training and validation text must not be identical")
+        protected_inputs = {args.corpus.resolve()}
+        if args.validation_file:
+            protected_inputs.add(args.validation_file.resolve())
+        if args.checkpoint.resolve() in protected_inputs:
+            raise ValueError("checkpoint path must differ from training and validation files")
         vocabulary = tuple(sorted(set(training_text)))
         model = CharacterLanguageModel(
             vocabulary,
