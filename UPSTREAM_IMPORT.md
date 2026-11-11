@@ -4,7 +4,7 @@
 
 **Status: complete — source inventory imported; functionality integration remains a separate engineering task.**
 
-The completed .gitmodules inventory contains **1,532 pinned public repositories across all twenty requested organizations**. The counts below are calculated directly from the current upstream organization submodule paths.
+The completed .gitmodules inventory contains **1,535 pinned public repositories across all twenty requested organizations**. The counts below are calculated directly from the current upstream organization submodule paths.
 
 | Organization | Pinned repositories |
 | --- | ---: |
@@ -20,21 +20,23 @@ The completed .gitmodules inventory contains **1,532 pinned public repositories 
 | lukalabs | 20 |
 | meta-llama | 12 |
 | microsoft | 634 |
-| n8n-io | 52 |
+| n8n-io | 53 |
 | NousResearch | 114 |
 | odysseus-dev | 2 |
 | openai | 277 |
 | openclaw | 97 |
-| paperclipai | 11 |
-| perplexityai | 57 |
+| paperclipai | 12 |
+| perplexityai | 58 |
 | xai-org | 12 |
-| **Total** | **1,532** |
+| **Total** | **1,535** |
 
 Five additional skill submodules under skills/upstream are maintained separately. They are not included in the total above.
 
 The six AI-query organizations are apple, aws, brave, google, kagisearch, and microsoft. The remaining fourteen organizations use public-repository listings. The importer completed its bounded GitHub Actions batches successfully. The inventory includes archived repositories and forks where returned by the listing or query. Existing submodule URLs are skipped; each imported repository is pinned to the commit resolved from its default branch.
 
 The inventory records Git submodules. It does not establish that every upstream source tree has been checked out, reviewed, built, or integrated into the application.
+
+On November 11, 2026, the import workflow was refreshed specifically against the ten organizations named in the current request. It enumerated 752 public repositories, added three non-empty repositories (`n8n-io/nod`, `paperclipai/soda-meme-playground`, and `perplexityai/cake-pplx-collab`), and skipped three empty repositories (`anthropics/homebrew-claude`, `NousResearch/forge-feedback`, and `perplexityai/pplx-rs`). The remaining repositories were already represented. The other ten organizations in the existing twenty-organization inventory were not refreshed in this run. The workflow is now scoped to the ten requested organizations.
 
 ## Retrieving the source
 
