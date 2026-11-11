@@ -49,7 +49,7 @@ python -m unittest discover -s tests -v
 
 ## Upstream source imports
 
-The completed .gitmodules inventory contains **1,532 pinned public repositories across all twenty requested organizations**. These Git submodules preserve upstream source boundaries; they do not mean that the upstream applications or their functionality have been integrated into Astrologically Intelligent. See [UPSTREAM_IMPORT.md](UPSTREAM_IMPORT.md) for the inventory and integration audit.
+The completed .gitmodules inventory contains **1,535 pinned public repositories across all twenty requested organizations**. These Git submodules preserve upstream source boundaries; they do not mean that the upstream applications or their functionality have been integrated into Astrologically Intelligent. See [UPSTREAM_IMPORT.md](UPSTREAM_IMPORT.md) for the inventory and integration audit.
 
 Retrieve the pinned source trees with:
 
