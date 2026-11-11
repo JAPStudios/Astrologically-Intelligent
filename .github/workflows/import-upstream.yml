@@ -36,7 +36,17 @@ jobs:
           while true; do
             batch=$((batch + 1))
             echo "Starting upstream import batch ${batch}"
-            output="$(python scripts/import_upstream_orgs.py --limit 25)"
+            output="$(python scripts/import_upstream_orgs.py --limit 25 \
+  --org anthropics \
+  --org herdrdev \
+  --org n8n-io \
+  --org NousResearch \
+  --org odysseus-dev \
+  --org openai \
+  --org openclaw \
+  --org paperclipai \
+  --org perplexityai \
+  --org xai-org)"
             echo "$output"
             added="$(printf '%s\n' "$output" | sed -n 's/^IMPORT_ADDED=\([0-9][0-9]*\).*/\1/p' | tail -n 1)"
             if [[ -z "$added" ]]; then
@@ -51,7 +61,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add .gitmodules
             base="$(git rev-parse HEAD)"
-            git commit -m "Import upstream repository batch ${batch}"
+            git commit -s -m "Import upstream repository batch ${batch}"
             git -c http.https://github.com/.extraheader="$auth_header" fetch origin main
             remote="$(git rev-parse origin/main)"
             if [[ "$remote" != "$base" ]]; then
