@@ -6145,3 +6145,15 @@
 	path = upstream/microsoft/acs-resource-explorer
 	url = https://github.com/microsoft/acs-resource-explorer.git
 	branch = main
+[submodule "upstream/n8n-io/nod"]
+	path = upstream/n8n-io/nod
+	url = https://github.com/n8n-io/nod.git
+	branch = main
+[submodule "upstream/paperclipai/soda-meme-playground"]
+	path = upstream/paperclipai/soda-meme-playground
+	url = https://github.com/paperclipai/soda-meme-playground.git
+	branch = main
+[submodule "upstream/perplexityai/cake-pplx-collab"]
+	path = upstream/perplexityai/cake-pplx-collab
+	url = https://github.com/perplexityai/cake-pplx-collab.git
+	branch = main
