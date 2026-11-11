@@ -13,7 +13,7 @@ class ProviderRetryTests(unittest.TestCase):
         if retry_after is not None:
             headers["Retry-After"] = str(retry_after)
         return urllib.error.HTTPError(
-            "https://provider.invalid/chat", status, "provider error",
+            "http://127.0.0.1:11434/v1/chat/completions", status, "provider error",
             headers, io.BytesIO(b"untrusted response body"),
         )
 
@@ -23,7 +23,7 @@ class ProviderRetryTests(unittest.TestCase):
             self._http_error(429, "1"), response
         ]) as request, patch("time.sleep") as sleep:
             result = _post_json(
-                "https://provider.invalid/chat",
+                "http://127.0.0.1:11434/v1/chat/completions",
                 {"model": "example", "messages": []}, {}, 10,
             )
         self.assertEqual(result, {"choices": []})
@@ -35,24 +35,24 @@ class ProviderRetryTests(unittest.TestCase):
     def test_does_not_retry_authentication_failures(self):
         with patch("urllib.request.urlopen", side_effect=self._http_error(401)) as request, \
              patch("time.sleep") as sleep:
-            with self.assertRaisesRegex(RuntimeError, "HTTP 401"):
-                _post_json("https://provider.invalid/chat", {}, {}, 10)
+            with self.assertRaisesRegex(RuntimeError, "Local model returned HTTP 401"):
+                _post_json("http://127.0.0.1:11434/v1/chat/completions", {}, {}, 10)
         request.assert_called_once()
         sleep.assert_not_called()
 
     def test_stops_after_four_transient_http_failures(self):
         with patch("urllib.request.urlopen", side_effect=self._http_error(503)) as request, \
              patch("time.sleep") as sleep:
-            with self.assertRaisesRegex(RuntimeError, "HTTP 503"):
-                _post_json("https://provider.invalid/chat", {}, {}, 10)
+            with self.assertRaisesRegex(RuntimeError, "Local model returned HTTP 503"):
+                _post_json("http://127.0.0.1:11434/v1/chat/completions", {}, {}, 10)
         self.assertEqual(request.call_count, 4)
         self.assertEqual(sleep.call_count, 3)
 
     def test_retries_connection_errors_with_bounded_backoff(self):
         with patch("urllib.request.urlopen", side_effect=urllib.error.URLError("offline")) as request, \
              patch("time.sleep") as sleep:
-            with self.assertRaisesRegex(RuntimeError, "Provider connection failed"):
-                _post_json("https://provider.invalid/chat", {}, {}, 10)
+            with self.assertRaisesRegex(RuntimeError, "Local model connection failed"):
+                _post_json("http://127.0.0.1:11434/v1/chat/completions", {}, {}, 10)
         self.assertEqual(request.call_count, 4)
         self.assertEqual([call.args[0] for call in sleep.call_args_list],
                          [0.25, 0.5, 1.0])
